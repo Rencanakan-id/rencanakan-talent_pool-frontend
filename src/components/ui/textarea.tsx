@@ -8,7 +8,7 @@ interface TextareaProps extends React.ComponentProps<"textarea"> {
 
 const Textarea: React.FC<TextareaProps> = ({ className, textLabel, placeholder, ...props }) => {
   return (
-    <div className={cn("relative mt-8 w-[12rem] sm:w-[16rem] md:w-[24rem] lg:w-[455px]", className)}>
+    <div className={cn("relative mt-8 min-w-[12rem] sm:min-w-[16rem] md:min-w-[24rem] lg:min-w-[455px]", className)}>
       {/* Label Positioning */}
       {textLabel && (
         <div className="absolute -top-3 left-3 pr-1 bg-white">
