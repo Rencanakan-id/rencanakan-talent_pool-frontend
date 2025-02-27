@@ -1,10 +1,7 @@
 import { Typography } from '@/components';
 import { ImageUpload } from '@/components/ui/media-upload-for-image';
-import { useState } from 'react';
 
 export const DesignSystemModule = () => {
-  const [image, setImage] = useState(null);
-
   return (
     <div className="flex flex-col gap-5 p-6">
       <h1 className="text-2xl font-bold">Design System | Typography</h1>
