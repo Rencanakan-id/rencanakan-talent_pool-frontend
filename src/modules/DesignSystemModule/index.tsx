@@ -35,15 +35,15 @@ export const DesignSystemModule = () => {
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
 
       <div>
-        <FileInput data-slot="input" textLabel='Empty Input File' state={"empty"}/>
+        <FileInput data-slot="input" textLabel="Empty Input File" state={'empty'} />
       </div>
 
       <div>
-        <FileInput data-slot="input" textLabel='Filled Input File' state={"filled"}/>
+        <FileInput data-slot="input" textLabel="Filled Input File" state={'filled'} />
       </div>
 
       <div>
-        <FileInput data-slot="input" textLabel='Error Input File' state={"error"}/>
+        <FileInput data-slot="input" textLabel="Error Input File" state={'error'} />
       </div>
     </div>
   );
