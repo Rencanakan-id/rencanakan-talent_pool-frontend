@@ -1,6 +1,10 @@
 import { Typography } from '@/components';
+import { ImageUpload } from '@/components/ui/media-upload-for-image';
+import { useState } from 'react';
 
 export const DesignSystemModule = () => {
+  const [image, setImage] = useState(null);
+
   return (
     <div className="flex flex-col gap-5 p-6">
       <h1 className="text-2xl font-bold">Design System | Typography</h1>
@@ -30,6 +34,11 @@ export const DesignSystemModule = () => {
         <Typography variant="b4">Body 4</Typography>
         <Typography variant="b5">Body 5</Typography>
         <Typography variant="small">Small Text</Typography>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-xl font-bold mb-4">Design System | Image Upload</h2>
+        <ImageUpload />
       </div>
     </div>
   );
