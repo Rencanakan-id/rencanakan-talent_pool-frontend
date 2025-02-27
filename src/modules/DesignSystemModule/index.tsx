@@ -1,5 +1,4 @@
-import { Typography } from "@/components";
-import { Textarea } from "@/components/ui/textarea";
+import { Typography, Textarea } from "@/components";
 
 export const DesignSystemModule = () => {
   return (

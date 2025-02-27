@@ -17,9 +17,8 @@ const Textarea: React.FC<TextareaProps> = ({ className, textLabel, placeholder, 
       )}
 
       <textarea
-        style={{resize: 'none'}}
         placeholder={placeholder}
-        className="placeholder:text-[13px] placeholder:text-[#3A3A3A] w-full h-[104px] p-3 border border-[#D7D7D7] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="placeholder:text-[13px] resize-none placeholder:text-[#3A3A3A] w-full h-[104px] p-3 border border-[#D7D7D7] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-blue-300"
         {...props}
       />
     </div>
