@@ -3,74 +3,62 @@ import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 
-// h = heading, s = subheading, b = body
+// d=display, h=heading, p=paragraph
 type Variant =
+  | 'd1'
+  | 'd2'
   | 'h1'
   | 'h2'
   | 'h3'
   | 'h4'
   | 'h5'
   | 'h6'
-  | 's1'
-  | 's2'
-  | 's3'
-  | 's4'
-  | 's5'
-  | 's6'
-  | 'b1'
-  | 'b2'
-  | 'b3'
-  | 'b4'
-  | 'b5'
+  | 'p1'
+  | 'p2'
+  | 'p3'
+  | 'p4'
+  | 'p5'
   | 'small';
 
 const typographyVariants = cva('text-ellipsis', {
   variants: {
     variant: {
-      h1: 'xxl:text-[4rem] xxl:leading-[calc(4rem*1)] xl:text-[3.5rem] xl:leading-[calc(3.5rem*1)] md:text-[2rem] md:leading-[calc(2rem*1)] text-[1.75rem] leading-[calc(1.75rem*1)] font-extrabold',
-      h2: 'xxl:text-[3rem] xxl:leading-[calc(3rem*1.2)] xl:text-[2.2rem] xl:leading-[calc(2.2rem*1.2)] md:text-[2rem] md:leading-[calc(2rem*1.2)] text-[1.5rem] leading-[calc(1.5rem*1.2)] font-extrabold',
-      h3: 'xxl:text-[2rem] xxl:leading-[calc(2rem*1.2)] xl:text-[1.85rem] xl:leading-[calc(1.85rem*1.2)] md:text-[1.5rem] md:leading-[calc(1.5rem*1.2)] text-[1.25rem] leading-[calc(1.25rem*1.2)] font-extrabold',
-      h4: 'xxl:text-[1.75rem] xxl:leading-[calc(1.75rem*1.2)] xl:text-[1.5rem] xl:leading-[calc(1.5rem*1.2)] md:text-[1.25rem] md:leading-[calc(1.25rem*1.2)] text-[1.1rem] leading-[calc(1.1rem*1.2)] font-bold',
-      h5: 'xxl:text-[1.5rem] xxl:leading-[calc(1.5rem*1.2)] xl:text-[1.3rem] xl:leading-[calc(1.3rem*1.2)] md:text-[1.1rem] md:leading-[calc(1.1rem*1.2)] text-[1rem] leading-[calc(1rem*1.2)] font-bold',
-      h6: 'xxl:text-[1.25rem] xxl:leading-[calc(1.25rem*1.2)] xl:text-[1.1rem] xl:leading-[calc(1.1rem*1.2)] md:text-[1rem] md:leading-[calc(1rem*1.2)] text-[0.9rem] leading-[calc(0.9rem*1.2)] font-bold',
+      d1: 'xxl:text-[4rem] xxl:leading-[calc(4rem*1)] xl:text-[3.5rem] xl:leading-[calc(3.5rem*1)] md:text-[3rem] md:leading-[calc(3rem*1)] text-[2.5rem] leading-[calc(2.5rem*1)]',
+      d2: 'xxl:text-[3.5rem] xxl:leading-[calc(3.5rem*1)] xl:text-[3rem] xl:leading-[calc(3rem*1)] md:text-[2.5rem] md:leading-[calc(2.5rem*1)] text-[2rem] leading-[calc(2rem*1)]',
 
-      s1: 'xxl:text-[2.9rem] xxl:leading-[calc(2.9rem*1.2)] xl:text-[2.2rem] xl:leading-[calc(2.2rem*1.2)] md:text-[1.75rem] md:leading-[calc(1.75rem*1.2)] text-[1.5rem] leading-[calc(1.5rem*1.2)] font-bold',
-      s2: 'xxl:text-[2rem] xxl:leading-[calc(2rem*1.2)] xl:text-[1.85rem] xl:leading-[calc(1.85rem*1.2)] md:text-[1.5rem] md:leading-[calc(1.5rem*1.2)] text-[1.1rem] leading-[calc(1.1rem*1.2)]',
-      s3: 'xxl:text-[1.5rem] xxl:leading-[calc(1.5rem*1.2)] xl:text-[1.3rem] xl:leading-[calc(1.3rem*1.2)] md:text-[1.1rem] md:leading-[calc(1.1rem*1.2)] text-[1rem] leading-[calc(1rem*1.2)]',
-      s4: 'xxl:text-[1.25rem] xxl:leading-[calc(1.25rem*1.2)] xl:text-[1.1rem] xl:leading-[calc(1.1rem*1.2)] md:text-[1rem] md:leading-[calc(1rem*1.2)] text-[0.9rem] leading-[calc(0.9rem*1.2)]',
-      s5: 'xxl:text-[1rem] xxl:leading-[calc(1rem*1.2)] xl:text-[0.9rem] xl:leading-[calc(0.9rem*1.2)] md:text-[0.85rem] md:leading-[calc(0.85rem*1.2)] text-[0.75rem] leading-[calc(0.75rem*1.2)]',
-      s6: 'xxl:text-[0.85rem] xxl:leading-[calc(0.85rem*1.2)] xl:text-[0.75rem] xl:leading-[calc(0.75rem*1.2)] md:text-[0.7rem] md:leading-[calc(0.7rem*1.2)] text-[0.65rem] leading-[calc(0.65rem*1.2)]',
+      h1: 'xxl:text-[2.5] xxl:leading-[calc(2.5rem*1.2)] xl:text-[2.2rem] xl:leading-[calc(2.2rem*1.2)] md:text-[2rem] md:leading-[calc(2rem*1.2)] text-[1.75rem] leading-[calc(1.75rem*1.2)]',
+      h2: 'xxl:text-[2rem] xxl:leading-[calc(2rem*1.2)] xl:text-[1.85rem] xl:leading-[calc(1.85rem*1.2)] md:text-[1.5rem] md:leading-[calc(1.5rem*1.2)] text-[1.25rem] leading-[calc(1.25rem*1.2)]',
+      h3: 'xxl:text-[1.75rem] xxl:leading-[calc(1.75rem*1.2)] xl:text-[1.6rem] xl:leading-[calc(1.6rem*1.2)] md:text-[1.4rem] md:leading-[calc(1.4rem*1.2)] text-[1.2rem] leading-[calc(1.2rem*1.2)]',
+      h4: 'xxl:text-[1.5rem] xxl:leading-[calc(1.5rem*1.2)] xl:text-[1.4rem] xl:leading-[calc(1.4rem*1.2)] md:text-[1.3rem] md:leading-[calc(1.3rem*1.2)] text-[1.15rem] leading-[calc(1.15rem*1.2)]',
+      h5: 'xxl:text-[1.25rem] xxl:leading-[calc(1.25rem*1.2)] xl:text-[1.2rem] xl:leading-[calc(1.2rem*1.2)] md:text-[1.1rem] md:leading-[calc(1.1rem*1.2)] text-[1rem] leading-[calc(1rem*1.2)]',
+      h6: 'xxl:text-[1.125rem] xxl:leading-[calc(1.125rem*1.2)] xl:text-[1.1rem] xl:leading-[calc(1.1rem*1.2)] md:text-[1rem] md:leading-[calc(1rem*1.2)] text-[0.9rem] leading-[calc(0.9rem*1.2)]',
 
-      b1: 'xxl:text-[1.5rem] xxl:leading-[calc(1.5rem*1.5)] xl:text-[1.4rem] xl:leading-[calc(1.4rem*1.5)] md:text-[1.3rem] md:leading-[calc(1.3rem*1.5)] text-[1.1rem] leading-[calc(1.1rem*1.5)]',
-      b2: 'xxl:text-[1.25rem] xxl:leading-[calc(1.25rem*1.5)] xl:text-[1.2rem] xl:leading-[calc(1.2rem*1.5)] md:text-[1.1rem] md:leading-[calc(1.1rem*1.5)] text-[1rem] leading-[calc(1rem*1.5)]',
-      b3: 'xxl:text-[1rem] xxl:leading-[calc(1rem*1.5)] xl:text-[0.9rem] xl:leading-[calc(0.9rem*1.5)] md:text-[0.85rem] md:leading-[calc(0.85rem*1.5)] text-[0.78rem] leading-[calc(0.78rem*1.5)]',
-      b4: 'xxl:text-[0.85rem] xxl:leading-[calc(0.85rem*1.5)] xl:text-[0.75rem] xl:leading-[calc(0.75rem*1.5)] md:text-[0.7rem] md:leading-[calc(0.7rem*1.5)] text-[0.65rem] leading-[calc(0.65rem*1.5)]',
-      b5: 'xxl:text-[0.8rem] xxl:leading-[calc(0.8rem*1.5)] xl:text-[0.75rem] xl:leading-[calc(0.75rem*1.5)] md:text-[0.7rem] md:leading-[calc(0.7rem*1.5)] text-[0.65rem] leading-[calc(0.65rem*1.5)]',
+      p1: 'xxl:text-[1.5rem] xxl:leading-[calc(1.5rem*1.5)] xl:text-[1.4rem] xl:leading-[calc(1.4rem*1.5)] md:text-[1.3rem] md:leading-[calc(1.3rem*1.5)] text-[1.1rem] leading-[calc(1.1rem*1.5)]',
+      p2: 'xxl:text-[1.125rem] xxl:leading-[calc(1.125rem*1.5)] xl:text-[1.1rem] xl:leading-[calc(1.1rem*1.5)] md:text-[1rem] md:leading-[calc(1rem*1.5)] text-[0.9rem] leading-[calc(0.9rem*1.5)]',
+      p3: 'xxl:text-[1rem] xxl:leading-[calc(1rem*1.5)] xl:text-[0.95rem] xl:leading-[calc(0.95rem*1.5)] md:text-[0.9rem] md:leading-[calc(0.9rem*1.5)] text-[0.85rem] leading-[calc(0.85rem*1.5)]',
+      p4: 'xxl:text-[0.875rem] xxl:leading-[calc(0.875rem*1.5)] xl:text-[0.85rem] xl:leading-[calc(0.85rem*1.5)] md:text-[0.8rem] md:leading-[calc(0.8rem*1.5)] text-[0.75rem] leading-[calc(0.75rem*1.5)]',
+      p5: 'xxl:text-[0.8125rem] xxl:leading-[calc(0.8125rem*1.5)] xl:text-[0.8rem] xl:leading-[calc(0.8rem*1.5)] md:text-[0.75rem] md:leading-[calc(0.75rem*1.5)] text-[0.7rem] leading-[calc(0.7rem*1.5)]',
       small:
         'xxl:text-[0.7rem] xxl:leading-[calc(0.7rem*1.5)] xl:text-[0.65rem] xl:leading-[calc(0.65rem*1.5)] md:text-[0.6rem] md:leading-[calc(0.6rem*1.5)] text-[0.55rem] leading-[calc(0.55rem*1.5)]',
     },
   },
-  defaultVariants: { variant: 'b3' },
+  defaultVariants: { variant: 'p3' },
 });
 
 const tags: Record<Variant, ElementType> = {
+  d1: 'h1',
+  d2: 'h1',
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
   h4: 'h4',
   h5: 'h5',
   h6: 'h6',
-  s1: 'h2',
-  s2: 'h3',
-  s3: 'h4',
-  s4: 'h5',
-  s5: 'h6',
-  s6: 'h6',
-  b1: 'p',
-  b2: 'p',
-  b3: 'p',
-  b4: 'p',
-  b5: 'p',
+  p1: 'p',
+  p2: 'p',
+  p3: 'p',
+  p4: 'p',
+  p5: 'p',
   small: 'span',
 };
 
