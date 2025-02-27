@@ -1,4 +1,4 @@
-import { Typography, Textarea, FileInput } from "@/components";
+import { Typography, Textarea, FileInput } from '@/components';
 
 export const DesignSystemModule = () => {
   return (

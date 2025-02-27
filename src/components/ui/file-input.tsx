@@ -15,8 +15,10 @@ const fileInputVariants = cva(
       state: {
         empty:
           'border-[var(--color-rencanakan-base-gray)] bg-[var(--color-rencanakan-light-gray)] text-[var(--color-rencanakan-main-black)]',
-        filled: 'border-[var(--color-rencanakan-base-gray)] text-[var(--color-rencanakan-success-100)] bg-[var(--color-rencanakan-success-25)]',
-        error: 'border-[var(--color-rencanakan-base-gray)] text-[var(--color-rencanakan-error-100)] bg-[var(--color-rencanakan-error-25)]',
+        filled:
+          'border-[var(--color-rencanakan-base-gray)] text-[var(--color-rencanakan-success-100)] bg-[var(--color-rencanakan-success-25)]',
+        error:
+          'border-[var(--color-rencanakan-base-gray)] text-[var(--color-rencanakan-error-100)] bg-[var(--color-rencanakan-error-25)]',
       },
     },
     defaultVariants: {
@@ -90,7 +92,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         <button
           type="button"
           onClick={handleClear}
-          className="absolute top-1/2 right-4 -translate-y-1/2 rounded-lg p-1 hover:bg-black/10 xxl:top-[70px] xl:top-[66px] md:top-[62px] top-[58px]"
+          className="xxl:top-[70px] absolute top-1/2 top-[58px] right-4 -translate-y-1/2 rounded-lg p-1 hover:bg-black/10 md:top-[62px] xl:top-[66px]"
         >
           <IoClose size={18} />
         </button>
