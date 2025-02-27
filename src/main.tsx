@@ -10,8 +10,6 @@ createRoot(document.getElementById('root')!).render(
       <Route path="" element={<App />}>
         <Route path="/" element={<>TODO: Make this landing page</>} />
         <Route path="/design" element={<DesignSystemModule />} />
-
-      
       </Route>
     </Routes>
   </BrowserRouter>
