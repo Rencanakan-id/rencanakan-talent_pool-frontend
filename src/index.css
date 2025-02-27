@@ -76,6 +76,19 @@
 }
 
 @theme inline {
+  --color-rencanakan-sea-blue-100: #D2E5F1;
+  --color-rencanakan-sea-blue-300: #00365A;
+  --color-rencanakan-main-black: #3A3A3A;
+  --color-rencanakan-pure-white: #FFFFFF;
+  --color-rencanakan-lightest-gray: #F8F8F8;
+  --color-rencanakan-light-gray: #ECEDEE;
+  --color-rencanakan-base-gray: #D7D7D7;
+  --color-rencanakan-dark-gray: #70787F;
+  --color-rencanakan-premium-gold-100: #FFF1E2;
+  --color-rencanakan-premium-gold-300: #FF9933;
+  --color-rencanakan-premium-gold-400: #A45200; 
+  --color-rencanakan-error-red-100: #C43D4B;
+  --color-rencanakan-light-red: #FCE8F3;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
