@@ -1,4 +1,4 @@
-import { Typography } from '@/components';
+import { Typography, Textarea } from "@/components";
 
 export const DesignSystemModule = () => {
   return (
@@ -31,6 +31,8 @@ export const DesignSystemModule = () => {
         <Typography variant="b5">Body 5</Typography>
         <Typography variant="small">Small Text</Typography>
       </div>
+
+      <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
     </div>
   );
 };
