@@ -12,14 +12,14 @@ const Textarea: React.FC<TextareaProps> = ({ className, textLabel, placeholder, 
       {/* Label Positioning */}
       {textLabel && (
         <div className="absolute -top-3 left-3 px-1 bg-white">
-          <label className="text-xs text-gray-600">{textLabel}</label>
+          <label className="text-xs text-[#70787F]">{textLabel}</label>
         </div>
       )}
 
       <textarea
         style={{resize: 'none'}}
         placeholder={placeholder}
-        className="placeholder:text-[13px] w-full p-3 border border-gray-300 rounded-[2px] focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="placeholder:text-[13px] placeholder:text-[#3A3A3A] w-full p-3 border border-[#D7D7D7] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-blue-300"
         {...props}
       />
     </div>
