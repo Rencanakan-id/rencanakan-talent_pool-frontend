@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
 
@@ -114,10 +114,15 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+:root {
+  font-family: 'Roboto', sans-serif;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
