@@ -1,6 +1,6 @@
 import { Typography } from '@/components';
 import { Button } from '@/components';
-import { Search, ArrowRight, ChevronRight, User, Bell } from 'lucide-react'; // Import some icons for examples
+import { Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 export const DesignSystemModule = () => {
   return (
@@ -39,31 +39,14 @@ export const DesignSystemModule = () => {
       <div className="space-y-6">
         <div>
           <Typography variant="b2" className="mb-2">
-            Regular Buttons (No Icons)
+            Regular Buttons
           </Typography>
           <div className="flex flex-wrap gap-4">
-            <Button variant="button-blue">Primary Blue</Button>
-            <Button variant="button-blue-outline">Blue Outline</Button>
-            <Button variant="button-grey">Grey Button</Button>
-            <Button variant="button-orange">Orange Button</Button>
-            <Button variant="button-orange-outline">Orange Outline</Button>
-          </div>
-        </div>
-
-        <div>
-          <Typography variant="b2" className="mb-2">
-            Buttons with Icons
-          </Typography>
-          <div className="flex flex-wrap gap-4">
-            <Button variant="button-blue" icon={<Search size={16} />}>
-              Search
-            </Button>
-            <Button variant="button-orange" icon={<Bell size={16} />}>
-              Notifications
-            </Button>
-            <Button variant="button-orange-outline" icon={<Bell size={16} />} iconPosition="end">
-              Alerts
-            </Button>
+            <Button variant="primary">Primary Button</Button>
+            <Button variant="secondary">Secondary Button</Button>
+            <Button variant="primary-outline">Primary Outline</Button>
+            <Button variant="secondary-outline">Secondary Outline</Button>
+            <Button variant="link">Link Button</Button>
           </div>
         </div>
 
@@ -72,14 +55,20 @@ export const DesignSystemModule = () => {
             Buttons with Icons (Start Position)
           </Typography>
           <div className="flex flex-wrap gap-4">
-            <Button variant="button-blue" icon={<Search size={16} />}>
+            <Button variant="primary" icon={<Search size={16} />}>
               Search
             </Button>
-            <Button variant="button-blue-outline" icon={<User size={16} />}>
+            <Button variant="secondary" icon={<Bell size={16} />}>
+              Notifications
+            </Button>
+            <Button variant="primary-outline" icon={<User size={16} />}>
               Profile
             </Button>
-            <Button variant="button-grey" icon={<ArrowRight size={16} />}>
-              Next
+            <Button variant="secondary-outline" icon={<User size={16} />}>
+              Profile
+            </Button>
+            <Button variant="link" icon={<ExternalLink size={16} />}>
+              External Link
             </Button>
           </div>
         </div>
@@ -89,18 +78,20 @@ export const DesignSystemModule = () => {
             Buttons with Icons (End Position)
           </Typography>
           <div className="flex flex-wrap gap-4">
-            <Button variant="button-blue" icon={<ChevronRight size={16} />} iconPosition="end">
+            <Button variant="primary" icon={<ChevronRight size={16} />} iconPosition="end">
               Continue
             </Button>
-            <Button
-              variant="button-blue-outline"
-              icon={<ArrowRight size={16} />}
-              iconPosition="end"
-            >
+            <Button variant="secondary" icon={<ChevronRight size={16} />} iconPosition="end">
+              Continue
+            </Button>
+            <Button variant="primary-outline" icon={<ArrowRight size={16} />} iconPosition="end">
               Next Step
             </Button>
-            <Button variant="button-grey" icon={<Search size={16} />} iconPosition="end">
-              Search Results
+            <Button variant="secondary-outline" icon={<ArrowRight size={16} />} iconPosition="end">
+              Next Step
+            </Button>
+            <Button variant="link" icon={<ExternalLink size={16} />} iconPosition="end">
+              Learn More
             </Button>
           </div>
         </div>
@@ -110,14 +101,32 @@ export const DesignSystemModule = () => {
             Button Sizes
           </Typography>
           <div className="flex flex-wrap items-center gap-4">
-            <Button variant="button-blue" size="sm" icon={<Search size={14} />}>
+            <Button variant="primary" size="sm">
               Small
             </Button>
-            <Button variant="button-blue" icon={<Search size={16} />}>
-              Default
-            </Button>
-            <Button variant="button-blue" size="lg" icon={<Search size={18} />}>
+            <Button variant="primary">Default</Button>
+            <Button variant="primary" size="lg">
               Large
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="b2" className="mb-2">
+            Disabled Buttons
+          </Typography>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="primary" disabled>
+              Primary Disabled
+            </Button>
+            <Button variant="secondary" disabled>
+              Secondary Disabled
+            </Button>
+            <Button variant="primary-outline" disabled>
+              Outline Disabled
+            </Button>
+            <Button variant="link" disabled>
+              Link Disabled
             </Button>
           </div>
         </div>
