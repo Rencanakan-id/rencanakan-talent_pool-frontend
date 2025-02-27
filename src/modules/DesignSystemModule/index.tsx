@@ -34,20 +34,16 @@ export const DesignSystemModule = () => {
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input (Text Fields)</h1>
-      
+
       <div className="space-y-6">
         <div>
           <Typography variant="b2" className="mb-2">
             Default Input
           </Typography>
-          <div className="space-y-4 max-w-md">
+          <div className="max-w-md space-y-4">
             <Input placeholder="Basic input field" />
             <Input label="With Label" placeholder="Enter your name" />
-            <Input 
-              label="Password Input" 
-              type="password" 
-              placeholder="Enter your password" 
-            />
+            <Input label="Password Input" type="password" placeholder="Enter your password" />
           </div>
         </div>
 
@@ -55,17 +51,13 @@ export const DesignSystemModule = () => {
           <Typography variant="b2" className="mb-2">
             Input with Prefix
           </Typography>
-          <div className="space-y-4 max-w-md">
-            <Input 
-              label="With Icon Prefix" 
-              placeholder="Enter your email" 
-              prefixIcon={<Mail size={18} />} 
+          <div className="max-w-md space-y-4">
+            <Input
+              label="With Icon Prefix"
+              placeholder="Enter your email"
+              prefixIcon={<Mail size={18} />}
             />
-            <Input 
-              label="With Text Prefix" 
-              placeholder="Enter amount" 
-              prefixText="Rp." 
-            />
+            <Input label="With Text Prefix" placeholder="Enter amount" prefixText="Rp." />
           </div>
         </div>
 
@@ -73,38 +65,22 @@ export const DesignSystemModule = () => {
           <Typography variant="b2" className="mb-2">
             Side-by-Side Inputs (Small Variant)
           </Typography>
-          <div className="space-y-4 max-w-md">
+          <div className="max-w-md space-y-4">
             <div className="flex flex-wrap gap-4">
-              <Input 
-                variant="small" 
-                label="First Name" 
-                placeholder="John"
-              />
-              <Input 
-                variant="small" 
-                label="Last Name" 
-                placeholder="Doe"
-              />
+              <Input variant="small" label="First Name" placeholder="John" />
+              <Input variant="small" label="Last Name" placeholder="Doe" />
             </div>
           </div>
         </div>
-        
+
         <div>
           <Typography variant="b2" className="mb-2">
             Custom Widths
           </Typography>
-          <div className="space-y-4 max-w-md">
+          <div className="max-w-md space-y-4">
             <div className="flex flex-wrap gap-4">
-              <Input 
-                label="30% widths" 
-                placeholder="30%"
-                width="30%"
-              />
-              <Input 
-                label="80% widths" 
-                placeholder="80%"
-                width="80%"
-              />
+              <Input label="30% widths" placeholder="30%" width="30%" />
+              <Input label="80% widths" placeholder="80%" width="80%" />
             </div>
           </div>
         </div>
@@ -113,11 +89,11 @@ export const DesignSystemModule = () => {
           <Typography variant="b2" className="mb-2">
             Error State
           </Typography>
-          <div className="space-y-4 max-w-md">
-            <Input 
-              label="With Error Message" 
-              placeholder="Invalid input" 
-              error="This field is required" 
+          <div className="max-w-md space-y-4">
+            <Input
+              label="With Error Message"
+              placeholder="Invalid input"
+              error="This field is required"
             />
           </div>
         </div>
