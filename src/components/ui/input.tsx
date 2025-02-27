@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
+import { Typography } from '@/components';
 
 type Variant = 'default' | 'small';
 
@@ -73,13 +74,17 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {label && (
-            <label className="absolute -top-2 left-2 bg-white px-1 text-xs text-[var(--color-rencanakan-dark-gray)]">
-              {label}
-            </label>
+            <span className="absolute -top-2 left-2 bg-[var(--color-rencanakan-pure-white)] px-1">
+              <Typography variant="b4" className="text-[var(--color-rencanakan-dark-gray)]">
+                {label}
+              </Typography>
+            </span>
           )}
         </div>
         {error && (
-          <p className="mt-1 text-xs text-[var(--color-rencanakan-error-red-100)]">{error}</p>
+          <Typography variant="small" className="mt-1 text-[var(--color-rencanakan-error-red-100)]">
+            {error}
+          </Typography>
         )}
       </div>
     );
