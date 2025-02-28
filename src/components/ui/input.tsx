@@ -57,12 +57,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className="inline-block" style={{ width: containerWidth }}>
         <div className="relative w-full">
           {prefixIcon && (
-            <span className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--color-rencanakan-dark-gray)]">
+            <span className="text-rencanakan-dark-gray absolute top-1/2 left-3 -translate-y-1/2">
               {prefixIcon}
             </span>
           )}
           {prefixText && (
-            <span className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--color-rencanakan-dark-gray)]">
+            <span className="text-rencanakan-dark-gray absolute top-1/2 left-3 -translate-y-1/2">
               {prefixText}
             </span>
           )}
@@ -74,15 +74,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {label && (
-            <span className="absolute -top-2 left-2 bg-[var(--color-rencanakan-pure-white)] px-1">
-              <Typography variant="b4" className="text-[var(--color-rencanakan-dark-gray)]">
+            <span className="bg-rencanakan-pure-white absolute -top-2 left-2 px-1">
+              <Typography variant="b4" className="text-rencanakan-dark-gray">
                 {label}
               </Typography>
             </span>
           )}
         </div>
         {error && (
-          <Typography variant="small" className="mt-1 text-[var(--color-rencanakan-error-red-100)]">
+          <Typography variant="small" className="text-rencanakan-error-red-100 mt-1">
             {error}
           </Typography>
         )}
