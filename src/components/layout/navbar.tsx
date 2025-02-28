@@ -10,8 +10,8 @@ export const Navbar: React.FC = () => {
   const ref = useOutsideClick(() => setIsMobileMenuOpen(false));
 
   return (
-    <div className="shaddow-lg flex h-18 lg:h-20 items-center justify-between bg-gray-200 px-6 lg:px-10">
-      <img src="./rencanakanLogo.svg" alt="Logo" className='h-8 lg:h-10'/>
+    <div className="shadow-lg flex h-18 lg:h-20 items-center justify-between bg-rencanakan-pure-white px-6 lg:px-10">
+      <img src="./rencanakanLogo.svg" alt="Logo" className='h-7 lg:h-9'/>
 
       <div className="hidden lg:flex items-center gap-4 lg:gap-8">
         {MENU_OPTIONS.map((menu, index) => (
@@ -20,9 +20,9 @@ export const Navbar: React.FC = () => {
           </a>
         ))}
 
-        <div className="hidden lg:flex gap-1">
-          <Typography variant="h6">Halo,</Typography>
-          <Typography variant="h6" className='text-[#00365A]'>Aman</Typography>
+        <div className="hidden lg:flex gap-1 items-center">
+          <Typography variant="h6" className='mr-3 font-medium'>Yoga Listyadana</Typography>
+          <img src="./dummy/profile.svg" />
         </div>
       </div>
 
@@ -46,17 +46,18 @@ export const Navbar: React.FC = () => {
         <div className="flex lg:hidden absolute top-[68px] left-0 w-full bg-white z-[999] shadow-xl">
           <div className="flex flex-col items-start w-full">
             {MENU_OPTIONS.map((menu, key) => (
-              <button
-                className="w-full text-left py-4 px-4 hover:bg-black-5 rounded hover:bg-gray-200 cursor-pointer"
-                key={key}
-                onClick={() => {
-                  // TODO: use button DS
-                  // handleMenuClick(menu.route);
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                <Typography variant="s4">{menu.name}</Typography>
-              </button>
+              // <Button></Button>
+              // <a
+              //   className="w-full text-left py-4 px-4 hover:bg-black-5 rounded hover:bg-gray-200 cursor-pointer"
+              //   key={key}
+              //   onClick={() => {
+              //     // TODO: use button DS
+              //     // handleMenuClick(menu.route);
+              //     setIsMobileMenuOpen(false);
+              //   }}
+              // >
+              //   <Typography variant="p3">{menu.name}</Typography>
+              // </a>
             ))}
           </div>
         </div>
