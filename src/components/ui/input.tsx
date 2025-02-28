@@ -51,7 +51,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const hasPrefixText = !!prefixText;
     const isError = !!error;
 
-    const containerWidth = width ? width : variant === 'small' ? 'calc(50% - 0.5rem)' : '100%';
+    const defaultWidth = variant === 'small' ? 'calc(50% - 0.5rem)' : '100%';
+    const containerWidth = width || defaultWidth;
 
     return (
       <div className="inline-block" style={{ width: containerWidth }}>
