@@ -1,20 +1,12 @@
 import { Typography } from '@/components';
 import { Combobox } from '@/components/ui/combobox';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 export const DesignSystemModule = () => {
   return (
     <div className="flex flex-col gap-5 p-6">
       <h1 className="text-2xl font-bold">Design System | Typography</h1>
-      <div className="space-y-4 w-full">
-        <Combobox/>
+      <div className="w-full space-y-4">
+        <Combobox />
       </div>
       <div className="space-y-4">
         <Typography variant="h1">Heading 1</Typography>
@@ -42,8 +34,6 @@ export const DesignSystemModule = () => {
         <Typography variant="b5">Body 5</Typography>
         <Typography variant="small">Small Text</Typography>
       </div>
-      
-    
     </div>
   );
 };
