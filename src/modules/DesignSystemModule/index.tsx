@@ -1,4 +1,4 @@
-import { Typography, Textarea, Button } from '@/components';
+import { Typography, Textarea, Button, FileInput } from '@/components';
 import { Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 export const DesignSystemModule = () => {
@@ -127,6 +127,20 @@ export const DesignSystemModule = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      <h1 className="text-2xl font-bold">Design System | Input File</h1>
+
+      <div>
+        <FileInput data-slot="input" textLabel="Empty Input File" state={'empty'} />
+      </div>
+
+      <div>
+        <FileInput data-slot="input" textLabel="Filled Input File" state={'filled'} />
+      </div>
+
+      <div>
+        <FileInput data-slot="input" textLabel="Error Input File" state={'error'} />
       </div>
     </div>
   );
