@@ -1,4 +1,5 @@
-import { Typography } from '@/components';
+import { Typography, Textarea } from "@/components";
+
 import { Combobox } from '@/components/ui/combobox';
 import { ComboboxCheckBox } from '@/components/ui/combobox-checkbox';
 
@@ -6,6 +7,12 @@ export const DesignSystemModule = () => {
   return (
     <div className="flex flex-col gap-5 p-6">
       <h1 className="text-2xl font-bold">Design System | Typography</h1>
+
+      <div className="space-y-4">
+        <Typography variant="d1">Display 1</Typography>
+        <Typography variant="d2">Display 2</Typography>
+      </div>
+
       <div className="w-full space-y-4">
         <Combobox />
         {/* <ComboboxCheckBox /> */}
@@ -24,22 +31,15 @@ export const DesignSystemModule = () => {
       </div>
 
       <div className="space-y-4">
-        <Typography variant="s1">Subheading 1</Typography>
-        <Typography variant="s2">Subheading 2</Typography>
-        <Typography variant="s3">Subheading 3</Typography>
-        <Typography variant="s4">Subheading 4</Typography>
-        <Typography variant="s5">Subheading 5</Typography>
-        <Typography variant="s6">Subheading 6</Typography>
-      </div>
-
-      <div className="space-y-4">
-        <Typography variant="b1">Body 1</Typography>
-        <Typography variant="b2">Body 2</Typography>
-        <Typography variant="b3">Body 3</Typography>
-        <Typography variant="b4">Body 4</Typography>
-        <Typography variant="b5">Body 5</Typography>
+        <Typography variant="p1">Parapraph 1</Typography>
+        <Typography variant="p2">Parapraph 2</Typography>
+        <Typography variant="p3">Parapraph 3</Typography>
+        <Typography variant="p4">Parapraph 4</Typography>
+        <Typography variant="p5">Parapraph 5</Typography>
         <Typography variant="small">Small Text</Typography>
       </div>
+
+      <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
     </div>
   );
 };

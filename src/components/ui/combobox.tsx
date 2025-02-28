@@ -46,15 +46,15 @@ export function Combobox() {
         >
           {value
             ? locations.find((location) => location.value === value)?.label
-            : 'Select location'}
+            : 'Lokasi saat ini'}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[368px] p-0">
         <Command>
-          <CommandInput placeholder="Current Location" />
+          <CommandInput placeholder="Lokasi" />
           <CommandList>
-            <CommandEmpty>No location found</CommandEmpty>
+            <CommandEmpty>Lokasi tidak ditemukan</CommandEmpty>
             <CommandGroup>
               {locations.map((location) => (
                 <CommandItem

@@ -19,6 +19,7 @@ import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
 
 const locations = [
+  { value: 'semua-lokasi', label: 'Semua Lokasi' },
   { value: 'jakarta', label: 'Jakarta' },
   { value: 'bandung', label: 'Bandung' },
   { value: 'surabaya', label: 'Surabaya' },
@@ -56,51 +57,47 @@ export function ComboboxCheckBox() {
         >
           {value
             ? locations.find((location) => location.value === value)?.label
-            : 'Select location'}
+            : 'Bersedia Ditempatkan Dimana'}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[368px] p-0">
         <Command>
           <div className="flex h-full items-center">
-            <Typography variant="b5" className="flex items-center p-2">
+            <Typography variant="p5" className="flex items-center p-2">
               Terpilih:
             </Typography>
           </div>
           {selected.length > 0 ? (
             <div className="flex flex-wrap gap-2 p-2 items-center ">
               {selected.map((location) => (
-                <Badge key={location} variant="secondary" className="flex items-center space-x-1 w-[93px] h-[25px]">
-                  <span>{location}</span>
+                <Badge key={location} variant="location" className="flex items-center justify-center space-x-1 min-w-[93px] w-auto h-[25px]">
+                  <Typography variant="p3" className='text-blue-900 m-1'>{location}</Typography>
                   <button
-                    className="ml-1  cursor-pointer"
+                    className="cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleLocation(location);
                     }}
                   >
-                    <X className=" h-4 w-4 text-gray-500 cursor-pointer" />
+                    <X className=" h-4 w-4 text-blue-900 cursor-pointer" />
                   </button>
                 </Badge>
               ))}
             </div>
           ) : null}
 
-          <CommandInput placeholder="Current Location" />
+          <CommandInput placeholder="Lokasi" />
           <CommandList>
-            <CommandEmpty>No location found</CommandEmpty>
+            <CommandEmpty>Lokasi tidak ditemukan</CommandEmpty>
             <CommandGroup>
               {locations.map((location) => (
                 <CommandItem
                   key={location.value}
                   value={location.value}
-                  // onSelect={(currentValue) => {
-                  //   setValue(currentValue === value ? '' : currentValue);
-                  //   setOpen(false);
-                  // }}
                 >
                   <div className="m-2 flex w-full items-center gap-4">
-                    <Checkbox id={location.label}  onCheckedChange={(checked) => toggleLocation(location.label)} />
+                    <Checkbox id={location.label} checked={selected.includes(location.label)}  onCheckedChange={(checked) => toggleLocation(location.label)} />
                     <label  htmlFor={location.label} className="cursor-pointer">{location.label}</label>
                   </div>
                 </CommandItem>
