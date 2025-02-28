@@ -7,19 +7,19 @@ import { cn } from '@/lib/utils';
 type Variant = 'primary' | 'secondary' | 'primary-outline' | 'secondary-outline' | 'link';
 
 const buttonVariants = cva(
-  'inline-flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none border-2 disabled:cursor-not-allowed active:scale-95 active:shadow-inner hover:shadow-md',
+  'inline-flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none border-2 disabled:cursor-not-allowed active:scale-95 hover:shadow-md',
   {
     variants: {
       variant: {
         primary:
-          'bg-[var(--color-rencanakan-sea-blue-300)] text-white border-[var(--color-rencanakan-sea-blue-300)] hover:bg-[#001E31] hover:border-[#001E31] hover:scale-[1.02] active:bg-[#001E31] disabled:bg-[var(--color-rencanakan-base-gray)] disabled:border-[var(--color-rencanakan-base-gray)] disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
+          'bg-rencanakan-sea-blue-300 text-white border-rencanakan-sea-blue-300 hover:bg-[#001E31] hover:border-[#001E31] hover:scale-[1.02] active:bg-[#001E31] disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
         secondary:
-          'bg-[var(--color-rencanakan-premium-gold-300)] text-white border-[var(--color-rencanakan-premium-gold-300)] hover:bg-[var(--color-rencanakan-premium-gold-400)] hover:border-[var(--color-rencanakan-premium-gold-400)] hover:scale-[1.02] active:bg-[var(--color-rencanakan-premium-gold-400)] disabled:bg-[var(--color-rencanakan-base-gray)] disabled:border-[var(--color-rencanakan-base-gray)] disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
+          'bg-rencanakan-premium-gold-300 text-white border-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 hover:border-rencanakan-premium-gold-400 hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
         'primary-outline':
-          'bg-transparent text-[var(--color-rencanakan-sea-blue-300)] border-[var(--color-rencanakan-sea-blue-300)] hover:bg-[var(--color-rencanakan-sea-blue-300)] hover:text-white hover:scale-[1.02] active:bg-[#001E31] active:border-[#001E31] active:text-white disabled:bg-transparent disabled:border-[var(--color-rencanakan-base-gray)] disabled:text-[var(--color-rencanakan-base-gray)] disabled:hover:scale-100 disabled:hover:shadow-none',
+          'bg-transparent text-rencanakan-sea-blue-300 border-rencanakan-sea-blue-300 hover:bg-rencanakan-sea-blue-300 hover:text-white hover:scale-[1.02] active:bg-[#001E31] active:border-[#001E31] active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
         'secondary-outline':
-          'bg-transparent text-[var(--color-rencanakan-premium-gold-300)] border-[var(--color-rencanakan-premium-gold-300)] hover:bg-[var(--color-rencanakan-premium-gold-300)] hover:text-white hover:scale-[1.02] active:bg-[var(--color-rencanakan-premium-gold-400)] active:border-[var(--color-rencanakan-premium-gold-400)] active:text-white disabled:bg-transparent disabled:border-[var(--color-rencanakan-base-gray)] disabled:text-[var(--color-rencanakan-base-gray)] disabled:hover:scale-100 disabled:hover:shadow-none',
-        link: 'bg-transparent text-[var(--color-rencanakan-sea-blue-300)] border-transparent hover:text-[var(--color-rencanakan-sea-blue-300)] hover:underline hover:scale-100 hover:shadow-none active:text-[#001E31] active:scale-[0.98] disabled:text-[var(--color-rencanakan-base-gray)] disabled:no-underline disabled:hover:scale-100 disabled:hover:shadow-none p-0 border-0',
+          'bg-transparent text-rencanakan-premium-gold-300 border-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-300 hover:text-white hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 active:border-rencanakan-premium-gold-400 active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
+        link: 'bg-transparent text-rencanakan-sea-blue-300 border-transparent hover:text-rencanakan-sea-blue-300 hover:underline hover:scale-100 hover:shadow-none active:text-[#001E31] active:scale-[0.98] disabled:text-rencanakan-base-gray disabled:no-underline disabled:hover:scale-100 disabled:hover:shadow-none p-0 border-0',
       },
       size: {
         default: 'h-[40px] px-[20px] py-[11px]',
