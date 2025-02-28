@@ -6,7 +6,7 @@ import { Typography } from '@/components';
 type Variant = 'default' | 'small';
 
 const inputVariants = cva(
-  'flex rounded-[4px] border border-[var(--color-rencanakan-base-gray)] bg-transparent px-3 py-[9px] text-[var(--color-rencanakan-main-black)] placeholder:text-[var(--color-rencanakan-dark-gray)] outline-none w-full',
+  'flex rounded-[4px] border border-rencanakan-base-gray bg-transparent px-3 py-[9px] text-rencanakan-main-black placeholder:text-rencanakan-dark-gray outline-none w-full',
   {
     variants: {
       hasPrefix: {
@@ -18,7 +18,7 @@ const inputVariants = cva(
         false: '',
       },
       isError: {
-        true: 'border-[var(--color-rencanakan-error-red-100)]',
+        true: 'border-rencanakan-error-red-100',
         false: '',
       },
     },
