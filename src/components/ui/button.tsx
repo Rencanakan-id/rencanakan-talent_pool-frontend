@@ -12,14 +12,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-rencanakan-sea-blue-300 text-white border-2 border-rencanakan-sea-blue-300 hover:bg-[#001E31] hover:border-[#001E31] hover:scale-[1.02] active:bg-[#001E31] disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
+          'bg-rencanakan-sea-blue-300 text-white border-2 border-rencanakan-sea-blue-300 hover:bg-rencanakan-sea-blue-500 hover:border-rencanakan-sea-blue-500 hover:scale-[1.02] active:bg-rencanakan-sea-blue-500 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
         secondary:
           'bg-rencanakan-premium-gold-300 text-white border-2 border-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 hover:border-rencanakan-premium-gold-400 hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
         'primary-outline':
-          'bg-transparent text-rencanakan-sea-blue-300 border border-rencanakan-sea-blue-300 sm:border-2 hover:bg-rencanakan-sea-blue-300 hover:text-white hover:scale-[1.02] active:bg-[#001E31] active:border-[#001E31] active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
+          'bg-transparent text-rencanakan-sea-blue-300 border border-rencanakan-sea-blue-300 sm:border-2 hover:bg-rencanakan-sea-blue-300 hover:text-white hover:scale-[1.02] active:bg-rencanakan-sea-blue-500 active:border-rencanakan-sea-blue-500 active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
         'secondary-outline':
           'bg-transparent text-rencanakan-premium-gold-300 border border-rencanakan-premium-gold-300 sm:border-2 hover:bg-rencanakan-premium-gold-300 hover:text-white hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 active:border-rencanakan-premium-gold-400 active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
-        link: 'bg-transparent text-rencanakan-sea-blue-300 border-transparent hover:text-rencanakan-sea-blue-300 hover:underline hover:scale-100 hover:shadow-none active:text-[#001E31] active:scale-[0.98] disabled:text-rencanakan-base-gray disabled:no-underline disabled:hover:scale-100 disabled:hover:shadow-none p-0 border-0',
+        link: 'bg-transparent text-rencanakan-sea-blue-300 border-transparent hover:text-rencanakan-sea-blue-300 hover:underline hover:scale-100 hover:shadow-none active:text-rencanakan-sea-blue-500 active:scale-[0.98] disabled:text-rencanakan-base-gray disabled:no-underline disabled:hover:scale-100 disabled:hover:shadow-none p-0 border-0',
       },
       size: {
         default: 'h-[36px] px-[14px] py-[9px] sm:h-[40px] sm:px-[20px] sm:py-[11px]',
@@ -66,7 +66,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         )}
         <Typography
-          variant="b2"
+          variant="p4"
           className={cn(
             'font-semibold',
             variant === 'link' && 'underline-offset-4',
