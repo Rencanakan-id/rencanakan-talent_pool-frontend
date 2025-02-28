@@ -75,7 +75,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {label && (
             <span className="bg-rencanakan-pure-white absolute -top-2 left-2 px-1">
-              <Typography variant="b4" className="text-rencanakan-dark-gray">
+              <Typography variant="p5" className="text-rencanakan-dark-gray">
                 {label}
               </Typography>
             </span>
