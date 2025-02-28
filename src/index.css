@@ -76,19 +76,42 @@
 }
 
 @theme inline {
+  --color-rencanakan-type-black: #3a3a3a;
+
   --color-rencanakan-sea-blue-100: #d2e5f1;
+  --color-rencanakan-sea-blue-200: #4a98c9;
   --color-rencanakan-sea-blue-300: #00365a;
-  --color-rencanakan-main-black: #3a3a3a;
+  --color-rencanakan-sea-blue-400: #153447;
+  --color-rencanakan-sea-blue-500: #001e31;
+
   --color-rencanakan-pure-white: #ffffff;
   --color-rencanakan-lightest-gray: #f8f8f8;
   --color-rencanakan-light-gray: #ecedee;
   --color-rencanakan-base-gray: #d7d7d7;
   --color-rencanakan-dark-gray: #70787f;
+  --color-rencanakan-pure-black: #000000;
+
   --color-rencanakan-premium-gold-100: #fff1e2;
+  --color-rencanakan-premium-gold-200: #ffc68c;
   --color-rencanakan-premium-gold-300: #ff9933;
   --color-rencanakan-premium-gold-400: #a45200;
-  --color-rencanakan-error-red-100: #c43d4b;
-  --color-rencanakan-light-red: #fce8f3;
+  --color-rencanakan-premium-gold-500: #4f2800;
+
+  --color-rencanakan-success-green-25: rgba(62, 136, 79, 0.25);
+  --color-rencanakan-success-green-50: rgba(62, 136, 79, 0.5);
+  --color-rencanakan-success-green-75: rgba(62, 136, 79, 0.75);
+  --color-rencanakan-success-green-100: rgba(62, 136, 79, 1);
+
+  --color-rencanakan-warning-yellow-25: rgba(182, 147, 41, 0.25);
+  --color-rencanakan-warning-yellow-50: rgba(182, 147, 41, 0.5);
+  --color-rencanakan-warning-yellow-75: rgba(182, 147, 41, 0.75);
+  --color-rencanakan-warning-yellow-100: rgba(182, 147, 41, 1);
+
+  --color-rencanakan-error-red-25: rgba(196, 61, 75, 0.25);
+  --color-rencanakan-error-red-50: rgba(196, 61, 75, 0.5);
+  --color-rencanakan-error-red-75: rgba(196, 61, 75, 0.75);
+  --color-rencanakan-error-red-100: rgba(196, 61, 75, 1);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
