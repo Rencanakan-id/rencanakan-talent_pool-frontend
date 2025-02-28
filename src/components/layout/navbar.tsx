@@ -6,7 +6,7 @@ import { useOutsideClick } from '../hooks';
 export const Navbar: React.FC = () => {
   const MENU_OPTIONS = [{ name: 'Beranda', href: '/' }];
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const ref = useOutsideClick(() => setIsMobileMenuOpen(false));
+  const closeMenu = useOutsideClick(() => setIsMobileMenuOpen(false));
 
   return (
     <div className="flex w-full">
@@ -14,8 +14,8 @@ export const Navbar: React.FC = () => {
         <img src="./rencanakanLogo.svg" alt="Logo" className="h-7 lg:h-9" />
 
         <div className="hidden items-center gap-4 lg:flex lg:gap-8">
-          {MENU_OPTIONS.map((menu, index) => (
-            <a key={index} href={menu.href} className="hover:text-rencanakan-dark-gray">
+          {MENU_OPTIONS.map((menu) => (
+            <a key={menu.name} href={menu.href} className="hover:text-rencanakan-dark-gray">
               <Typography variant="h6" className="font-medium">
                 {menu.name}
               </Typography>
@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex lg:hidden" ref={ref}>
+        <div className="flex lg:hidden" ref={closeMenu}>
           <button
             className="p-1 transition-transform duration-300"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -51,9 +51,9 @@ export const Navbar: React.FC = () => {
         className={`bg-rencanakan-pure-white absolute top-[68px] left-0 w-full transform transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-[68px]'}`}
       >
         <div className="flex w-full flex-col items-start">
-          {MENU_OPTIONS.map((menu, key) => (
+          {MENU_OPTIONS.map((menu) => (
             <a
-              key={key}
+              key={menu.name}
               href={menu.href}
               className="w-full cursor-pointer rounded px-6 py-5 text-left hover:bg-gray-200"
               onClick={() => setIsMobileMenuOpen(false)}
