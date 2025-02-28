@@ -1,5 +1,6 @@
 import { Typography } from '@/components';
 import { Combobox } from '@/components/ui/combobox';
+import { ComboboxCheckBox } from '@/components/ui/combobox-checkbox';
 
 export const DesignSystemModule = () => {
   return (
@@ -7,6 +8,11 @@ export const DesignSystemModule = () => {
       <h1 className="text-2xl font-bold">Design System | Typography</h1>
       <div className="w-full space-y-4">
         <Combobox />
+        {/* <ComboboxCheckBox /> */}
+      </div>
+      <div className="w-full space-y-4">
+        {/* <Combobox /> */}
+        <ComboboxCheckBox />
       </div>
       <div className="space-y-4">
         <Typography variant="h1">Heading 1</Typography>
