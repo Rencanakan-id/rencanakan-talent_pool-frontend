@@ -152,6 +152,33 @@
 
 :root {
   font-family: 'Roboto', sans-serif;
-  
+
   @apply bg-rencanakan-light-gray;
+}
+
+/* Define the keyframes for sliding down */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(68px);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(200px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease-in-out forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-in-out forwards;
 }
