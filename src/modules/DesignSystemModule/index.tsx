@@ -1,4 +1,5 @@
-import { Typography, Textarea, ImageUpload} from "@/components";
+import { Typography, Textarea, ImageUpload, Button} from "@/components";
+import { Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 export const DesignSystemModule = () => {
   return (
@@ -34,6 +35,104 @@ export const DesignSystemModule = () => {
       </div>
 
       <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
+
+      <h1 className="text-2xl font-bold">Design System | Buttons</h1>
+
+      <div className="space-y-6">
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Regular Buttons
+          </Typography>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="primary">Primary Button</Button>
+            <Button variant="secondary">Secondary Button</Button>
+            <Button variant="primary-outline">Primary Outline</Button>
+            <Button variant="secondary-outline">Secondary Outline</Button>
+            <Button variant="link">Link Button</Button>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Buttons with Icons (Start Position)
+          </Typography>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="primary" icon={<Search size={16} />}>
+              Search
+            </Button>
+            <Button variant="secondary" icon={<Bell size={16} />}>
+              Notifications
+            </Button>
+            <Button variant="primary-outline" icon={<User size={16} />}>
+              Profile
+            </Button>
+            <Button variant="secondary-outline" icon={<User size={16} />}>
+              Profile
+            </Button>
+            <Button variant="link" icon={<ExternalLink size={16} />}>
+              External Link
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Buttons with Icons (End Position)
+          </Typography>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="primary" icon={<ChevronRight size={16} />} iconPosition="end">
+              Continue
+            </Button>
+            <Button variant="secondary" icon={<ChevronRight size={16} />} iconPosition="end">
+              Continue
+            </Button>
+            <Button variant="primary-outline" icon={<ArrowRight size={16} />} iconPosition="end">
+              Next Step
+            </Button>
+            <Button variant="secondary-outline" icon={<ArrowRight size={16} />} iconPosition="end">
+              Next Step
+            </Button>
+            <Button variant="link" icon={<ExternalLink size={16} />} iconPosition="end">
+              Learn More
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Button Sizes
+          </Typography>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button variant="primary" size="sm">
+              Small
+            </Button>
+            <Button variant="primary">Default</Button>
+            <Button variant="primary" size="lg">
+              Large
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Disabled Buttons
+          </Typography>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="primary" disabled>
+              Primary Disabled
+            </Button>
+            <Button variant="secondary" disabled>
+              Secondary Disabled
+            </Button>
+            <Button variant="primary-outline" disabled>
+              Outline Disabled
+            </Button>
+            <Button variant="link" disabled>
+              Link Disabled
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

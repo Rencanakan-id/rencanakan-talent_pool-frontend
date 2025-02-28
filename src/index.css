@@ -97,9 +97,20 @@
   --color-rencanakan-premium-gold-400: #a45200;
   --color-rencanakan-premium-gold-500: #4f2800;
 
-  --color-rencanakan-success-green: #3e884f;
-  --color-rencanakan-warning-yellow: #b69329;
-  --color-rencanakan-error-red: #c43d4b;
+  --color-rencanakan-success-green-25: rgba(62, 136, 79, 0.25);
+  --color-rencanakan-success-green-50: rgba(62, 136, 79, 0.5);
+  --color-rencanakan-success-green-75: rgba(62, 136, 79, 0.75);
+  --color-rencanakan-success-green-100: rgba(62, 136, 79, 1);
+
+  --color-rencanakan-warning-yellow-25: rgba(182, 147, 41, 0.25);
+  --color-rencanakan-warning-yellow-50: rgba(182, 147, 41, 0.5);
+  --color-rencanakan-warning-yellow-75: rgba(182, 147, 41, 0.75);
+  --color-rencanakan-warning-yellow-100: rgba(182, 147, 41, 1);
+
+  --color-rencanakan-error-red-25: rgba(196, 61, 75, 0.25);
+  --color-rencanakan-error-red-50: rgba(196, 61, 75, 0.5);
+  --color-rencanakan-error-red-75: rgba(196, 61, 75, 0.75);
+  --color-rencanakan-error-red-100: rgba(196, 61, 75, 1);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
