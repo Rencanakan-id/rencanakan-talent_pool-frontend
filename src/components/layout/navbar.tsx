@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
         <div
           className="fixed inset-0 bg-rencanakan-pure-black opacity-30 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
-        />
+        >{' '}</div>
       )}
 
       <div
