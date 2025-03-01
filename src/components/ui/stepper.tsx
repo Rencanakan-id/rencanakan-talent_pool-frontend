@@ -9,7 +9,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep }) => {
   const steps = [1, 2, 3, 4];
 
   return (
-    <div className="flex items-center justify-center max-w-md">
+    <div className="flex items-center justify-center">
       {steps.map((step, index) => (
         <React.Fragment key={index}>
           <div

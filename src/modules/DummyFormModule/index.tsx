@@ -12,7 +12,7 @@ export const RegisterModule = () => {
 
   return (
     <div className="flex min-h-screen w-full justify-center items-center bg-rencanakan-sea-blue-500 pt-12 md:py-12">
-      <div className="flex h-screen md:h-full flex-col justify-center bg-rencanakan-pure-white rounded-t-xl md:rounded-xl drop-shadow-md md:max-w-2xl mx-auto py-6 px-8">
+      <div className="overflow-y-auto flex h-screen md:h-full flex-col justify-center bg-rencanakan-pure-white rounded-t-xl md:rounded-xl drop-shadow-md md:max-w-2xl mx-auto py-6 px-8">
         {formState === 1 ? (
           <StepOneForm />
         ) : (

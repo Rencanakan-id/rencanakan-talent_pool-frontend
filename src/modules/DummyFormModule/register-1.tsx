@@ -11,10 +11,8 @@ export const StepOneForm = () => {
         <Stepper currentStep={0} />
       </div>
 
-      <div>
-        <Typography variant="h6" className="my-2">Masukkan Data Diri</Typography>
-        <Typography variant="p4" className="font-semibold">Foto Diri</Typography>
-      </div>
+      <Typography variant="h6" className="my-2">Masukkan Data Diri</Typography>
+      <Typography variant="p4" className="font-semibold">Foto Diri</Typography>
 
       <div className="space-y-4 my-4">
         <div className="flex space-x-2">
