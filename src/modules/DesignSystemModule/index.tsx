@@ -1,5 +1,5 @@
-import { Typography, Textarea, ImageUpload, Button} from "@/components";
-import { Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
+import { Typography, Textarea, ImageUpload, Button, FileInput, Input } from '@/components';
+import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 export const DesignSystemModule = () => {
   return (
@@ -130,6 +130,86 @@ export const DesignSystemModule = () => {
             <Button variant="link" disabled>
               Link Disabled
             </Button>
+          </div>
+        </div>
+      </div>
+
+      <h1 className="text-2xl font-bold">Design System | Input File</h1>
+
+      <div>
+        <FileInput data-slot="input" textLabel="Empty Input File" state={'empty'} />
+      </div>
+
+      <div>
+        <FileInput data-slot="input" textLabel="Filled Input File" state={'filled'} />
+      </div>
+
+      <div>
+        <FileInput data-slot="input" textLabel="Error Input File" state={'error'} />
+      </div>
+
+      <h1 className="text-2xl font-bold">Design System | Input (Text Fields)</h1>
+
+      <div className="space-y-6">
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Default Input
+          </Typography>
+          <div className="max-w-md space-y-4">
+            <Input placeholder="Basic input field" />
+            <Input label="With Label" placeholder="Enter your name" />
+            <Input label="Password Input" type="password" placeholder="Enter your password" />
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Input with Prefix
+          </Typography>
+          <div className="max-w-md space-y-4">
+            <Input
+              label="With Icon Prefix"
+              placeholder="Enter your email"
+              prefixIcon={<Mail size={18} />}
+            />
+            <Input label="With Text Prefix" placeholder="Enter amount" prefixText="Rp." />
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Side-by-Side Inputs (Small Variant)
+          </Typography>
+          <div className="max-w-md space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <Input variant="small" label="First Name" placeholder="John" />
+              <Input variant="small" label="Last Name" placeholder="Doe" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Custom Widths
+          </Typography>
+          <div className="max-w-md space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <Input label="30% widths" placeholder="30%" width="30%" />
+              <Input label="80% widths" placeholder="80%" width="80%" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Error State
+          </Typography>
+          <div className="max-w-md space-y-4">
+            <Input
+              label="With Error Message"
+              placeholder="Invalid input"
+              error="This field is required"
+            />
           </div>
         </div>
       </div>
