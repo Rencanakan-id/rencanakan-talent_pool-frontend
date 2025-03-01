@@ -15,8 +15,8 @@ const badgeVariants = cva(
         destructive:
           'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
         outline: 'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
-        location:'bg-rencanakan-sea-blue-100 border-transparent text-blue-700 text-secondary-foreground  hover:bg-rencanakan-sea-blue-200 hover:text-blue-900',
-  
+        location:
+          'bg-rencanakan-sea-blue-100 border-transparent text-blue-700 text-secondary-foreground  hover:bg-rencanakan-sea-blue-200 hover:text-blue-900',
       },
     },
     defaultVariants: {

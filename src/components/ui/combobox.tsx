@@ -14,6 +14,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Typography } from '../atoms/typography';
 
 const locations = [
   { value: 'jakarta', label: 'Jakarta' },
@@ -37,19 +38,31 @@ export function Combobox() {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="h-[50px] w-[368px] justify-between p-0"
-        >
-          {value
-            ? locations.find((location) => location.value === value)?.label
-            : 'Lokasi saat ini'}
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
+      <div className="relative">
+        <PopoverTrigger>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="relative h-[50px] w-[368px] justify-between rounded-[12px] p-0"
+            icon={<ChevronsUpDown className="opacity-50" />}
+            iconPosition="end"
+          >
+            <Typography variant="p4" className="text-xs text-gray-500">
+              {value ? locations.find((location) => location.value === value)?.label : 'Pilih kota'}
+            </Typography>
+          </Button>
+          <Typography
+            variant="p4"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
+          >
+            {value
+              ? locations.find((location) => location.value === value)?.label
+              : 'Lokasi saat ini'}
+          </Typography>
+        </PopoverTrigger>
+      </div>
+
       <PopoverContent className="w-[368px] p-0">
         <Command>
           <CommandInput placeholder="Lokasi" />

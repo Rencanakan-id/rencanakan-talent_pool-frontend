@@ -40,26 +40,44 @@ export function ComboboxCheckBox() {
   const [value, setValue] = React.useState('');
   const [selected, setSelected] = useState<string[]>([]);
 
-  const toggleLocation = (location: string) => {
-    setSelected((prev) =>
-      prev.includes(location) ? prev.filter((item) => item !== location) : [...prev, location]
-    );
+  const toggleLocation = (location: string, checked: boolean) => {
+    let updated = [];
+    setSelected((prev) => {
+      if (location == 'Semua Lokasi') {
+        updated = !checked ? [] : ['Semua Lokasi'];
+      } else {
+        updated = !checked
+          ? prev.filter((item) => item !== location)
+          : [...prev.filter((item) => item !== 'Semua Lokasi'), location]; 
+      }
+
+      setValue(updated.join(', '));
+
+      return updated;
+    });
   };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger className="relative">
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-[50px] w-[368px] justify-between p-0"
+          className="flex h-[50px] w-[368px] justify-between rounded-[12px] p-0"
+          icon={<ChevronsUpDown className="opacity-50" />}
+          iconPosition="end"
         >
-          {value
-            ? locations.find((location) => location.value === value)?.label
-            : 'Bersedia Ditempatkan Dimana'}
-          <ChevronsUpDown className="opacity-50" />
+          <Typography variant="p4" className="text-xs text-gray-500">
+            {value ? value : 'Pilih kota'}
+          </Typography>
         </Button>
+        <Typography
+          variant="p4"
+          className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
+        >
+          Bersedia Ditempatkan Dimana
+        </Typography>
       </PopoverTrigger>
       <PopoverContent className="w-[368px] p-0">
         <Command>
@@ -69,18 +87,24 @@ export function ComboboxCheckBox() {
             </Typography>
           </div>
           {selected.length > 0 ? (
-            <div className="flex flex-wrap gap-2 p-2 items-center ">
+            <div className="flex flex-wrap items-center gap-2 p-2">
               {selected.map((location) => (
-                <Badge key={location} variant="location" className="flex items-center justify-center space-x-1 min-w-[93px] w-auto h-[25px]">
-                  <Typography variant="p3" className='text-blue-900 m-1'>{location}</Typography>
+                <Badge
+                  key={location}
+                  variant="location"
+                  className="flex h-[25px] w-auto min-w-[93px] items-center justify-center space-x-1"
+                >
+                  <Typography variant="p3" className="m-1 text-blue-900">
+                    {location}
+                  </Typography>
                   <button
                     className="cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleLocation(location);
+                      toggleLocation(location, false);
                     }}
                   >
-                    <X className=" h-4 w-4 text-blue-900 cursor-pointer" />
+                    <X className="h-4 w-4 cursor-pointer text-blue-900" />
                   </button>
                 </Badge>
               ))}
@@ -92,13 +116,18 @@ export function ComboboxCheckBox() {
             <CommandEmpty>Lokasi tidak ditemukan</CommandEmpty>
             <CommandGroup>
               {locations.map((location) => (
-                <CommandItem
-                  key={location.value}
-                  value={location.value}
-                >
+                <CommandItem key={location.value} value={location.value}>
                   <div className="m-2 flex w-full items-center gap-4">
-                    <Checkbox id={location.label} checked={selected.includes(location.label)}  onCheckedChange={(checked) => toggleLocation(location.label)} />
-                    <label  htmlFor={location.label} className="cursor-pointer">{location.label}</label>
+                    <Checkbox
+                      id={location.label}
+                      checked={selected.includes(location.label)}
+                      onCheckedChange={(checked) =>
+                        toggleLocation(location.label, checked === true)
+                      }
+                    />
+                    <label htmlFor={location.label} className="cursor-pointer">
+                      {location.label}
+                    </label>
                   </div>
                 </CommandItem>
               ))}

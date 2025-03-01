@@ -5,52 +5,79 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  'flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none disabled:cursor-not-allowed active:scale-95 hover:shadow-md',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
+        primary:
+          'bg-rencanakan-sea-blue-300 text-white border-2 border-rencanakan-sea-blue-300 hover:bg-rencanakan-sea-blue-500 hover:border-rencanakan-sea-blue-500 hover:scale-[1.02] active:bg-rencanakan-sea-blue-500 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
         outline:
           'border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        secondary:
+          'bg-rencanakan-premium-gold-300 text-white border-2 border-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 hover:border-rencanakan-premium-gold-400 hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
+        'primary-outline':
+          'bg-transparent text-rencanakan-sea-blue-300 border border-rencanakan-sea-blue-300 sm:border-2 hover:bg-rencanakan-sea-blue-300 hover:text-white hover:scale-[1.02] active:bg-rencanakan-sea-blue-500 active:border-rencanakan-sea-blue-500 active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
+        'secondary-outline':
+          'bg-transparent text-rencanakan-premium-gold-300 border border-rencanakan-premium-gold-300 sm:border-2 hover:bg-rencanakan-premium-gold-300 hover:text-white hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 active:border-rencanakan-premium-gold-400 active:text-white disabled:bg-transparent disabled:border-rencanakan-base-gray disabled:text-rencanakan-base-gray disabled:hover:scale-100 disabled:hover:shadow-none',
+        link: 'bg-transparent text-rencanakan-sea-blue-300 border-transparent hover:text-rencanakan-sea-blue-300 hover:underline hover:scale-100 hover:shadow-none active:text-rencanakan-sea-blue-500 active:scale-[0.98] disabled:text-rencanakan-base-gray disabled:no-underline disabled:hover:scale-100 disabled:hover:shadow-none p-0 border-0',
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
+        default: 'h-[36px] px-[14px] py-[9px] sm:h-[40px] sm:px-[20px] sm:py-[11px]',
+        sm: 'h-[32px] px-[12px] py-[7px] sm:h-[36px] sm:px-[16px] sm:py-[8px]',
+        lg: 'h-[40px] px-[16px] py-[9px] sm:h-[44px] sm:px-[24px] sm:py-[13px]',
+        icon: 'h-[36px] w-[36px] p-[9px] sm:h-[40px] sm:w-[40px] sm:p-[11px]',
+        link: 'px-[6px] py-[9px] sm:px-[8px] sm:py-[11px]',
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'primary',
       size: 'default',
     },
   }
 );
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : 'button';
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  // variant?: Variant;
+  asChild?: boolean;
+  icon?: React.ReactNode;
+  iconPosition?: 'start' | 'end';
 }
 
-export { Button, buttonVariants };
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    { variant, size, children, className, asChild = false, icon, iconPosition = 'start', ...props },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : 'button';
+
+    const buttonSize = variant === 'link' && !size ? 'link' : size;
+
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size: buttonSize, className }))}
+        ref={ref}
+        {...props}
+      >
+        {icon && iconPosition === 'start' && (
+          <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
+            {icon}
+          </span>
+        )}
+
+        {children}
+
+        {icon && iconPosition === 'end' && (
+          <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
+            {icon}
+          </span>
+        )}
+      </Comp>
+    );
+  }
+);
+
+Button.displayName = 'Button';
+
+export { buttonVariants };
