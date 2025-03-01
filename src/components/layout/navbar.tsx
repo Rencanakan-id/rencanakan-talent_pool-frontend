@@ -10,7 +10,9 @@ export const Navbar: React.FC = () => {
 
   return (
     <div className="flex w-full">
-      <div className={`${!isMobileMenuOpen && "shadow-lg duration-500 transition-shadow"} bg-rencanakan-pure-white z-[999] flex h-18 w-full items-center justify-between px-6 lg:h-20 lg:px-10`}>
+      <div
+        className={`${!isMobileMenuOpen && 'shadow-lg transition-shadow duration-500'} bg-rencanakan-pure-white z-[999] flex h-18 w-full items-center justify-between px-6 lg:h-20 lg:px-10`}
+      >
         <img src="./rencanakanLogo.svg" alt="Logo" className="h-7 lg:h-9" />
 
         <div className="hidden items-center gap-4 lg:flex lg:gap-8">
@@ -42,9 +44,17 @@ export const Navbar: React.FC = () => {
 
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-rencanakan-pure-black opacity-30 lg:hidden"
+          className="bg-rencanakan-pure-black fixed inset-0 opacity-30 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
-        >{' '}</div>
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setIsMobileMenuOpen(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Mobile Menu Backdrop"
+        />
       )}
 
       <div
