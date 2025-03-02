@@ -10,7 +10,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep }) => {
 
   return (
     <div className="flex items-center justify-center">
-      {steps.map((step, index) => (
+      {steps.map((_step, index) => (
         <React.Fragment key={index}>
           <div
             className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-semibold z-10 ${

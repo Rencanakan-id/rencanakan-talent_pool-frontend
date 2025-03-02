@@ -12,57 +12,51 @@ export const RegisterModule = () => {
 
   return (
     <div className="flex min-h-screen w-full justify-center items-center bg-rencanakan-sea-blue-500 pt-12 md:py-12">
-      <div className="overflow-y-auto flex h-screen md:h-full flex-col justify-center bg-rencanakan-pure-white rounded-t-xl md:rounded-xl drop-shadow-md md:max-w-2xl mx-auto py-6 px-8">
+      <div className="overflow-y-auto flex h-screen md:h-full flex-col justify-center bg-rencanakan-pure-white rounded-t-xl md:rounded-xl drop-shadow-md md:w-lg mx-auto py-6 px-8">
         {formState === 1 ? (
           <StepOneForm />
-        ) : (
+        ) : formState === 2 ? (
           <>
             <Typography variant="h5" className="text-center">
               Lengkapi formulir dan mulai perjalanan karier kamu!
             </Typography>
             
             <div className="my-4 mx-4 justify-center items-center">
-              <Stepper currentStep={formState - 1} />
+              <Stepper currentStep={1} />
             </div>
 
-            {formState === 2 && (
-              <div className="my-4">
-                <Typography variant="h6" className="mb-4">Step 2 Content</Typography>
-                {/* Add your step 2 form fields here */}
-                <div className="space-y-4">
-                  <Input 
-                    label="Alamat" 
-                    placeholder="Alamat lengkap" 
-                  />
-                  <Input 
-                    label="Kota" 
-                    placeholder="Kota" 
-                  />
-                  {/* Add more fields as needed */}
-                </div>
+            <div className="my-4">
+              <Typography variant="h6" className="mb-4">Step 2 Content</Typography>
+              <div className="space-y-4">
+                <Input 
+                  label="Alamat" 
+                  placeholder="Alamat lengkap" 
+                />
+                <Input 
+                  label="Kota" 
+                  placeholder="Kota" 
+                />
               </div>
-            )}
-
-            {formState === 3 && (
-              <div className="my-4">
-                <Typography variant="h6" className="mb-4">Step 3 Content</Typography>
-                {/* Add your step 3 form fields here */}
-              </div>
-            )}
-
-            {formState === 4 && (
-              <div className="my-4">
-                <Typography variant="h6" className="mb-4">Step 4 Content</Typography>
-                {/* Add your step 4 form fields here */}
-              </div>
-            )}
+            </div>
+          </>
+        ) : formState === 3 ? (
+          <>
+            <Typography variant="h5" className="text-center">
+              This step is currently not available
+            </Typography>
+          </>
+        ) : (
+          <>
+            <Typography variant="h5" className="text-center">
+              This step is currently not available
+            </Typography>
           </>
         )}
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-4 space-x-2">
           {formState > 1 && (
             <Button 
-              variant="secondary" 
+              variant="primary-outline" 
               onClick={() => setFormState(prev => Math.max(prev - 1, 1))}
             >
               Kembali
@@ -72,7 +66,7 @@ export const RegisterModule = () => {
             variant="primary" 
             onClick={handleNext}
           >
-            {formState === 4 ? "Selesai" : "Selanjutnya"}
+            {formState === 4 ? "Daftar Kerja" : "Selanjutnya"}
           </Button>
         </div>
       </div>
