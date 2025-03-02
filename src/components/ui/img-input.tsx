@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { Typography } from '../atoms/typography';
 
 interface ImageUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "value" | "onChange"> {
   onImageChange?: (file: File | null) => void
@@ -9,12 +10,10 @@ interface ImageUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "v
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
   ({ className, previewClassName, onImageChange, defaultImage = null, ...props }, ref) => {
-    // Internal state to manage the selected file
     const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage)
     const [preview, setPreview] = React.useState<string | null>(null)
     const fileInputRef = React.useRef<HTMLInputElement>(null)
     
-    // Create preview when file changes
     React.useEffect(() => {
       if (!selectedFile) {
         setPreview(null)
@@ -24,7 +23,6 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
       const objectUrl = URL.createObjectURL(selectedFile)
       setPreview(objectUrl)
       
-      // Free memory when component unmounts
       return () => URL.revokeObjectURL(objectUrl)
     }, [selectedFile])
     
@@ -44,7 +42,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     return (
       <div
         className={cn(
-          "relative flex w-[250px] h-[250px] rounded-md border-2 border-dashed border-gray-300 bg-gray-100 cursor-pointer",
+          "relative flex w-[250px] h-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
           "flex-col justify-center items-center gap-4 overflow-hidden",
           className
         )}
@@ -69,12 +67,9 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full w-full">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 5V19M5 12H19" stroke="#666666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <p className="text-sm text-gray-500 m-0">
-              Click here to upload
-            </p>
+            <label className="text-rencanakan-dark-gray font-bold">
+              <Typography variant={'p5'}>Klik di sini untuk upload</Typography>
+            </label>
           </div>
         )}
       </div>

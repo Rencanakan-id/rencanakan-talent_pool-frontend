@@ -4,7 +4,6 @@ import { Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'luci
 =======
 import { Typography, Textarea, Button, FileInput, Input } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
->>>>>>> 2ebe4f7fa4bf8f2e265284b2e2f98a6b891f28f7
 
 export const DesignSystemModule = () => {
   return (
