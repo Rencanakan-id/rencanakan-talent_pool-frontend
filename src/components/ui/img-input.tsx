@@ -4,13 +4,14 @@ import { Typography } from '../atoms/typography';
 
 interface ImageUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "value" | "onChange"> {
   onImageChange?: (file: File | null) => void
+  label?: string
   previewClassName?: string
   defaultImage?: File | null
   maxSize?: number
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ className, previewClassName, onImageChange, defaultImage = null, maxSize = 2 * 1024 * 1024, ...props }, ref) => {
+  ({ label, className, previewClassName, onImageChange, defaultImage = null, maxSize = 2 * 1024 * 1024, ...props }, ref) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage)
     const [preview, setPreview] = React.useState<string | null>(null)
     const fileInputRef = React.useRef<HTMLInputElement>(null)
@@ -46,38 +47,41 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     }
     
     return (
-      <div
-        className={cn(
-          "relative flex w-[250px] h-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
-          "flex-col justify-center items-center gap-4 overflow-hidden",
-          className
-        )}
-        onClick={handleClick}
-        {...props}
-      >
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-        />
-        
-        {preview ? (
-          <div className={cn("absolute inset-0", previewClassName)}>
-            <img 
-              src={preview} 
-              alt="Preview" 
-              className="w-full h-full object-cover" 
-            />
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full w-full">
-            <label className="text-rencanakan-dark-gray font-bold">
-              <Typography variant={'p5'}>Klik di sini untuk upload</Typography>
-            </label>
-          </div>
-        )}
+      <div className="flex flex-col gap-2">
+        {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-bold">{label}</Typography>}
+        <div
+          className={cn(
+            "relative flex w-[250px] h-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
+            "flex-col justify-center items-center gap-4 overflow-hidden",
+            className
+          )}
+          onClick={handleClick}
+          {...props}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+          />
+          
+          {preview ? (
+            <div className={cn("absolute inset-0", previewClassName)}>
+              <img 
+                src={preview} 
+                alt="Preview" 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full w-full">
+              <label className="text-rencanakan-dark-gray font-bold">
+                <Typography variant={'p5'}>Klik di sini untuk upload</Typography>
+              </label>
+            </div>
+          )}
+        </div>
       </div>
     )
   }
