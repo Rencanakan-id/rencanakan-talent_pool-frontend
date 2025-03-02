@@ -6,10 +6,11 @@ interface ImageUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "v
   onImageChange?: (file: File | null) => void
   previewClassName?: string
   defaultImage?: File | null
+  maxSize?: number
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ className, previewClassName, onImageChange, defaultImage = null, ...props }, ref) => {
+  ({ className, previewClassName, onImageChange, defaultImage = null, maxSize = 2 * 1024 * 1024, ...props }, ref) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage)
     const [preview, setPreview] = React.useState<string | null>(null)
     const fileInputRef = React.useRef<HTMLInputElement>(null)
@@ -32,6 +33,11 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0] || null
+      
+      if (file && file.size > maxSize) {
+        alert(`File size exceeds the maximum limit of ${maxSize / (1024 * 1024)}MB.`)
+        return
+      }
       
       setSelectedFile(file)
       if (onImageChange) {
