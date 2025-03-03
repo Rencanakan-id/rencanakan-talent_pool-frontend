@@ -31,7 +31,7 @@ export const DesignSystemModule = () => {
 
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Design System | Image Upload</h2>
-        <ImageUpload />
+        <ImageUpload label="Upload foto"/>
       </div>
 
       <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
