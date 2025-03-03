@@ -56,6 +56,13 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             className
           )}
           onClick={handleClick}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              handleClick();
+            }
+          }}
+          role="button"
+          tabIndex={0}
           {...props}
         >
           <input
