@@ -11,7 +11,7 @@ interface ImageUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "v
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, previewClassName, onImageChange, defaultImage = null, maxSize = 2 * 1024 * 1024, ...props }, ref) => {
+  ({ label, className, previewClassName, onImageChange, defaultImage = null, maxSize = 2 * 1024 * 1024, ...props }) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage)
     const [preview, setPreview] = React.useState<string | null>(null)
     const fileInputRef = React.useRef<HTMLInputElement>(null)
