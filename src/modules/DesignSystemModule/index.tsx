@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { Typography, Textarea, ImageUpload, Button} from "@/components";
-import { Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
-=======
-import { Typography, Textarea, Button, FileInput, Input } from '@/components';
+import { Typography, Textarea, ImageUpload, Button, FileInput, Input } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 export const DesignSystemModule = () => {
