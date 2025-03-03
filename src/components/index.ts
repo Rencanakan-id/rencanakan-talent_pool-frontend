@@ -3,3 +3,11 @@ export { Textarea } from './ui/textarea';
 export { Button } from './ui/button';
 export { FileInput } from './ui/file-input';
 export { Input } from './ui/input';
+
+
+
+
+
+
+// Nando
+export { Stepper } from "./ui/stepper"
