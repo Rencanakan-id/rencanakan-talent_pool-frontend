@@ -1,6 +1,6 @@
 import { Typography, Stepper, Input, Button } from "@/components";
 import { ReactNode, useState } from "react";
-import { StepOneForm } from "./register-1";
+import { StepOneForm } from "./Section/register-1";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
