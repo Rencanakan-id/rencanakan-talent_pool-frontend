@@ -105,10 +105,7 @@ export const RegisterModule = () => {
     4: (
       <div className="text-center">
         <Typography variant="h5" className="mb-4">
-          Terima kasih telah mendaftar!
-        </Typography>
-        <Typography variant="p3" className="mb-6">
-          Kami akan segera menghubungi Anda untuk proses selanjutnya.
+          Under development
         </Typography>
       </div>
     ),
