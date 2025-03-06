@@ -99,14 +99,14 @@ export const FileInput: React.FC<FileInputProps> = ({
         setErrorType('type');
         return;
       }
-      
+
       // Check file size
       if (file.size > MAX_FILE_SIZE) {
         setFileState('error');
         setErrorType('size');
         return;
       }
-      
+
       // File is valid
       setFileState('filled');
       setErrorType(null);
@@ -155,7 +155,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         <div className={cn(fileInputWrapperVariants({ state: fileState }), className)}>
           <div className={fileNameVariants()}>
             <div className="w-full overflow-hidden pr-8 text-ellipsis whitespace-nowrap">
-              <Typography variant='p5'>
+              <Typography variant="p5">
                 {fileName ? (
                   <span className="font-bold">{fileName.toUpperCase()}</span>
                 ) : (
@@ -184,10 +184,10 @@ export const FileInput: React.FC<FileInputProps> = ({
           {...props}
         />
       </div>
-      
+
       {errorType && (
         <div className={errorMessageVariants()}>
-          <Typography variant='p5'>{getErrorMessage()}</Typography>
+          <Typography variant="p5">{getErrorMessage()}</Typography>
         </div>
       )}
     </div>
