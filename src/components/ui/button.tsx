@@ -65,9 +65,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {icon}
           </span>
         )}
-
         {children}
-
         {icon && iconPosition === 'end' && (
           <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
             {icon}

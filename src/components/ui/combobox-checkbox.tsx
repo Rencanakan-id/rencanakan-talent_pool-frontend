@@ -48,7 +48,7 @@ export function ComboboxCheckBox() {
       } else {
         updated = !checked
           ? prev.filter((item) => item !== location)
-          : [...prev.filter((item) => item !== 'Semua Lokasi'), location]; 
+          : [...prev.filter((item) => item !== 'Semua Lokasi'), location];
       }
 
       setValue(updated.join(', '));
