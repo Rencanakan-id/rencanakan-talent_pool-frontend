@@ -1,6 +1,7 @@
 import { Typography, Stepper, Input, Button } from "@/components";
 import { ReactNode, useState } from "react";
 import { StepOneForm } from "./Section/register-1";
+import { StepTwoForm } from "./Section/register-2";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -10,23 +11,7 @@ export const RegisterModule = () => {
 
   const stepsContent: Record<number, ReactNode> = {
     1: <StepOneForm />,
-    2: (
-      <>
-        <Typography variant="h5" className="text-center">
-          Lengkapi formulir dan mulai perjalanan karier kamu!
-        </Typography>
-        <div className="my-4 mx-4 justify-center items-center">
-          <Stepper currentStep={1} />
-        </div>
-        <div className="my-4">
-          <Typography variant="h6" className="mb-4">Step 2 Content</Typography>
-          <div className="space-y-4">
-            <Input label="Alamat" placeholder="Alamat lengkap" />
-            <Input label="Kota" placeholder="Kota" />
-          </div>
-        </div>
-      </>
-    ),
+    2: <StepTwoForm />,
     3: (
       <>
         <Typography variant="h5" className="text-center">
