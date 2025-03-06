@@ -22,11 +22,11 @@ const buttonVariants = cva(
         link: 'bg-transparent text-rencanakan-sea-blue-300 border-transparent hover:text-rencanakan-sea-blue-300 hover:underline hover:scale-100 hover:shadow-none active:text-rencanakan-sea-blue-500 active:scale-[0.98] disabled:text-rencanakan-base-gray disabled:no-underline disabled:hover:scale-100 disabled:hover:shadow-none p-0 border-0',
       },
       size: {
-        default: 'h-[36px] px-[14px] py-[9px] sm:h-[40px] sm:px-[20px] sm:py-[11px]',
-        sm: 'h-[32px] px-[12px] py-[7px] sm:h-[36px] sm:px-[16px] sm:py-[8px]',
-        lg: 'h-[40px] px-[16px] py-[9px] sm:h-[44px] sm:px-[24px] sm:py-[13px]',
-        icon: 'h-[36px] w-[36px] p-[9px] sm:h-[40px] sm:w-[40px] sm:p-[11px]',
-        link: 'px-[6px] py-[9px] sm:px-[8px] sm:py-[11px]',
+        default: 'h-9 px-[14px] py-[9px] sm:h-10 sm:px-5 sm:py-[11px]',
+        sm: 'h-8 px-3 py-[7px] sm:h-9 sm:px-4 sm:py-2',
+        lg: 'h-10 px-4 py-[9px] sm:h-11 sm:px-6 sm:py-[13px]',
+        icon: 'h-9 w-9 p-[9px] sm:h-10 sm:w-10 sm:p-[11px]',
+        link: 'px-1.5 py-[9px] sm:px-2 sm:py-[11px]',
       },
     },
     defaultVariants: {
