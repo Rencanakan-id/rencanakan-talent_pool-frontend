@@ -5,6 +5,8 @@ import { IoClose } from 'react-icons/io5';
 import { FiPlus } from 'react-icons/fi';
 import { Typography } from '../atoms/typography';
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+
 const fileContainerVariants = cva(['w-full flex items-center']);
 
 const buttonVariants = cva([
@@ -37,6 +39,11 @@ const fileNameVariants = cva([
   'xxl:text-[0.8125rem] xxl:leading-[calc(0.8125rem*1.5)] xl:text-[0.8rem] xl:leading-[calc(0.8rem*1.5)] md:text-[0.75rem] md:leading-[calc(0.75rem*1.5)] text-[0.7rem] leading-[calc(0.7rem*1.5)]',
 ]);
 
+const errorMessageVariants = cva([
+  'text-rencanakan-error-red-100 mt-1',
+  'xxl:text-[0.75rem] xxl:leading-[calc(0.75rem*1.5)] xl:text-[0.75rem] xl:leading-[calc(0.75rem*1.5)] md:text-[0.7rem] md:leading-[calc(0.7rem*1.5)] text-[0.65rem] leading-[calc(0.65rem*1.5)]',
+]);
+
 interface FileInputProps
   extends Omit<React.ComponentProps<'input'>, 'type'>,
     VariantProps<typeof fileInputWrapperVariants> {
@@ -45,6 +52,8 @@ interface FileInputProps
   icon?: React.ReactNode;
   buttonText?: string;
 }
+
+type ErrorType = 'size' | 'type' | null;
 
 export const FileInput: React.FC<FileInputProps> = ({
   className,
@@ -55,6 +64,7 @@ export const FileInput: React.FC<FileInputProps> = ({
 }) => {
   const [fileState, setFileState] = React.useState<'empty' | 'filled' | 'error'>('empty');
   const [fileName, setFileName] = React.useState<string>('');
+  const [errorType, setErrorType] = React.useState<ErrorType>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -69,7 +79,12 @@ export const FileInput: React.FC<FileInputProps> = ({
     }
     setFileName('');
     setFileState('empty');
+    setErrorType(null);
     onClear?.();
+  };
+
+  const isValidFileType = (fileType: string): boolean => {
+    return fileType === 'application/pdf' || fileType.startsWith('image/');
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,20 +92,44 @@ export const FileInput: React.FC<FileInputProps> = ({
     if (files && files.length > 0) {
       const file = files[0];
       setFileName(file.name);
-      if (file.type === 'application/pdf' || file.type.startsWith('image/')) {
-        setFileState('filled');
-      } else {
+      
+      // Check file size
+      if (file.size > MAX_FILE_SIZE) {
         setFileState('error');
+        setErrorType('size');
+        return;
       }
+      
+      // Check file type
+      if (!isValidFileType(file.type)) {
+        setFileState('error');
+        setErrorType('type');
+        return;
+      }
+      
+      // File is valid
+      setFileState('filled');
+      setErrorType(null);
     } else {
       setFileName('');
       setFileState('empty');
+      setErrorType(null);
     }
     props.onChange?.(e);
   };
 
   const handleButtonClick = () => {
     inputRef.current?.click();
+  };
+
+  const getErrorMessage = (): string => {
+    if (errorType === 'size') {
+      return 'Ukuran file melebihi batas maksimal 5MB';
+    }
+    if (errorType === 'type') {
+      return 'Format file tidak didukung. Harap unggah file gambar atau PDF saja';
+    }
+    return '';
   };
 
   return (
@@ -140,9 +179,16 @@ export const FileInput: React.FC<FileInputProps> = ({
           type="file"
           className="hidden"
           onChange={handleFileChange}
+          accept="image/*,application/pdf"
           {...props}
         />
       </div>
+      
+      {errorType && (
+        <div className={errorMessageVariants()}>
+          <Typography variant='p5'>{getErrorMessage()}</Typography>
+        </div>
+      )}
     </div>
   );
 };
