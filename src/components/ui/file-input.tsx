@@ -92,18 +92,18 @@ export const FileInput: React.FC<FileInputProps> = ({
     if (files && files.length > 0) {
       const file = files[0];
       setFileName(file.name);
+
+      // Check file type
+      if (!isValidFileType(file.type)) {
+        setFileState('error');
+        setErrorType('type');
+        return;
+      }
       
       // Check file size
       if (file.size > MAX_FILE_SIZE) {
         setFileState('error');
         setErrorType('size');
-        return;
-      }
-      
-      // Check file type
-      if (!isValidFileType(file.type)) {
-        setFileState('error');
-        setErrorType('type');
         return;
       }
       
@@ -155,11 +155,13 @@ export const FileInput: React.FC<FileInputProps> = ({
         <div className={cn(fileInputWrapperVariants({ state: fileState }), className)}>
           <div className={fileNameVariants()}>
             <div className="w-full overflow-hidden pr-8 text-ellipsis whitespace-nowrap">
-              {fileName ? (
-                <span className="font-bold">{fileName.toUpperCase()}</span>
-              ) : (
-                'Tidak ada file yang dipilih'
-              )}
+              <Typography variant='p5'>
+                {fileName ? (
+                  <span className="font-bold">{fileName.toUpperCase()}</span>
+                ) : (
+                  'Tidak ada file yang dipilih'
+                )}
+              </Typography>
             </div>
           </div>
 
@@ -179,7 +181,6 @@ export const FileInput: React.FC<FileInputProps> = ({
           type="file"
           className="hidden"
           onChange={handleFileChange}
-          accept="image/*,application/pdf"
           {...props}
         />
       </div>
