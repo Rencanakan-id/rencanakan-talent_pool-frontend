@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741315618641" clover="3.2.0">
-  <project timestamp="1741315618642" name="All files">
-    <metrics statements="107" coveredstatements="0" conditionals="65" coveredconditionals="0" methods="18" coveredmethods="0" elements="190" coveredelements="0" complexity="0" loc="107" ncloc="107" packages="6" files="12" classes="12"/>
+<coverage generated="1741344356446" clover="3.2.0">
+  <project timestamp="1741344356447" name="All files">
+    <metrics statements="115" coveredstatements="7" conditionals="67" coveredconditionals="2" methods="20" coveredmethods="2" elements="202" coveredelements="11" complexity="0" loc="115" ncloc="115" packages="6" files="13" classes="13"/>
     <package name="src">
       <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="App.tsx" path="C:\Users\gabri\sem 6\ppl\rencanakan-talent_pool-frontend\src\App.tsx">
@@ -50,7 +50,7 @@
       </file>
     </package>
     <package name="src.components.ui">
-      <metrics statements="76" coveredstatements="0" conditionals="62" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <metrics statements="83" coveredstatements="7" conditionals="64" coveredconditionals="2" methods="11" coveredmethods="2"/>
       <file name="button.tsx" path="C:\Users\gabri\sem 6\ppl\rencanakan-talent_pool-frontend\src\components\ui\button.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
@@ -66,6 +66,16 @@
         <line num="57" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
+      </file>
+      <file name="experience.tsx" path="C:\Users\gabri\sem 6\ppl\rencanakan-talent_pool-frontend\src\components\ui\experience.tsx">
+        <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
       </file>
       <file name="file-input.tsx" path="C:\Users\gabri\sem 6\ppl\rencanakan-talent_pool-frontend\src\components\ui\file-input.tsx">
         <metrics statements="39" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -154,13 +164,14 @@
       </file>
     </package>
     <package name="src.modules.DesignSystemModule">
-      <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="index.tsx" path="C:\Users\gabri\sem 6\ppl\rencanakan-talent_pool-frontend\src\modules\DesignSystemModule\index.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
-        <line num="4" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
       </file>
     </package>
   </project>
