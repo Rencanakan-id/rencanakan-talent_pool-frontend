@@ -15,22 +15,7 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Typography } from '../atoms/typography';
-
-const locations = [
-  { value: 'jakarta', label: 'Jakarta' },
-  { value: 'bandung', label: 'Bandung' },
-  { value: 'surabaya', label: 'Surabaya' },
-  { value: 'medan', label: 'Medan' },
-  { value: 'makassar1', label: 'Makassar' },
-  { value: 'makassar2', label: 'Makassar' },
-  { value: 'makassar3', label: 'Makassar' },
-  { value: 'makassar4', label: 'Makassar' },
-  { value: 'makassar5', label: 'Makassar' },
-  { value: 'makassar6', label: 'Makassar' },
-  { value: 'makassar7', label: 'Makassar' },
-  { value: 'makassar8', label: 'Makassar' },
-  { value: 'makassar9', label: 'Makassar' },
-];
+import { locations } from '@/data/static';
 
 export function Combobox() {
   const [open, setOpen] = React.useState(false);

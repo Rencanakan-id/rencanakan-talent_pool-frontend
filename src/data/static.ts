@@ -1,0 +1,16 @@
+export const locations = [
+  { value: 'semua-lokasi', label: 'Semua Lokasi' },
+  { value: 'jakarta', label: 'Jakarta' },
+  { value: 'bandung', label: 'Bandung' },
+  { value: 'surabaya', label: 'Surabaya' },
+  { value: 'medan', label: 'Medan' },
+  { value: 'makassar1', label: 'Makassar' },
+  { value: 'makassar2', label: 'Makassar' },
+  { value: 'makassar3', label: 'Makassar' },
+  { value: 'makassar4', label: 'Makassar' },
+  { value: 'makassar5', label: 'Makassar' },
+  { value: 'makassar6', label: 'Makassar' },
+  { value: 'makassar7', label: 'Makassar' },
+  { value: 'makassar8', label: 'Makassar' },
+  { value: 'makassar9', label: 'Makassar' },
+];
