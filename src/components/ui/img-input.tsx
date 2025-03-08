@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Typography } from '../atoms/typography';
 
-interface ImageUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "value" | "onChange"> {
+interface ImageUploadProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
   onImageChange?: (file: File | null) => void
   label?: string
   previewClassName?: string
@@ -36,7 +36,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
       const file = e.target.files?.[0] || null
       
       if (file && file.size > maxSize) {
-        alert(`File size exceeds the maximum limit of ${maxSize / (1024 * 1024)}MB.`)
+        alert(`Ukuran gambar yang Anda unggah melebihi batas maksimum ${maxSize / (1024 * 1024)}MB.`)
         return
       }
       
@@ -49,20 +49,14 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     return (
       <div className="flex flex-col gap-2">
         {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-bold">{label}</Typography>}
-        <div
+        <button
+          type="button"
           className={cn(
             "relative flex w-[250px] h-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
             "flex-col justify-center items-center gap-4 overflow-hidden",
             className
           )}
           onClick={handleClick}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              handleClick();
-            }
-          }}
-          role="button"
-          tabIndex={0}
           {...props}
         >
           <input
@@ -88,7 +82,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
               </label>
             </div>
           )}
-        </div>
+        </button>
       </div>
     )
   }
