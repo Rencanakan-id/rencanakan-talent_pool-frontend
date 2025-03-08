@@ -1,6 +1,7 @@
 import { Typography, Stepper, Input, Button } from "@/components";
 import { ReactNode, useState } from "react";
 import { StepOneForm } from "./Section/register-1";
+import { StepFourForm } from "./Section/register-4";
 import { RegisterFormData } from "@/lib/register";
 
 export const RegisterModule = () => {
@@ -17,11 +18,23 @@ export const RegisterModule = () => {
     diplomaFile: null,
     address: '',
     city: '',
-    price: ''
+    price: '',
+    password: '',
+    passwordConfirmation: '',
+  });
+  const [validationStatus, setValidationStatus] = useState({
+    step4Valid: false
   });
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData(prev => ({
+      ...prev,
+      ...data
+    }));
+  };
+
+  const updateValidationStatus = (data: Partial<typeof validationStatus>) => {
+    setValidationStatus(prev => ({
       ...prev,
       ...data
     }));
@@ -36,15 +49,14 @@ export const RegisterModule = () => {
           formData.email && 
           formData.phoneNumber && 
           formData.nik && 
-          formData.npwp && 
-          formData.ktpFile && 
-          formData.npwpFile && 
-          formData.diplomaFile
+          formData.npwp
         );
       case 2:
         return !!(formData.address && formData.city);
       case 3:
         return !!formData.price;
+      case 4:
+        return validationStatus.step4Valid;
       default:
         return true;
     }
@@ -102,13 +114,11 @@ export const RegisterModule = () => {
         </div>
       </>
     ),
-    4: (
-      <div className="text-center">
-        <Typography variant="h5" className="mb-4">
-          Under development
-        </Typography>
-      </div>
-    ),
+    4: <StepFourForm 
+        formData={formData} 
+        updateFormData={updateFormData}
+        updateValidationStatus={updateValidationStatus} 
+       />,
   };
 
   const handleSubmit = () => {
@@ -123,11 +133,9 @@ export const RegisterModule = () => {
         {stepsContent[formState]}
 
         <div className="flex justify-end mt-4 space-x-2">
-          {formState > 1 && formState < 4 && (
-            <Button variant="primary-outline" onClick={handlePrev}>
-              Kembali
-            </Button>
-          )}
+          <Button variant="primary-outline" onClick={handlePrev}>
+            Kembali
+          </Button>
           <Button 
             variant="primary" 
             onClick={formState === 4 ? handleSubmit : handleNext} 
