@@ -51,6 +51,8 @@ interface FileInputProps
   textLabel?: string;
   icon?: React.ReactNode;
   buttonText?: string;
+  onFileSelect?: (file: File | null) => void;
+  value?: string;
 }
 
 type ErrorType = 'size' | 'type' | null;
@@ -60,10 +62,11 @@ export const FileInput: React.FC<FileInputProps> = ({
   state,
   onClear,
   textLabel,
+  value,
   ...props
 }) => {
   const [fileState, setFileState] = React.useState<'empty' | 'filled' | 'error'>('empty');
-  const [fileName, setFileName] = React.useState<string>('');
+  const [fileName, setFileName] = React.useState<string>(value || '');
   const [errorType, setErrorType] = React.useState<ErrorType>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -71,13 +74,18 @@ export const FileInput: React.FC<FileInputProps> = ({
     if (state) {
       setFileState(state);
     }
-  }, [state]);
+    if (value !== undefined) {
+      setFileName(value);
+    }
+  }, [value]);
 
   const handleClear = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
     }
-    setFileName('');
+    if (value === undefined) {
+      setFileName('');
+    }
     setFileState('empty');
     setErrorType(null);
     onClear?.();
@@ -91,12 +99,15 @@ export const FileInput: React.FC<FileInputProps> = ({
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      setFileName(file.name);
+      if (value === undefined) {
+        setFileName(file.name);
+      }
 
       // Check file type
       if (!isValidFileType(file.type)) {
         setFileState('error');
         setErrorType('type');
+        props.onFileSelect?.(null);
         return;
       }
 
@@ -104,16 +115,21 @@ export const FileInput: React.FC<FileInputProps> = ({
       if (file.size > MAX_FILE_SIZE) {
         setFileState('error');
         setErrorType('size');
+        props.onFileSelect?.(null);
         return;
       }
 
       // File is valid
       setFileState('filled');
       setErrorType(null);
+      props.onFileSelect?.(file);
     } else {
-      setFileName('');
+      if (value === undefined) {
+        setFileName('');
+      }
       setFileState('empty');
       setErrorType(null);
+      props.onFileSelect?.(null);
     }
     props.onChange?.(e);
   };
@@ -121,6 +137,12 @@ export const FileInput: React.FC<FileInputProps> = ({
   const handleButtonClick = () => {
     inputRef.current?.click();
   };
+
+  const displayFileName = fileName ? (
+    <span className="font-bold">{fileName.toUpperCase()}</span>
+  ) : (
+    'Tidak ada file yang dipilih'
+  );
 
   const getErrorMessage = (): string => {
     if (errorType === 'size') {
@@ -155,13 +177,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         <div className={cn(fileInputWrapperVariants({ state: fileState }), className)}>
           <div className={fileNameVariants()}>
             <div className="w-full overflow-hidden pr-8 text-ellipsis whitespace-nowrap">
-              <Typography variant="p5">
-                {fileName ? (
-                  <span className="font-bold">{fileName.toUpperCase()}</span>
-                ) : (
-                  'Tidak ada file yang dipilih'
-                )}
-              </Typography>
+              <Typography variant="p5">{displayFileName}</Typography>
             </div>
           </div>
 
