@@ -2,8 +2,8 @@ import { Typography, Textarea, Button, FileInput, Input } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 import { Combobox } from '@/components/ui/combobox';
-import { ComboboxCheckBox } from '@/components/ui/combobox-checkbox';
-import { locations } from '@/data/static';
+import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
+import { locations } from '@/data/location';
 
 export const DesignSystemModule = () => {
   return (

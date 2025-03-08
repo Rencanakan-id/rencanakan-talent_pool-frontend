@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { locations } from '@/data/static';
+import { locations } from '@/data/location';
 import {
   Command,
   CommandEmpty,
