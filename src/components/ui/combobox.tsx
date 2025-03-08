@@ -15,9 +15,19 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Typography } from '../atoms/typography';
-import { locations } from '@/data/static';
 
-export function Combobox() {
+
+type Option = {
+  value: string;
+  label: string;
+};
+
+type ComboboxProps = {
+  type?: string,
+  data?: Option[];
+};
+
+export function Combobox({ data = [], type }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
 
@@ -34,7 +44,7 @@ export function Combobox() {
             iconPosition="end"
           >
             <Typography variant="p4" className="text-xs text-gray-500">
-              {value ? locations.find((location) => location.value === value)?.label : 'Pilih kota'}
+              {value ? data.find((point) => point.value === value)?.label : 'Pilih ' + type}
             </Typography>
           </Button>
           <Typography
@@ -42,33 +52,33 @@ export function Combobox() {
             className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
           >
             {value
-              ? locations.find((location) => location.value === value)?.label
-              : 'Lokasi saat ini'}
+              ? data.find((point) => point.value === value)?.label
+              : type +' saat ini'}
           </Typography>
         </PopoverTrigger>
       </div>
 
       <PopoverContent className="w-[368px] p-0">
         <Command>
-          <CommandInput placeholder="Lokasi" />
+          <CommandInput placeholder= {`${type}`} />
           <CommandList>
-            <CommandEmpty>Lokasi tidak ditemukan</CommandEmpty>
+            <CommandEmpty> {`${type} tidak ditemukan`}</CommandEmpty>
             <CommandGroup>
-              {locations.map((location) => (
+              {data.map((point) => (
                 <CommandItem
-                  key={location.value}
-                  value={location.value}
+                  key={point.value}
+                  value={point.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue);
                     setOpen(false);
                   }}
                 >
                   <div className="flex w-full items-center gap-4">
-                    <span>{location.label}</span>
+                    <span>{point.label}</span>
                     <Check
                       className={cn(
                         'mr-2 transition-opacity duration-200',
-                        value === location.value ? 'opacity-100' : 'opacity-0'
+                        value === point.value ? 'opacity-100' : 'opacity-0'
                       )}
                     />
                   </div>

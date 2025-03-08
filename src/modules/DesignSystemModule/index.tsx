@@ -3,6 +3,7 @@ import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from
 
 import { Combobox } from '@/components/ui/combobox';
 import { ComboboxCheckBox } from '@/components/ui/combobox-checkbox';
+import { locations } from '@/data/static';
 
 export const DesignSystemModule = () => {
   return (
@@ -15,7 +16,7 @@ export const DesignSystemModule = () => {
       </div>
 
       <div className="w-full space-y-4">
-        <Combobox />
+        <Combobox data={locations} type='Lokasi'/>
         {/* <ComboboxCheckBox /> */}
       </div>
       <div className="w-full space-y-4">
