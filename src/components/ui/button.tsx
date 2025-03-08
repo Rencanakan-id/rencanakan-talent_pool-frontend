@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Typography } from '@/components';
 import { cn } from '@/lib/utils';
 
 type Variant = 'primary' | 'secondary' | 'primary-outline' | 'secondary-outline' | 'link';
 
 const buttonVariants = cva(
-  'inline-flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none disabled:cursor-not-allowed active:scale-95 hover:shadow-md',
+  'inline-flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none disabled:cursor-not-allowed active:scale-95 hover:shadow-md font-semibold text-sm sm:text-base xxl:text-[0.875rem] xxl:leading-[calc(0.875rem*1.5)] xl:text-[0.85rem] xl:leading-[calc(0.85rem*1.5)] md:text-[0.8rem] md:leading-[calc(0.8rem*1.5)]',
   {
     variants: {
       variant: {
@@ -54,9 +53,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const buttonSize = variant === 'link' && !size ? 'link' : size;
 
+    const buttonClassName = cn(
+      buttonVariants({ variant, size: buttonSize }), 
+      variant === 'link' && 'underline-offset-4',
+      className
+    );
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size: buttonSize }), className)}
+        className={buttonClassName}
         ref={ref}
         {...props}
       >
@@ -65,16 +70,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {icon}
           </span>
         )}
-        <Typography
-          variant="p4"
-          className={cn(
-            'font-semibold',
-            variant === 'link' && 'underline-offset-4',
-            'text-sm sm:text-base'
-          )}
-        >
-          {children}
-        </Typography>
+        {children}
         {icon && iconPosition === 'end' && (
           <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
             {icon}
