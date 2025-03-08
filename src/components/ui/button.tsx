@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Typography } from '@/components';
+
 import { cn } from '@/lib/utils';
 
-type Variant = 'primary' | 'secondary' | 'primary-outline' | 'secondary-outline' | 'link';
-
 const buttonVariants = cva(
-  'inline-flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none disabled:cursor-not-allowed active:scale-95 hover:shadow-md',
+  'flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none disabled:cursor-not-allowed active:scale-95 hover:shadow-md',
   {
     variants: {
       variant: {
         primary:
           'bg-rencanakan-sea-blue-300 text-white border-2 border-rencanakan-sea-blue-300 hover:bg-rencanakan-sea-blue-500 hover:border-rencanakan-sea-blue-500 hover:scale-[1.02] active:bg-rencanakan-sea-blue-500 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
+        outline:
+          'border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground',
         secondary:
           'bg-rencanakan-premium-gold-300 text-white border-2 border-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 hover:border-rencanakan-premium-gold-400 hover:scale-[1.02] active:bg-rencanakan-premium-gold-400 disabled:bg-rencanakan-base-gray disabled:border-rencanakan-base-gray disabled:text-white disabled:hover:scale-100 disabled:hover:shadow-none',
         'primary-outline':
@@ -39,7 +39,7 @@ const buttonVariants = cva(
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  variant?: Variant;
+  // variant?: Variant;
   asChild?: boolean;
   icon?: React.ReactNode;
   iconPosition?: 'start' | 'end';
@@ -65,16 +65,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {icon}
           </span>
         )}
-        <Typography
-          variant="p4"
-          className={cn(
-            'font-semibold',
-            variant === 'link' && 'underline-offset-4',
-            'text-sm sm:text-base'
-          )}
-        >
-          {children}
-        </Typography>
+        {children}
         {icon && iconPosition === 'end' && (
           <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
             {icon}
