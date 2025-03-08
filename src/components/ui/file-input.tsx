@@ -65,15 +65,18 @@ export const FileInput: React.FC<FileInputProps> = ({
   value,
   ...props
 }) => {
-  const [fileState, setFileState] = React.useState<'empty' | 'filled' | 'error'>('empty');
+  const [fileState, setFileState] = React.useState<'empty' | 'filled' | 'error'>(state || 'empty');
   const [fileName, setFileName] = React.useState<string>(value || '');
   const [errorType, setErrorType] = React.useState<ErrorType>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
-    if (state) {
-      setFileState(state);
+    if (state !== undefined) {
+      setFileState(state || 'empty');
     }
+  }, [state]);
+
+  React.useEffect(() => {
     if (value !== undefined) {
       setFileName(value);
     }
@@ -83,12 +86,11 @@ export const FileInput: React.FC<FileInputProps> = ({
     if (inputRef.current) {
       inputRef.current.value = '';
     }
-    if (value === undefined) {
-      setFileName('');
-    }
+    setFileName('');
     setFileState('empty');
     setErrorType(null);
     onClear?.();
+    props.onFileSelect?.(null);
   };
 
   const isValidFileType = (fileType: string): boolean => {
@@ -99,6 +101,7 @@ export const FileInput: React.FC<FileInputProps> = ({
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
+
       if (value === undefined) {
         setFileName(file.name);
       }
@@ -108,21 +111,19 @@ export const FileInput: React.FC<FileInputProps> = ({
         setFileState('error');
         setErrorType('type');
         props.onFileSelect?.(null);
-        return;
       }
-
       // Check file size
-      if (file.size > MAX_FILE_SIZE) {
+      else if (file.size > MAX_FILE_SIZE) {
         setFileState('error');
         setErrorType('size');
         props.onFileSelect?.(null);
-        return;
       }
-
       // File is valid
-      setFileState('filled');
-      setErrorType(null);
-      props.onFileSelect?.(file);
+      else {
+        setFileState('filled');
+        setErrorType(null);
+        props.onFileSelect?.(file);
+      }
     } else {
       if (value === undefined) {
         setFileName('');
@@ -131,7 +132,10 @@ export const FileInput: React.FC<FileInputProps> = ({
       setErrorType(null);
       props.onFileSelect?.(null);
     }
-    props.onChange?.(e);
+
+    if (props.onChange) {
+      props.onChange(e);
+    }
   };
 
   const handleButtonClick = () => {
