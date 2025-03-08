@@ -16,7 +16,7 @@ export const DesignSystemModule = () => {
       </div>
 
       <div className="w-full space-y-4">
-        <Combobox data={locations} type='Lokasi'/>
+        <Combobox data={locations} type="Lokasi" />
         {/* <ComboboxCheckBox /> */}
       </div>
       <div className="w-full space-y-4">

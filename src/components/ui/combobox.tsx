@@ -16,14 +16,13 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Typography } from '../atoms/typography';
 
-
 type Option = {
   value: string;
   label: string;
 };
 
 type ComboboxProps = {
-  type?: string,
+  type?: string;
   data?: Option[];
 };
 
@@ -51,16 +50,14 @@ export function Combobox({ data = [], type }: ComboboxProps) {
             variant="p4"
             className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
           >
-            {value
-              ? data.find((point) => point.value === value)?.label
-              : type +' saat ini'}
+            {value ? data.find((point) => point.value === value)?.label : type + ' saat ini'}
           </Typography>
         </PopoverTrigger>
       </div>
 
       <PopoverContent className="w-[368px] p-0">
         <Command>
-          <CommandInput placeholder= {`${type}`} />
+          <CommandInput placeholder={`${type}`} />
           <CommandList>
             <CommandEmpty> {`${type} tidak ditemukan`}</CommandEmpty>
             <CommandGroup>
