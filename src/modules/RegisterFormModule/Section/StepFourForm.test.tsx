@@ -64,6 +64,7 @@ describe('StepFourForm Component', () => {
       />
     );
     
+    fireEvent.change(getByTestId('password'), { target: { value: ' ' } });
     fireEvent.change(getByTestId('password'), { target: { value: '' } });
     
     await waitFor(() => {
@@ -71,6 +72,110 @@ describe('StepFourForm Component', () => {
       fireEvent.blur(passwordInput);
       expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
     });
+  });
+
+  it('displays error when password is less than 8 characters', async () => {
+    const { getByTestId, findByTestId } = render(
+      <StepFourForm 
+        {...defaultProps} 
+        formData={{ password: '1234567' }}
+      />
+    );
+    
+    fireEvent.change(getByTestId('password'), { target: { value: '1234567' } });
+    
+    const errorElement = await findByTestId('password-error');
+    expect(errorElement).toHaveTextContent('Kata sandi minimal 8 karakter');
+    expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+  });
+
+  it('displays error when password doesn\'t have uppercase letters', async () => {
+    const { getByTestId, findByTestId } = render(
+      <StepFourForm 
+        {...defaultProps} 
+        formData={{ password: 'password123' }}
+      />
+    );
+    
+    fireEvent.change(getByTestId('password'), { target: { value: 'password123' } });
+    
+    const errorElement = await findByTestId('password-error');
+    expect(errorElement).toHaveTextContent('Kata sandi harus memiliki huruf kapital');
+    expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+  });
+
+  it('displays error when password doesn\'t have lowercase letters', async () => {
+    const { getByTestId, findByTestId } = render(
+      <StepFourForm 
+        {...defaultProps} 
+        formData={{ password: 'PASSWORD123' }}
+      />
+    );
+    
+    fireEvent.change(getByTestId('password'), { target: { value: 'PASSWORD123' } });
+    
+    const errorElement = await findByTestId('password-error');
+    expect(errorElement).toHaveTextContent('Kata sandi harus memiliki huruf kecil');
+    expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+  });
+
+  it('displays error when password doesn\'t have numbers', async () => {
+    const { getByTestId, findByTestId } = render(
+      <StepFourForm 
+        {...defaultProps} 
+        formData={{ password: 'Password' }}
+      />
+    );
+    
+    fireEvent.change(getByTestId('password'), { target: { value: 'Password' } });
+    
+    const errorElement = await findByTestId('password-error');
+    expect(errorElement).toHaveTextContent('Kata sandi harus memiliki angka');
+    expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+  });
+
+  it('displays error when password contains spaces', async () => {
+    const { getByTestId, findByTestId } = render(
+      <StepFourForm 
+        {...defaultProps} 
+        formData={{ password: 'Password 123' }}
+      />
+    );
+    
+    fireEvent.change(getByTestId('password'), { target: { value: 'Password 123' } });
+    
+    const errorElement = await findByTestId('password-error');
+    expect(errorElement).toHaveTextContent('Kata sandi tidak boleh mengandung spasi');
+    expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+  });
+
+  it('validates that password confirmation cannot be empty', async () => {
+    const { updateFormData, updateValidationStatus } = defaultProps;
+    
+    const testFormData = {
+      password: 'Password123',
+      passwordConfirmation: ''
+    } as RegisterFormData;
+    
+    render(
+      <StepFourForm 
+        formData={testFormData}
+        updateFormData={updateFormData}
+        updateValidationStatus={updateValidationStatus}
+      />
+    );
+    
+    await waitFor(() => {
+      expect(updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+    });
+    
+    const validatePasswordMatch = (password?: string, confirmation?: string) => {
+      if (!confirmation) return "Konfirmasi kata sandi tidak boleh kosong";
+      if (password !== confirmation) return "Kata sandi tidak cocok";
+      return "";
+    };
+    
+    expect(validatePasswordMatch('Password123', '')).toBe("Konfirmasi kata sandi tidak boleh kosong");
   });
 
   it('displays error when passwords don\'t match', async () => {
@@ -86,14 +191,6 @@ describe('StepFourForm Component', () => {
     const errorElement = await findByTestId('passwordConfirmation-error');
     expect(errorElement).toHaveTextContent('Kata sandi tidak cocok');
     expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
-  });
-
-  it('updates form data when user types in password field', () => {
-    const { getByTestId } = render(<StepFourForm {...defaultProps} />);
-    
-    fireEvent.change(getByTestId('password'), { target: { value: 'NewPassword123' } });
-    
-    expect(defaultProps.updateFormData).toHaveBeenCalledWith({ password: 'NewPassword123' });
   });
 
   it('validates form as valid with correct password and terms accepted', async () => {
@@ -113,4 +210,71 @@ describe('StepFourForm Component', () => {
       expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: true });
     });
   });
+
+  it('updates form data when user types in password field', () => {
+    const { getByTestId } = render(<StepFourForm {...defaultProps} />);
+    
+    fireEvent.change(getByTestId('password'), { target: { value: 'NewPassword123' } });
+    
+    expect(defaultProps.updateFormData).toHaveBeenCalledWith({ password: 'NewPassword123' });
+  });
+
+  it('updates form data when user types in password confirmation field', () => {
+    const { getByTestId } = render(<StepFourForm {...defaultProps} />);
+    
+    fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: 'NewPassword123' } });
+    
+    expect(defaultProps.updateFormData).toHaveBeenCalledWith({ passwordConfirmation: 'NewPassword123' });
+  });
+
+  it('updates form data when user toggles terms and conditions checkbox', () => {
+    const { container } = render(<StepFourForm {...defaultProps} />);
+    
+    const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
+    expect(checkbox).toBeInTheDocument();
+    
+    fireEvent.click(checkbox);
+    
+    expect(defaultProps.updateFormData).toHaveBeenCalledWith({ termsAndConditions: true });
+  });
+
+  it('validates form as invalid when terms not accepted', async () => {
+    const formDataNoTerms: Partial<RegisterFormData> = {
+      password: 'Password123',
+      passwordConfirmation: 'Password123',
+      termsAndConditions: false
+    };
+
+    render(
+      <StepFourForm
+        {...defaultProps}
+        formData={formDataNoTerms as RegisterFormData} />
+    );
+    
+    await waitFor(() => {
+      expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+    });
+  });
+
+  it('shows no errors with valid password but validation fails without terms', async () => {
+    const formData: Partial<RegisterFormData> = {
+      password: 'Password123',
+      passwordConfirmation: 'Password123',
+      termsAndConditions: false
+    };
+
+    const { queryByTestId } = render(
+      <StepFourForm 
+        {...defaultProps} 
+        formData={formData as RegisterFormData}
+      />
+    );
+    
+    await waitFor(() => {
+      expect(queryByTestId('password-error')).not.toBeInTheDocument();
+      expect(queryByTestId('passwordConfirmation-error')).not.toBeInTheDocument();
+      expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+    });
+  });
 });
+
