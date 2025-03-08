@@ -61,6 +61,8 @@ export const LoginForm = ({
               className="w-full"
               onClick={handleLogin} 
               disabled={!isFormValid}
+              data-testid="login-button"
+              
             >
               MASUK
             </Button>
