@@ -111,43 +111,6 @@
   --color-rencanakan-error-red-50: rgba(196, 61, 75, 0.5);
   --color-rencanakan-error-red-75: rgba(196, 61, 75, 0.75);
   --color-rencanakan-error-red-100: rgba(196, 61, 75, 1);
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 :root {
@@ -156,7 +119,6 @@
   @apply bg-rencanakan-light-gray;
 }
 
-/* Define the keyframes for sliding down */
 @keyframes slideDown {
   0% {
     transform: translateY(-100%);
@@ -182,3 +144,173 @@
 .slide-up {
   animation: slideUp 0.3s ease-in-out forwards;
 }
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.31);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.slay{
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.slay div{
+  position: absolute;
+  border-radius: 50%;
+  animation: gradient 4s infinite;
+}
+@keyframes gradient{
+  70%{
+      transform: scale(1.2) translate(50px);
+  }
+}
+
+.slay div:nth-child(1){
+  height: 90%;
+  width: 80%;
+  background-color: var(--color-rencanakan-sea-blue-500);
+  left: -20%;
+  top: -10%;
+}
+.slay div:nth-child(2){
+  height: 80%;
+  width: 70%;
+  background-color: #001522;
+  top: -12%;
+  right: -12%;
+  animation-delay: 2s;
+}
+.slay div:nth-child(3){
+  height: 65%;
+  width: 80%;
+  background-color: #00090f;
+  bottom: -15%;
+  right: -20%;
+  animation-delay: 0.3s;
+}
+.slay div:nth-child(4){
+  height: 50%;
+  width: 75%;
+  background-color: #001522;
+  bottom: -10%;
+  left: -18%;
+  animation-delay: 1.2s;
+}
+.slay:after{
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(80px);
+}
+
+.animate-graident-text {
+  /* background: linear-gradient(
+    to right,
+    #fc72ff,
+    #8f68ff,
+    #487bff,
+    #8f68ff,
+    #fc72ff
+  ); */
+  background: linear-gradient(
+    to right,
+    #ff9933,
+    #a45200,
+    #ff9933
+
+  );
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animate-gradient 2.5s linear infinite;
+}
+
+@keyframes animate-gradient {
+  to {
+    background-position: 200%;
+  }
+}
+
+@keyframes floatVertical {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float-vertical {
+  animation: floatVertical 4s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(164, 82, 0, 0.3),
+                0 0 40px rgba(164, 82, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(164, 82, 0, 1),
+                0 0 60px rgba(164, 82, 0, 0.3);
+  }
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Add this to your CSS file */
+@keyframes rotate-conic {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
+.conic-border-animation {
+  --angle: 0deg;
+  border: 3px solid; /* Match original border width */
+  border-image: conic-gradient(
+    var(--angle),
+    transparent,
+    #a45200,
+    transparent
+  ) 1; /* 1 = slice parameter */
+  animation: rotate-conic 4s linear infinite, float-vertical 2s ease-in-out infinite;
+}
+
+/* .shape-tl-1 {
+  animation: topleft1 10s infinite;
+}
+
+.shape-bl-1 {
+  animation: bottomleft1 10s infinite;
+} */
+
+/* @keyframes topleft1{
+  0% { left: -80px; top: -20px;}
+  25% {left: -30px; top: 0px;}
+  50% {left: -60px; top: 10px;}
+  75% {left: -50px; top: -10px}
+  100%{left: -80px; top: -20px;}
+}
+
+@keyframes bottomleft1{
+  0% { left: 200px; bottom: -120px;}
+  25% {left: 180px; bottom: -120px;}
+  50% {left: 190px; bottom: -90px;}
+  75% {left: 150px; bottom: -110px}
+  100%{ left: 200px; bottom: -120px;}
+} */
