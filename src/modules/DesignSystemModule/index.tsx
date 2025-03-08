@@ -1,5 +1,4 @@
 import { Typography, Textarea, Button, FileInput, Input } from '@/components';
-import Experience from '@/components/ui/experience';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 export const DesignSystemModule = () => {
@@ -128,10 +127,6 @@ export const DesignSystemModule = () => {
             </Button>
           </div>
         </div>
-      </div>
-      <div>
-        <h1> Experience Detail </h1>
-        <Experience />
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>

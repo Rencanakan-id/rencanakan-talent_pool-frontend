@@ -65,16 +65,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {icon}
           </span>
         )}
-        <Typography
-          variant="p4"
-          className={cn(
-            'font-semibold',
-            variant === 'link' && 'underline-offset-4',
-            'text-sm sm:text-base'
-          )}
-        >
           {children}
-        </Typography>
         {icon && iconPosition === 'end' && (
           <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
             {icon}
