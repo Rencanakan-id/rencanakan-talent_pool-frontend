@@ -41,7 +41,7 @@ export const LoginForm = ({
               label="E-mail" 
               placeholder="Masukkan email Anda" 
               type="email"
-              value={formData.email || ''} 
+              value={formData.email ?? ''} 
               onChange={handleInputChange} 
             />
             
@@ -50,7 +50,7 @@ export const LoginForm = ({
               label="Kata Sandi" 
               placeholder="Masukkan kata sandi" 
               type="password"
-              value={formData.password || ''} 
+              value={formData.password ?? ''} 
               onChange={handleInputChange} 
             />
           </div>
@@ -68,16 +68,16 @@ export const LoginForm = ({
             </Button>
           </div>
           <div className="mt-4 text-center">
-            <Typography variant="p4">
-              Belum punya akun?&nbsp;
-              <span 
+          <Typography variant="p4">
+            Belum punya akun?{" "}
+            <a
                 className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-blue-700"
-                onClick={() => window.location.href = '/register'}
-                style={{ textDecoration: 'underline' }}
-              >
+                href="/register"
+                style={{ textDecoration: "underline" }}
+            >
                 DAFTAR
-              </span>
-            </Typography>
+            </a>
+          </Typography>
           </div>
         </div>
         
@@ -94,11 +94,11 @@ export const LoginForm = ({
                     kebutuhan proyek mereka secara cepat dan efisien.
                 </Typography>
                 <Typography variant="p5" className="mt-4">
-                    <span className="cursor-pointer text-white hover:text-blue-700"
-                        onClick={() => window.location.href = 'https://rencanakan.id/about-us/'}
+                    <a className="cursor-pointer text-white hover:text-blue-700"
+                        href= 'https://rencanakan.id/about-us/'
                     >
                         Pelajari lebih lanjut
-                    </span>
+                    </a>
                 </Typography>
             </div>
         </div>

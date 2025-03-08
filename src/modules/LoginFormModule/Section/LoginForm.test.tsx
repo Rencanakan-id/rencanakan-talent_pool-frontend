@@ -1,6 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { LoginForm } from "./login";
+import { faker } from "@faker-js/faker";
 import "@testing-library/jest-dom";
+
+const randomPassword = faker.internet.password();
 
 describe("LoginForm", () => {
   let mockUpdateFormData: jest.Mock;
@@ -32,9 +35,9 @@ describe("LoginForm", () => {
     expect(mockUpdateFormData).toHaveBeenCalledWith(expect.objectContaining({ email: "test@example.com" }));
 
     fireEvent.change(screen.getByPlaceholderText("Masukkan kata sandi"), {
-      target: { value: "password123" },
+      target: { value: randomPassword },
     });
-    expect(mockUpdateFormData).toHaveBeenCalledWith(expect.objectContaining({ password: "password123" }));
+    expect(mockUpdateFormData).toHaveBeenCalledWith(expect.objectContaining({ password: randomPassword }));
   });
 
   test("login button is disabled when form is invalid", () => {
@@ -53,7 +56,7 @@ describe("LoginForm - Valid Form", () => {
 
     render(
       <LoginForm
-        formData={{ email: "user@example.com", password: "securePass" }}
+        formData={{ email: "user@example.com", password: randomPassword }}
         updateFormData={mockUpdateFormData}
         isFormValid={true}
         handleLogin={mockHandleLogin}
