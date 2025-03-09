@@ -89,16 +89,16 @@ describe('StepFourForm Component', () => {
   describe('Password Field Validations', () => {
     it('shows error from validation errors prop when present', async () => {
       const validationErrors = {
-        password: 'Password has an error'
+        password: faker.lorem.sentence()
       };
       
       const { findByTestId } = renderFormWithData(
-        { password: 'test' },
+        { password: faker.string.alphanumeric(4) },
         validationErrors
       );
       
       const errorElement = await findByTestId('password-error');
-      expect(errorElement).toHaveTextContent('Password has an error');
+      expect(errorElement).toHaveTextContent(validationErrors.password);
     });
 
     it('marks form as incomplete with empty password', async () => {
@@ -120,8 +120,9 @@ describe('StepFourForm Component', () => {
     });
 
     it('shows error when passwords don\'t match from validation errors', async () => {
+      const errorMessage = faker.lorem.sentence();
       const validationErrors = {
-        passwordConfirmation: 'Kata sandi tidak cocok'
+        passwordConfirmation: errorMessage
       };
       
       const { findByTestId } = renderFormWithData(
@@ -133,7 +134,7 @@ describe('StepFourForm Component', () => {
       );
       
       const errorElement = await findByTestId('passwordConfirmation-error');
-      expect(errorElement).toHaveTextContent('Kata sandi tidak cocok');
+      expect(errorElement).toHaveTextContent(errorMessage);
     });
   });
 
