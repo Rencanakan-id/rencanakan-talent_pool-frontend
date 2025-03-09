@@ -8,7 +8,7 @@ export const validatePassword = (password: string | undefined): string => {
   if (password.length < 8) return "Kata sandi minimal 8 karakter";
   if (!/[A-Z]/.test(password)) return "Kata sandi harus memiliki huruf kapital";
   if (!/[a-z]/.test(password)) return "Kata sandi harus memiliki huruf kecil";
-  if (!/[0-9]/.test(password)) return "Kata sandi harus memiliki angka";
+  if (!/\d/.test(password)) return "Kata sandi harus memiliki angka";
   if (/[ \t]/.test(password)) return "Kata sandi tidak boleh mengandung spasi";
   return "";
 };
