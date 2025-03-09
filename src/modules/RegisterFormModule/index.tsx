@@ -3,6 +3,7 @@ import { ReactNode, useState } from "react";
 import { StepOneForm } from "./Section/register-1";
 import { StepFourForm } from "./Section/register-4";
 import { RegisterFormData } from "@/lib/register";
+import { validatePasswordSection } from "@/lib/validation/passwordValidation";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -22,9 +23,13 @@ export const RegisterModule = () => {
     password: '',
     passwordConfirmation: '',
   });
-  const [validationStatus, setValidationStatus] = useState({
-    step4Valid: false
+  const [formCompleteness, setFormCompleteness] = useState({
+    step4Complete: false
   });
+  const [validationErrors, setValidationErrors] = useState<{
+    password?: string;
+    passwordConfirmation?: string;
+  }>({});
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData(prev => ({
@@ -33,10 +38,10 @@ export const RegisterModule = () => {
     }));
   };
 
-  const updateValidationStatus = (data: Partial<typeof validationStatus>) => {
-    setValidationStatus(prev => ({
+  const updateFormCompleteness = (isComplete: boolean) => {
+    setFormCompleteness(prev => ({
       ...prev,
-      ...data
+      step4Complete: isComplete
     }));
   };
 
@@ -56,7 +61,8 @@ export const RegisterModule = () => {
       case 3:
         return !!formData.price;
       case 4:
-        return validationStatus.step4Valid;
+        // For step 4, we only check if fields are filled, not if they're valid
+        return formCompleteness.step4Complete;
       default:
         return true;
     }
@@ -72,6 +78,23 @@ export const RegisterModule = () => {
 
   const handlePrev = () => {
     setFormState(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleSubmit = () => {
+    if (formState === 4) {
+      // Validate the form before submission
+      const { password, passwordConfirmation, termsAndConditions } = formData;
+      const validation = validatePasswordSection(password, passwordConfirmation, termsAndConditions);
+      
+      // Set validation errors
+      setValidationErrors(validation.errors);
+      
+      // If form is valid, proceed with submission
+      if (validation.isValid) {
+        console.log('Final Form Data:', formData);
+        // Here you would submit the form data
+      }
+    }
   };
 
   const stepsContent: Record<number, ReactNode> = {
@@ -117,14 +140,9 @@ export const RegisterModule = () => {
     4: <StepFourForm 
         formData={formData} 
         updateFormData={updateFormData}
-        updateValidationStatus={updateValidationStatus} 
+        updateFormCompleteness={updateFormCompleteness}
+        validationErrors={validationErrors}
        />,
-  };
-
-  const handleSubmit = () => {
-    if (formState === 4) {
-      console.log('Final Form Data:', formData);
-    }
   };
 
   return (

@@ -1,24 +1,23 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
 import { Typography, Stepper, Input } from "@/components";
 import { RegisterFormData } from "@/lib/register";
-import { validatePasswordSection } from "@/lib/validation/passwordValidation";
 
 interface StepFourFormProps {
   formData: RegisterFormData;
   updateFormData: (data: Partial<RegisterFormData>) => void;
-  updateValidationStatus: (data: { step4Valid: boolean }) => void;
+  updateFormCompleteness: (isComplete: boolean) => void;
+  validationErrors?: {
+    password?: string;
+    passwordConfirmation?: string;
+  };
 }
 
 export const StepFourForm: React.FC<StepFourFormProps> = ({
   formData,
   updateFormData,
-  updateValidationStatus,
+  updateFormCompleteness,
+  validationErrors = {}, 
 }) => {
-  const [errors, setErrors] = useState<{
-    password?: string;
-    passwordConfirmation?: string;
-  }>({});
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     updateFormData({
@@ -29,15 +28,10 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
   useEffect(() => {
     const { password, passwordConfirmation, termsAndConditions } = formData;
     
-    const validation = validatePasswordSection(
-      password, 
-      passwordConfirmation, 
-      termsAndConditions
-    );
+    const isComplete = !!password && !!passwordConfirmation && !!termsAndConditions;
     
-    setErrors(validation.errors);
-    updateValidationStatus({ step4Valid: validation.isValid });
-  }, [formData.password, formData.passwordConfirmation, formData.termsAndConditions, updateValidationStatus]);
+    updateFormCompleteness(isComplete);
+  }, [formData.password, formData.passwordConfirmation, formData.termsAndConditions, updateFormCompleteness]);
 
   return (
     <div>
@@ -55,7 +49,7 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
               type="password"
               value={formData.password || ''}
               onChange={handleInputChange}
-              error={errors.password}
+              error={validationErrors.password}
             />
             <Input
               name="passwordConfirmation"
@@ -64,7 +58,7 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
               type="password"
               value={formData.passwordConfirmation || ''}
               onChange={handleInputChange}
-              error={errors.passwordConfirmation}
+              error={validationErrors.passwordConfirmation}
             />
             
             <div className="flex items-start">
