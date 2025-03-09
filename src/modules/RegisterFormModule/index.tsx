@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react';
 import { StepOneForm } from './Section/register-1';
 import { StepTwoForm } from './Section/register-2';
 import { RegisterFormData } from '@/lib/register';
+import { StepThreeForm } from './Section/register-3';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -69,29 +70,7 @@ export const RegisterModule = () => {
   const stepsContent: Record<number, ReactNode> = {
     1: <StepOneForm formData={formData} updateFormData={updateFormData} />,
     2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
-    3: (
-      <>
-        <Typography variant="h5" className="text-center">
-          Lengkapi formulir dan mulai perjalanan karier kamu!
-        </Typography>
-        <div className="mx-4 my-4 items-center justify-center">
-          <Stepper currentStep={2} />
-        </div>
-        <div className="my-4 space-y-4">
-          <Typography variant="h6" className="mb-4">
-            Harga Kamu
-          </Typography>
-          <Input
-            name="price"
-            label="Harga Kamu"
-            placeholder="Masukkan harga kamu"
-            type="number"
-            value={formData.price || ''}
-            onChange={(e) => updateFormData({ price: e.target.value })}
-          />
-        </div>
-      </>
-    ),
+    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: (
       <div className="text-center">
         <Typography variant="h5" className="mb-4">
