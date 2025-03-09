@@ -8,9 +8,11 @@ import { RegisterModule } from './modules/RegisterFormModule/index.tsx';
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
-      <Route path="" element={<App />} />
-      <Route path="/design" element={<DesignSystemModule />} />
-      <Route path="/register" element={<RegisterModule />} />
+      <Route path="" element={<App />}>
+        <Route path="/" element={<>TODO: Make this landing page</>} />
+        <Route path="/design" element={<DesignSystemModule />} />
+        <Route path="/register" element={<RegisterModule />} />
+      </Route>
     </Routes>
   </BrowserRouter>
 );
