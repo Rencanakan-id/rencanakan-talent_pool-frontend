@@ -56,7 +56,8 @@ export function Combobox({
         <PopoverTrigger className="w-full">
           <Button
             variant="primary-outline"
-            role="combobox"
+            aria-haspopup="listbox"
+            aria-controls="dropdown-list"
             aria-expanded={open}
             className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:bg-transparent active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
             icon={
