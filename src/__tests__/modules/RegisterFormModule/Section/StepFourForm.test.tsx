@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { StepFourForm } from '../../../modules/RegisterFormModule/Section/register-4';
+import { StepFourForm } from '../../../../modules/RegisterFormModule/Section/register-4';
 import { RegisterFormData } from '@/lib/register';
 
 jest.mock('@/components', () => ({
