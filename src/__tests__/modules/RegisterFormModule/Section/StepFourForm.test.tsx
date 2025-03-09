@@ -101,15 +101,8 @@ describe('StepFourForm Component', () => {
       expect(errorElement).toHaveTextContent('Password has an error');
     });
 
-    it('checks form completeness when password is empty', () => {
-      renderFormWithData({ password: '' });
-      
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
-    });
-
     it('marks form as incomplete with empty password', async () => {
       renderFormWithData({ 
-        password: '', 
         passwordConfirmation: generateValidPassword1() 
       });
       
@@ -121,7 +114,6 @@ describe('StepFourForm Component', () => {
     it('marks form as incomplete with empty password confirmation', async () => {
       renderFormWithData({
         password: generateValidPassword1(),
-        passwordConfirmation: ''
       });
       
       expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
