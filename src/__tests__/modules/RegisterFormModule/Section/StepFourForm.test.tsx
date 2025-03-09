@@ -10,7 +10,7 @@ const generateValidPassword1 = () => {
 };
 
 const generateValidPassword2 = () => {
-  return `${faker.string.alpha(5).toUpperCase()}${faker.string.alpha(1).toLowerCase()}${faker.string.numeric(3)}`;
+  return `${faker.string.alpha(2).toUpperCase()}${faker.string.alpha(7).toLowerCase()}${faker.string.numeric(4)}`;
 };
 
 jest.mock('@/components', () => ({
@@ -108,7 +108,10 @@ describe('StepFourForm Component', () => {
     });
 
     it('marks form as incomplete with empty password', async () => {
-      renderFormWithData({ password: '', passwordConfirmation: generateValidPassword1() });
+      renderFormWithData({ 
+        password: '', 
+        passwordConfirmation: generateValidPassword1() 
+      });
       
       expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
