@@ -41,7 +41,6 @@ jest.mock('@/components/ui/comboboxCheckbox', () => ({
   )
 }));
 
-// Mock components to match the import structure in register-2.tsx
 jest.mock('@/components', () => ({
   Typography: ({ children, className }: { children: React.ReactNode, className?: string, variant?: string }) => (
     <div className={className}>{children}</div>
@@ -218,6 +217,10 @@ describe('StepTwoForm Component', () => {
       
       fireEvent.change(fileInput, { target: { files: [file] } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkFile: file });
+      
+      // Rerender the component with the updated file
+      setup({ skkFile: file });
+      expect(screen.getByText('skk.pdf')).toBeInTheDocument(); // Verify the filename is displayed
     });
   });
 
