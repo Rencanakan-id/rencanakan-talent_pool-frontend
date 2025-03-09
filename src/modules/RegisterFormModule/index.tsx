@@ -1,4 +1,4 @@
-import { Typography, Stepper, Input, Button } from '@/components';
+import { Typography, Button } from '@/components';
 import { ReactNode, useState } from 'react';
 import { StepOneForm } from './Section/register-1';
 import { StepTwoForm } from './Section/register-2';
