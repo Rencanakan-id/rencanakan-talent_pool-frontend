@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
 import { Typography, Stepper, Input } from "@/components";
 import { RegisterFormData } from "@/lib/register";
+import { validatePasswordSection } from "@/lib/validation/passwordValidation";
 
 interface StepFourFormProps {
   formData: RegisterFormData;
@@ -18,22 +19,6 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
     passwordConfirmation?: string;
   }>({});
 
-  const validatePassword = (password: string | undefined) => {
-    if (!password) return "Kata sandi tidak boleh kosong";
-    if (password.length < 8) return "Kata sandi minimal 8 karakter";
-    if (!/[A-Z]/.test(password)) return "Kata sandi harus memiliki huruf kapital";
-    if (!/[a-z]/.test(password)) return "Kata sandi harus memiliki huruf kecil";
-    if (!/[0-9]/.test(password)) return "Kata sandi harus memiliki angka";
-    if (/[ \t]/.test(password)) return "Kata sandi tidak boleh mengandung spasi";
-    return "";
-  };
-
-  const validatePasswordMatch = (password: string | undefined, confirmation: string | undefined) => {
-    if (!confirmation) return "Konfirmasi kata sandi tidak boleh kosong";
-    if (password !== confirmation) return "Kata sandi tidak cocok";
-    return "";
-  };
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     updateFormData({
@@ -44,17 +29,14 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
   useEffect(() => {
     const { password, passwordConfirmation, termsAndConditions } = formData;
     
-    const passwordError = validatePassword(password);
-    const confirmationError = validatePasswordMatch(password, passwordConfirmation);
+    const validation = validatePasswordSection(
+      password, 
+      passwordConfirmation, 
+      termsAndConditions
+    );
     
-    setErrors({
-      password: password ? passwordError : undefined,
-      passwordConfirmation: passwordConfirmation ? confirmationError : undefined,
-    });
-
-    const isValid = passwordError === "" && confirmationError === "" && termsAndConditions;
-
-    updateValidationStatus({ step4Valid: !!isValid });
+    setErrors(validation.errors);
+    updateValidationStatus({ step4Valid: validation.isValid });
   }, [formData.password, formData.passwordConfirmation, formData.termsAndConditions, updateValidationStatus]);
 
   return (
