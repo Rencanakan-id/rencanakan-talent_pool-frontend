@@ -36,7 +36,7 @@ export const LoginForm = ({
           </div>
           
           <Typography variant="h5" className="mb-6">
-            Silahkan Masuk
+            Masuk
           </Typography>
           
           <div className="space-y-4">
@@ -81,7 +81,7 @@ export const LoginForm = ({
                 href="/register"
                 style={{ textDecoration: "underline" }}
             >
-                DAFTAR
+                Daftar disini
             </a>
           </Typography>
           </div>
@@ -93,7 +93,7 @@ export const LoginForm = ({
                 <Typography variant="h4" className="mb-4 text-white">
                     Selamat datang!!
                 </Typography>
-                <Typography variant="p1" className="text-white">
+                <Typography variant="p2" className="text-white">
                     Talent Pool adalah fitur dari Rencanakan.id yang memungkinkan tenaga ahli 
                     di bidang konstruksi untuk mendaftar dan menunjukkan keterampilan mereka. 
                     Fitur ini memudahkan kontraktor dalam mencari dan merekrut talenta sesuai 
