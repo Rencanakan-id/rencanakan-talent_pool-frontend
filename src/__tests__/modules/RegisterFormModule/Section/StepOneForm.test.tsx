@@ -4,6 +4,14 @@ import '@testing-library/jest-dom';
 import { StepOneForm } from '@/modules/RegisterFormModule/Section/register-1';
 import { RegisterFormData } from '@/lib/register';
 
+interface InputFileProps {
+  textLabel: string;
+  accept?: string;
+  state?: string;
+  value?: string | null;
+  onFileSelect: (file: File) => void;
+}
+
 interface InputProps {
   name?: string;
   label?: string;
@@ -13,14 +21,6 @@ interface InputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   className?: string;
-}
-
-interface FileInputProps {
-  textLabel: string;
-  accept?: string;
-  state?: string;
-  value?: string | null;
-  onFileSelect: (file: File) => void;
 }
 
 jest.mock('@/components', () => ({
@@ -49,7 +49,7 @@ jest.mock('@/components', () => ({
       {error && <div className="error-message">{error}</div>}
     </div>
   ),
-  FileInput: ({ textLabel, accept, state, value, onFileSelect }: FileInputProps) => (
+  FileInput: ({ textLabel, accept, state, value, onFileSelect }: InputFileProps) => (
     <div>
       <label>{textLabel}</label>
       <input
