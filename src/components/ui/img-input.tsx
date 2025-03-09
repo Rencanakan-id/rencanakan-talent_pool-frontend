@@ -55,7 +55,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           <button
             type="button"
             className={cn(
-              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
+              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-base-gray bg-rencanakan-light-gray cursor-pointer",
               "flex flex-col justify-center items-center gap-4 overflow-hidden",
               className
             )}

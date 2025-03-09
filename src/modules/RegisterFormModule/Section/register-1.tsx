@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { Typography, Stepper, Input, FileInput } from "@/components";
+import { Typography, Stepper, Input, FileInput, ImageUpload } from "@/components";
 import { RegisterFormData } from "@/lib/register";
 
 interface StepOneFormProps {
@@ -14,17 +14,22 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
   };
 
   return (
-    <div className="px-4">
-      <Typography variant="h5" className="text-center mb-4">
+    <div>
+      <Typography variant="h5" className="mb-4 text-rencanakan-type-black">
         Lengkapi formulir dan mulai perjalanan karier kamu!
       </Typography>
       
       <Stepper currentStep={0} />
 
 
-      <div className="space-y-6">
+      <div className="space-y-6 mt-8">
         <section>
           <Typography variant="h6" className="my-2">Masukkan Data Diri</Typography>
+
+          <div className="space-y-1 mb-6 mt-4">
+            <Typography variant="p5" className="text-rencanakan-type-black font-semibold text-sm">Foto Diri</Typography>
+            <ImageUpload />
+          </div>
           
           <div className="space-y-4">
             <div className="flex space-x-2">
