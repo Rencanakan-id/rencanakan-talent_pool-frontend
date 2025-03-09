@@ -29,15 +29,12 @@ export const RegisterModule = () => {
     switch (step) {
       case 1:
         return !!(
-          formData.firstName &&
-          formData.lastName &&
-          formData.email &&
-          formData.phoneNumber &&
-          formData.nik &&
-          formData.npwp &&
-          formData.ktpFile &&
-          formData.npwpFile &&
-          formData.diplomaFile
+          formData.firstName && 
+          formData.lastName && 
+          formData.email && 
+          formData.phoneNumber && 
+          formData.nik && 
+          formData.npwp
         );
       case 2:
         return !!(
