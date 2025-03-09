@@ -139,7 +139,6 @@ describe('StepTwoForm Component', () => {
     jest.clearAllMocks();
   });
 
-  // Positive test cases
   describe('Positive Cases', () => {
     test('renders form with all fields', () => {
       setup();
@@ -224,7 +223,6 @@ describe('StepTwoForm Component', () => {
     });
   });
 
-  // Negative test cases
   describe('Negative Cases', () => {
     test('does not show otherSkill input when skill is not "lainnya"', () => {
       setup({ skill: 'Sipil' });
@@ -243,6 +241,40 @@ describe('StepTwoForm Component', () => {
       } as any);
       
       expect(container).toBeInTheDocument();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    test('handles changing skill from "lainnya" to another value', () => {
+      // Start with "lainnya" selected
+      const { rerender } = setup({ skill: 'lainnya', otherSkill: 'Custom Skill' });
+      
+      // Verify otherSkill input is shown
+      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
+      
+      // Change skill to non-"lainnya" value
+      const skillInput = screen.getByLabelText('Keahlian');
+      fireEvent.change(skillInput, { target: { value: 'Sipil' } });
+      
+      // Re-render with the updated props to simulate React's behavior
+      rerender(
+        <StepTwoForm 
+          formData={{ ...defaultFormData, skill: 'Sipil' }} 
+          updateFormData={mockUpdateFormData} 
+        />
+      );
+      
+      // Verify otherSkill input is no longer shown
+      const otherSkillInput = screen.queryByPlaceholderText('Tulis di sini keahlian kamu');
+      expect(otherSkillInput).not.toBeInTheDocument();
+    });
+
+    test('handles very long text input in textarea', () => {
+      const longText = 'a'.repeat(1000);
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya');
+      fireEvent.change(textarea, { target: { value: longText } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: longText });
     });
   });
 });
