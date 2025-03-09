@@ -95,21 +95,24 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               textLabel="Foto KTP" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.ktpFile ? 'filled' : 'empty'}
-              onChange={handleFileChange('ktpFile')}
+              value={formData.ktpFile?.name || ''}
+              onFileSelect={(file) => updateFormData({ ktpFile: file })}
             />
             <FileInput 
               data-slot="input" 
               textLabel="Foto NPWP" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.npwpFile ? 'filled' : 'empty'}
-              onChange={handleFileChange('npwpFile')}
+              value={formData.npwpFile?.name || ''}
+              onFileSelect={(file) => updateFormData({ npwpFile: file })}
             />
             <FileInput 
               data-slot="input" 
               textLabel="Scan Ijazah" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.diplomaFile ? 'filled' : 'empty'}
-              onChange={handleFileChange('diplomaFile')}
+              value={formData.diplomaFile?.name || ''}
+              onFileSelect={(file) => updateFormData({ diplomaFile: file })}
             />
           </div>
         </section>

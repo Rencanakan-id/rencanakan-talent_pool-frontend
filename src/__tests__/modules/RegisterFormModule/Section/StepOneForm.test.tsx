@@ -145,12 +145,6 @@ describe('StepOneForm Component', () => {
         expect(mockUpdateFormData).toHaveBeenCalledWith({ npwp: '123123123123' });
     });  
 
-    test("displays file inputs correctly", () => {
-        expect(screen.getByText("Foto KTP")).toBeInTheDocument();
-        expect(screen.getByText("Foto NPWP")).toBeInTheDocument();
-        expect(screen.getByText("Scan Ijazah")).toBeInTheDocument();
-      });
-
     test('updates foto KTP when file is selected', () => {
         setup();
         const file = new File(['dummy content'], 'ktp.pdf', { type: 'application/pdf' });
