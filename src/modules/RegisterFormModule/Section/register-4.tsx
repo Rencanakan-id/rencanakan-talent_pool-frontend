@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { Typography, Stepper, Input } from "@/components";
 import { RegisterFormData } from "@/lib/register";
 
