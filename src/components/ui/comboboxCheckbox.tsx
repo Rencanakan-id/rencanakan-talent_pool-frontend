@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -11,7 +11,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from './checkbox';
 import { useState } from 'react';
@@ -45,7 +44,7 @@ export function ComboboxCheckBox({
   onChange,
   defaultValues = [],
   maxSelection,
-}: ComboboxCheckBoxProps) {
+}: Readonly<ComboboxCheckBoxProps>) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [selected, setSelected] = useState<string[]>(defaultValues);
@@ -86,12 +85,12 @@ export function ComboboxCheckBox({
             variant="primary-outline"
             role="combobox"
             aria-expanded={open}
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:bg-transparent active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
             <Typography variant="p4" className="text-xs text-gray-500">
-              {value ? value : `Pilih ${label}`}
+              {value || `Pilih ${label}`}
             </Typography>
           </Button>
           <Typography
@@ -102,7 +101,7 @@ export function ComboboxCheckBox({
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent className="p-0" style={{ width }}>
+      <PopoverContent className="p-0 border-transparent" style={{ width }}>
         <Command>
           <div className="flex h-full items-center">
             <Typography variant="p5" className="flex items-center p-2">
