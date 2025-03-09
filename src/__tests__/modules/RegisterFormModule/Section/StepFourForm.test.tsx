@@ -5,8 +5,12 @@ import { StepFourForm } from '../../../../modules/RegisterFormModule/Section/reg
 import { RegisterFormData } from '@/lib/register';
 import { faker } from '@faker-js/faker';
 
-const generateValidPassword = () => {
+const generateValidPassword1 = () => {
   return `${faker.string.alpha(1).toUpperCase()}${faker.string.alpha(5).toLowerCase()}${faker.string.numeric(3)}`;
+};
+
+const generateValidPassword2 = () => {
+  return `${faker.string.alpha(5).toUpperCase()}${faker.string.alpha(1).toLowerCase()}${faker.string.numeric(3)}`;
 };
 
 jest.mock('@/components', () => ({
@@ -104,7 +108,7 @@ describe('StepFourForm Component', () => {
     });
 
     it('marks form as incomplete with empty password', async () => {
-      renderFormWithData({ password: '', passwordConfirmation: 'Password123' });
+      renderFormWithData({ password: '', passwordConfirmation: generateValidPassword1() });
       
       expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
@@ -113,7 +117,7 @@ describe('StepFourForm Component', () => {
   describe('Password Confirmation Validations', () => {
     it('marks form as incomplete with empty password confirmation', async () => {
       renderFormWithData({
-        password: generateValidPassword(),
+        password: generateValidPassword1(),
         passwordConfirmation: ''
       });
       
@@ -127,8 +131,8 @@ describe('StepFourForm Component', () => {
       
       const { findByTestId } = renderFormWithData(
         { 
-          password: generateValidPassword(), 
-          passwordConfirmation: 'differentPassword' 
+          password: generateValidPassword1(), 
+          passwordConfirmation: generateValidPassword2()
         },
         validationErrors
       );
@@ -140,7 +144,7 @@ describe('StepFourForm Component', () => {
 
   describe('Terms and Conditions', () => {
     it('marks form as incomplete when terms not accepted', async () => {
-      const validPassword = generateValidPassword();
+      const validPassword = generateValidPassword1();
       
       renderFormWithData({
         password: validPassword,
@@ -152,7 +156,7 @@ describe('StepFourForm Component', () => {
     });
 
     it('marks form as complete when all fields valid and terms accepted', async () => {
-      const validPassword = generateValidPassword();
+      const validPassword = generateValidPassword1();
       
       renderFormWithData({
         password: validPassword,
@@ -167,7 +171,7 @@ describe('StepFourForm Component', () => {
   describe('Form Data Updates', () => {
     it('updates form data when user types in password field', () => {
       const { getByTestId } = renderFormWithData();
-      const newPassword = generateValidPassword();
+      const newPassword = generateValidPassword1();
       
       fireEvent.change(getByTestId('password'), { target: { value: newPassword } });
       
@@ -176,7 +180,7 @@ describe('StepFourForm Component', () => {
 
     it('updates form data when user types in password confirmation field', () => {
       const { getByTestId } = renderFormWithData();
-      const newPassword = generateValidPassword();
+      const newPassword = generateValidPassword1();
       
       fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: newPassword } });
       
@@ -197,7 +201,7 @@ describe('StepFourForm Component', () => {
 
   describe('Form Completeness Status', () => {
     it('updates completeness status when all fields are filled correctly', async () => {
-      const validPassword = generateValidPassword();
+      const validPassword = generateValidPassword1();
       
       renderFormWithData({
         password: validPassword,
@@ -209,7 +213,7 @@ describe('StepFourForm Component', () => {
     });
     
     it('updates completeness status when some fields are missing', async () => {
-      const validPassword = generateValidPassword();
+      const validPassword = generateValidPassword1();
       
       renderFormWithData({
         password: validPassword,
@@ -220,7 +224,7 @@ describe('StepFourForm Component', () => {
     });
     
     it('updates completeness status when terms are not accepted', async () => {
-      const validPassword = generateValidPassword();
+      const validPassword = generateValidPassword1();
       
       renderFormWithData({
         password: validPassword,
