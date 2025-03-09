@@ -77,7 +77,7 @@ describe('LandingPageModule', () => {
 
     const textContainer = screen.getByTestId('text-container');
     expect(textContainer).toBeInTheDocument();
-    expect(textContainer).toHaveClass('w-1/2');
+    expect(textContainer).toHaveClass('lg:w-1/2');
 
     const imageContainer = screen.getByTestId('image-container');
     expect(imageContainer).toBeInTheDocument();
