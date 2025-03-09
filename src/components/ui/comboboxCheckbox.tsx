@@ -106,7 +106,7 @@ export function ComboboxCheckBox({
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent className="p-0 border-transparent" id="combobox-options" role="listbox" style={{ width }}>
+      <PopoverContent className="p-0 border-rencanakan-light-gray" id="combobox-options" role="listbox" style={{ width }}>
         <Command>
           <div className="flex h-full items-center">
             <Typography variant="p5" className="flex items-center p-2">

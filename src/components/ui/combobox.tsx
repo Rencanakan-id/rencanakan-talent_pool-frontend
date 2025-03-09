@@ -79,7 +79,7 @@ export function Combobox({
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent className="w-full p-0 pt-2 border-transparent" style={{ width: width }}>
+      <PopoverContent className="w-full p-0 pt-2 border-rencanakan-light-gray" style={{ width: width }}>
         <Command>
           <CommandInput placeholder={placeholder} />
           <CommandList>
