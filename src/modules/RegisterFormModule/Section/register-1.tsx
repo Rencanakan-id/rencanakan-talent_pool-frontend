@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
-import { Typography, Stepper, Input, FileInput } from '@/components';
-import { RegisterFormData } from '@/lib/register';
+import React, { ChangeEvent } from "react";
+import { Typography, Stepper, Input, FileInput } from "@/components";
+import { RegisterFormData } from "@/lib/register";
 
 interface StepOneFormProps {
   formData: RegisterFormData;
@@ -13,27 +13,25 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
     updateFormData({ [name]: value });
   };
 
-  const handleFileChange =
-    (field: keyof RegisterFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      const file = files && files.length > 0 ? files[0] : null;
-      updateFormData({ [field]: file });
-    };
+  const handleFileChange = (field: keyof RegisterFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const file = files && files.length > 0 ? files[0] : null;
+    updateFormData({ [field]: file });
+  };
 
   return (
     <div className="px-4">
-      <Typography variant="h5" className="mb-4 text-center">
+      <Typography variant="h5" className="text-center mb-4">
         Lengkapi formulir dan mulai perjalanan karier kamu!
       </Typography>
-
+      
       <Stepper currentStep={0} />
+
 
       <div className="space-y-6">
         <section>
-          <Typography variant="h6" className="my-2">
-            Masukkan Data Diri
-          </Typography>
-
+          <Typography variant="h6" className="my-2">Masukkan Data Diri</Typography>
+          
           <div className="space-y-4">
             <div className="flex space-x-2">
               <Input
@@ -89,28 +87,26 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
         </section>
 
         <section>
-          <Typography variant="h6" className="mb-4">
-            Upload Dokumen
-          </Typography>
+          <Typography variant="h6" className="mb-4">Upload Dokumen</Typography>
 
           <div className="space-y-4">
-            <FileInput
-              data-slot="input"
-              textLabel="Foto KTP"
+            <FileInput 
+              data-slot="input" 
+              textLabel="Foto KTP" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.ktpFile ? 'filled' : 'empty'}
               onChange={handleFileChange('ktpFile')}
             />
-            <FileInput
-              data-slot="input"
-              textLabel="Foto NPWP"
+            <FileInput 
+              data-slot="input" 
+              textLabel="Foto NPWP" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.npwpFile ? 'filled' : 'empty'}
               onChange={handleFileChange('npwpFile')}
             />
-            <FileInput
-              data-slot="input"
-              textLabel="Scan Ijazah"
+            <FileInput 
+              data-slot="input" 
+              textLabel="Scan Ijazah" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.diplomaFile ? 'filled' : 'empty'}
               onChange={handleFileChange('diplomaFile')}
