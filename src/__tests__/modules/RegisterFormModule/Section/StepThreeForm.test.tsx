@@ -22,7 +22,6 @@ jest.mock('@/components', () => ({
   }: {
     children: React.ReactNode;
     className?: string;
-    variant?: string;
   }) => <div className={className}>{children}</div>,
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
@@ -33,9 +32,9 @@ jest.mock('@/components', () => ({
       <input
         id={name}
         name={name}
-        placeholder={placeholder || ''}
+        placeholder={placeholder ?? ''}
         type={type}
-        value={value || ''}
+        value={value ?? ''}
         onChange={onChange}
         aria-label={label}
       />
