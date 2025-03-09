@@ -3,8 +3,6 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-type Variant = 'primary' | 'secondary' | 'primary-outline' | 'secondary-outline' | 'link';
-
 const buttonVariants = cva(
   'inline-flex justify-center items-center gap-[6px] rounded-[50px] cursor-pointer whitespace-nowrap transition-all duration-300 ease-in-out focus:outline-none disabled:cursor-not-allowed active:scale-95 hover:shadow-md font-semibold text-sm sm:text-base xxl:text-[0.875rem] xxl:leading-[calc(0.875rem*1.5)] xl:text-[0.85rem] xl:leading-[calc(0.85rem*1.5)] md:text-[0.8rem] md:leading-[calc(0.8rem*1.5)]',
   {
@@ -38,7 +36,7 @@ const buttonVariants = cva(
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  variant?: Variant;
+  // variant?: Variant;
   asChild?: boolean;
   icon?: React.ReactNode;
   iconPosition?: 'start' | 'end';
@@ -54,17 +52,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const buttonSize = variant === 'link' && !size ? 'link' : size;
 
     const buttonClassName = cn(
-      buttonVariants({ variant, size: buttonSize }), 
+      buttonVariants({ variant, size: buttonSize }),
       variant === 'link' && 'underline-offset-4',
       className
     );
 
     return (
-      <Comp
-        className={buttonClassName}
-        ref={ref}
-        {...props}
-      >
+      <Comp className={buttonClassName} ref={ref} {...props}>
         {icon && iconPosition === 'start' && (
           <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
             {icon}
