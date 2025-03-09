@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { StepOneForm } from "./register-1";
 import "@testing-library/jest-dom";
-// import { RegisterFormData } from "@/lib/register";
 
 describe("StepOneForm", () => {
   let mockUpdateFormData: jest.Mock;
