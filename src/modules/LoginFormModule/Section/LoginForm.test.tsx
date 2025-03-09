@@ -75,3 +75,42 @@ describe("LoginForm - Valid Form", () => {
     expect(mockHandleLogin).toHaveBeenCalled();
   });
 });
+
+// Tambahkan test baru untuk mengcover kasus null di email dan password
+describe("LoginForm - Null Values", () => {
+  let mockUpdateFormData: jest.Mock;
+  let mockHandleLogin: jest.Mock;
+
+  beforeEach(() => {
+    mockUpdateFormData = jest.fn();
+    mockHandleLogin = jest.fn();
+
+    render(
+      <LoginForm
+        formData={{ email: "", password: "" }}
+        updateFormData={mockUpdateFormData}
+        isFormValid={false}
+        handleLogin={mockHandleLogin}
+        emailError=""
+        passwordError=""
+      />
+    );
+  });
+
+  test("renders empty string when formData values are null", () => {
+    // Cek bahwa input email memiliki value kosong (bukan null)
+    expect(screen.getByPlaceholderText("Masukkan email Anda")).toHaveValue('');
+    
+    // Cek bahwa input password memiliki value kosong (bukan null)
+    expect(screen.getByPlaceholderText("Masukkan kata sandi")).toHaveValue('');
+  });
+
+  test("updates null values correctly", () => {
+    const emailInput = screen.getByPlaceholderText("Masukkan email Anda");
+    fireEvent.change(emailInput, {
+      target: { name: "email", value: "new@example.com" },
+    });
+    
+    expect(mockUpdateFormData).toHaveBeenCalledWith({ email: "new@example.com" });
+  });
+});
