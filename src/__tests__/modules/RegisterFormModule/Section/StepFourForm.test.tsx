@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import { render, fireEvent, RenderResult } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StepFourForm } from '../../../../modules/RegisterFormModule/Section/register-4';
 import { RegisterFormData } from '@/lib/register';
@@ -47,33 +47,21 @@ describe('StepFourForm Component', () => {
   const defaultProps = {
     formData: {} as RegisterFormData,
     updateFormData: jest.fn(),
-    updateValidationStatus: jest.fn(),
+    updateFormCompleteness: jest.fn(),
+    validationErrors: {},
   };
   
-  const testPasswordValidationError = async (
-    testValue: string,
-    expectedError: string
-  ) => {
-    const { getByTestId, findByTestId } = render(
-      <StepFourForm 
-        {...defaultProps} 
-        formData={{ password: testValue }}
-      />
-    );
-    
-    fireEvent.change(getByTestId('password'), { target: { value: testValue } });
-    
-    const errorElement = await findByTestId('password-error');
-    expect(errorElement).toHaveTextContent(expectedError);
-    expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
-  };
   
-  const renderFormWithData = (formData: Partial<RegisterFormData> = {}): RenderResult => {
+  const renderFormWithData = (
+    formData: Partial<RegisterFormData> = {},
+    validationErrors = {}
+  ): RenderResult => {
     return render(
       <StepFourForm 
         formData={formData as RegisterFormData}
         updateFormData={defaultProps.updateFormData}
-        updateValidationStatus={defaultProps.updateValidationStatus}
+        updateFormCompleteness={defaultProps.updateFormCompleteness}
+        validationErrors={validationErrors}
       />
     );
   };
@@ -95,68 +83,84 @@ describe('StepFourForm Component', () => {
   });
 
   describe('Password Field Validations', () => {
-    it('displays error when password is empty after interaction', async () => {
-      const { getByTestId } = renderFormWithData({ password: '' });
+    it('shows error from validation errors prop when present', async () => {
+      const validationErrors = {
+        password: 'Password has an error'
+      };
       
-      fireEvent.change(getByTestId('password'), { target: { value: ' ' } });
-      fireEvent.change(getByTestId('password'), { target: { value: '' } });
+      const { findByTestId } = renderFormWithData(
+        { password: 'test' },
+        validationErrors
+      );
       
-      await waitFor(() => {
-        expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
-      });
+      const errorElement = await findByTestId('password-error');
+      expect(errorElement).toHaveTextContent('Password has an error');
     });
 
-    it('displays error when password is less than 8 characters', async () => {
-      await testPasswordValidationError('1234567', 'Kata sandi minimal 8 karakter');
+    it('checks form completeness when password is empty', () => {
+      renderFormWithData({ password: '' });
+      
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
 
-    it('displays error when password doesn\'t have uppercase letters', async () => {
-      await testPasswordValidationError('password123', 'Kata sandi harus memiliki huruf kapital');
-    });
-
-    it('displays error when password doesn\'t have lowercase letters', async () => {
-      await testPasswordValidationError('PASSWORD123', 'Kata sandi harus memiliki huruf kecil');
-    });
-
-    it('displays error when password doesn\'t have numbers', async () => {
-      await testPasswordValidationError('Password', 'Kata sandi harus memiliki angka');
-    });
-
-    it('displays error when password contains spaces', async () => {
-      await testPasswordValidationError('Password 123', 'Kata sandi tidak boleh mengandung spasi');
+    it('marks form as incomplete with empty password', async () => {
+      renderFormWithData({ password: '', passwordConfirmation: 'Password123' });
+      
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
   });
 
   describe('Password Confirmation Validations', () => {
-    it('validates that password confirmation cannot be empty', async () => {
-      const validPassword = generateValidPassword();
+    it('marks form as incomplete with empty password confirmation', async () => {
       renderFormWithData({
-        password: validPassword,
+        password: generateValidPassword(),
         passwordConfirmation: ''
       });
       
-      await waitFor(() => {
-        expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
-      });
-      
-      const { validatePasswordMatch } = require('@/lib/validation/passwordValidation');
-      expect(validatePasswordMatch(validPassword, '')).toBe("Konfirmasi kata sandi tidak boleh kosong");
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
 
-    it('displays error when passwords don\'t match', async () => {
-      const validPassword = generateValidPassword();
-      const differentPassword = generateValidPassword() + 'X';
+    it('shows error when passwords don\'t match from validation errors', async () => {
+      const validationErrors = {
+        passwordConfirmation: 'Kata sandi tidak cocok'
+      };
       
-      const { getByTestId, findByTestId } = renderFormWithData({ 
-        password: validPassword, 
-        passwordConfirmation: differentPassword 
-      });
-      
-      fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: differentPassword } });
+      const { findByTestId } = renderFormWithData(
+        { 
+          password: generateValidPassword(), 
+          passwordConfirmation: 'differentPassword' 
+        },
+        validationErrors
+      );
       
       const errorElement = await findByTestId('passwordConfirmation-error');
       expect(errorElement).toHaveTextContent('Kata sandi tidak cocok');
-      expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
+    });
+  });
+
+  describe('Terms and Conditions', () => {
+    it('marks form as incomplete when terms not accepted', async () => {
+      const validPassword = generateValidPassword();
+      
+      renderFormWithData({
+        password: validPassword,
+        passwordConfirmation: validPassword,
+        termsAndConditions: false
+      });
+      
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
+    });
+
+    it('marks form as complete when all fields valid and terms accepted', async () => {
+      const validPassword = generateValidPassword();
+      
+      renderFormWithData({
+        password: validPassword,
+        passwordConfirmation: validPassword,
+        termsAndConditions: true
+      });
+      
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(true);
     });
   });
 
@@ -191,8 +195,8 @@ describe('StepFourForm Component', () => {
     });
   });
 
-  describe('Form Validation Status', () => {
-    it('validates form as valid with correct password and terms accepted', async () => {
+  describe('Form Completeness Status', () => {
+    it('updates completeness status when all fields are filled correctly', async () => {
       const validPassword = generateValidPassword();
       
       renderFormWithData({
@@ -201,12 +205,21 @@ describe('StepFourForm Component', () => {
         termsAndConditions: true
       });
       
-      await waitFor(() => {
-        expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: true });
-      });
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(true);
     });
-
-    it('validates form as invalid when terms not accepted', async () => {
+    
+    it('updates completeness status when some fields are missing', async () => {
+      const validPassword = generateValidPassword();
+      
+      renderFormWithData({
+        password: validPassword,
+        termsAndConditions: true
+      });
+      
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
+    });
+    
+    it('updates completeness status when terms are not accepted', async () => {
       const validPassword = generateValidPassword();
       
       renderFormWithData({
@@ -215,25 +228,24 @@ describe('StepFourForm Component', () => {
         termsAndConditions: false
       });
       
-      await waitFor(() => {
-        expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
-      });
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
+  });
 
-    it('shows no errors with valid password but validation fails without terms', async () => {
-      const validPassword = generateValidPassword();
+  describe('Component with undefined validationErrors', () => {
+    it('renders correctly when validationErrors prop is undefined', () => {
+      const { queryByTestId } = render(
+        <StepFourForm 
+          formData={{}} 
+          updateFormData={defaultProps.updateFormData}
+          updateFormCompleteness={defaultProps.updateFormCompleteness}
+        />
+      );
       
-      const { queryByTestId } = renderFormWithData({
-        password: validPassword,
-        passwordConfirmation: validPassword,
-        termsAndConditions: false
-      });
+      expect(queryByTestId('password-error')).not.toBeInTheDocument();
+      expect(queryByTestId('passwordConfirmation-error')).not.toBeInTheDocument();
       
-      await waitFor(() => {
-        expect(queryByTestId('password-error')).not.toBeInTheDocument();
-        expect(queryByTestId('passwordConfirmation-error')).not.toBeInTheDocument();
-        expect(defaultProps.updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
-      });
+      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
     });
   });
 });
