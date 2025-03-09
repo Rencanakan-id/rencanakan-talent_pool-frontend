@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -11,7 +11,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from './checkbox';
 import { useState } from 'react';
@@ -45,7 +44,7 @@ export function ComboboxCheckBox({
   onChange,
   defaultValues = [],
   maxSelection,
-}: ComboboxCheckBoxProps) {
+}: Readonly<ComboboxCheckBoxProps>) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [selected, setSelected] = useState<string[]>(defaultValues);
@@ -91,7 +90,7 @@ export function ComboboxCheckBox({
             iconPosition="end"
           >
             <Typography variant="p4" className="text-xs text-gray-500">
-              {value ? value : `Pilih ${label}`}
+              {value || `Pilih ${label}`}
             </Typography>
           </Button>
           <Typography

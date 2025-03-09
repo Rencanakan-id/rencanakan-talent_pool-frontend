@@ -39,7 +39,7 @@ export function Combobox({
   width = '100%',
   className = '',
   onChange,
-}: ComboboxProps) {
+}: Readonly<ComboboxProps>) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
 
