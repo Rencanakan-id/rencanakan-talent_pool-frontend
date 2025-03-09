@@ -11,7 +11,6 @@ const config: Config = {
   coverageDirectory: 'coverage', // Direktori hasil laporan
   collectCoverageFrom: ['src/**/*.{ts,tsx}'], // File yang ingin diukur coverage-nya
   coverageReporters: ['json', 'lcov', 'text', 'clover'], // Format laporan coverage
-  
 };
 
 export default config;

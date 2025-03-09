@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Typography } from '../atoms/typography';
 
 function Experience() {
-  
   const dummyExperience = [
     {
       id: 1,
@@ -38,7 +37,7 @@ function Experience() {
       talentId: 103,
     },
   ];
-  const [experiences] = useState(dummyExperience)
+  const [experiences] = useState(dummyExperience);
 
   return (
     <div className="min-h-[200px] w-auto max-w-[825px] min-w-[200px] rounded-[8px] border border-gray-500 px-6 py-6">
@@ -47,15 +46,23 @@ function Experience() {
       </Typography>
 
       {experiences.length > 0 ? (
-        <div className=" w-auto max-w-[825px] min-w-[200px] space-y-2 divide-y divide-gray-300 pl-6">
+        <div className="w-auto max-w-[825px] min-w-[200px] space-y-2 divide-y divide-gray-300 pl-6">
           {dummyExperience.map((exp) => (
-            <div className='space-y-1  min-h-[112px]'>
+            <div className="min-h-[112px] space-y-1">
               <Typography variant="h5"> {exp.title} </Typography>
-              <Typography variant="p3"  > {exp.company} • {exp.employmentType} </Typography>
-              <Typography variant="p3" className='text-gray-500'> {exp.startDate} - {exp.endDate} </Typography>
-              <Typography variant="p3" className='text-gray-500'> {exp.location} - {exp.endDate} </Typography>
+              <Typography variant="p3">
+                {' '}
+                {exp.company} • {exp.employmentType}{' '}
+              </Typography>
+              <Typography variant="p3" className="text-gray-500">
+                {' '}
+                {exp.startDate} - {exp.endDate}{' '}
+              </Typography>
+              <Typography variant="p3" className="text-gray-500">
+                {' '}
+                {exp.location} - {exp.endDate}{' '}
+              </Typography>
             </div>
-            
           ))}
         </div>
       ) : (
