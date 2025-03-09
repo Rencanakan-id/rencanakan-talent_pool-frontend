@@ -152,32 +152,32 @@
   -webkit-backdrop-filter: blur(6px);
 }
 
-.slay{
+.slay {
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
 }
 
-.slay div{
+.slay div {
   position: absolute;
   border-radius: 50%;
   animation: gradient 4s infinite;
 }
-@keyframes gradient{
-  70%{
-      transform: scale(1.2) translate(50px);
+@keyframes gradient {
+  70% {
+    transform: scale(1.2) translate(50px);
   }
 }
 
-.slay div:nth-child(1){
+.slay div:nth-child(1) {
   height: 90%;
   width: 80%;
   background-color: var(--color-rencanakan-sea-blue-500);
   left: -20%;
   top: -10%;
 }
-.slay div:nth-child(2){
+.slay div:nth-child(2) {
   height: 80%;
   width: 70%;
   background-color: #001522;
@@ -185,7 +185,7 @@
   right: -12%;
   animation-delay: 2s;
 }
-.slay div:nth-child(3){
+.slay div:nth-child(3) {
   height: 65%;
   width: 80%;
   background-color: #00090f;
@@ -193,7 +193,7 @@
   right: -20%;
   animation-delay: 0.3s;
 }
-.slay div:nth-child(4){
+.slay div:nth-child(4) {
   height: 50%;
   width: 75%;
   background-color: #001522;
@@ -201,9 +201,9 @@
   left: -18%;
   animation-delay: 1.2s;
 }
-.slay:after{
+.slay:after {
   position: absolute;
-  content: "";
+  content: '';
   height: 100%;
   width: 100%;
   backdrop-filter: blur(80px);
@@ -218,13 +218,7 @@
     #8f68ff,
     #fc72ff
   ); */
-  background: linear-gradient(
-    to right,
-    #ff9933,
-    #a45200,
-    #ff9933
-
-  );
+  background: linear-gradient(to right, #ff9933, #a45200, #ff9933);
   background-size: 200%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -255,13 +249,16 @@
 }
 
 @keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 25px rgba(164, 82, 0, 0.3),
-                0 0 40px rgba(164, 82, 0, 0.5);
+  0%,
+  100% {
+    box-shadow:
+      0 0 25px rgba(164, 82, 0, 0.3),
+      0 0 40px rgba(164, 82, 0, 0.5);
   }
   50% {
-    box-shadow: 0 0 35px rgba(164, 82, 0, 1),
-                0 0 60px rgba(164, 82, 0, 0.3);
+    box-shadow:
+      0 0 35px rgba(164, 82, 0, 1),
+      0 0 60px rgba(164, 82, 0, 0.3);
   }
 }
 
@@ -282,13 +279,10 @@
 .conic-border-animation {
   --angle: 0deg;
   border: 3px solid; /* Match original border width */
-  border-image: conic-gradient(
-    var(--angle),
-    transparent,
-    #a45200,
-    transparent
-  ) 1; /* 1 = slice parameter */
-  animation: rotate-conic 4s linear infinite, float-vertical 2s ease-in-out infinite;
+  border-image: conic-gradient(var(--angle), transparent, #a45200, transparent) 1; /* 1 = slice parameter */
+  animation:
+    rotate-conic 4s linear infinite,
+    float-vertical 2s ease-in-out infinite;
 }
 
 /* .shape-tl-1 {
