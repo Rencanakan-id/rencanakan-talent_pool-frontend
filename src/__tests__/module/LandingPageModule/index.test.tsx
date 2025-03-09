@@ -1,14 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { LandingPageModule } from '@/modules';
+import { ButtonProps } from '@/components/ui/button';
+import { TypographyProps } from '@/components/atoms/typography';
 
 jest.mock('@/components', () => ({
-  Button: ({ children, variant, className }: any) => (
+  Button: ({ children, variant, className }: ButtonProps) => (
     <button data-testid={`mock-button-${variant}`} className={className}>
       {children}
     </button>
   ),
-  Typography: ({ children, variant, className }: any) => (
+  Typography: ({ children, variant, className }: TypographyProps) => (
     <div data-testid={`mock-typography-${variant}`} className={className}>
       {children}
     </div>
