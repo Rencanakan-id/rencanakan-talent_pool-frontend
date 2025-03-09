@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StepThreeForm } from '@/modules/RegisterFormModule/Section/register-3';
 import { RegisterFormData } from '@/lib/register';
-import { yearsOfExperience } from '@/data/yearsOfExperience';
 
 interface InputProps {
   name?: string;
@@ -48,7 +47,7 @@ jest.mock('@/components', () => ({
 jest.mock('@/data/hargaJasa', () => ({
     hargaJasa: {
       operator: {
-        "1": { min: 200000, max: 500000 },
+        "1 Tahun": { min: 200000, max: 500000 },
       },
     },
   }));
@@ -58,7 +57,7 @@ jest.mock('@/data/hargaJasa', () => ({
   }));
   
   jest.mock('@/data/yearsOfExperience', () => ({
-    yearsOfExperience: [{ value: '1', label: '1 Tahun' }],
+    yearsOfExperience: [{ value: '1 Tahun', label: '1 Tahun' }],
   }));
   
 
@@ -87,17 +86,29 @@ describe('StepThreeForm Component', () => {
   });
   
   test('displays formatted price range based on form data', () => {
-    setup({ skkLevel: 'operator', yearsOfExperience: '1' });
+    setup({ skkLevel: 'operator', yearsOfExperience: '1 Tahun' });
     expect(
       screen.getByText((content) => content.includes("Rp200.000") && content.includes("Rp500.000"))
     ).toBeInTheDocument();
   });
-  
+
+  test('displays correct SKK level and years of experience', () => {
+    const { container } = setup({ skkLevel: 'operator', yearsOfExperience: '1 Tahun' });
+    const textPattern = /Untuk level.*Operator.*dengan.*1.*tahun.*pengalaman kerja/;
+    expect(container.textContent).toMatch(textPattern);
+  });
   
   test('updates price field correctly', () => {
     setup();
     const input = screen.getByLabelText('Tentukan Harga Kamu');
     fireEvent.change(input, { target: { value: '500000' } });
     expect(mockUpdateFormData).toHaveBeenCalledWith({ price: '500000' });
+  });
+
+  test('strips non-numeric characters from input', () => {
+    setup();
+    const input = screen.getByLabelText('Tentukan Harga Kamu');
+    fireEvent.change(input, { target: { value: 'abc123def456' } });
+    expect(mockUpdateFormData).toHaveBeenCalledWith({ price: '123456' });
   });
 });
