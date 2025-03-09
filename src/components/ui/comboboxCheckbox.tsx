@@ -89,7 +89,7 @@ export function ComboboxCheckBox({
             aria-controls="combobox-options"
             aria-labelledby={`${label}-label`}
             aria-autocomplete="list"
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} px-3 md:px-3 sm:px-3 active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100 active:bg-transparent`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-3 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100 active:bg-transparent sm:px-3 md:px-3`}
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
