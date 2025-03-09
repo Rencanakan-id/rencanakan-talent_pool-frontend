@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StepThreeForm } from '@/modules/RegisterFormModule/Section/register-3';
 import { RegisterFormData } from '@/lib/register';
+import { yearsOfExperience } from '@/data/yearsOfExperience';
 
 interface InputProps {
   name?: string;
@@ -44,10 +45,27 @@ jest.mock('@/components', () => ({
   ),
 }));
 
+jest.mock('@/data/hargaJasa', () => ({
+    hargaJasa: {
+      operator: {
+        "1": { min: 200000, max: 500000 },
+      },
+    },
+  }));
+  
+  jest.mock('@/data/skkLevels', () => ({
+    skkLevels: [{ value: 'operator', label: 'Operator' }],
+  }));
+  
+  jest.mock('@/data/yearsOfExperience', () => ({
+    yearsOfExperience: [{ value: '1', label: '1 Tahun' }],
+  }));
+  
+
 describe('StepThreeForm Component', () => {
   const defaultFormData: RegisterFormData = {
     skkLevel: 'operator',
-    yearsOfExperience: '1',
+    yearsOfExperience: '1 Tahun',
     price: '',
   };
   
@@ -71,8 +89,8 @@ describe('StepThreeForm Component', () => {
   test('displays formatted price range based on form data', () => {
     setup({ skkLevel: 'operator', yearsOfExperience: '1' });
     expect(
-        screen.getByText((content) => content.includes("Rp200.000") && content.includes("Rp500.000"))
-      ).toBeInTheDocument();      
+      screen.getByText((content) => content.includes("Rp200.000") && content.includes("Rp500.000"))
+    ).toBeInTheDocument();
   });
   
   
