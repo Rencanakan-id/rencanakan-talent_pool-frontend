@@ -117,8 +117,52 @@ describe('StepOneForm Component', () => {
       expect(mockUpdateFormData).toHaveBeenCalledWith({ lastName: 'Cena' });
     });
 
+    test('updates email when input changes', () => {
+        setup();
+        const input = screen.getByLabelText('Email');
+        fireEvent.change(input, { target: { value: 'dummy@example.com' } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ email: 'dummy@example.com' });
+      });
+
+    test('updates phoneNumber when input changes', () => {
+        setup();
+        const input = screen.getByLabelText('Nomor Telepon');
+        fireEvent.change(input, { target: { value: '0129102301212' } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ phoneNumber: '0129102301212' });
+    });
+
+    test('updates nik when input changes', () => {
+        setup();
+        const input = screen.getByLabelText('No. NIK');
+        fireEvent.change(input, { target: { value: '2312312413123' } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ nik: '2312312413123' });
+    });
+
+    test('updates lastName when input changes', () => {
+        setup();
+        const input = screen.getByLabelText('No. NPWP');
+        fireEvent.change(input, { target: { value: '123123123123' } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ npwp: '123123123123' });
+    });  
+
+    test("displays file inputs correctly", () => {
+        expect(screen.getByText("Foto KTP")).toBeInTheDocument();
+        expect(screen.getByText("Foto NPWP")).toBeInTheDocument();
+        expect(screen.getByText("Scan Ijazah")).toBeInTheDocument();
+      });
+
+    test('updates foto KTP when file is selected', () => {
+        setup();
+        const file = new File(['dummy content'], 'ktp.pdf', { type: 'application/pdf' });
+        const fileInput = screen.getByLabelText('Foto KTP');
+  
+        fireEvent.change(fileInput, { target: { files: [file] } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ ktpFile: file });
+  
+        setup({ ktpFile: file });
+        expect(screen.getByText('ktp.pdf')).toBeInTheDocument();
+    });
+
   });
-
-
 });
 
