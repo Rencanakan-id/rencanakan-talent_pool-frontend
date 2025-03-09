@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { locations } from '@/data/location';
 import {
   Command,
   CommandEmpty,
@@ -19,98 +18,144 @@ import { useState } from 'react';
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
 
-export function ComboboxCheckBox() {
+type Option = {
+  value: string;
+  label: string;
+};
+
+type ComboboxCheckBoxProps = {
+  placeholder?: string;
+  label?: string;
+  emptyMessage?: string;
+  data?: Option[];
+  width?: string;
+  className?: string;
+  onChange?: (values: string[]) => void;
+  defaultValues?: string[];
+  maxSelection?: number; // New prop to limit selection
+};
+
+export function ComboboxCheckBox({
+  data = [],
+  placeholder = "Search",
+  label = "Selection",
+  emptyMessage = "No options found",
+  width = "368px",
+  className = "",
+  onChange,
+  defaultValues = [],
+  maxSelection
+}: ComboboxCheckBoxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(defaultValues);
 
-  const toggleLocation = (location: string, checked: boolean) => {
-    let updated = [];
+  const toggleSelection = (optionValue: string, _optionLabel: string, checked: boolean) => {
     setSelected((prev) => {
-      if (location == 'Semua Lokasi') {
-        updated = !checked ? [] : ['Semua Lokasi'];
+      let updated: string[] = [];
+      
+      if (checked) {
+        if (maxSelection && prev.length >= maxSelection) {
+          updated = [...prev.slice(1), optionValue];
+        } else {
+          updated = [...prev, optionValue];
+        }
       } else {
-        updated = !checked
-          ? prev.filter((item) => item !== location)
-          : [...prev.filter((item) => item !== 'Semua Lokasi'), location];
+        updated = prev.filter(item => item !== optionValue);
       }
-
-      setValue(updated.join(', '));
-
+      
+      // Update the display text
+      const selectedLabels = data
+        .filter(option => updated.includes(option.value))
+        .map(option => option.label);
+      setValue(selectedLabels.join(', '));
+      
+      if (onChange) {
+        onChange(updated);
+      }
+      
       return updated;
     });
   };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="relative">
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="flex h-[50px] w-[368px] justify-between rounded-[12px] p-0"
-          icon={<ChevronsUpDown className="opacity-50" />}
-          iconPosition="end"
-        >
-          <Typography variant="p4" className="text-xs text-gray-500">
-            {value ? value : 'Pilih kota'}
+      <div className="relative w-full">
+        <PopoverTrigger className="w-full">
+          <Button
+            variant="primary-outline"
+            role="combobox"
+            aria-expanded={open}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} px-4 h-10 hover:scale-[1.001] hover:text-rencanakan-dark-gray hover:bg-transparent border-rencanakan-base-gray bg-transparent hover:border-rencanakan-base-gray hover:shadow-sm focus:border-rencanakan focus:outline-none font-normal text-rencanakan-dark-gray`}
+            icon={<ChevronsUpDown className="opacity-50" />}
+            iconPosition="end"
+          >
+            <Typography variant="p4" className="text-xs text-gray-500">
+              {value ? value : `Pilih ${label}`}
+            </Typography>
+          </Button>
+          <Typography
+            variant="p4"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
+          >
+            {label}
           </Typography>
-        </Button>
-        <Typography
-          variant="p4"
-          className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
-        >
-          Bersedia Ditempatkan Dimana
-        </Typography>
-      </PopoverTrigger>
-      <PopoverContent className="w-[368px] p-0">
+        </PopoverTrigger>
+      </div>
+      <PopoverContent className="p-0" style={{ width }}>
         <Command>
           <div className="flex h-full items-center">
             <Typography variant="p5" className="flex items-center p-2">
               Terpilih:
             </Typography>
+            {maxSelection && (
+              <Typography variant="p5" className="text-gray-500">
+                (Maks. {maxSelection})
+              </Typography>
+            )}
           </div>
           {selected.length > 0 ? (
             <div className="flex flex-wrap items-center gap-2 p-2">
-              {selected.map((location) => (
-                <Badge
-                  key={location}
-                  variant="location"
-                  className="flex h-[25px] w-auto min-w-[93px] items-center justify-center space-x-1"
-                >
-                  <Typography variant="p3" className="m-1 text-blue-900">
-                    {location}
-                  </Typography>
-                  <button
-                    className="cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleLocation(location, false);
-                    }}
+              {selected.map((selectedValue) => {
+                const option = data.find(item => item.value === selectedValue);
+                return option ? (
+                  <Badge
+                    key={selectedValue}
+                    variant="location"
+                    className="flex h-[25px] w-auto min-w-[93px] items-center justify-center space-x-1"
                   >
-                    <X className="h-4 w-4 cursor-pointer text-blue-900" />
-                  </button>
-                </Badge>
-              ))}
+                    <Typography variant="p3" className="m-1 text-blue-900">
+                      {option.label}
+                    </Typography>
+                    <button
+                      className="cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSelection(option.value, option.label, false);
+                      }}
+                    >
+                      <X className="h-4 w-4 cursor-pointer text-blue-900" />
+                    </button>
+                  </Badge>
+                ) : null;
+              })}
             </div>
           ) : null}
 
-          <CommandInput placeholder="Lokasi" />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty>Lokasi tidak ditemukan</CommandEmpty>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
-              {locations.map((location) => (
-                <CommandItem key={location.value} value={location.value}>
+              {data.map((option) => (
+                <CommandItem key={option.value} value={option.value}>
                   <div className="m-2 flex w-full items-center gap-4">
                     <Checkbox
-                      id={location.label}
-                      checked={selected.includes(location.label)}
-                      onCheckedChange={(checked) =>
-                        toggleLocation(location.label, checked === true)
-                      }
-                    />
-                    <label htmlFor={location.label} className="cursor-pointer">
-                      {location.label}
+                      id={option.value}
+                      checked={selected.includes(option.value)}
+                      onCheckedChange={(checked) => toggleSelection(option.value, option.label, checked === true)}
+                      disabled={!!(maxSelection && selected.length >= maxSelection && !selected.includes(option.value))} />
+                    <label htmlFor={option.value} className="cursor-pointer">
+                      {option.label}
                     </label>
                   </div>
                 </CommandItem>

@@ -22,62 +22,77 @@ type Option = {
 };
 
 type ComboboxProps = {
-  type?: string;
+  placeholder?: string;
+  label?: string;
+  emptyMessage?: string;
   data?: Option[];
+  width?: string;
+  className?: string;
+  onChange?: (value: string) => void;
 };
 
-export function Combobox({ data = [], type }: ComboboxProps) {
+export function Combobox({
+  data = [],
+  placeholder = "Search...",
+  label = "Selection",
+  emptyMessage = "No options found",
+  width = "100%",
+  className = "",
+  onChange
+}: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
 
+  const handleSelect = (currentValue: string) => {
+    const newValue = currentValue === value ? '' : currentValue;
+    setValue(newValue);
+    if (onChange) onChange(newValue);
+    setOpen(false);
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <div className="relative">
-        <PopoverTrigger>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="relative h-[50px] w-[368px] justify-between rounded-[12px] p-0"
-            icon={<ChevronsUpDown className="opacity-50" />}
-            iconPosition="end"
-          >
-            <Typography variant="p4" className="text-xs text-gray-500">
-              {value ? data.find((point) => point.value === value)?.label : 'Pilih ' + type}
-            </Typography>
-          </Button>
+      <div className="relative w-full">
+        <PopoverTrigger className="w-full">
+            <Button
+              variant="primary-outline"
+              role="combobox"
+              aria-expanded={open}
+              className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:scale-100 hover:scale-[1.001] px-4 h-10 hover:text-rencanakan-dark-gray hover:bg-transparent border-rencanakan-base-gray bg-transparent hover:border-rencanakan-base-gray hover:shadow-sm focus:border-rencanakan focus:outline-none font-normal text-rencanakan-dark-gray`}
+              icon={<ChevronsUpDown className={`transition-transform duration-200 ${open ? 'rotate-180' : ''} opacity-50`} />}
+              iconPosition="end"
+            >
+              <Typography variant="p4" className="text-xs">
+                {value ? data.find((option) => option.value === value)?.label : `Pilih ${label}`}
+              </Typography>
+            </Button>
           <Typography
             variant="p4"
-            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
           >
-            {value ? data.find((point) => point.value === value)?.label : type + ' saat ini'}
+            {label}
           </Typography>
         </PopoverTrigger>
       </div>
-
-      <PopoverContent className="w-[368px] p-0">
+      <PopoverContent className="w-full p-0 pt-2" style={{ width: width }}>
         <Command>
-          <CommandInput placeholder={`${type}`} />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty> {`${type} tidak ditemukan`}</CommandEmpty>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
-              {data.map((point) => (
+              {data.map((option) => (
                 <CommandItem
-                  key={point.value}
-                  value={point.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
+                  key={option.value}
+                  value={option.value}
+                  onSelect={handleSelect}
                 >
                   <div className="flex w-full items-center gap-4">
-                    <span>{point.label}</span>
+                    <span>{option.label}</span>
                     <Check
                       className={cn(
-                        'mr-2 transition-opacity duration-200',
-                        value === point.value ? 'opacity-100' : 'opacity-0'
-                      )}
-                    />
+                        'ml-auto transition-opacity duration-200',
+                        value === option.value ? 'opacity-100' : 'opacity-0'
+                      )} />
                   </div>
                 </CommandItem>
               ))}
