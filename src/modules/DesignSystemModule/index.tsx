@@ -1,5 +1,9 @@
-import { Typography, Textarea, ImageUpload, Button, FileInput, Input } from '@/components';
+import { Typography, Textarea, Button, FileInput, Input } from '@/components';
+import Experience from '@/components/ui/experience';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
+import { Combobox } from '@/components/ui/combobox';
+import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
+import { locations } from '@/data/location';
 
 export const DesignSystemModule = () => {
   return (
@@ -9,6 +13,15 @@ export const DesignSystemModule = () => {
       <div className="space-y-4">
         <Typography variant="d1">Display 1</Typography>
         <Typography variant="d2">Display 2</Typography>
+      </div>
+
+      <div className="w-full space-y-4">
+        <Combobox data={locations} label="Lokasi" />
+        {/* <ComboboxCheckBox /> */}
+      </div>
+      <div className="w-full space-y-4">
+        {/* <Combobox /> */}
+        <ComboboxCheckBox data={locations} label="Lokasi" />
       </div>
 
       <div className="space-y-4">
@@ -27,11 +40,6 @@ export const DesignSystemModule = () => {
         <Typography variant="p4">Parapraph 4</Typography>
         <Typography variant="p5">Parapraph 5</Typography>
         <Typography variant="small">Small Text</Typography>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Design System | Image Upload</h2>
-        <ImageUpload />
       </div>
 
       <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
@@ -132,6 +140,10 @@ export const DesignSystemModule = () => {
             </Button>
           </div>
         </div>
+      </div>
+      <div>
+        <h1> Experience Detail </h1>
+        <Experience />
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
