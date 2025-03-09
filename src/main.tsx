@@ -9,8 +9,8 @@ createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
       <Route path="" element={<App />} />
-      <Route path="/design" element={<DesignSystemModule />} />
-      <Route path="/register" element={<RegisterModule />} />
+        <Route path="/design" element={<DesignSystemModule />} />
+        <Route path="/register" element={<RegisterModule />} />
     </Routes>
   </BrowserRouter>
 );
