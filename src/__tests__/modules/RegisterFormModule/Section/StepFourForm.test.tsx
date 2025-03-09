@@ -3,6 +3,11 @@ import { render, fireEvent, waitFor, RenderResult } from '@testing-library/react
 import '@testing-library/jest-dom';
 import { StepFourForm } from '../../../../modules/RegisterFormModule/Section/register-4';
 import { RegisterFormData } from '@/lib/register';
+import { faker } from '@faker-js/faker';
+
+const generateValidPassword = () => {
+  return `${faker.string.alpha(1).toUpperCase()}${faker.string.alpha(5).toLowerCase()}${faker.string.numeric(3)}`;
+};
 
 jest.mock('@/components', () => ({
   Typography: ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -124,8 +129,9 @@ describe('StepFourForm Component', () => {
 
   describe('Password Confirmation Validations', () => {
     it('validates that password confirmation cannot be empty', async () => {
+      const validPassword = generateValidPassword();
       renderFormWithData({
-        password: 'Password123',
+        password: validPassword,
         passwordConfirmation: ''
       });
       
@@ -134,16 +140,19 @@ describe('StepFourForm Component', () => {
       });
       
       const { validatePasswordMatch } = require('@/lib/validation/passwordValidation');
-      expect(validatePasswordMatch('Password123', '')).toBe("Konfirmasi kata sandi tidak boleh kosong");
+      expect(validatePasswordMatch(validPassword, '')).toBe("Konfirmasi kata sandi tidak boleh kosong");
     });
 
     it('displays error when passwords don\'t match', async () => {
+      const validPassword = generateValidPassword();
+      const differentPassword = generateValidPassword() + 'X';
+      
       const { getByTestId, findByTestId } = renderFormWithData({ 
-        password: 'Password123', 
-        passwordConfirmation: 'Password124' 
+        password: validPassword, 
+        passwordConfirmation: differentPassword 
       });
       
-      fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: 'Password124' } });
+      fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: differentPassword } });
       
       const errorElement = await findByTestId('passwordConfirmation-error');
       expect(errorElement).toHaveTextContent('Kata sandi tidak cocok');
@@ -154,18 +163,20 @@ describe('StepFourForm Component', () => {
   describe('Form Data Updates', () => {
     it('updates form data when user types in password field', () => {
       const { getByTestId } = renderFormWithData();
+      const newPassword = generateValidPassword();
       
-      fireEvent.change(getByTestId('password'), { target: { value: 'NewPassword123' } });
+      fireEvent.change(getByTestId('password'), { target: { value: newPassword } });
       
-      expect(defaultProps.updateFormData).toHaveBeenCalledWith({ password: 'NewPassword123' });
+      expect(defaultProps.updateFormData).toHaveBeenCalledWith({ password: newPassword });
     });
 
     it('updates form data when user types in password confirmation field', () => {
       const { getByTestId } = renderFormWithData();
+      const newPassword = generateValidPassword();
       
-      fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: 'NewPassword123' } });
+      fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: newPassword } });
       
-      expect(defaultProps.updateFormData).toHaveBeenCalledWith({ passwordConfirmation: 'NewPassword123' });
+      expect(defaultProps.updateFormData).toHaveBeenCalledWith({ passwordConfirmation: newPassword });
     });
 
     it('updates form data when user toggles terms and conditions checkbox', () => {
@@ -182,9 +193,11 @@ describe('StepFourForm Component', () => {
 
   describe('Form Validation Status', () => {
     it('validates form as valid with correct password and terms accepted', async () => {
+      const validPassword = generateValidPassword();
+      
       renderFormWithData({
-        password: 'Password123',
-        passwordConfirmation: 'Password123',
+        password: validPassword,
+        passwordConfirmation: validPassword,
         termsAndConditions: true
       });
       
@@ -194,9 +207,11 @@ describe('StepFourForm Component', () => {
     });
 
     it('validates form as invalid when terms not accepted', async () => {
+      const validPassword = generateValidPassword();
+      
       renderFormWithData({
-        password: 'Password123',
-        passwordConfirmation: 'Password123',
+        password: validPassword,
+        passwordConfirmation: validPassword,
         termsAndConditions: false
       });
       
@@ -206,9 +221,11 @@ describe('StepFourForm Component', () => {
     });
 
     it('shows no errors with valid password but validation fails without terms', async () => {
+      const validPassword = generateValidPassword();
+      
       const { queryByTestId } = renderFormWithData({
-        password: 'Password123',
-        passwordConfirmation: 'Password123',
+        password: validPassword,
+        passwordConfirmation: validPassword,
         termsAndConditions: false
       });
       
