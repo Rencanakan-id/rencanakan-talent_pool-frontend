@@ -19,6 +19,8 @@ describe("LoginForm", () => {
         updateFormData={mockUpdateFormData}
         isFormValid={false}
         handleLogin={mockHandleLogin}
+        emailError=""
+        passwordError=""
       />
     );
   });
@@ -60,6 +62,8 @@ describe("LoginForm - Valid Form", () => {
         updateFormData={mockUpdateFormData}
         isFormValid={true}
         handleLogin={mockHandleLogin}
+        emailError=""
+        passwordError=""
       />
     );
   });
