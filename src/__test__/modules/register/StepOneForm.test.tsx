@@ -19,9 +19,6 @@ describe('StepOneForm', () => {
           ktpFile: null,
           npwpFile: null,
           diplomaFile: null,
-          address: '',
-          city: '',
-          price: '',
         }}
         updateFormData={mockUpdateFormData}
       />
