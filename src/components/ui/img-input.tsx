@@ -50,7 +50,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     
     return (
       <div className="flex flex-col gap-2 w-full max-w-sm">
-        {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-bold">{label}</Typography>}
+        {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-semibold text-sm">{label}</Typography>}
         <div>
           <button
             type="button"
