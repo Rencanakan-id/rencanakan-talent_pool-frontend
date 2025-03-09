@@ -1,6 +1,18 @@
 import { Typography, Stepper, Input, FileInput, Textarea } from '@/components';
+import { Combobox } from '@/components/ui/combobox';
+import { yearsOfExperience } from '@/data/yearsOfExperience';
+import { skkLevels } from '@/data/skkLevels';
+import { locations } from '@/data/location';
+import { skills } from '@/data/skills';
+import { RegisterFormData } from '@/lib/register';
+import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 
-export const StepTwoForm = () => {
+interface StepTwoFormProps {
+  formData: RegisterFormData;
+  updateFormData: (data: Partial<RegisterFormData>) => void;
+}
+
+export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormData }) => {
   return (
     <>
       <Typography variant="h5" className="text-center">
@@ -17,30 +29,70 @@ export const StepTwoForm = () => {
         <Textarea
           textLabel="Tentang Saya"
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
+          value={formData.aboutMe || ''}
+          onChange={(e) => updateFormData({ aboutMe: e.target.value })}
         />
 
-        {/* PLaceholder input, karena dropdown belum ada */}
-        <Input label="Lama Pengalaman" placeholder="Pilih tahun pengalaman" />
+        <Combobox 
+          data={yearsOfExperience} 
+          label="Lama Pengalaman"
+          onChange={(value) => updateFormData({ yearsOfExperience: value })}
+        />
 
-        <Input label="Level Sertifikasi SKK" placeholder="Pilih level" />
+        <Combobox 
+          data={skkLevels} 
+          label="Level Sertifikasi SKK"
+          onChange={(value) => updateFormData({ skkLevel: value })}
+        />
 
-        <Input label="Lokasi Saat Ini" placeholder="Pilih kota" />
+        <Combobox 
+          data={locations} 
+          label="Lokasi Saat Ini"
+          onChange={(value) => updateFormData({ currentLocation: value })}
+        />
 
         <div>
-          <Input label="Bersedia Ditempatkan Di Mana" placeholder="Pilih kota" />
+          <ComboboxCheckBox 
+            data={locations} 
+            label="Bersedia Ditempatkan Di Mana"
+            placeholder='Search...'
+            onChange={(values) => updateFormData({ prefferedLocations: values })}
+            maxSelection={5}
+          />
           <Typography variant="p4" className="my-2">
             Pilih maksimal 5 lokasi
           </Typography>
         </div>
 
-        <Input label="Keahlian" placeholder="Pilih keahlian" />
+        <div>
+        <Combobox 
+          data={skills} 
+          label="Keahlian"
+          onChange={(value) => updateFormData({ skill: value })}
+        />
+        {formData.skill === 'lainnya' && (
+        <Input 
+          className="mt-2"
+          placeholder="Tulis di sini keahlian kamu"
+          value={formData.otherSkill || ''}
+          onChange={(e) => updateFormData({ otherSkill: e.target.value })}
+        />
+          )}
+        </div>
       </div>
 
       <div className="mb-4">
         <Typography variant="h6">Dokumen Pendukung</Typography>
 
         <div className="mt-2 space-y-2">
-          <FileInput data-slot="input" textLabel="SKK" state={'empty'} />
+          <FileInput 
+            data-slot="input" 
+            textLabel="SKK" 
+            accept=".pdf,.jpg,.jpeg,.png"
+            state={formData.skkFile ? 'filled' : 'empty'}
+            value={formData.skkFile?.name || ''}
+            onFileSelect={(file) => updateFormData({ skkFile: file })}
+          />
         </div>
       </div>
     </>

@@ -16,9 +16,6 @@ export const RegisterModule = () => {
     ktpFile: null,
     npwpFile: null,
     diplomaFile: null,
-    address: '',
-    city: '',
-    price: ''
   });
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
@@ -43,7 +40,16 @@ export const RegisterModule = () => {
           formData.diplomaFile
         );
       case 2:
-        return !!(formData.address && formData.city);
+        return !!(
+          formData.aboutMe &&
+          formData.yearsOfExperience &&
+          formData.skkLevel &&
+          formData.currentLocation &&
+          formData.prefferedLocations &&
+          formData.skill &&
+          (formData.skill === "lainnya" ? formData.otherSkill : true) &&
+          formData.skkFile
+        );
       case 3:
         return !!formData.price;
       default:
@@ -65,27 +71,7 @@ export const RegisterModule = () => {
 
   const stepsContent: Record<number, ReactNode> = {
     1: <StepOneForm formData={formData} updateFormData={updateFormData} />,
-    2: (
-      <>
-        <Typography variant="h5" className="text-center">
-          Lengkapi formulir dan mulai perjalanan karier kamu!
-        </Typography>
-        <div className="w-full flex justify-center">
-          <Stepper currentStep={formState - 1} />
-        </div>
-        <div className="my-4 space-y-4">
-          <Typography variant="h6" className="mb-4">Alamat Lengkap</Typography>
-          <Input name="address" label="Alamat" placeholder="Alamat lengkap" 
-            value={formData.address || ''} 
-            onChange={(e) => updateFormData({ address: e.target.value })} 
-          />
-          <Input name="city" label="Kota" placeholder="Kota" 
-            value={formData.city || ''} 
-            onChange={(e) => updateFormData({ city: e.target.value })} 
-          />
-        </div>
-      </>
-    ),
+    2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
     3: (
       <>
         <Typography variant="h5" className="text-center">

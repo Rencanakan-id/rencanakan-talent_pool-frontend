@@ -10,11 +10,17 @@ export interface RegisterFormData {
     diplomaFile?: File | null;
   
     // Buat step 2
-    address?: string;
-    city?: string;
-  
+    aboutMe?: string;
+    yearsOfExperience?: string;
+    skkLevel?: string;
+    currentLocation?: string;
+    prefferedLocations?: string[];
+    skill?: string ;
+    otherSkill?: string;
+    skkFile?: File | null;
+
     // Buat step 3
     price?: string;
 
     // Buat step 4
-  }
+}
