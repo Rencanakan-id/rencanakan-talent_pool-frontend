@@ -89,13 +89,13 @@ export function ComboboxCheckBox({
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
-            <Typography variant="p4" className="text-xs text-gray-500">
+            <Typography variant="p4" className="text-xs text-rencanakan-dark-gray">
               {value || `Pilih ${label}`}
             </Typography>
           </Button>
           <Typography
             variant="p4"
-            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
           >
             {label}
           </Typography>
