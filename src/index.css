@@ -145,79 +145,17 @@
   animation: slideUp 0.3s ease-in-out forwards;
 }
 
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.31);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.slay {
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-.slay div {
-  position: absolute;
-  border-radius: 50%;
+.animate-bg {
   animation: gradient 4s infinite;
 }
+
 @keyframes gradient {
   70% {
     transform: scale(1.2) translate(50px);
   }
 }
 
-.slay div:nth-child(1) {
-  height: 90%;
-  width: 80%;
-  background-color: var(--color-rencanakan-sea-blue-500);
-  left: -20%;
-  top: -10%;
-}
-.slay div:nth-child(2) {
-  height: 80%;
-  width: 70%;
-  background-color: #001522;
-  top: -12%;
-  right: -12%;
-  animation-delay: 2s;
-}
-.slay div:nth-child(3) {
-  height: 65%;
-  width: 80%;
-  background-color: #00090f;
-  bottom: -15%;
-  right: -20%;
-  animation-delay: 0.3s;
-}
-.slay div:nth-child(4) {
-  height: 50%;
-  width: 75%;
-  background-color: #001522;
-  bottom: -10%;
-  left: -18%;
-  animation-delay: 1.2s;
-}
-.slay:after {
-  position: absolute;
-  content: '';
-  height: 100%;
-  width: 100%;
-  backdrop-filter: blur(80px);
-}
-
 .animate-graident-text {
-  /* background: linear-gradient(
-    to right,
-    #fc72ff,
-    #8f68ff,
-    #487bff,
-    #8f68ff,
-    #fc72ff
-  ); */
   background: linear-gradient(to right, #ff9933, #a45200, #ff9933);
   background-size: 200%;
   background-clip: text;
