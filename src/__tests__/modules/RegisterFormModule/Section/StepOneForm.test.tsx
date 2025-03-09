@@ -156,6 +156,51 @@ describe('StepOneForm Component', () => {
         setup({ ktpFile: file });
         expect(screen.getByText('ktp.pdf')).toBeInTheDocument();
     });
+  });
+
+  describe('Negative Cases', () => {
+
+    test('renders error message when firstName is empty', () => {
+      setup({ firstName: '' });
+      const input = screen.getByLabelText('Nama Depan');
+      fireEvent.change(input, { target: { value: '' } });
+      expect(screen.getByText('Nama depan tidak valid')).toBeInTheDocument();
+    });
+
+    test('renders error message when lastName is empty', () => {
+      setup({ lastName: '' });
+      const input = screen.getByLabelText('Nama Belakang');
+      fireEvent.change(input, { target: { value: '' } });
+      expect(screen.getByText('Nama belakang tidak valid')).toBeInTheDocument();
+    });
+
+    test('renders error message when email is empty', () => {
+      setup({ email: '' });
+      const input = screen.getByLabelText('Email');
+      fireEvent.change(input, { target: { value: '' } });
+      expect(screen.getByText('Email tidak valid')).toBeInTheDocument();
+    });
+
+    test('renders error message when phoneNumber is empty', () => {
+      setup({ phoneNumber: '' });
+      const input = screen.getByLabelText('Nomor Telepon');
+      fireEvent.change(input, { target: { value: '' } });
+      expect(screen.getByText('Nomor telepon tidak valid')).toBeInTheDocument();
+    });
+
+    test('renders error message when nik is empty', () => {
+      setup({ nik: '' });
+      const input = screen.getByLabelText('No. NIK');
+      fireEvent.change(input, { target: { value: '' } });
+      expect(screen.getByText('No. NIK tidak valid')).toBeInTheDocument();
+    });
+
+    test('renders error message when npwp is empty', () => {
+      setup({ npwp: '' });
+      const input = screen.getByLabelText('No. NPWP');
+      fireEvent.change(input, { target: { value: '' } });
+      expect(screen.getByText('No. NPWP tidak valid')).toBeInTheDocument();
+    });
 
   });
 });
