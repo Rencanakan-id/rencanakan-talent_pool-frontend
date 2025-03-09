@@ -156,6 +156,30 @@ describe('StepOneForm Component', () => {
         setup({ ktpFile: file });
         expect(screen.getByText('ktp.pdf')).toBeInTheDocument();
     });
+
+    test('updates foto NPWP when file is selected', () => {
+        setup();
+        const file = new File(['dummy content'], 'npwp.pdf', { type: 'application/pdf' });
+        const fileInput = screen.getByLabelText('Foto NPWP');
+  
+        fireEvent.change(fileInput, { target: { files: [file] } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ npwpFile: file });
+  
+        setup({ npwpFile: file });
+        expect(screen.getByText('npwp.pdf')).toBeInTheDocument();
+    });
+
+    test('updates foto ijazah when file is selected', () => {
+        setup();
+        const file = new File(['dummy content'], 'ijazah.pdf', { type: 'application/pdf' });
+        const fileInput = screen.getByLabelText('Scan Ijazah');
+  
+        fireEvent.change(fileInput, { target: { files: [file] } });
+        expect(mockUpdateFormData).toHaveBeenCalledWith({ diplomaFile: file });
+  
+        setup({ diplomaFile: file });
+        expect(screen.getByText('ijazah.pdf')).toBeInTheDocument();
+    });
   });
 
   describe('Negative Cases', () => {
