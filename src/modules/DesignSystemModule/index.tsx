@@ -28,30 +28,28 @@ export const DesignSystemModule = () => {
       <div className="w-full space-y-4">
         <h1> Location on Profile</h1>
         <Location
-          data={
-            [
-              'Jakarta',
-              'Surabaya',
-              'Bandung',
-              'Medan',
-              'Semarang',
-              'Makassar',
-              'Palembang',
-              'Yogyakarta',
-              'Denpasar',
-              'Balikpapan',
-              'Jakarta',
-              'Surabaya',
-              'Bandung',
-              'Medan',
-              'Semarang',
-              'Makassar',
-              'Palembang',
-              'Yogyakarta',
-              'Denpasar',
-              'Balikpapan',
-            ]
-          }
+          data={[
+            'Jakarta',
+            'Surabaya',
+            'Bandung',
+            'Medan',
+            'Semarang',
+            'Makassar',
+            'Palembang',
+            'Yogyakarta',
+            'Denpasar',
+            'Balikpapan',
+            'Jakarta',
+            'Surabaya',
+            'Bandung',
+            'Medan',
+            'Semarang',
+            'Makassar',
+            'Palembang',
+            'Yogyakarta',
+            'Denpasar',
+            'Balikpapan',
+          ]}
         />
       </div>
       <div className="space-y-4">
