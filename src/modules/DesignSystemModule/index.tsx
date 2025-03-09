@@ -21,9 +21,9 @@ export const DesignSystemModule = () => {
       </div>
       <div className="w-full space-y-4">
         {/* <Combobox /> */}
-        <ComboboxCheckBox data={locations} label='Lokasi' />
+        <ComboboxCheckBox data={locations} label="Lokasi" />
       </div>
-      
+
       <div className="space-y-4">
         <Typography variant="h1">Heading 1</Typography>
         <Typography variant="h2">Heading 2</Typography>

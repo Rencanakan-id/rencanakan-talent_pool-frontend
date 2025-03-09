@@ -37,14 +37,14 @@ type ComboboxCheckBoxProps = {
 
 export function ComboboxCheckBox({
   data = [],
-  placeholder = "Search",
-  label = "Selection",
-  emptyMessage = "No options found",
-  width = "368px",
-  className = "",
+  placeholder = 'Search',
+  label = 'Selection',
+  emptyMessage = 'No options found',
+  width = '368px',
+  className = '',
   onChange,
   defaultValues = [],
-  maxSelection
+  maxSelection,
 }: ComboboxCheckBoxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
@@ -53,7 +53,7 @@ export function ComboboxCheckBox({
   const toggleSelection = (optionValue: string, _optionLabel: string, checked: boolean) => {
     setSelected((prev) => {
       let updated: string[] = [];
-      
+
       if (checked) {
         if (maxSelection && prev.length >= maxSelection) {
           updated = [...prev.slice(1), optionValue];
@@ -61,19 +61,19 @@ export function ComboboxCheckBox({
           updated = [...prev, optionValue];
         }
       } else {
-        updated = prev.filter(item => item !== optionValue);
+        updated = prev.filter((item) => item !== optionValue);
       }
-      
+
       // Update the display text
       const selectedLabels = data
-        .filter(option => updated.includes(option.value))
-        .map(option => option.label);
+        .filter((option) => updated.includes(option.value))
+        .map((option) => option.label);
       setValue(selectedLabels.join(', '));
-      
+
       if (onChange) {
         onChange(updated);
       }
-      
+
       return updated;
     });
   };
@@ -86,7 +86,7 @@ export function ComboboxCheckBox({
             variant="primary-outline"
             role="combobox"
             aria-expanded={open}
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} px-4 h-10 hover:scale-[1.001] hover:text-rencanakan-dark-gray hover:bg-transparent border-rencanakan-base-gray bg-transparent hover:border-rencanakan-base-gray hover:shadow-sm focus:border-rencanakan focus:outline-none font-normal text-rencanakan-dark-gray`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none`}
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
@@ -117,7 +117,7 @@ export function ComboboxCheckBox({
           {selected.length > 0 ? (
             <div className="flex flex-wrap items-center gap-2 p-2">
               {selected.map((selectedValue) => {
-                const option = data.find(item => item.value === selectedValue);
+                const option = data.find((item) => item.value === selectedValue);
                 return option ? (
                   <Badge
                     key={selectedValue}
@@ -152,8 +152,17 @@ export function ComboboxCheckBox({
                     <Checkbox
                       id={option.value}
                       checked={selected.includes(option.value)}
-                      onCheckedChange={(checked) => toggleSelection(option.value, option.label, checked === true)}
-                      disabled={!!(maxSelection && selected.length >= maxSelection && !selected.includes(option.value))} />
+                      onCheckedChange={(checked) =>
+                        toggleSelection(option.value, option.label, checked === true)
+                      }
+                      disabled={
+                        !!(
+                          maxSelection &&
+                          selected.length >= maxSelection &&
+                          !selected.includes(option.value)
+                        )
+                      }
+                    />
                     <label htmlFor={option.value} className="cursor-pointer">
                       {option.label}
                     </label>

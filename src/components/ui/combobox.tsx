@@ -33,12 +33,12 @@ type ComboboxProps = {
 
 export function Combobox({
   data = [],
-  placeholder = "Search...",
-  label = "Selection",
-  emptyMessage = "No options found",
-  width = "100%",
-  className = "",
-  onChange
+  placeholder = 'Search...',
+  label = 'Selection',
+  emptyMessage = 'No options found',
+  width = '100%',
+  className = '',
+  onChange,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
@@ -54,18 +54,22 @@ export function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <div className="relative w-full">
         <PopoverTrigger className="w-full">
-            <Button
-              variant="primary-outline"
-              role="combobox"
-              aria-expanded={open}
-              className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:scale-100 hover:scale-[1.001] px-4 h-10 hover:text-rencanakan-dark-gray hover:bg-transparent border-rencanakan-base-gray bg-transparent hover:border-rencanakan-base-gray hover:shadow-sm focus:border-rencanakan focus:outline-none font-normal text-rencanakan-dark-gray`}
-              icon={<ChevronsUpDown className={`transition-transform duration-200 ${open ? 'rotate-180' : ''} opacity-50`} />}
-              iconPosition="end"
-            >
-              <Typography variant="p4" className="text-xs">
-                {value ? data.find((option) => option.value === value)?.label : `Pilih ${label}`}
-              </Typography>
-            </Button>
+          <Button
+            variant="primary-outline"
+            role="combobox"
+            aria-expanded={open}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
+            icon={
+              <ChevronsUpDown
+                className={`transition-transform duration-200 ${open ? 'rotate-180' : ''} opacity-50`}
+              />
+            }
+            iconPosition="end"
+          >
+            <Typography variant="p4" className="text-xs">
+              {value ? data.find((option) => option.value === value)?.label : `Pilih ${label}`}
+            </Typography>
+          </Button>
           <Typography
             variant="p4"
             className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
@@ -81,18 +85,15 @@ export function Combobox({
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
               {data.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  onSelect={handleSelect}
-                >
+                <CommandItem key={option.value} value={option.value} onSelect={handleSelect}>
                   <div className="flex w-full items-center gap-4">
                     <span>{option.label}</span>
                     <Check
                       className={cn(
                         'ml-auto transition-opacity duration-200',
                         value === option.value ? 'opacity-100' : 'opacity-0'
-                      )} />
+                      )}
+                    />
                   </div>
                 </CommandItem>
               ))}
