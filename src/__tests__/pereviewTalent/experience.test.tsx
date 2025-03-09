@@ -4,8 +4,18 @@ import Experience from '../../components/ui/experience';
 
 // Mock Typography agar tidak perlu bergantung pada library lain
 jest.mock('../../components/atoms/typography', () => ({
-  Typography: ({ variant, className, children }: { variant: string, className?: string, children: React.ReactNode }) => (
-    <p data-testid={variant} className={className}>{children}</p>
+  Typography: ({
+    variant,
+    className,
+    children,
+  }: {
+    variant: string;
+    className?: string;
+    children: React.ReactNode;
+  }) => (
+    <p data-testid={variant} className={className}>
+      {children}
+    </p>
   ),
 }));
 
@@ -21,12 +31,11 @@ describe('Experience Component', () => {
 
   test('renders message when there is no data', () => {
     const mockSetState = jest.fn();
-    
-    jest.spyOn(React, 'useState').mockImplementationOnce(() => [[], mockSetState]); 
-  
+
+    jest.spyOn(React, 'useState').mockImplementationOnce(() => [[], mockSetState]);
+
     render(<Experience />);
-  
+
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
-  
 });

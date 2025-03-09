@@ -33,29 +33,29 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           onChange={(e) => updateFormData({ aboutMe: e.target.value })}
         />
 
-        <Combobox 
-          data={yearsOfExperience} 
+        <Combobox
+          data={yearsOfExperience}
           label="Lama Pengalaman"
           onChange={(value) => updateFormData({ yearsOfExperience: value })}
         />
 
-        <Combobox 
-          data={skkLevels} 
+        <Combobox
+          data={skkLevels}
           label="Level Sertifikasi SKK"
           onChange={(value) => updateFormData({ skkLevel: value })}
         />
 
-        <Combobox 
-          data={locations} 
+        <Combobox
+          data={locations}
           label="Lokasi Saat Ini"
           onChange={(value) => updateFormData({ currentLocation: value })}
         />
 
         <div>
-          <ComboboxCheckBox 
-            data={locations} 
+          <ComboboxCheckBox
+            data={locations}
             label="Bersedia Ditempatkan Di Mana"
-            placeholder='Search...'
+            placeholder="Search..."
             onChange={(values) => updateFormData({ prefferedLocations: values })}
             maxSelection={5}
           />
@@ -65,18 +65,18 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
         </div>
 
         <div>
-        <Combobox 
-          data={skills} 
-          label="Keahlian"
-          onChange={(value) => updateFormData({ skill: value })}
-        />
-        {formData.skill === 'lainnya' && (
-        <Input 
-          className="mt-2"
-          placeholder="Tulis di sini keahlian kamu"
-          value={formData.otherSkill || ''}
-          onChange={(e) => updateFormData({ otherSkill: e.target.value })}
-        />
+          <Combobox
+            data={skills}
+            label="Keahlian"
+            onChange={(value) => updateFormData({ skill: value })}
+          />
+          {formData.skill === 'lainnya' && (
+            <Input
+              className="mt-2"
+              placeholder="Tulis di sini keahlian kamu"
+              value={formData.otherSkill || ''}
+              onChange={(e) => updateFormData({ otherSkill: e.target.value })}
+            />
           )}
         </div>
       </div>
@@ -85,9 +85,9 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
         <Typography variant="h6">Dokumen Pendukung</Typography>
 
         <div className="mt-2 space-y-2">
-          <FileInput 
-            data-slot="input" 
-            textLabel="SKK" 
+          <FileInput
+            data-slot="input"
+            textLabel="SKK"
             accept=".pdf,.jpg,.jpeg,.png"
             state={formData.skkFile ? 'filled' : 'empty'}
             value={formData.skkFile?.name || ''}

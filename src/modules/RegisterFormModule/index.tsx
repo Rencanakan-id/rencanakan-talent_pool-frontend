@@ -1,8 +1,8 @@
-import { Typography, Stepper, Input, Button } from "@/components";
-import { ReactNode, useState } from "react";
-import { StepOneForm } from "./Section/register-1";
-import { StepTwoForm } from "./Section/register-2";
-import { RegisterFormData } from "@/lib/register";
+import { Typography, Stepper, Input, Button } from '@/components';
+import { ReactNode, useState } from 'react';
+import { StepOneForm } from './Section/register-1';
+import { StepTwoForm } from './Section/register-2';
+import { RegisterFormData } from '@/lib/register';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -19,9 +19,9 @@ export const RegisterModule = () => {
   });
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      ...data
+      ...data,
     }));
   };
 
@@ -29,14 +29,14 @@ export const RegisterModule = () => {
     switch (step) {
       case 1:
         return !!(
-          formData.firstName && 
-          formData.lastName && 
-          formData.email && 
-          formData.phoneNumber && 
-          formData.nik && 
-          formData.npwp && 
-          formData.ktpFile && 
-          formData.npwpFile && 
+          formData.firstName &&
+          formData.lastName &&
+          formData.email &&
+          formData.phoneNumber &&
+          formData.nik &&
+          formData.npwp &&
+          formData.ktpFile &&
+          formData.npwpFile &&
           formData.diplomaFile
         );
       case 2:
@@ -47,7 +47,7 @@ export const RegisterModule = () => {
           formData.currentLocation &&
           formData.prefferedLocations &&
           formData.skill &&
-          (formData.skill === "lainnya" ? formData.otherSkill : true) &&
+          (formData.skill === 'lainnya' ? formData.otherSkill : true) &&
           formData.skkFile
         );
       case 3:
@@ -61,12 +61,12 @@ export const RegisterModule = () => {
 
   const handleNext = () => {
     if (isStepValid) {
-      setFormState(prev => Math.min(prev + 1, 4));
+      setFormState((prev) => Math.min(prev + 1, 4));
     }
   };
 
   const handlePrev = () => {
-    setFormState(prev => Math.max(prev - 1, 1));
+    setFormState((prev) => Math.max(prev - 1, 1));
   };
 
   const stepsContent: Record<number, ReactNode> = {
@@ -77,14 +77,20 @@ export const RegisterModule = () => {
         <Typography variant="h5" className="text-center">
           Lengkapi formulir dan mulai perjalanan karier kamu!
         </Typography>
-        <div className="my-4 mx-4 justify-center items-center">
+        <div className="mx-4 my-4 items-center justify-center">
           <Stepper currentStep={2} />
         </div>
         <div className="my-4 space-y-4">
-          <Typography variant="h6" className="mb-4">Harga Kamu</Typography>
-          <Input name="price" label="Harga Kamu" placeholder="Masukkan harga kamu" 
-            type="number" value={formData.price || ''} 
-            onChange={(e) => updateFormData({ price: e.target.value })} 
+          <Typography variant="h6" className="mb-4">
+            Harga Kamu
+          </Typography>
+          <Input
+            name="price"
+            label="Harga Kamu"
+            placeholder="Masukkan harga kamu"
+            type="number"
+            value={formData.price || ''}
+            onChange={(e) => updateFormData({ price: e.target.value })}
           />
         </div>
       </>
@@ -105,22 +111,22 @@ export const RegisterModule = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full justify-center items-center bg-rencanakan-sea-blue-500 pt-12 md:py-12">
-      <div className="overflow-y-auto flex h-screen md:h-full flex-col justify-center bg-rencanakan-pure-white rounded-t-xl md:rounded-xl drop-shadow-md md:w-lg mx-auto py-6 px-8">
+    <div className="bg-rencanakan-sea-blue-500 flex min-h-screen w-full items-center justify-center pt-12 md:py-12">
+      <div className="bg-rencanakan-pure-white mx-auto flex h-screen flex-col justify-center overflow-y-auto rounded-t-xl px-8 py-6 drop-shadow-md md:h-full md:w-lg md:rounded-xl">
         {stepsContent[formState]}
 
-        <div className="flex justify-end mt-4 space-x-2">
+        <div className="mt-4 flex justify-end space-x-2">
           {formState > 1 && formState < 4 && (
             <Button variant="primary-outline" onClick={handlePrev}>
               Kembali
             </Button>
           )}
-          <Button 
-            variant="primary" 
-            onClick={formState === 4 ? handleSubmit : handleNext} 
+          <Button
+            variant="primary"
+            onClick={formState === 4 ? handleSubmit : handleNext}
             disabled={!isStepValid}
           >
-            {formState === 4 ? "Daftar Kerja" : "Selanjutnya"}
+            {formState === 4 ? 'Daftar Kerja' : 'Selanjutnya'}
           </Button>
         </div>
       </div>

@@ -4,97 +4,108 @@ import '@testing-library/jest-dom';
 import { StepTwoForm } from '@/modules/RegisterFormModule/Section/register-2';
 import { RegisterFormData } from '@/lib/register';
 
-// Mock the UI components before other imports to ensure they're properly mocked
+// Define interfaces for mock components
+interface ComboboxProps {
+  label: string;
+  onChange: (value: string) => void;
+  value?: string;
+}
+
 jest.mock('@/components/ui/combobox', () => ({
-  Combobox: ({ 
-    label, 
-    onChange, 
-    value 
-  }: any) => (
+  Combobox: ({ label, onChange, value }: ComboboxProps) => (
     <div>
       <label>{label}</label>
-      <input 
-        value={value || ''}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={label}
-      />
+      <input value={value || ''} onChange={(e) => onChange(e.target.value)} aria-label={label} />
     </div>
-  )
+  ),
 }));
+
+interface ComboboxCheckBoxProps {
+  label: string;
+  onChange: (values: string[]) => void;
+  values?: string[];
+  placeholder?: string;
+}
 
 jest.mock('@/components/ui/comboboxCheckbox', () => ({
-  ComboboxCheckBox: ({ 
-    label, 
-    onChange, 
-    values,
-    placeholder,
-  }: any) => (
+  ComboboxCheckBox: ({ label, onChange, values, placeholder }: ComboboxCheckBoxProps) => (
     <div>
       <label>{label}</label>
-      <input 
+      <input
         value={(values || []).join(', ')}
         onChange={(e) => onChange(e.target.value.split(', '))}
-        placeholder={placeholder || ""}
+        placeholder={placeholder || ''}
         aria-label={label}
       />
     </div>
-  )
+  ),
 }));
 
+interface InputProps {
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+  value?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  className?: string;
+}
+
+interface TextareaProps {
+  textLabel: string;
+  placeholder?: string;
+  value?: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+interface FileInputProps {
+  textLabel: string;
+  accept?: string;
+  state?: string;
+  value?: string | null;
+  onFileSelect: (file: File) => void;
+}
+
 jest.mock('@/components', () => ({
-  Typography: ({ children, className }: { children: React.ReactNode, className?: string, variant?: string }) => (
-    <div className={className}>{children}</div>
-  ),
+  Typography: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+    variant?: string;
+  }) => <div className={className}>{children}</div>,
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
   ),
-  Input: ({ 
-    name, 
-    label, 
-    placeholder,
-    type,
-    value,
-    onChange,
-    error,
-    className
-  }: any) => (
+  Input: ({ name, label, placeholder, type, value, onChange, error, className }: InputProps) => (
     <div className={className}>
       {label && <label htmlFor={name}>{label}</label>}
-      <input 
+      <input
         id={name}
         name={name}
-        placeholder={placeholder || ""}
+        placeholder={placeholder || ''}
         type={type}
-        value={value || ""}
+        value={value || ''}
         onChange={onChange}
         aria-label={label}
       />
       {error && <div className="error-message">{error}</div>}
     </div>
   ),
-  Textarea: ({
-    textLabel,
-    placeholder,
-    value,
-    onChange
-  }: any) => (
+  Textarea: ({ textLabel, placeholder, value, onChange }: TextareaProps) => (
     <div>
       <label>{textLabel}</label>
       <textarea
-        placeholder={placeholder || ""}
-        value={value || ""}
+        placeholder={placeholder || ''}
+        value={value || ''}
         onChange={onChange}
         aria-label={textLabel}
       />
     </div>
   ),
-  FileInput: ({
-    textLabel,
-    accept,
-    state,
-    value,
-    onFileSelect
-  }: any) => (
+  FileInput: ({ textLabel, accept, state, value, onFileSelect }: FileInputProps) => (
     <div>
       <label>{textLabel}</label>
       <input
@@ -105,7 +116,7 @@ jest.mock('@/components', () => ({
       />
       {state === 'filled' && <span>{value}</span>}
     </div>
-  )
+  ),
 }));
 
 describe('StepTwoForm Component', () => {
@@ -120,7 +131,7 @@ describe('StepTwoForm Component', () => {
     otherSkill: '',
     skkFile: null,
   };
-  
+
   const mockUpdateFormData = jest.fn();
 
   // Helper function to setup component with custom props
@@ -139,12 +150,12 @@ describe('StepTwoForm Component', () => {
   describe('Positive Cases', () => {
     test('renders form with all fields', () => {
       setup();
-      
+
       // Verify headings
       expect(screen.getByText('Ceritakan sedikit pengalaman kerja kamu')).toBeInTheDocument();
       expect(screen.getByText('Tentang Pekerjaan')).toBeInTheDocument();
       expect(screen.getByText('Dokumen Pendukung')).toBeInTheDocument();
-      
+
       // Verify input fields
       expect(screen.getByLabelText('Tentang Saya')).toBeInTheDocument();
       expect(screen.getByLabelText('Lama Pengalaman')).toBeInTheDocument();
@@ -187,7 +198,9 @@ describe('StepTwoForm Component', () => {
       setup();
       const input = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
       fireEvent.change(input, { target: { value: 'Bandung, Surabaya' } });
-      expect(mockUpdateFormData).toHaveBeenCalledWith({ prefferedLocations: ['Bandung', 'Surabaya'] });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({
+        prefferedLocations: ['Bandung', 'Surabaya'],
+      });
     });
 
     test('updates skill when input changes', () => {
@@ -214,10 +227,10 @@ describe('StepTwoForm Component', () => {
       setup();
       const file = new File(['dummy content'], 'skk.pdf', { type: 'application/pdf' });
       const fileInput = screen.getByLabelText('SKK');
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkFile: file });
-      
+
       // Rerender the component with the updated file
       setup({ skkFile: file });
       expect(screen.getByText('skk.pdf')).toBeInTheDocument(); // Verify the filename is displayed
@@ -239,8 +252,8 @@ describe('StepTwoForm Component', () => {
         currentLocation: undefined,
         prefferedLocations: undefined,
         skill: undefined,
-      } as any);
-      
+      } as Partial<RegisterFormData>);
+
       expect(container).toBeInTheDocument();
     });
   });
@@ -249,22 +262,22 @@ describe('StepTwoForm Component', () => {
     test('handles changing skill from "lainnya" to another value', () => {
       // Start with "lainnya" selected
       const { rerender } = setup({ skill: 'lainnya', otherSkill: 'Custom Skill' });
-      
+
       // Verify otherSkill input is shown
       expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
-      
+
       // Change skill to non-"lainnya" value
       const skillInput = screen.getByLabelText('Keahlian');
       fireEvent.change(skillInput, { target: { value: 'Sipil' } });
-      
+
       // Re-render with the updated props to simulate React's behavior
       rerender(
-        <StepTwoForm 
-          formData={{ ...defaultFormData, skill: 'Sipil' }} 
-          updateFormData={mockUpdateFormData} 
+        <StepTwoForm
+          formData={{ ...defaultFormData, skill: 'Sipil' }}
+          updateFormData={mockUpdateFormData}
         />
       );
-      
+
       // Verify otherSkill input is no longer shown
       const otherSkillInput = screen.queryByPlaceholderText('Tulis di sini keahlian kamu');
       expect(otherSkillInput).not.toBeInTheDocument();
