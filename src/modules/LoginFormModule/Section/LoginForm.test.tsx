@@ -20,7 +20,7 @@ describe("LoginForm", () => {
         isFormValid={false}
         handleLogin={mockHandleLogin}
         emailError=""
-        passwordError=""
+        commentError=""
       />
     );
   });
@@ -63,7 +63,7 @@ describe("LoginForm - Valid Form", () => {
         isFormValid={true}
         handleLogin={mockHandleLogin}
         emailError=""
-        passwordError=""
+        commentError=""
       />
     );
   });
@@ -92,7 +92,7 @@ describe("LoginForm - Null Values", () => {
         isFormValid={false}
         handleLogin={mockHandleLogin}
         emailError=""
-        passwordError=""
+        commentError=""
       />
     );
   });

@@ -9,7 +9,7 @@ interface LoginFormProps {
   isFormValid: boolean;
   handleLogin: () => void;
   emailError: string;
-  passwordError: string;
+  commentError: string;
 }
 
 export const LoginForm = ({ 
@@ -18,7 +18,7 @@ export const LoginForm = ({
   isFormValid, 
   handleLogin,
   emailError,
-  passwordError
+  commentError
 }: LoginFormProps) => {
   
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +57,7 @@ export const LoginForm = ({
             type="password"
             value={formData.password ?? ''} 
             onChange={handleInputChange} 
-            error={passwordError}
+            error={commentError}
           />
           </div>
           

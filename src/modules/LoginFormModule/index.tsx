@@ -22,7 +22,7 @@ const LoginModule = () => {
   const validateFormOnSubmit = () => {
     let isValid = true;
     let emailErr = '';
-    let passwordErr = '';
+    let commentErr = '';
 
     if ((formData.email ?? '').length < 4) {
       emailErr = 'Email harus memiliki setidaknya 4 karakter';
@@ -30,18 +30,18 @@ const LoginModule = () => {
     }
 
     if ((formData.password ?? '').length < 6) {
-      passwordErr = 'Kata sandi harus memiliki setidaknya 6 karakter';
+     commentErr = 'Kata sandi harus memiliki setidaknya 6 karakter';
       isValid = false;
     }
 
-    return { isValid, emailErr, passwordErr };
+    return { isValid, emailErr, commentErr };
   };
 
   const handleLogin = () => {
     if (isFormValid) {
-      const { isValid, emailErr, passwordErr } = validateFormOnSubmit();
+      const { isValid, emailErr, commentErr } = validateFormOnSubmit();
       setEmailError(emailErr);
-      setPasswordError(passwordErr);
+      setPasswordError(commentErr);
 
       if (isValid) {
         console.log('Login Data:', formData);
@@ -60,7 +60,7 @@ const LoginModule = () => {
       isFormValid={isFormValid}
       handleLogin={handleLogin}
       emailError={emailError}
-      passwordError={passwordError}
+      commentError={passwordError}
     />
   );
 };
