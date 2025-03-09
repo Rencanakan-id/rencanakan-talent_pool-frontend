@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { StepFourForm } from './register-4';
+import { StepFourForm } from '../../../modules/RegisterFormModule/Section/register-4';
 import { RegisterFormData } from '@/lib/register';
 
 jest.mock('@/components', () => ({
@@ -169,12 +169,7 @@ describe('StepFourForm Component', () => {
       expect(updateValidationStatus).toHaveBeenCalledWith({ step4Valid: false });
     });
     
-    const validatePasswordMatch = (password?: string, confirmation?: string) => {
-      if (!confirmation) return "Konfirmasi kata sandi tidak boleh kosong";
-      if (password !== confirmation) return "Kata sandi tidak cocok";
-      return "";
-    };
-    
+    const { validatePasswordMatch } = require('@/lib/validation/passwordValidation');
     expect(validatePasswordMatch('Password123', '')).toBe("Konfirmasi kata sandi tidak boleh kosong");
   });
 
@@ -277,4 +272,3 @@ describe('StepFourForm Component', () => {
     });
   });
 });
-
