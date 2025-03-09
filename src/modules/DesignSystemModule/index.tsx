@@ -1,6 +1,10 @@
 import { Typography, Textarea, ImageUpload, Button, FileInput, Input } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
+import { Combobox } from '@/components/ui/combobox';
+import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
+import { locations } from '@/data/location';
+
 export const DesignSystemModule = () => {
   return (
     <div className="flex flex-col gap-5 p-6">
@@ -9,6 +13,15 @@ export const DesignSystemModule = () => {
       <div className="space-y-4">
         <Typography variant="d1">Display 1</Typography>
         <Typography variant="d2">Display 2</Typography>
+      </div>
+
+      <div className="w-full space-y-4">
+        <Combobox data={locations} label="Lokasi" />
+        {/* <ComboboxCheckBox /> */}
+      </div>
+      <div className="w-full space-y-4">
+        {/* <Combobox /> */}
+        <ComboboxCheckBox data={locations} label="Lokasi" />
       </div>
 
       <div className="space-y-4">
