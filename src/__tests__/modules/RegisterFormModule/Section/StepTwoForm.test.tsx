@@ -7,7 +7,6 @@ import { RegisterFormData } from '@/lib/register';
 // Mock the UI components before other imports to ensure they're properly mocked
 jest.mock('@/components/ui/combobox', () => ({
   Combobox: ({ 
-    data, 
     label, 
     onChange, 
     value 
@@ -25,7 +24,6 @@ jest.mock('@/components/ui/combobox', () => ({
 
 jest.mock('@/components/ui/comboboxCheckbox', () => ({
   ComboboxCheckBox: ({ 
-    data, 
     label, 
     onChange, 
     values,
@@ -45,7 +43,7 @@ jest.mock('@/components/ui/comboboxCheckbox', () => ({
 
 // Mock components to match the import structure in register-2.tsx
 jest.mock('@/components', () => ({
-  Typography: ({ children, className, variant }: { children: React.ReactNode, className?: string, variant?: string }) => (
+  Typography: ({ children, className }: { children: React.ReactNode, className?: string, variant?: string }) => (
     <div className={className}>{children}</div>
   ),
   Stepper: ({ currentStep }: { currentStep: number }) => (
