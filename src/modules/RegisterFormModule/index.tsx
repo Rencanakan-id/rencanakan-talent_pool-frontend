@@ -36,10 +36,7 @@ export const RegisterModule = () => {
           formData.email && 
           formData.phoneNumber && 
           formData.nik && 
-          formData.npwp && 
-          formData.ktpFile && 
-          formData.npwpFile && 
-          formData.diplomaFile
+          formData.npwp
         );
       case 2:
         return !!(formData.address && formData.city);
