@@ -43,11 +43,6 @@ export const StepThreeForm: React.FC<StepThreeFormProps> = ({ formData, updateFo
   
     if (inputRef.current) {
       inputRef.current.value = `${formatToRupiah(rawValue)}`;
-      
-      const cursorPosition = e.target.selectionStart ?? 0;
-      setTimeout(() => {
-        inputRef.current?.setSelectionRange(cursorPosition, cursorPosition);
-      }, 0);
     }
   };
   
