@@ -86,7 +86,7 @@ export function ComboboxCheckBox({
             variant="primary-outline"
             role="combobox"
             aria-expanded={open}
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:bg-transparent active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
@@ -102,7 +102,7 @@ export function ComboboxCheckBox({
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent className="p-0" style={{ width }}>
+      <PopoverContent className="p-0 border-transparent" style={{ width }}>
         <Command>
           <div className="flex h-full items-center">
             <Typography variant="p5" className="flex items-center p-2">
