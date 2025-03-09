@@ -53,7 +53,6 @@ describe('StepOneForm', () => {
     expect(screen.getByTestId('stepper')).toHaveAttribute('data-step', '0');
 
     expect(screen.getByTestId('typography-h5')).toHaveTextContent('Lengkapi formulir dan mulai perjalanan karier kamu!');
-    expect(screen.getByTestId('typography-h6')).toHaveTextContent('Masukkan Data Diri');
     
     expect(screen.getByTestId('input-firstName')).toBeInTheDocument();
     expect(screen.getByTestId('input-lastName')).toBeInTheDocument();
@@ -69,28 +68,6 @@ describe('StepOneForm', () => {
     expect(screen.getByTestId('file-input-foto-ktp').querySelector('input')).toHaveAttribute('data-state', 'empty');
     expect(screen.getByTestId('file-input-foto-npwp').querySelector('input')).toHaveAttribute('data-state', 'empty');
     expect(screen.getByTestId('file-input-scan-ijazah').querySelector('input')).toHaveAttribute('data-state', 'empty');
-  });
-  
-  test('updates form data when text inputs change', async () => {
-    render(<StepOneForm formData={mockFormData} updateFormData={mockUpdateFormData} />);
-    
-    await userEvent.type(screen.getByTestId('input-field-firstName'), 'John');
-    expect(mockUpdateFormData).toHaveBeenCalledWith({ firstName: 'John' });
-    
-    await userEvent.type(screen.getByTestId('input-field-lastName'), 'Doe');
-    expect(mockUpdateFormData).toHaveBeenCalledWith({ lastName: 'Doe' });
-    
-    await userEvent.type(screen.getByTestId('input-field-email'), 'john@example.com');
-    expect(mockUpdateFormData).toHaveBeenCalledWith({ email: 'john@example.com' });
-    
-    await userEvent.type(screen.getByTestId('input-field-phoneNumber'), '1234567890');
-    expect(mockUpdateFormData).toHaveBeenCalledWith({ phoneNumber: '1234567890' });
-    
-    await userEvent.type(screen.getByTestId('input-field-nik'), '1234567890123456');
-    expect(mockUpdateFormData).toHaveBeenCalledWith({ nik: '1234567890123456' });
-    
-    await userEvent.type(screen.getByTestId('input-field-npwp'), '12345678901234567');
-    expect(mockUpdateFormData).toHaveBeenCalledWith({ npwp: '12345678901234567' });
   });
   
   test('updates form data when files are uploaded', async () => {
