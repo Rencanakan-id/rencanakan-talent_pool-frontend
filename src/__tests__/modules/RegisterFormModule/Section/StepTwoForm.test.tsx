@@ -15,7 +15,7 @@ jest.mock('@/components/ui/combobox', () => ({
   Combobox: ({ label, onChange, value }: ComboboxProps) => (
     <div>
       <label>{label}</label>
-      <input value={value || ''} onChange={(e) => onChange(e.target.value)} aria-label={label} />
+      <input value={value ?? ''} onChange={(e) => onChange(e.target.value)} aria-label={label} />
     </div>
   ),
 }));
@@ -34,7 +34,7 @@ jest.mock('@/components/ui/comboboxCheckbox', () => ({
       <input
         value={(values || []).join(', ')}
         onChange={(e) => onChange(e.target.value.split(', '))}
-        placeholder={placeholder || ''}
+        placeholder={placeholder ?? ''}
         aria-label={label}
       />
     </div>
@@ -74,7 +74,6 @@ jest.mock('@/components', () => ({
   }: {
     children: React.ReactNode;
     className?: string;
-    variant?: string;
   }) => <div className={className}>{children}</div>,
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
@@ -85,9 +84,9 @@ jest.mock('@/components', () => ({
       <input
         id={name}
         name={name}
-        placeholder={placeholder || ''}
+        placeholder={placeholder ?? ''}
         type={type}
-        value={value || ''}
+        value={value ?? ''}
         onChange={onChange}
         aria-label={label}
       />
@@ -98,8 +97,8 @@ jest.mock('@/components', () => ({
     <div>
       <label>{textLabel}</label>
       <textarea
-        placeholder={placeholder || ''}
-        value={value || ''}
+        placeholder={placeholder ?? ''}
+        value={value ?? ''}
         onChange={onChange}
         aria-label={textLabel}
       />
