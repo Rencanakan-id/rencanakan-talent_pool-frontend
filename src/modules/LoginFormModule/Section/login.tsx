@@ -8,13 +8,17 @@ interface LoginFormProps {
   updateFormData: (data: Partial<LoginFormData>) => void;
   isFormValid: boolean;
   handleLogin: () => void;
+  emailError: string;
+  passwordError: string;
 }
 
 export const LoginForm = ({ 
   formData, 
   updateFormData, 
   isFormValid, 
-  handleLogin 
+  handleLogin,
+  emailError,
+  passwordError
 }: LoginFormProps) => {
   
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,23 +40,25 @@ export const LoginForm = ({
           </Typography>
           
           <div className="space-y-4">
-            <Input 
-              name="email" 
-              label="E-mail" 
-              placeholder="Masukkan email Anda" 
-              type="email"
-              value={formData.email ?? ''} 
-              onChange={handleInputChange} 
-            />
+          <Input 
+            name="email" 
+            label="E-mail" 
+            placeholder="Masukkan email Anda" 
+            type="email"
+            value={formData.email ?? ''} 
+            onChange={handleInputChange} 
+            error={emailError}
+          />
             
-            <Input 
-              name="password" 
-              label="Kata Sandi" 
-              placeholder="Masukkan kata sandi" 
-              type="password"
-              value={formData.password ?? ''} 
-              onChange={handleInputChange} 
-            />
+          <Input 
+            name="password" 
+            label="Kata Sandi" 
+            placeholder="Masukkan kata sandi" 
+            type="password"
+            value={formData.password ?? ''} 
+            onChange={handleInputChange} 
+            error={passwordError}
+          />
           </div>
           
           <div className="mt-6">

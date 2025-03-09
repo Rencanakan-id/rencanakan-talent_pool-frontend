@@ -1,4 +1,3 @@
-// index.tsx - Logic and state management
 import { useState } from "react";
 import { LoginForm } from './Section/login';
 import { LoginFormData } from "@/lib/login";
@@ -8,6 +7,8 @@ const LoginModule = () => {
     email: '',
     password: ''
   });
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const updateFormData = (data: Partial<LoginFormData>) => {
     setFormData(prev => ({
@@ -16,17 +17,39 @@ const LoginModule = () => {
     }));
   };
 
-  const validateForm = (): boolean => {
-    return !!(formData.email && formData.password);
-  };
+  const isFormValid = !!formData.email && !!formData.password;
 
-  const isFormValid = validateForm();
+  const validateFormOnSubmit = () => {
+    let isValid = true;
+    let emailErr = '';
+    let passwordErr = '';
+
+    if ((formData.email ?? '').length < 4) {
+      emailErr = 'Email harus memiliki setidaknya 4 karakter';
+      isValid = false;
+    }
+
+    if ((formData.password ?? '').length < 6) {
+      passwordErr = 'Kata sandi harus memiliki setidaknya 6 karakter';
+      isValid = false;
+    }
+
+    return { isValid, emailErr, passwordErr };
+  };
 
   const handleLogin = () => {
     if (isFormValid) {
-      console.log('Login Data:', formData);
-      // Handle login logic here
-      // Such as API calls, authentication, etc.
+      const { isValid, emailErr, passwordErr } = validateFormOnSubmit();
+      setEmailError(emailErr);
+      setPasswordError(passwordErr);
+
+      if (isValid) {
+        console.log('Login Data:', formData);
+        // Handle login logic
+      }
+    } else {
+      setEmailError(formData.email ? '' : 'Email harus diisi');
+      setPasswordError(formData.password ? '' : 'Kata sandi harus diisi');
     }
   };
 
@@ -36,6 +59,8 @@ const LoginModule = () => {
       updateFormData={updateFormData}
       isFormValid={isFormValid}
       handleLogin={handleLogin}
+      emailError={emailError}
+      passwordError={passwordError}
     />
   );
 };
