@@ -223,4 +223,26 @@ describe('StepTwoForm Component', () => {
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkFile: file });
     });
   });
+
+  // Negative test cases
+  describe('Negative Cases', () => {
+    test('does not show otherSkill input when skill is not "lainnya"', () => {
+      setup({ skill: 'Sipil' });
+      const otherSkillInput = screen.queryByPlaceholderText('Tulis di sini keahlian kamu');
+      expect(otherSkillInput).not.toBeInTheDocument();
+    });
+
+    test('handles empty form data gracefully', () => {
+      const { container } = setup({
+        aboutMe: undefined,
+        yearsOfExperience: undefined,
+        skkLevel: undefined,
+        currentLocation: undefined,
+        prefferedLocations: undefined,
+        skill: undefined,
+      } as any);
+      
+      expect(container).toBeInTheDocument();
+    });
+  });
 });
