@@ -59,7 +59,7 @@ export function Combobox({
             aria-haspopup="listbox"
             aria-controls="dropdown-list"
             aria-expanded={open}
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:bg-transparent active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100 active:bg-transparent`}
             icon={
               <ChevronsUpDown
                 className={`transition-transform duration-200 ${open ? 'rotate-180' : ''} opacity-50`}
@@ -67,7 +67,10 @@ export function Combobox({
             }
             iconPosition="end"
           >
-            <Typography variant="p4" className="text-xs">
+            <Typography
+              variant="p4"
+              className={`text-xs ${value ? 'text-rencanakan-type-black' : 'text-rencanakan-dark-gray'}`}
+            >
               {value ? data.find((option) => option.value === value)?.label : `Pilih ${label}`}
             </Typography>
           </Button>
@@ -79,7 +82,10 @@ export function Combobox({
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent className="w-full p-0 pt-2 border-rencanakan-light-gray" style={{ width: width }}>
+      <PopoverContent
+        className="border-rencanakan-light-gray w-full p-0 pt-2"
+        style={{ width: width }}
+      >
         <Command>
           <CommandInput placeholder={placeholder} />
           <CommandList>
