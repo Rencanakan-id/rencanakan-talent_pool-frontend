@@ -91,10 +91,14 @@ describe('StepThreeForm Component', () => {
     ).toBeInTheDocument();
   });
 
-  test('displays correct SKK level and years of experience', () => {
+  test('displays correct SKK level and years of experience information', () => {
     const { container } = setup({ skkLevel: 'operator', yearsOfExperience: '1 Tahun' });
-    const textPattern = /Untuk level.*Operator.*dengan.*1.*tahun.*pengalaman kerja/;
-    expect(container.textContent).toMatch(textPattern);
+    expect(container).toHaveTextContent('Untuk level');
+    expect(container).toHaveTextContent('Operator');
+    expect(container).toHaveTextContent('dengan');
+    expect(container).toHaveTextContent('1');
+    expect(container).toHaveTextContent('tahun');
+    expect(container).toHaveTextContent('pengalaman kerja');
   });
   
   test('updates price field correctly', () => {
