@@ -22,13 +22,13 @@ type Option = {
 };
 
 type ComboboxProps = {
-  placeholder?: string; 
-  label?: string; 
-  emptyMessage?: string; 
-  data?: Option[]; 
-  width?: string; 
-  className?: string; 
-  value?: string; 
+  placeholder?: string;
+  label?: string;
+  emptyMessage?: string;
+  data?: Option[];
+  width?: string;
+  className?: string;
+  value?: string;
   onChange?: (value: string) => void;
 };
 
@@ -47,8 +47,7 @@ export function Combobox({
 
   React.useEffect(() => {
     setValue(propValue);
-  }, 
-  [propValue]);
+  }, [propValue]);
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === value ? '' : currentValue;

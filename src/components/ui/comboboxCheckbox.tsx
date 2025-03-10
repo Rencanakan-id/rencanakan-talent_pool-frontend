@@ -53,8 +53,7 @@ export function ComboboxCheckBox({
 
   React.useEffect(() => {
     setValue(propValue);
-  },
-  [propValue]);
+  }, [propValue]);
 
   const toggleSelection = (optionValue: string, _optionLabel: string, checked: boolean) => {
     setSelected((prev) => {
