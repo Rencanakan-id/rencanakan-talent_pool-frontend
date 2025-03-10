@@ -30,35 +30,20 @@ describe('UserProfileCard Component', () => {
     render(<UserProfileCard user={mockUser} />);
   });
 
-  test('renders user name correctly', () => {
+  test('renders correctly', () => {
     expect(screen.getByText('Gabriella Naomi')).toBeInTheDocument();
-  });
-
-  test('renders user location correctly', () => {
     expect(screen.getByText('Surabaya, Jawa Timur')).toBeInTheDocument();
-  });
-
-  test('renders phone number correctly', () => {
     expect(screen.getByText('+62 8123456789')).toBeInTheDocument();
-  });
-
-  test('renders job title correctly', () => {
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-  });
-
-  test('renders experience correctly', () => {
     expect(screen.getByText('5 Tahun Pengalaman')).toBeInTheDocument();
-  });
-
-  test('renders about me section', () => {
     expect(screen.getByText('Tentang Saya')).toBeInTheDocument();
     expect(
       screen.getByText('Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.')
     ).toBeInTheDocument();
-  });
-
-  test('renders estimated price section', () => {
     expect(screen.getByText('Perkiraan Harga')).toBeInTheDocument();
     expect(screen.getByText('Rp 7.500.000')).toBeInTheDocument();
+    
   });
+
+ 
 });
