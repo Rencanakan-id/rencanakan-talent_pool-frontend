@@ -6,6 +6,7 @@ import { StepFourForm } from "./Section/register-4";
 import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
 import { validatePasswordSection } from "@/lib/validation/passwordValidation";
+import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -27,6 +28,12 @@ export const RegisterModule = () => {
     step4Complete: false
   });
   const [validationErrors, setValidationErrors] = useState<{
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phoneNumber?: string;
+    nik?: string;
+    npwp?: string;
     password?: string;
     passwordConfirmation?: string;
   }>({});
@@ -80,6 +87,25 @@ export const RegisterModule = () => {
   const isStepValid = validateStep(formState);
 
   const handleNext = () => {
+    if (formState === 1) {
+      const { firstName, lastName, email, phoneNumber, nik, npwp } = formData;
+      const stepOneValidation = validateStepOneForm({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        nik,
+        npwp,
+      });
+
+      setValidationErrors(stepOneValidation.errors);
+
+      if (stepOneValidation.isValid) {
+        setFormState((prev) => Math.min(prev + 1, 4));
+      }
+      return; 
+    }
+
     if (isStepValid) {
       setFormState((prev) => Math.min(prev + 1, 4));
     }
@@ -108,7 +134,11 @@ export const RegisterModule = () => {
   };
 
   const stepsContent: Record<number, ReactNode> = {
-    1: <StepOneForm formData={formData} updateFormData={updateFormData} />,
+    1: <StepOneForm 
+        formData={formData} 
+        updateFormData={updateFormData}
+        validationErrors={validationErrors} 
+        />,
     2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
     3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: <StepFourForm 

@@ -1,13 +1,25 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { Typography, Stepper, Input, FileInput, ImageUpload } from "@/components";
 import { RegisterFormData } from "@/lib/register";
 
 interface StepOneFormProps {
   formData: RegisterFormData;
   updateFormData: (data: Partial<RegisterFormData>) => void;
+  validationErrors?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phoneNumber?: string;
+    nik?: string;
+    npwp?: string;
+  };
 }
 
-export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormData }) => {
+export const StepOneForm: React.FC<StepOneFormProps> = ({ 
+  formData, 
+  updateFormData,
+  validationErrors = {},
+  }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     updateFormData({ [name]: value });
@@ -36,7 +48,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
                 name="firstName"
                 label="Nama Depan"
                 placeholder="Nama Depan"
-                error="Nama depan tidak valid"
+                error={validationErrors.firstName}
                 value={formData.firstName || ''}
                 onChange={handleInputChange}
               />
@@ -44,7 +56,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
                 name="lastName"
                 label="Nama Belakang"
                 placeholder="Nama Belakang"
-                error="Nama belakang tidak valid"
+                error={validationErrors.lastName}
                 value={formData.lastName || ''}
                 onChange={handleInputChange}
               />
@@ -54,7 +66,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               name="email"
               label="Email"
               placeholder="Masukkan email Anda"
-              error="Email tidak valid"
+              error={validationErrors.email}
               type="email"
               value={formData.email || ''}
               onChange={handleInputChange}
@@ -64,7 +76,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               name="phoneNumber"
               label="Nomor Telepon"
               placeholder="Masukkan nomor WhatsApp Anda"
-              error="Nomor telepon tidak valid"
+              error={validationErrors.phoneNumber}
               type="tel"
               value={formData.phoneNumber || ''}
               onChange={handleInputChange}
@@ -74,7 +86,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               name="nik"
               label="No. NIK"
               placeholder="Masukkan NIK Anda"
-              error="No. NIK tidak valid"
+              error={validationErrors.nik}
               value={formData.nik || ''}
               onChange={handleInputChange}
             />
@@ -82,7 +94,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
             <Input
               name="npwp"
               label="No. NPWP"
-              error="No. NPWP tidak valid"
+              error={validationErrors.npwp}
               placeholder="Masukkan NPWP Anda"
               value={formData.npwp || ''}
               onChange={handleInputChange}
