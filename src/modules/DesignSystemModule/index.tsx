@@ -1,5 +1,5 @@
 import { Typography, Textarea, Button, FileInput, Input } from '@/components';
-import Experience from '@/components/ui/experience';
+import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 import { Combobox } from '@/components/ui/combobox';
@@ -7,6 +7,42 @@ import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
+const dummyExperience= [
+  {
+    id: 1,
+    title: 'Software Engineer',
+    company: 'Tech Corp',
+    employmentType: 'FULL_TIME' as EmploymentType,
+    startDate: '2020-06-01',
+    endDate: '2023-08-31',
+    location: 'Jakarta, Indonesia',
+    locationType: 'ON_SITE' as LocationType,
+    talentId: 101,
+  },
+  {
+    id: 2,
+    title: 'Frontend Developer',
+    company: 'Startup XYZ',
+    employmentType: 'FULL_TIME' as EmploymentType, 
+    startDate: '2019-02-15',
+    endDate: '2020-05-30',
+    location: 'Remote',
+    locationType: 'ON_SITE' as LocationType, 
+    talentId: 102,
+  },
+  {
+    id: 3,
+    title: 'Backend Developer',
+    company: 'Enterprise Solutions',
+    employmentType: 'FULL_TIME' as EmploymentType, 
+    startDate: '2018-09-01',
+    endDate: '2019-12-15',
+    location: 'Bandung, Indonesia',
+    locationType: 'ON_SITE' as LocationType, 
+    talentId: 103,
+  },
+];
+
 
 const dummyUser = {
   id: '1',
@@ -198,7 +234,7 @@ export const DesignSystemModule = () => {
       </div>
       <div>
         <h1> Experience Detail </h1>
-        <Experience experiences={[]}/>
+        <Experience experiences={dummyExperience}/>
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
