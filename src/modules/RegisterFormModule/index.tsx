@@ -49,11 +49,11 @@ export const RegisterModule = () => {
     switch (step) {
       case 1:
         return !!(
-          formData.firstName && 
-          formData.lastName && 
-          formData.email && 
-          formData.phoneNumber && 
-          formData.nik && 
+          formData.firstName &&
+          formData.lastName &&
+          formData.email &&
+          formData.phoneNumber &&
+          formData.nik &&
           formData.npwp
         );
       case 2:
@@ -64,8 +64,7 @@ export const RegisterModule = () => {
           formData.currentLocation &&
           formData.prefferedLocations &&
           formData.skill &&
-          (formData.skill === 'lainnya' ? formData.otherSkill : true) &&
-          formData.skkFile
+          (formData.skill === 'lainnya' ? formData.otherSkill : true)
         );
       case 3:
         return !!formData.price;

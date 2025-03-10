@@ -28,6 +28,7 @@ type ComboboxProps = {
   data?: Option[];
   width?: string;
   className?: string;
+  value?: string;
   onChange?: (value: string) => void;
 };
 
@@ -38,10 +39,15 @@ export function Combobox({
   emptyMessage = 'No options found',
   width = '100%',
   className = '',
+  value: propValue = '',
   onChange,
 }: Readonly<ComboboxProps>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(propValue);
+
+  React.useEffect(() => {
+    setValue(propValue);
+  }, [propValue]);
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === value ? '' : currentValue;
@@ -83,7 +89,7 @@ export function Combobox({
         </PopoverTrigger>
       </div>
       <PopoverContent
-        className="border-rencanakan-light-gray w-full p-0 pt-2"
+        className="border-rencanakan-light-gray w-full p-0 pt-2 bg-white"
         style={{ width: width }}
       >
         <Command>

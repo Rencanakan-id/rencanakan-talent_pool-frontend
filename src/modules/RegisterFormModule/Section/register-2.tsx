@@ -15,15 +15,15 @@ interface StepTwoFormProps {
 export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormData }) => {
   return (
     <>
-      <Typography variant="h5" className="text-center">
-        Ceritakan sedikit pengalaman kerja kamu
-      </Typography>
+      <Typography variant="h5">Ceritakan sedikit pengalaman kerja kamu</Typography>
 
       <div className="mx-4 my-4 items-center justify-center">
         <Stepper currentStep={1} />
       </div>
 
-      <Typography variant="h6">Tentang Pekerjaan</Typography>
+      <Typography variant="h6" className="mt-6">
+        Tentang Pekerjaan
+      </Typography>
 
       <div className="mb-4 space-y-6">
         <Textarea
@@ -36,18 +36,21 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
         <Combobox
           data={yearsOfExperience}
           label="Lama Pengalaman"
+          value={formData.yearsOfExperience || ''}
           onChange={(value) => updateFormData({ yearsOfExperience: value })}
         />
 
         <Combobox
           data={skkLevels}
           label="Level Sertifikasi SKK"
+          value={formData.skkLevel || ''}
           onChange={(value) => updateFormData({ skkLevel: value })}
         />
 
         <Combobox
           data={locations}
           label="Lokasi Saat Ini"
+          value={formData.currentLocation || ''}
           onChange={(value) => updateFormData({ currentLocation: value })}
         />
 
@@ -56,6 +59,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
             data={locations}
             label="Bersedia Ditempatkan Di Mana"
             placeholder="Search..."
+            value={(formData.prefferedLocations || []).join(', ')}
             onChange={(values) => updateFormData({ prefferedLocations: values })}
             maxSelection={5}
           />
@@ -68,6 +72,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           <Combobox
             data={skills}
             label="Keahlian"
+            value={formData.skill || ''}
             onChange={(value) => updateFormData({ skill: value })}
           />
           {formData.skill === 'lainnya' && (
