@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
-
-import UserProfileCard , { UserProfile} from '@/components/ui/profile';
+import UserProfileCard, { UserProfile } from '@/components/ui/profile';
 import '@testing-library/jest-dom';
 
 const mockUser: UserProfile = {
@@ -27,43 +26,38 @@ const mockUser: UserProfile = {
 };
 
 describe('UserProfileCard Component', () => {
-  test('renders user name correctly', () => {
+  beforeEach(() => {
     render(<UserProfileCard user={mockUser} />);
+  });
+
+  test('renders user name correctly', () => {
     expect(screen.getByText('Gabriella Naomi')).toBeInTheDocument();
   });
 
   test('renders user location correctly', () => {
-    render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('Surabaya, Jawa Timur')).toBeInTheDocument();
   });
 
   test('renders phone number correctly', () => {
-    render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('+62 8123456789')).toBeInTheDocument();
   });
 
   test('renders job title correctly', () => {
-    render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
   });
 
   test('renders experience correctly', () => {
-    render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('5 Tahun Pengalaman')).toBeInTheDocument();
   });
 
   test('renders about me section', () => {
-    render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('Tentang Saya')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        'Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.'
-      )
+      screen.getByText('Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.')
     ).toBeInTheDocument();
   });
 
   test('renders estimated price section', () => {
-    render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('Perkiraan Harga')).toBeInTheDocument();
     expect(screen.getByText('Rp 7.500.000')).toBeInTheDocument();
   });
