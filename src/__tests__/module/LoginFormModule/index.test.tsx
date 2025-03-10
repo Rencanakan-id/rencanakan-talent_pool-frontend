@@ -2,9 +2,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import LoginModule from '@/modules/LoginFormModule'; // Sesuaikan path sesuai struktur proyek
 import '@testing-library/jest-dom';
+import { faker } from "@faker-js/faker";
 
 // Mock console.log untuk mengecek submit yang valid
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
+const randomPassword = faker.internet.password();
 
 describe('LoginModule', () => {
   afterEach(() => {
@@ -32,11 +34,11 @@ describe('LoginModule', () => {
 
     // Simulasikan perubahan input
     fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(passwordInput, { target: { value: randomPassword } });
 
     // Cek nilai input telah berubah
     expect(emailInput.value).toBe('user@example.com');
-    expect(passwordInput.value).toBe('password123');
+    expect(passwordInput.value).toBe(randomPassword);
   });
 
   // Test 3: Validasi error saat submit data tidak valid
@@ -72,7 +74,7 @@ describe('LoginModule', () => {
 
     // Masukkan data valid
     fireEvent.change(emailInput, { target: { value: 'valid@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'validpassword' } });
+    fireEvent.change(passwordInput, { target: { value: randomPassword } });
 
     // Klik tombol submit
     fireEvent.click(submitButton);
@@ -80,7 +82,7 @@ describe('LoginModule', () => {
     // Cek console.log dipanggil dengan data yang benar
     expect(mockConsoleLog).toHaveBeenCalledWith('Login Data:', {
       email: 'valid@example.com',
-      password: 'validpassword',
+      password: randomPassword,
     });
   });
 
@@ -97,5 +99,5 @@ describe('LoginModule', () => {
     expect(screen.queryByText('Kata sandi harus diisi')).not.toBeInTheDocument();
   });
 
-  
+
 });
