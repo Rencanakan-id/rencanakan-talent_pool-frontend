@@ -1,50 +1,60 @@
+# .coderabbit.yml - CodeRabbit configuration file for React Vite project
+
+# Core configuration
+version: 1
+reviews:
+  request_changes_threshold: major
+  approve_threshold: minor
+
+# Customize what files CodeRabbit should analyze
 include:
-  - "src/**/*.js"
-  - "src/**/*.jsx"
-  - "src/**/*.ts"
-  - "src/**/*.tsx"
-  - "public/index.html"
+  - "src/**/*.{js,jsx,ts,tsx}"
+  - "*.{js,jsx,ts,tsx,json}"
+  - "public/**/*"
+  - "vite.config.{js,ts}"
+  - "index.html"
   - "package.json"
 
 exclude:
   - "node_modules/"
-  - "build/"
   - "dist/"
-  - "**/*.test.js"
-  - "**/*.spec.js"
+  - "build/"
+  - "coverage/"
+  - "**/*.test.{js,jsx,ts,tsx}"
+  - "**/*.spec.{js,jsx,ts,tsx}"
+  
+# Configure analysis settings
+analysis:
+  categories:
+    - security
+    - performance
+    - bug_prevention
+    - code_style
+    - best_practices
 
-rules:
-  - rule: "react/react-in-jsx-scope"
-    level: "error"
-  - rule: "react-hooks/rules-of-hooks"
-    level: "error"
-  - rule: "react/prop-types"
-    level: "warning"
-  - rule: "react/jsx-no-undef"
-    level: "error"
-  - rule: "react/no-unescaped-entities"
-    level: "warning"
+  # React/Vite specific rules
+  react:
+    enabled: true
+    best_practices: true
+    hooks: true
+    jsx: true
+    
+  eslint:
+    enabled: true
+    config_path: ".eslintrc.js"
+    
+  typescript:
+    enabled: true
+    
+  vite:
+    enabled: true
 
-  - rule: "no-console"
-    level: "warning"
-  - rule: "no-debugger"
-    level: "error"
-  - rule: "prefer-const"
-    level: "warning"
-
-documentation:
-  title: "My React Project Documentation"
-  description: "API and component documentation for the React project"
-  include:
-    - "src/components/**/*.js"
-    - "src/services/**/*.js"
-  exclude:
-    - "**/*.test.js"
-  format: "markdown"
-  output: "./docs"
-
-dependencies:
-  - "react"
-  - "react-dom"
-  - "react-router-dom"
-  - "axios"
+# PR comment settings
+comments:
+  max_number_of_reviews: 10
+  max_line_length: 500
+  sections:
+    - summary
+    - security
+    - performance
+    - code_improvements
