@@ -1,17 +1,32 @@
-import { Config } from 'jest';
+import type { Config } from 'jest';
 
 const config: Config = {
-  preset: 'ts-jest', // Gunakan ts-jest untuk TypeScript
-  testEnvironment: 'jsdom', // Simulasi DOM untuk testing React
-  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
+  // Core settings
+  preset: 'ts-jest',
+  testEnvironment: 'jest-environment-jsdom',
+  
+  // Module resolution
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Biar Jest bisa handle import CSS
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  collectCoverage: true, // Mengaktifkan coverage
-  coverageDirectory: 'coverage', // Direktori hasil laporan
-  collectCoverageFrom: ['src/**/*.{ts,tsx}'], // File yang ingin diukur coverage-nya
-  coverageReporters: ['json', 'lcov', 'text', 'clover'], // Format laporan coverage
+  moduleDirectories: ['node_modules', 'src'],
+  
+  // Setup files
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  
+  // TypeScript configuration
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.jest.json',
+    },
+  },
+  
+  // Coverage settings
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
 };
 
 export default config;

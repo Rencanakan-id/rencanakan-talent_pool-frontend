@@ -40,7 +40,8 @@ export const LoginForm = ({
           </Typography>
           
           <div className="space-y-4">
-          <Input 
+          <Input
+            data-testid="email-input" 
             name="email" 
             label="E-mail" 
             placeholder="Masukkan email Anda" 
@@ -51,6 +52,7 @@ export const LoginForm = ({
           />
             
           <Input 
+            data-testid="password-input"
             name="password" 
             label="Kata Sandi" 
             placeholder="Masukkan kata sandi" 
@@ -81,7 +83,7 @@ export const LoginForm = ({
                 href="/register"
                 style={{ textDecoration: "underline" }}
             >
-                Daftar disini
+                Daftar di sini
             </a>
           </Typography>
           </div>
@@ -91,7 +93,7 @@ export const LoginForm = ({
         <div className="hidden md:block md:w-1/2 bg-rencanakan-premium-gold-300 p-8">
             <div className="h-full flex flex-col justify-center">
                 <Typography variant="h4" className="mb-4 text-white">
-                    Selamat datang!!
+                    Selamat datang!
                 </Typography>
                 <Typography variant="p2" className="text-white">
                     Talent Pool adalah fitur dari Rencanakan.id yang memungkinkan tenaga ahli 
