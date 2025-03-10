@@ -87,7 +87,7 @@ describe('StepThreeForm Component', () => {
   test('displays formatted price range based on form data', () => {
     setup({ skkLevel: 'operator', yearsOfExperience: '1 Tahun' });
     expect(
-      screen.getByText((content) => content.includes("Rp200.000") && content.includes("Rp500.000"))
+      screen.getByText((content) => content.includes("Rp700.000") && content.includes("Rp1.200.000"))
     ).toBeInTheDocument();
   });
 
