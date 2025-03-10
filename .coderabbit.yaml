@@ -13,6 +13,5 @@ reviews:
     drafts: false
     base_branches:
       - "dev"
-      - "develop"
 chat:
   auto_reply: true
