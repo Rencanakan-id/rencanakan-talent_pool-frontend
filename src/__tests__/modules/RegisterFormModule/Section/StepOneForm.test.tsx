@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StepOneForm } from '@/modules/RegisterFormModule/Section/register-1';
 import { RegisterFormData } from '@/lib/register';
-import { RegisterModule } from '@/modules/RegisterFormModule';
 
 interface InputFileProps {
   textLabel: string;
