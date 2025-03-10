@@ -27,8 +27,6 @@ interface ImageInputProps {
   label?: string;
   className?: string;
   onImageChange?: (file: File | null) => void;
-  defaultImage?: File | null;
-  maxSize?: number;
 }
 
 jest.mock('@/components', () => ({
