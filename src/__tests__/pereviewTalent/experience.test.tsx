@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import Experience,{ ExperienceDetail } from '../../components/ui/experience';
 
 
-
 describe('Experience Component', () => {
   const mockExperiences: ExperienceDetail[] = [
     {
