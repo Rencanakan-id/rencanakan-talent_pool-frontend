@@ -23,4 +23,7 @@ export interface RegisterFormData {
   price?: string;
 
   // Buat step 4
+  password?: string;
+  passwordConfirmation?: string;
+  termsAndConditions?: boolean;
 }
