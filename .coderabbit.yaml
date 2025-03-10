@@ -1,33 +1,15 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-
-files:
-  include:
-    - "src/**/*.js"
-    - "src/**/*.jsx"
-    - "src/**/*.ts"
-    - "src/**/*.tsx"
-    - "vite.config.js"
-    - "package.json"
-  exclude:
-    - "node_modules/"
-    - "dist/"
-    - "**/*.test.js"
-
-rules:
-  # React rules
-  - rule: "react/react-in-jsx-scope"
-    level: "error"
-  - rule: "react-hooks/rules-of-hooks"
-    level: "error"
-  - rule: "react/jsx-no-undef"
-    level: "error"
-
-  # JavaScript best practices
-  - rule: "no-console"
-    level: "warning"
-  - rule: "prefer-const"
-    level: "warning"
-
-  # Security checks
-  - rule: "no-eval"
-    level: "error"
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: true
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+chat:
+  auto_reply: true
