@@ -6,7 +6,30 @@ import { Combobox } from '@/components/ui/combobox';
 import { ComboboxCheckBox } from '@/components/ui/combobox-checkbox';
 import { locations } from '@/data/static';
 import Location from '@/components/ui/location';
+import UserProfileCard from '@/components/ui/profile';
 
+const dummyUser = {
+  id: '1',
+  firstName: 'Gabriella',
+  price: 7500000,
+  lastName: 'Naomi',
+  email: 'gabriella@example.com',
+  phoneNumber: '+62 8123456789',
+  address: 'Jl. Sudirman No. 1, Jakarta',
+  job: 'Software Engineer',
+  photo: 'https://via.placeholder.com/150',
+  aboutMe: 'Passionate about web development and cloud computing.',
+  nik: '1234567890123456',
+  npwp: '12.345.678.9-012.345',
+  photoKtp: 'https://via.placeholder.com/150',
+  photoNpwp: 'https://via.placeholder.com/150',
+  photoIjazah: 'https://via.placeholder.com/150',
+  experienceYears: 5,
+  skkLevel: 'Senior',
+  currentLocation: 'Jakarta, Indonesia',
+  preferredLocations: ['Bali', 'Surabaya', 'Bandung'],
+  skill: 'React, NestJS, Kubernetes',
+};
 export const DesignSystemModule = () => {
   return (
     <div className="flex flex-col gap-5 p-6">
@@ -24,6 +47,10 @@ export const DesignSystemModule = () => {
       <div className="w-full space-y-4">
         {/* <Combobox /> */}
         <ComboboxCheckBox />
+      </div>
+      <div className="w-full space-y-4">
+        {/* <Combobox /> */}
+        <UserProfileCard user={dummyUser} />
       </div>
       <div className="w-full space-y-4">
         <h1> Location on Profile</h1>
