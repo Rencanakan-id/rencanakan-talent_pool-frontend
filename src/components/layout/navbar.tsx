@@ -92,25 +92,6 @@ export const Navbar: React.FC = () => {
               </Typography>
             </a>
           ))}
-          
-          <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
-            <div className="flex items-center gap-2">
-              <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
-              <Typography variant="p2" className="font-medium">
-                Yoga Listyadana
-              </Typography>
-            </div>
-            <Button
-              variant="primary"
-              size={'lg'}
-              className="flex items-center gap-1 px-3 py-1 transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
-              onClick={handleLogout}
-            >
-              <Typography variant="p2" className="font-medium">
-                Logout
-              </Typography>
-            </Button>
-          </div>
         </div>
       </div>
     </div>
