@@ -149,7 +149,7 @@ export const DesignSystemModule = () => {
       </div>
       <div>
         <h1> Experience Detail </h1>
-        <Experience />
+        <Experience experiences={[]}/>
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
