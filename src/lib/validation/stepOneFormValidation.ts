@@ -30,7 +30,7 @@ export const validateFirstName = (firstName: string | undefined): string => {
   export const validateEmail = (email: string | undefined): string => {
     if (!email) return "Email tidak boleh kosong";
     // Basic email validation pattern
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(email)) return "Format email tidak valid";
     return "";
   };
