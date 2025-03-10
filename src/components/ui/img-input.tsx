@@ -5,13 +5,12 @@ import { Typography } from "../atoms/typography";
 interface ImageUploadProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
   onImageChange?: (file: File | null) => void;
   label?: string;
-  previewClassName?: string;
   defaultImage?: File | null;
   maxSize?: number;
 }
 
-const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, previewClassName, onImageChange, defaultImage = null, maxSize = 5 * 1024 * 1024, ...props }) => {
+export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
+  ({ label, className, onImageChange, defaultImage = null, maxSize = 5 * 1024 * 1024, ...props }) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -71,7 +70,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             />
             
             {preview ? (
-              <div className={cn("absolute inset-0", previewClassName)}>
+              <div className={cn("absolute inset-0")}>
                 <img 
                   src={preview} 
                   alt="Preview" 
@@ -98,5 +97,3 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
 );
 
 ImageUpload.displayName = "ImageUpload";
-
-export { ImageUpload };

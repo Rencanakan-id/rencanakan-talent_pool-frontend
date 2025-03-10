@@ -23,6 +23,14 @@ interface InputProps {
   className?: string;
 }
 
+interface ImageInputProps {
+  label?: string;
+  className?: string;
+  onImageChange?: (file: File | null) => void;
+  defaultImage?: File | null;
+  maxSize?: number;
+}
+
 jest.mock('@/components', () => ({
   Typography: ({
     children,
@@ -33,6 +41,22 @@ jest.mock('@/components', () => ({
   }) => <div className={className}>{children}</div>,
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
+  ),
+  ImageUpload: ({ label, className, onImageChange, defaultImage, maxSize }: ImageInputProps) => (
+    <div className={className}>
+      {label && <label>{label}</label>}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            console.log('Image file selected:', file);
+            onImageChange?.(file);
+          }
+        }}
+      />
+    </div>
   ),
   Input: ({ name, label, placeholder, type, value, onChange, error, className }: InputProps) => (
     <div className={className}>
