@@ -7,8 +7,10 @@ import { DesignSystemModule } from './modules/DesignSystemModule';
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
-      <Route path="" element={<App />} />
-      <Route path="/design" element={<DesignSystemModule />} />
+      <Route path="" element={<App />}>
+        <Route path="/" element={<>TODO: Make this landing page</>} />
+        <Route path="/design" element={<DesignSystemModule />} />
+      </Route>
     </Routes>
   </BrowserRouter>
 );

@@ -77,12 +77,12 @@ export const DesignSystemModule = () => {
       </div>
 
       <div className="w-full space-y-4">
-        <Combobox data={locations} type="Lokasi" />
+        <Combobox data={locations} label="Lokasi" />
         {/* <ComboboxCheckBox /> */}
       </div>
       <div className="w-full space-y-4">
         {/* <Combobox /> */}
-        <ComboboxCheckBox />
+        <ComboboxCheckBox data={locations} label="Lokasi" />
       </div>
       <div className="w-full space-y-4">
         {/* <Combobox /> */}
@@ -115,6 +115,7 @@ export const DesignSystemModule = () => {
           ]}
         />
       </div>
+
       <div className="space-y-4">
         <Typography variant="h1">Heading 1</Typography>
         <Typography variant="h2">Heading 2</Typography>

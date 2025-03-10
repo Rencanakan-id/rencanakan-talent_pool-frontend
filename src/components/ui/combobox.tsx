@@ -21,62 +21,90 @@ type Option = {
   label: string;
 };
 
-type ComboboxProps = Readonly<{
-  type?: string;
-  data?: ReadonlyArray<Option>;
-}>;
+type ComboboxProps = {
+  placeholder?: string;
+  label?: string;
+  emptyMessage?: string;
+  data?: Option[];
+  width?: string;
+  className?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+};
 
-
-export function Combobox({ data = [], type }: ComboboxProps) {
+export function Combobox({
+  data = [],
+  placeholder = 'Search...',
+  label = 'Selection',
+  emptyMessage = 'No options found',
+  width = '100%',
+  className = '',
+  value: propValue = '',
+  onChange,
+}: Readonly<ComboboxProps>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(propValue);
+
+  React.useEffect(() => {
+    setValue(propValue);
+  }, [propValue]);
+
+  const handleSelect = (currentValue: string) => {
+    const newValue = currentValue === value ? '' : currentValue;
+    setValue(newValue);
+    if (onChange) onChange(newValue);
+    setOpen(false);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <div className="relative">
-        <PopoverTrigger>
+      <div className="relative w-full">
+        <PopoverTrigger className="w-full">
           <Button
-            variant="outline"
-            role="combobox"
+            variant="primary-outline"
+            aria-haspopup="listbox"
+            aria-controls="dropdown-list"
             aria-expanded={open}
-            className="relative h-[50px] w-[368px] justify-between rounded-[12px] p-0"
-            icon={<ChevronsUpDown className="opacity-50" />}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-3 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100 active:bg-transparent sm:px-3 md:px-3`}
+            icon={
+              <ChevronsUpDown
+                className={`transition-transform duration-200 ${open ? 'rotate-180' : ''} opacity-50`}
+              />
+            }
             iconPosition="end"
           >
-            <Typography variant="p4" className="text-xs text-gray-500">
-              {value ? data.find((point) => point.value === value)?.label : 'Pilih ' + type}
+            <Typography
+              variant="p4"
+              className={`${value ? 'text-rencanakan-type-black' : 'text-rencanakan-dark-gray'}`}
+            >
+              {value ? data.find((option) => option.value === value)?.label : `Pilih ${label}`}
             </Typography>
           </Button>
           <Typography
-            variant="p4"
-            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white text-gray-500"
+            variant="p5"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
           >
-            {value ? data.find((point) => point.value === value)?.label : type + ' saat ini'}
+            {label}
           </Typography>
         </PopoverTrigger>
       </div>
-
-      <PopoverContent className="w-[368px] p-0">
+      <PopoverContent
+        className="border-rencanakan-light-gray w-full p-0 pt-2"
+        style={{ width: width }}
+      >
         <Command>
-          <CommandInput placeholder={`${type}`} />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty> {`${type} tidak ditemukan`}</CommandEmpty>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
-              {data.map((point) => (
-                <CommandItem
-                  key={point.value}
-                  value={point.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
-                >
+              {data.map((option) => (
+                <CommandItem key={option.value} value={option.value} onSelect={handleSelect}>
                   <div className="flex w-full items-center gap-4">
-                    <span>{point.label}</span>
+                    <span>{option.label}</span>
                     <Check
                       className={cn(
-                        'mr-2 transition-opacity duration-200',
-                        value === point.value ? 'opacity-100' : 'opacity-0'
+                        'ml-auto transition-opacity duration-200',
+                        value === option.value ? 'opacity-100' : 'opacity-0'
                       )}
                     />
                   </div>
