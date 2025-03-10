@@ -1,27 +1,25 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Experience from '../../components/ui/experience';
+import Experience,{ ExperienceDetail } from '../../components/ui/experience';
 
-// Mock Typography agar tidak perlu bergantung pada library lain
-jest.mock('../../components/atoms/typography', () => ({
-  Typography: ({
-    variant,
-    className,
-    children,
-  }: {
-    variant: string;
-    className?: string;
-    children: React.ReactNode;
-  }) => (
-    <p data-testid={variant} className={className}>
-      {children}
-    </p>
-  ),
-}));
+
 
 describe('Experience Component', () => {
-  test('renders the component with static data', () => {
-    render(<Experience />);
+  const mockExperiences: ExperienceDetail[] = [
+    {
+      id: 1,
+      title: 'Software Engineer',
+      company: 'Tech Corp',
+      employmentType: 'FULL_TIME',
+      startDate: '2020-06-01',
+      endDate: '2023-08-31',
+      location: 'Jakarta, Indonesia',
+      locationType: 'ON_SITE',
+      talentId: 101,
+    },
+  ];
+
+  test('renders the component with experience data', () => {
+    render(<Experience experiences={mockExperiences} />);
 
     expect(screen.getByText('Pengalaman')).toBeInTheDocument();
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
@@ -30,12 +28,17 @@ describe('Experience Component', () => {
   });
 
   test('renders message when there is no data', () => {
-    const mockSetState = jest.fn();
-
-    jest.spyOn(React, 'useState').mockImplementationOnce(() => [[], mockSetState]);
-
-    render(<Experience />);
+    render(<Experience experiences={[]} />);
 
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
+  test('renders message when there is no data', () => {
+    render(<Experience  />);
+
+    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+  });
+
 });
+
+
+

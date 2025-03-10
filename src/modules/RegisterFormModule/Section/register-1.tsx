@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
-import { Typography, Stepper, Input, FileInput } from '@/components';
-import { RegisterFormData } from '@/lib/register';
+import React, { ChangeEvent } from "react";
+import { Typography, Stepper, Input, FileInput, ImageUpload } from "@/components";
+import { RegisterFormData } from "@/lib/register";
 
 interface StepOneFormProps {
   formData: RegisterFormData;
@@ -13,33 +13,30 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
     updateFormData({ [name]: value });
   };
 
-  const handleFileChange =
-    (field: keyof RegisterFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      const file = files && files.length > 0 ? files[0] : null;
-      updateFormData({ [field]: file });
-    };
-
   return (
-    <div className="px-4">
-      <Typography variant="h5" className="mb-4 text-center">
+    <div>
+      <Typography variant="h5" className="mb-4 text-rencanakan-type-black">
         Lengkapi formulir dan mulai perjalanan karier kamu!
       </Typography>
-
+      
       <Stepper currentStep={0} />
 
-      <div className="space-y-6">
-        <section>
-          <Typography variant="h6" className="my-2">
-            Masukkan Data Diri
-          </Typography>
 
+      <div className="space-y-6 mt-8">
+        <section>
+          <Typography variant="h6" className="my-2 text-rencanakan-type-black">Masukkan Data Diri</Typography>
+
+          <div className="space-y-1 mb-6 mt-4">
+            <ImageUpload label="Foto Diri" maxSize={5} />
+          </div>
+          
           <div className="space-y-4">
             <div className="flex space-x-2">
               <Input
                 name="firstName"
                 label="Nama Depan"
                 placeholder="Nama Depan"
+                error="Nama depan tidak valid"
                 value={formData.firstName || ''}
                 onChange={handleInputChange}
               />
@@ -47,6 +44,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
                 name="lastName"
                 label="Nama Belakang"
                 placeholder="Nama Belakang"
+                error="Nama belakang tidak valid"
                 value={formData.lastName || ''}
                 onChange={handleInputChange}
               />
@@ -56,6 +54,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               name="email"
               label="Email"
               placeholder="Masukkan email Anda"
+              error="Email tidak valid"
               type="email"
               value={formData.email || ''}
               onChange={handleInputChange}
@@ -65,6 +64,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               name="phoneNumber"
               label="Nomor Telepon"
               placeholder="Masukkan nomor WhatsApp Anda"
+              error="Nomor telepon tidak valid"
               type="tel"
               value={formData.phoneNumber || ''}
               onChange={handleInputChange}
@@ -74,6 +74,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
               name="nik"
               label="No. NIK"
               placeholder="Masukkan NIK Anda"
+              error="No. NIK tidak valid"
               value={formData.nik || ''}
               onChange={handleInputChange}
             />
@@ -81,6 +82,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
             <Input
               name="npwp"
               label="No. NPWP"
+              error="No. NPWP tidak valid"
               placeholder="Masukkan NPWP Anda"
               value={formData.npwp || ''}
               onChange={handleInputChange}
@@ -89,31 +91,32 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
         </section>
 
         <section>
-          <Typography variant="h6" className="mb-4">
-            Upload Dokumen
-          </Typography>
+          <Typography variant="h6" className="mb-4">Upload Dokumen</Typography>
 
           <div className="space-y-4">
-            <FileInput
-              data-slot="input"
-              textLabel="Foto KTP"
+            <FileInput 
+              data-slot="input" 
+              textLabel="Foto KTP" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.ktpFile ? 'filled' : 'empty'}
-              onChange={handleFileChange('ktpFile')}
+              value={formData.ktpFile?.name || ''}
+              onFileSelect={(file) => updateFormData({ ktpFile: file })}
             />
-            <FileInput
-              data-slot="input"
-              textLabel="Foto NPWP"
+            <FileInput 
+              data-slot="input" 
+              textLabel="Foto NPWP" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.npwpFile ? 'filled' : 'empty'}
-              onChange={handleFileChange('npwpFile')}
+              value={formData.npwpFile?.name || ''}
+              onFileSelect={(file) => updateFormData({ npwpFile: file })}
             />
-            <FileInput
-              data-slot="input"
-              textLabel="Scan Ijazah"
+            <FileInput 
+              data-slot="input" 
+              textLabel="Scan Ijazah" 
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.diplomaFile ? 'filled' : 'empty'}
-              onChange={handleFileChange('diplomaFile')}
+              value={formData.diplomaFile?.name || ''}
+              onFileSelect={(file) => updateFormData({ diplomaFile: file })}
             />
           </div>
         </section>
