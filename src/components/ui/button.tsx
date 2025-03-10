@@ -35,7 +35,7 @@ const buttonVariants = cva(
   }
 );
 
-interface ButtonProps
+export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   variant?: Variant;
@@ -54,17 +54,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const buttonSize = variant === 'link' && !size ? 'link' : size;
 
     const buttonClassName = cn(
-      buttonVariants({ variant, size: buttonSize }), 
+      buttonVariants({ variant, size: buttonSize }),
       variant === 'link' && 'underline-offset-4',
       className
     );
 
     return (
-      <Comp
-        className={buttonClassName}
-        ref={ref}
-        {...props}
-      >
+      <Comp className={buttonClassName} ref={ref} {...props}>
         {icon && iconPosition === 'start' && (
           <span className="inline-flex h-3 w-3 items-center justify-center sm:h-4 sm:w-4">
             {icon}
