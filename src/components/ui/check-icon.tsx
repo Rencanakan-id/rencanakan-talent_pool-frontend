@@ -1,7 +1,7 @@
 export const CheckIcon: React.FC<{ className?: string }> = () => {
   return (
     <svg
-      className= "w-6 h-6"
+      className="h-6 w-6"
       fill="none"
       stroke="currentColor"
       strokeWidth={8}
