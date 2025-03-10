@@ -58,7 +58,7 @@ export const Navbar: React.FC = () => {
       )}
 
       <div
-        className={`z-99 bg-rencanakan-pure-white absolute top-[68px] left-0 w-full transform transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-[68px]'}`}
+        className={`bg-rencanakan-pure-white absolute top-[68px] left-0 z-99 w-full transform transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-[68px]'}`}
       >
         <div className="flex w-full flex-col items-start">
           {MENU_OPTIONS.map((menu) => (
