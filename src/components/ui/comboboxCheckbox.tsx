@@ -118,7 +118,6 @@ export function ComboboxCheckBox({
       <PopoverContent
         className="border-rencanakan-light-gray p-0 bg-white"
         id="combobox-options"
-        role="listbox"
         style={{ width }}
       >
         <Command>
