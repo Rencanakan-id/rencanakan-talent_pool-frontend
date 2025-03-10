@@ -68,7 +68,7 @@ export const validateFirstName = (firstName: string | undefined): string => {
     if (!npwp) return "NPWP tidak boleh kosong";
     // NPWP format: XX.XXX.XXX.X-XXX.XXX (15 digits + format characters)
     // For validation simplicity, we'll just check for 15 digits
-    const npwpDigits = npwp.replace(/[.\-]/g, '');
+    const npwpDigits = npwp.replace(/[.-]/g, '');
     if (!/^\d{15}$/.test(npwpDigits)) return "NPWP harus terdiri dari 15 digit angka";
     return "";
   };
