@@ -29,9 +29,10 @@ type ComboboxCheckBoxProps = {
   data?: Option[];
   width?: string;
   className?: string;
+  value?: string;
   onChange?: (values: string[]) => void;
   defaultValues?: string[];
-  maxSelection?: number; // New prop to limit selection
+  maxSelection?: number;
 };
 
 export function ComboboxCheckBox({
@@ -41,13 +42,18 @@ export function ComboboxCheckBox({
   emptyMessage = 'No options found',
   width = '368px',
   className = '',
+  value: propValue = '',
   onChange,
   defaultValues = [],
   maxSelection,
 }: Readonly<ComboboxCheckBoxProps>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(propValue);
   const [selected, setSelected] = useState<string[]>(defaultValues);
+
+  React.useEffect(() => {
+    setValue(propValue);
+  }, [propValue]);
 
   const toggleSelection = (optionValue: string, _optionLabel: string, checked: boolean) => {
     setSelected((prev) => {
@@ -102,7 +108,11 @@ export function ComboboxCheckBox({
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent className="p-0 border-transparent" style={{ width }}>
+      <PopoverContent
+        className="border-rencanakan-light-gray p-0 bg-white"
+        id="combobox-options"
+        style={{ width }}
+      >
         <Command>
           <div className="flex h-full items-center">
             <Typography variant="p5" className="flex items-center p-2">
@@ -150,6 +160,7 @@ export function ComboboxCheckBox({
                 <CommandItem key={option.value} value={option.value}>
                   <div className="m-2 flex w-full items-center gap-4">
                     <Checkbox
+                      className="data-[state=checked]:border-white data-[state=checked]:text-white"
                       id={option.value}
                       checked={selected.includes(option.value)}
                       onCheckedChange={(checked) =>
