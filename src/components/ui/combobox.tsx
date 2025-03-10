@@ -22,12 +22,13 @@ type Option = {
 };
 
 type ComboboxProps = {
-  placeholder?: string;
-  label?: string;
-  emptyMessage?: string;
-  data?: Option[];
-  width?: string;
-  className?: string;
+  placeholder?: string; 
+  label?: string; 
+  emptyMessage?: string; 
+  data?: Option[]; 
+  width?: string; 
+  className?: string; 
+  value?: string; 
   onChange?: (value: string) => void;
 };
 
@@ -38,10 +39,16 @@ export function Combobox({
   emptyMessage = 'No options found',
   width = '100%',
   className = '',
+  value: propValue = '',
   onChange,
 }: Readonly<ComboboxProps>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(propValue);
+
+  React.useEffect(() => {
+    setValue(propValue);
+  }, 
+  [propValue]);
 
   const handleSelect = (currentValue: string) => {
     const newValue = currentValue === value ? '' : currentValue;
