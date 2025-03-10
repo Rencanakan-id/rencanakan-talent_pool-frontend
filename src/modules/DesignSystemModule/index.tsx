@@ -3,10 +3,10 @@ import Experience from '@/components/ui/experience';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 import { Combobox } from '@/components/ui/combobox';
-import { ComboboxCheckBox } from '@/components/ui/combobox-checkbox';
-import { locations } from '@/data/static';
+import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
+import { locations } from '@/data/location';
 
 const dummyUser = {
   id: '1',
