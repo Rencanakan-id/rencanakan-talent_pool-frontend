@@ -21,10 +21,11 @@ type Option = {
   label: string;
 };
 
-type ComboboxProps = {
+type ComboboxProps = Readonly<{
   type?: string;
-  data?: ReadonlyArray<Option>; 
-};
+  data?: ReadonlyArray<Option>;
+}>;
+
 
 export function Combobox({ data = [], type }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);

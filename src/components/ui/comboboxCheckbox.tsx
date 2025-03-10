@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { locations } from '@/data/location';
 import {
@@ -12,7 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { X } from 'lucide-react';
+import { X, ChevronsUpDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Checkbox } from './checkbox';
 import { useState } from 'react';

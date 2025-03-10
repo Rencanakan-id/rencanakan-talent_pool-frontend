@@ -1,9 +1,9 @@
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
 
-type LocationProps = {
+type LocationProps = Readonly<{
   data?: ReadonlyArray<string>;
-};
+}>;
 
 function Location({ data = [] }: LocationProps) {
   return (
