@@ -2,8 +2,8 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import './index.css';
 import App from './App';
-import { DesignSystemModule, LandingPageModule } from './modules/index';
-import { RegisterModule } from './modules/RegisterFormModule/index';
+import { DesignSystemModule, LandingPageModule } from './modules';
+import { RegisterModule } from './modules/RegisterFormModule';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

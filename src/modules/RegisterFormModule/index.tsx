@@ -1,9 +1,10 @@
-import { Typography, Stepper, Input, Button } from '@/components';
+import { Typography, Button } from '@/components';
 import { ReactNode, useState } from 'react';
 import { StepOneForm } from './Section/register-1';
 import { StepTwoForm } from './Section/register-2';
 import { StepFourForm } from "./Section/register-4";
 import { RegisterFormData } from '@/lib/register';
+import { StepThreeForm } from './Section/register-3';
 import { validatePasswordSection } from "@/lib/validation/passwordValidation";
 
 export const RegisterModule = () => {
@@ -109,29 +110,7 @@ export const RegisterModule = () => {
   const stepsContent: Record<number, ReactNode> = {
     1: <StepOneForm formData={formData} updateFormData={updateFormData} />,
     2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
-    3: (
-      <>
-        <Typography variant="h5" className="text-center">
-          Lengkapi formulir dan mulai perjalanan karier kamu!
-        </Typography>
-        <div className="mx-4 my-4 items-center justify-center">
-          <Stepper currentStep={2} />
-        </div>
-        <div className="my-4 space-y-4">
-          <Typography variant="h6" className="mb-4">
-            Harga Kamu
-          </Typography>
-          <Input
-            name="price"
-            label="Harga Kamu"
-            placeholder="Masukkan harga kamu"
-            type="number"
-            value={formData.price || ''}
-            onChange={(e) => updateFormData({ price: e.target.value })}
-          />
-        </div>
-      </>
-    ),
+    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: <StepFourForm 
         formData={formData} 
         updateFormData={updateFormData}
