@@ -3,25 +3,27 @@
 # Core configuration
 version: 1
 reviews:
-  request_changes_threshold: major
-  approve_threshold: minor
+  request_changes_threshold: "major"
+  approve_threshold: "minor"
+  review_status: true
 
 # Customize what files CodeRabbit should analyze
-include:
-  - "src/**/*.{js,jsx,ts,tsx}"
-  - "*.{js,jsx,ts,tsx,json}"
-  - "public/**/*"
-  - "vite.config.{js,ts}"
-  - "index.html"
-  - "package.json"
+files:
+  include:
+    - "src/**/*.{js,jsx,ts,tsx}"
+    - "*.{js,jsx,ts,tsx,json}"
+    - "public/**/*"
+    - "vite.config.{js,ts}"
+    - "index.html"
+    - "package.json"
 
-exclude:
-  - "node_modules/"
-  - "dist/"
-  - "build/"
-  - "coverage/"
-  - "**/*.test.{js,jsx,ts,tsx}"
-  - "**/*.spec.{js,jsx,ts,tsx}"
+  exclude:
+    - "node_modules/**"
+    - "dist/**"
+    - "build/**"
+    - "coverage/**"
+    - "**/*.test.{js,jsx,ts,tsx}"
+    - "**/*.spec.{js,jsx,ts,tsx}"
   
 # Configure analysis settings
 analysis:
@@ -32,7 +34,6 @@ analysis:
     - code_style
     - best_practices
 
-  # React/Vite specific rules
   react:
     enabled: true
     best_practices: true
@@ -41,7 +42,6 @@ analysis:
     
   eslint:
     enabled: true
-    config_path: ".eslintrc.js"
     
   typescript:
     enabled: true
