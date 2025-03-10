@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import UserProfileCard from '@/components/ui/profile';
-import { UserProfile } from '@/components/ui/profile';
+
+import UserProfileCard , { UserProfile} from '@/components/ui/profile';
 import '@testing-library/jest-dom';
 
 const mockUser: UserProfile = {
