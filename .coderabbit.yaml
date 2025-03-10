@@ -12,12 +12,7 @@ reviews:
     enabled: true
     drafts: false
     base_branches:
-      - "main"
-      - "master"
       - "dev"
       - "develop"
-      - "development"
-      - "staging"
-      - "feature/*"
 chat:
   auto_reply: true
