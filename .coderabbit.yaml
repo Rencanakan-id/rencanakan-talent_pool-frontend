@@ -1,60 +1,49 @@
-# .coderabbit.yml - CodeRabbit configuration file for React Vite project
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
-# Core configuration
-version: 1
+# CodeRabbit configuration for React Vite project
+model: claude-3-haiku-20240307
+temperature: 0.0
+
 reviews:
   request_changes_threshold: "major"
   approve_threshold: "minor"
   review_status: true
-
-# Customize what files CodeRabbit should analyze
-files:
-  include:
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+    drafts: false
+    base_branches:
+      - "main"
+      - "master"
+  path_filters:
     - "src/**/*.{js,jsx,ts,tsx}"
     - "*.{js,jsx,ts,tsx,json}"
     - "public/**/*"
     - "vite.config.{js,ts}"
     - "index.html"
     - "package.json"
-
-  exclude:
+  path_excludes:
     - "node_modules/**"
     - "dist/**"
     - "build/**"
     - "coverage/**"
     - "**/*.test.{js,jsx,ts,tsx}"
     - "**/*.spec.{js,jsx,ts,tsx}"
-  
-# Configure analysis settings
-analysis:
-  categories:
-    - security
-    - performance
-    - bug_prevention
-    - code_style
-    - best_practices
 
-  react:
-    enabled: true
-    best_practices: true
-    hooks: true
-    jsx: true
-    
-  eslint:
-    enabled: true
-    
-  typescript:
-    enabled: true
-    
-  vite:
+chat:
+  auto_reply:
     enabled: true
 
 # PR comment settings
-comments:
-  max_number_of_reviews: 10
-  max_line_length: 500
-  sections:
-    - summary
-    - security
-    - performance
-    - code_improvements
+prompts:
+  review_pull_request:
+    max_lines_of_code: 1000
+    max_review_comments: 10
+    review_comment_sections:
+      - summary
+      - security
+      - performance
+      - code_improvements
+    include_line_length_in_calculation: true
