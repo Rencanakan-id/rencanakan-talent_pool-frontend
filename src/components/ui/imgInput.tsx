@@ -5,14 +5,12 @@ import { Typography } from "../atoms/typography";
 interface ImageUploadProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
   onImageChange?: (file: File | null) => void;
   label?: string;
-  previewClassName?: string;
-  defaultImage?: File | null;
   maxSize?: number;
 }
 
-const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, previewClassName, onImageChange, defaultImage = null, maxSize = 5 * 1024 * 1024, ...props }) => {
-    const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage);
+export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
+  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, ...props }) => {
+    const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -55,7 +53,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           <button
             type="button"
             className={cn(
-              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
+              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-base-gray bg-rencanakan-light-gray cursor-pointer",
               "flex flex-col justify-center items-center gap-4 overflow-hidden",
               className
             )}
@@ -71,7 +69,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             />
             
             {preview ? (
-              <div className={cn("absolute inset-0", previewClassName)}>
+              <div className={cn("absolute inset-0")}>
                 <img 
                   src={preview} 
                   alt="Preview" 
@@ -98,5 +96,3 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
 );
 
 ImageUpload.displayName = "ImageUpload";
-
-export { ImageUpload };

@@ -91,18 +91,11 @@ export function ComboboxCheckBox({
             variant="primary-outline"
             role="combobox"
             aria-expanded={open}
-            aria-haspopup="listbox"
-            aria-controls="combobox-options"
-            aria-labelledby={`${label}-label`}
-            aria-autocomplete="list"
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-3 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100 active:bg-transparent sm:px-3 md:px-3`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:bg-transparent active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
-            <Typography
-              variant="p4"
-              className={`${value ? 'text-rencanakan-type-black' : 'text-rencanakan-dark-gray'}`}
-            >
+            <Typography variant="p4" className="text-xs text-rencanakan-dark-gray">
               {value || `Pilih ${label}`}
             </Typography>
           </Button>
@@ -116,9 +109,8 @@ export function ComboboxCheckBox({
         </PopoverTrigger>
       </div>
       <PopoverContent
-        className="border-rencanakan-light-gray p-0"
+        className="border-rencanakan-light-gray p-0 bg-white"
         id="combobox-options"
-        role="listbox"
         style={{ width }}
       >
         <Command>
@@ -168,6 +160,7 @@ export function ComboboxCheckBox({
                 <CommandItem key={option.value} value={option.value}>
                   <div className="m-2 flex w-full items-center gap-4">
                     <Checkbox
+                      className="data-[state=checked]:border-white data-[state=checked]:text-white"
                       id={option.value}
                       checked={selected.includes(option.value)}
                       onCheckedChange={(checked) =>

@@ -89,7 +89,7 @@ export function Combobox({
         </PopoverTrigger>
       </div>
       <PopoverContent
-        className="border-rencanakan-light-gray w-full p-0 pt-2"
+        className="border-rencanakan-light-gray w-full p-0 pt-2 bg-white"
         style={{ width: width }}
       >
         <Command>
