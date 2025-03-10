@@ -13,10 +13,10 @@ export const LandingPageModule: React.FC = () => {
         <div className="animate-bg animate-delay-[1200ms] absolute bottom-[-10%] left-[-18%] h-1/2 w-[75%] rounded-[50%] bg-[#001522]"></div>
         <div className="absolute inset-0 backdrop-blur-[80px]"></div>
       </div>
-      
+
       <div
         data-testid="text-container"
-        className="z-10 flex h-full flex-col justify-center pt-14 max-md:px-3 max-md:text-center lg:w-1/2 lg:pt-20"
+        className="z-10 flex flex-col justify-center pt-18 max-md:px-3 max-md:text-center md:h-full lg:w-1/2 lg:pt-20"
       >
         <Typography variant="d1" className="text-rencanakan-pure-white font-bold xl:!text-6xl">
           YUK GABUNG SEBAGAI
@@ -44,17 +44,17 @@ export const LandingPageModule: React.FC = () => {
 
       <div
         data-testid="image-container"
-        className="relative z-10 flex items-center justify-start max-sm:pt-8 lg:w-1/2"
+        className="relative z-10 flex items-center justify-center max-sm:pt-4 md:justify-start lg:w-1/2"
       >
         <img
           src="/landingPage/hero.png"
           alt="Hero"
-          className="animate-float-vertical z-10 ml-12 scale-110 md:scale-115 lg:-mb-10 lg:scale-120"
+          className="animate-float-vertical z-10 md:ml-12 md:scale-115 lg:-mb-10 lg:scale-120"
         />
 
         <div
           data-testid="animated-border"
-          className="border-rencanakan-premium-gold-400 animate-glow absolute ml-12 h-[320px] w-[800px] rotate-[2deg] rounded-xl border-6 will-change-transform sm:h-[500px] lg:-mb-6 lg:ml-20 lg:h-[500px] xl:h-[560px]"
+          className="border-rencanakan-premium-gold-400 animate-glow absolute h-[300px] w-[80vw] rotate-[2deg] rounded-xl border-6 will-change-transform sm:h-[500px] md:ml-12 md:w-[800px] lg:-mb-6 lg:ml-20 lg:h-[500px] xl:h-[560px]"
         />
       </div>
     </div>
