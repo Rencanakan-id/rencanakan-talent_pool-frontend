@@ -53,7 +53,7 @@ export function ComboboxCheckBox() {
           iconPosition="end"
         >
           <Typography variant="p4" className="text-xs text-gray-500">
-            {value ? value : 'Pilih kota'}
+            {value  || 'Pilih kota'}
           </Typography>
         </Button>
         <Typography

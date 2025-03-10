@@ -23,7 +23,7 @@ type Option = {
 
 type ComboboxProps = {
   type?: string;
-  data?: Option[];
+  data?: ReadonlyArray<Option>; 
 };
 
 export function Combobox({ data = [], type }: ComboboxProps) {
