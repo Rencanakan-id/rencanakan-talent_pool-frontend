@@ -85,36 +85,23 @@ export function ComboboxCheckBox({
             variant="primary-outline"
             role="combobox"
             aria-expanded={open}
-            aria-haspopup="listbox"
-            aria-controls="combobox-options"
-            aria-labelledby={`${label}-label`}
-            aria-autocomplete="list"
-            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-3 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100 active:bg-transparent sm:px-3 md:px-3`}
+            className={`relative h-[50px] w-full justify-between rounded-[2px] p-0 ${className} active:bg-transparent active:text-rencanakan-dark-gray hover:text-rencanakan-dark-gray border-rencanakan-base-gray hover:border-rencanakan-base-gray focus:border-rencanakan text-rencanakan-dark-gray h-10 bg-transparent px-4 font-normal hover:scale-[1.001] hover:bg-transparent hover:shadow-sm focus:outline-none active:scale-100`}
             icon={<ChevronsUpDown className="opacity-50" />}
             iconPosition="end"
           >
-            <Typography
-              variant="p4"
-              className={`${value ? 'text-rencanakan-type-black' : 'text-rencanakan-dark-gray'}`}
-            >
+            <Typography variant="p4" className="text-xs text-rencanakan-dark-gray">
               {value || `Pilih ${label}`}
             </Typography>
           </Button>
           <Typography
-            variant="p5"
-            id={`${label}-label`}
-            className="text-rencanakan-dark-gray text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
+            variant="p4"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
           >
             {label}
           </Typography>
         </PopoverTrigger>
       </div>
-      <PopoverContent
-        className="border-rencanakan-light-gray p-0"
-        id="combobox-options"
-        role="listbox"
-        style={{ width }}
-      >
+      <PopoverContent className="p-0 border-transparent" style={{ width }}>
         <Command>
           <div className="flex h-full items-center">
             <Typography variant="p5" className="flex items-center p-2">
