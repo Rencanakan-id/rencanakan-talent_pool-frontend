@@ -25,6 +25,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Dev deploy from GitHub Actions"
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_STG }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_STG }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_PROD }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_PROD }}
         timeout-minutes: 2
