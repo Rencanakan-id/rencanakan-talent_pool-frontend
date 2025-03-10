@@ -3,7 +3,6 @@ import UserProfileCard from '@/components/ui/profile';
 import { UserProfile } from '@/components/ui/profile';
 import '@testing-library/jest-dom';
 
-
 const mockUser: UserProfile = {
   id: '1',
   firstName: 'Gabriella',
@@ -16,7 +15,7 @@ const mockUser: UserProfile = {
   aboutMe: 'Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.',
   nik: '1234567890',
   npwp: '9876543210',
-  price:7500000,
+  price: 7500000,
   photoKtp: '',
   photoNpwp: '',
   photoIjazah: '',
@@ -56,12 +55,16 @@ describe('UserProfileCard Component', () => {
   test('renders about me section', () => {
     render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('Tentang Saya')).toBeInTheDocument();
-    expect(screen.getByText('Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.'
+      )
+    ).toBeInTheDocument();
   });
 
   test('renders estimated price section', () => {
     render(<UserProfileCard user={mockUser} />);
     expect(screen.getByText('Perkiraan Harga')).toBeInTheDocument();
-    expect(screen.getByText('Rp 7500000')).toBeInTheDocument();
+    expect(screen.getByText('Rp 7.500.000')).toBeInTheDocument();
   });
 });
