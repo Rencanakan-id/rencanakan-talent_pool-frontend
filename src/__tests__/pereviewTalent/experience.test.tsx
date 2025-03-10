@@ -1,7 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Experience from '../../components/ui/experience';
+import Experience,{ ExperienceDetail } from '../../components/ui/experience';
 
+
+<<<<<<< HEAD
 // Mock Typography agar tidak perlu bergantung pada library lain
 jest.mock('../../components/atoms/typography', () => ({
   Typography: ({
@@ -18,10 +19,26 @@ jest.mock('../../components/atoms/typography', () => ({
     </p>
   ),
 }));
+=======
+>>>>>>> 9480b17af720245fb2b925c784eb44158a76d413
 
 describe('Experience Component', () => {
-  test('renders the component with static data', () => {
-    render(<Experience />);
+  const mockExperiences: ExperienceDetail[] = [
+    {
+      id: 1,
+      title: 'Software Engineer',
+      company: 'Tech Corp',
+      employmentType: 'FULL_TIME',
+      startDate: '2020-06-01',
+      endDate: '2023-08-31',
+      location: 'Jakarta, Indonesia',
+      locationType: 'ON_SITE',
+      talentId: 101,
+    },
+  ];
+
+  test('renders the component with experience data', () => {
+    render(<Experience experiences={mockExperiences} />);
 
     expect(screen.getByText('Pengalaman')).toBeInTheDocument();
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
@@ -30,6 +47,7 @@ describe('Experience Component', () => {
   });
 
   test('renders message when there is no data', () => {
+<<<<<<< HEAD
     const mockSetState = jest.fn();
 
     jest.spyOn(React, 'useState').mockImplementationOnce(() => [[], mockSetState]);
@@ -38,4 +56,19 @@ describe('Experience Component', () => {
 
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
+=======
+    render(<Experience experiences={[]} />);
+
+    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+  });
+  test('renders message when there is no data', () => {
+    render(<Experience  />);
+
+    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+  });
+
+>>>>>>> 9480b17af720245fb2b925c784eb44158a76d413
 });
+
+
+

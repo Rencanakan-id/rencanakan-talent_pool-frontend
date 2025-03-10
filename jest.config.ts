@@ -6,10 +6,7 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Biar Jest bisa handle import CSS
-    '^@/components(.*)$': '<rootDir>/src/components$1', // Tambahkan alias untuk @/components
-    '^@/modules(.*)$': '<rootDir>/src/modules$1', // Tambahkan alias untuk @/modules
-    '^@/lib(.*)$': '<rootDir>/src/lib$1', // Tambahkan alias untuk @/lib
-    '^@/data(.*)$': '<rootDir>/src/data$1', // Tambahkan alias untuk @/data
+    '^@/(.*)$': '<rootDir>/src/$1', 
   },
   collectCoverage: true, // Mengaktifkan coverage
   coverageDirectory: 'coverage', // Direktori hasil laporan
