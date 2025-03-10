@@ -28,26 +28,35 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
       
       return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
-    
+
     const handleClick = () => {
       fileInputRef.current?.click();
     };
-    
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0] || null;
-      
+
       if (file && file.size > maxSize) {
         setErrorMessage(`Ukuran gambar yang Anda unggah melebihi batas maksimum ${maxSize / (1024 * 1024)}MB.`);
         return;
       }
-      
+
       setErrorMessage(null);
       setSelectedFile(file);
       if (onImageChange) {
         onImageChange(file);
       }
     };
-    
+
+    const handleDelete = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setSelectedFile(null);
+      setPreview(null);
+      if (onImageChange) {
+        onImageChange(null);
+      }
+    };
+
     return (
       <div className="flex flex-col gap-2 w-full max-w-sm">
         {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-semibold text-sm">{label}</Typography>}
@@ -55,7 +64,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           <button
             type="button"
             className={cn(
-              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-gray bg-rencanakan-light-gray cursor-pointer",
+              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-base-gray bg-rencanakan-light-gray cursor-pointer",
               "flex flex-col justify-center items-center gap-4 overflow-hidden",
               className
             )}
@@ -75,8 +84,14 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                 <img 
                   src={preview} 
                   alt="Preview" 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-full object-cover hover:brightness-90 transition duration-300 ease-in-out"
                 />
+                <button
+                  onClick={handleDelete}
+                  className="absolute top-2 right-2 text-white p-1 hover:text-rencanakan-error-red-100"
+                >
+                  ✖
+                </button>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full w-full">
