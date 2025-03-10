@@ -29,9 +29,10 @@ type ComboboxCheckBoxProps = {
   data?: Option[];
   width?: string;
   className?: string;
+  value?: string;
   onChange?: (values: string[]) => void;
   defaultValues?: string[];
-  maxSelection?: number; // New prop to limit selection
+  maxSelection?: number;
 };
 
 export function ComboboxCheckBox({
@@ -41,13 +42,18 @@ export function ComboboxCheckBox({
   emptyMessage = 'No options found',
   width = '368px',
   className = '',
+  value: propValue = '',
   onChange,
   defaultValues = [],
   maxSelection,
 }: Readonly<ComboboxCheckBoxProps>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(propValue);
   const [selected, setSelected] = useState<string[]>(defaultValues);
+
+  React.useEffect(() => {
+    setValue(propValue);
+  }, [propValue]);
 
   const toggleSelection = (optionValue: string, _optionLabel: string, checked: boolean) => {
     setSelected((prev) => {

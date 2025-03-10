@@ -1,5 +1,4 @@
-import { Typography, Textarea, Button, FileInput, Input } from '@/components';
-import Experience from '@/components/ui/experience';
+import { Typography, Textarea, ImageUpload, Button, FileInput, Input } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 
 import { Combobox } from '@/components/ui/combobox';
@@ -41,6 +40,11 @@ export const DesignSystemModule = () => {
         <Typography variant="p4">Parapraph 4</Typography>
         <Typography variant="p5">Parapraph 5</Typography>
         <Typography variant="small">Small Text</Typography>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-xl font-bold mb-4">Design System | Image Upload</h2>
+        <ImageUpload label="Upload foto"/>
       </div>
 
       <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
@@ -141,10 +145,6 @@ export const DesignSystemModule = () => {
             </Button>
           </div>
         </div>
-      </div>
-      <div>
-        <h1> Experience Detail </h1>
-        <Experience />
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
