@@ -1,0 +1,50 @@
+include:
+  - "src/**/*.js"
+  - "src/**/*.jsx"
+  - "src/**/*.ts"
+  - "src/**/*.tsx"
+  - "public/index.html"
+  - "package.json"
+
+exclude:
+  - "node_modules/"
+  - "build/"
+  - "dist/"
+  - "**/*.test.js"
+  - "**/*.spec.js"
+
+rules:
+  - rule: "react/react-in-jsx-scope"
+    level: "error"
+  - rule: "react-hooks/rules-of-hooks"
+    level: "error"
+  - rule: "react/prop-types"
+    level: "warning"
+  - rule: "react/jsx-no-undef"
+    level: "error"
+  - rule: "react/no-unescaped-entities"
+    level: "warning"
+
+  - rule: "no-console"
+    level: "warning"
+  - rule: "no-debugger"
+    level: "error"
+  - rule: "prefer-const"
+    level: "warning"
+
+documentation:
+  title: "My React Project Documentation"
+  description: "API and component documentation for the React project"
+  include:
+    - "src/components/**/*.js"
+    - "src/services/**/*.js"
+  exclude:
+    - "**/*.test.js"
+  format: "markdown"
+  output: "./docs"
+
+dependencies:
+  - "react"
+  - "react-dom"
+  - "react-router-dom"
+  - "axios"
