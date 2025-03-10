@@ -27,7 +27,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({ formData, updateFormDa
           <Typography variant="h6" className="my-2 text-rencanakan-type-black">Masukkan Data Diri</Typography>
 
           <div className="space-y-1 mb-6 mt-4">
-            {/* <ImageUpload label="Foto Diri" /> */}
+            <ImageUpload label="Foto Diri" />
           </div>
           
           <div className="space-y-4">

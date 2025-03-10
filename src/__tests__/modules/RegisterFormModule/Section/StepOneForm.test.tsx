@@ -42,7 +42,7 @@ jest.mock('@/components', () => ({
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
   ),
-  ImageUpload: ({ label, className, onImageChange, defaultImage, maxSize }: ImageInputProps) => (
+  ImageUpload: ({ label, className, onImageChange }: ImageInputProps) => (
     <div className={className}>
       {label && <label>{label}</label>}
       <input
