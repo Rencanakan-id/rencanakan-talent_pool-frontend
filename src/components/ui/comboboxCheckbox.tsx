@@ -116,7 +116,7 @@ export function ComboboxCheckBox({
         </PopoverTrigger>
       </div>
       <PopoverContent
-        className="border-rencanakan-light-gray p-0"
+        className="border-rencanakan-light-gray p-0 bg-white"
         id="combobox-options"
         role="listbox"
         style={{ width }}
@@ -168,6 +168,7 @@ export function ComboboxCheckBox({
                 <CommandItem key={option.value} value={option.value}>
                   <div className="m-2 flex w-full items-center gap-4">
                     <Checkbox
+                      className="data-[state=checked]:border-white data-[state=checked]:text-white"
                       id={option.value}
                       checked={selected.includes(option.value)}
                       onCheckedChange={(checked) =>
