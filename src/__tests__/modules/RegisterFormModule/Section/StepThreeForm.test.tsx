@@ -46,7 +46,7 @@ jest.mock('@/components', () => ({
 jest.mock('@/data/hargaJasa', () => ({
     hargaJasa: {
       operator: {
-        "1 Tahun": { min: 200000, max: 500000 },
+        "1 Tahun": { min: 700000, max: 1200000 },
       },
     },
   }));
