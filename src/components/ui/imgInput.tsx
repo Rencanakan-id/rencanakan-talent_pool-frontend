@@ -1,54 +1,69 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Typography } from "../atoms/typography";
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+import { Typography } from '../atoms/typography';
 
-interface ImageUploadProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
+interface ImageUploadProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'onChange'> {
   onImageChange?: (file: File | null) => void;
   label?: string;
   maxSize?: number;
 }
 
-export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, ...props }) => {
-    const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
+  ({
+    label,
+    className,
+    previewClassName,
+    onImageChange,
+    defaultImage = null,
+    maxSize = 5 * 1024 * 1024,
+    ...props
+  }) => {
+    const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
-    
+
     React.useEffect(() => {
       if (!selectedFile) {
         setPreview(null);
         return;
       }
-      
+
       const objectUrl = URL.createObjectURL(selectedFile);
       setPreview(objectUrl);
-      
+
       return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
-    
+
     const handleClick = () => {
       fileInputRef.current?.click();
     };
-    
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0] || null;
-      
+
       if (file && file.size > maxSize) {
-        setErrorMessage(`Ukuran gambar yang Anda unggah melebihi batas maksimum ${maxSize / (1024 * 1024)}MB.`);
+        setErrorMessage(
+          `Ukuran gambar yang Anda unggah melebihi batas maksimum ${maxSize / (1024 * 1024)}MB.`
+        );
         return;
       }
-      
+
       setErrorMessage(null);
       setSelectedFile(file);
       if (onImageChange) {
         onImageChange(file);
       }
     };
-    
+
     return (
-      <div className="flex flex-col gap-2 w-full max-w-sm">
-        {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-semibold text-sm">{label}</Typography>}
+      <div className="flex w-full max-w-sm flex-col gap-2">
+        {label && (
+          <Typography variant={'p5'} className="text-rencanakan-dark-gray text-sm font-semibold">
+            {label}
+          </Typography>
+        )}
         <div>
           <button
             type="button"
@@ -67,7 +82,7 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
               ref={fileInputRef}
               onChange={handleFileChange}
             />
-            
+
             {preview ? (
               <div className={cn("absolute inset-0")}>
                 <img 
@@ -75,9 +90,11 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                   alt="Preview" 
                   className="w-full h-full object-cover" 
                 />
+              <div className={cn('absolute inset-0', previewClassName)}>
+                <img src={preview} alt="Preview" className="h-full w-full object-cover" />
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full w-full">
+              <div className="flex h-full w-full flex-col items-center justify-center">
                 <label className="text-rencanakan-dark-gray font-bold">
                   <Typography variant={'p5'}>Klik di sini untuk upload</Typography>
                 </label>
@@ -85,7 +102,7 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             )}
           </button>
           {errorMessage && (
-            <Typography variant='small' className="text-rencanakan-error-red-100 mt-2">
+            <Typography variant="small" className="text-rencanakan-error-red-100 mt-2">
               {errorMessage}
             </Typography>
           )}
@@ -95,4 +112,6 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
   }
 );
 
-ImageUpload.displayName = "ImageUpload";
+ImageUpload.displayName = 'ImageUpload';
+
+export { ImageUpload };

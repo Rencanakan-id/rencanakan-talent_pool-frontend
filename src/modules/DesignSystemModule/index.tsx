@@ -16,11 +16,15 @@ export const DesignSystemModule = () => {
 
       <div className="w-full space-y-4">
         <Combobox data={locations} label="Lokasi" />
-        {/* <ComboboxCheckBox /> */}
       </div>
       <div className="w-full space-y-4">
-        {/* <Combobox /> */}
+        <Combobox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+      </div>
+      <div className="w-full space-y-4">
         <ComboboxCheckBox data={locations} label="Lokasi" />
+      </div>
+      <div className="w-full space-y-4">
+        <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
       </div>
 
       <div className="space-y-4">
@@ -42,8 +46,8 @@ export const DesignSystemModule = () => {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Design System | Image Upload</h2>
-        <ImageUpload label="Upload foto"/>
+        <h2 className="mb-4 text-xl font-bold">Design System | Image Upload</h2>
+        <ImageUpload label="Upload foto" />
       </div>
 
       <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
