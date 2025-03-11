@@ -121,7 +121,7 @@ export const RegisterModule = () => {
         };
   
         try {
-          const response = await fetch('http://54.227.49.85:8000/api/auth/register-talent', {
+          const response = await fetch('https://54.227.49.85:8000/api/auth/register-talent', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
