@@ -121,7 +121,7 @@ describe('StepTwoForm Component', () => {
     yearsOfExperience: '',
     skkLevel: '',
     currentLocation: '',
-    preferedLocations: [],
+    preferredLocations: [],
     skill: '',
     otherSkill: '',
     skkFile: null,
@@ -194,7 +194,7 @@ describe('StepTwoForm Component', () => {
       const input = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
       fireEvent.change(input, { target: { value: 'Bandung, Surabaya' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({
-        preferedLocations: ['Bandung', 'Surabaya'],
+        preferredLocations: ['Bandung', 'Surabaya'],
       });
     });
 
