@@ -195,7 +195,7 @@ export function ComboboxCheckBox({
         </PopoverContent>
       </Popover>
       {error && (
-        <Typography variant="small" className="mt-1 text-rencanakan-error-red-100 mt-1">
+        <Typography variant="small" className="mt-1 text-rencanakan-error-red-100">
           {error}
         </Typography>
       )}
