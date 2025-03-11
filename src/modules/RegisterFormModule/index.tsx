@@ -1,7 +1,13 @@
-import { Typography, Stepper, Input, Button } from "@/components";
-import { ReactNode, useState } from "react";
-import { StepOneForm } from "./Section/register-1";
-import { RegisterFormData } from "@/lib/register";
+import { Button } from '@/components';
+import { ReactNode, useState } from 'react';
+import { StepOneForm } from './Section/register-1';
+import { StepTwoForm } from './Section/register-2';
+import { StepFourForm } from "./Section/register-4";
+import { RegisterFormData } from '@/lib/register';
+import { StepThreeForm } from './Section/register-3';
+import { validatePasswordSection } from "@/lib/validation/passwordValidation";
+import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -15,125 +21,126 @@ export const RegisterModule = () => {
     ktpFile: null,
     npwpFile: null,
     diplomaFile: null,
-    address: '',
-    city: '',
-    price: ''
+    price: '',
+    password: '',
+    passwordConfirmation: '',
   });
+  const [formCompleteness, setFormCompleteness] = useState({
+    step4Complete: false
+  });
+  const [validationErrors, setValidationErrors] = useState<{
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phoneNumber?: string;
+    nik?: string;
+    npwp?: string;
+    password?: string;
+    passwordConfirmation?: string;
+  }>({});
+
+  const navigate = useNavigate();
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
-    setFormData(prev => ({
+    setFormData((prev) => {
+      const newData = { ...prev, ...data };
+      console.log("Updated Form Data:", newData); 
+      return newData;
+    });
+  };
+  
+
+
+  const updateFormCompleteness = (isComplete: boolean) => {
+    setFormCompleteness(prev => ({
       ...prev,
-      ...data
+      step4Complete: isComplete
     }));
   };
 
-  const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(
-          formData.firstName && 
-          formData.lastName && 
-          formData.email && 
-          formData.phoneNumber && 
-          formData.nik && 
-          formData.npwp && 
-          formData.ktpFile && 
-          formData.npwpFile && 
-          formData.diplomaFile
-        );
-      case 2:
-        return !!(formData.address && formData.city);
-      case 3:
-        return !!formData.price;
-      default:
-        return true;
-    }
-  };
-
-  const isStepValid = validateStep(formState);
+  const isStepValid = true;
 
   const handleNext = () => {
-    if (isStepValid) {
-      setFormState(prev => Math.min(prev + 1, 4));
+    if (formState === 1) {
+      const { firstName, lastName, email, phoneNumber, nik, npwp } = formData;
+      console.log('Step 1 Form Data:', formData);
+      const stepOneValidation = validateStepOneForm({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        nik,
+        npwp,
+      });
+
+      setValidationErrors(stepOneValidation.errors);
+      console.log('Step 1 Validation:', stepOneValidation);
+
+      if (stepOneValidation.isValid) {
+        console.log('Step 1 Form Data:', formData);
+        setFormState((prev) => Math.min(prev + 1, 4));
+      }
+      return; 
     }
+    
+    setFormState((prev) => Math.min(prev + 1, 4));
   };
 
   const handlePrev = () => {
-    setFormState(prev => Math.max(prev - 1, 1));
+    setFormState((prev) => Math.max(prev - 1, 1));
   };
 
-  const stepsContent: Record<number, ReactNode> = {
-    1: <StepOneForm formData={formData} updateFormData={updateFormData} />,
-    2: (
-      <>
-        <Typography variant="h5" className="text-center">
-          Lengkapi formulir dan mulai perjalanan karier kamu!
-        </Typography>
-        <div className="w-full flex justify-center">
-          <Stepper currentStep={formState - 1} />
-        </div>
-        <div className="my-4 space-y-4">
-          <Typography variant="h6" className="mb-4">Alamat Lengkap</Typography>
-          <Input name="address" label="Alamat" placeholder="Alamat lengkap" 
-            value={formData.address || ''} 
-            onChange={(e) => updateFormData({ address: e.target.value })} 
-          />
-          <Input name="city" label="Kota" placeholder="Kota" 
-            value={formData.city || ''} 
-            onChange={(e) => updateFormData({ city: e.target.value })} 
-          />
-        </div>
-      </>
-    ),
-    3: (
-      <>
-        <Typography variant="h5" className="text-center">
-          Lengkapi formulir dan mulai perjalanan karier kamu!
-        </Typography>
-        <div className="my-4 mx-4 justify-center items-center">
-          <Stepper currentStep={2} />
-        </div>
-        <div className="my-4 space-y-4">
-          <Typography variant="h6" className="mb-4">Harga Kamu</Typography>
-          <Input name="price" label="Harga Kamu" placeholder="Masukkan harga kamu" 
-            type="number" value={formData.price || ''} 
-            onChange={(e) => updateFormData({ price: e.target.value })} 
-          />
-        </div>
-      </>
-    ),
-    4: (
-      <div className="text-center">
-        <Typography variant="h5" className="mb-4">
-          Under development
-        </Typography>
-      </div>
-    ),
-  };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (formState === 4) {
-      console.log('Final Form Data:', formData);
+      // Validate the form before submission
+      const { password, passwordConfirmation, termsAndConditions } = formData;
+      const validation = validatePasswordSection(password, passwordConfirmation, termsAndConditions);
+      
+      // Set validation errors
+      setValidationErrors(validation.errors);
+
+      if (validation.isValid) {
+        updateFormCompleteness(true);
+      }
+      // If form is valid, proceed with submission
+      if (validation.isValid && formCompleteness.step4Complete) {
+        navigate("/login");
+      }
     }
   };
 
+  const stepsContent: Record<number, ReactNode> = {
+    1: <StepOneForm 
+        formData={formData} 
+        updateFormData={updateFormData}
+        validationErrors={validationErrors} 
+        />,
+    2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
+    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
+    4: <StepFourForm 
+        formData={formData} 
+        updateFormData={updateFormData}
+        updateFormCompleteness={updateFormCompleteness}
+        validationErrors={validationErrors}
+       />,
+  };
+
   return (
-    <div className="flex min-h-screen w-full justify-center items-center bg-rencanakan-sea-blue-500 pt-12 md:py-12">
-      <div className="overflow-y-auto flex h-screen md:h-full flex-col justify-center bg-rencanakan-pure-white rounded-t-xl md:rounded-xl drop-shadow-md md:w-lg mx-auto py-6 px-8">
+    <div className="bg-rencanakan-sea-blue-500 flex min-h-screen w-full items-center justify-center pt-12 md:py-12">
+      <div className="bg-rencanakan-pure-white mx-auto flex h-screen flex-col justify-center overflow-y-auto rounded-t-xl px-8 py-6 drop-shadow-md md:h-full md:w-lg md:rounded-xl">
         {stepsContent[formState]}
 
-        <div className="flex justify-end mt-4 space-x-2">
-          {formState > 1 && formState < 4 && (
-            <Button variant="primary-outline" onClick={handlePrev}>
-              Kembali
-            </Button>
-          )}
-          <Button 
-            variant="primary" 
-            onClick={formState === 4 ? handleSubmit : handleNext} 
+        <div className="mt-4 flex justify-end space-x-2">
+          <Button variant="primary-outline" onClick={handlePrev}>
+            Kembali
+          </Button>
+          <Button
+            variant="primary"
+            onClick={formState === 4 ? handleSubmit : handleNext}
             disabled={!isStepValid}
           >
-            {formState === 4 ? "Daftar Kerja" : "Selanjutnya"}
+            {formState === 4 ? 'Daftar Kerja' : 'Selanjutnya'}
           </Button>
         </div>
       </div>

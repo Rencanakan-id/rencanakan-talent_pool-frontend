@@ -1,6 +1,5 @@
 import { Typography, Textarea, ImageUpload, Button, FileInput, Input } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
-
 import { Combobox } from '@/components/ui/combobox';
 import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 import { locations } from '@/data/location';
