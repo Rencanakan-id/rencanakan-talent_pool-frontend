@@ -58,37 +58,6 @@ export const RegisterModule = () => {
     }));
   };
 
-  const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(
-          formData.firstName &&
-          formData.lastName &&
-          formData.email &&
-          formData.phoneNumber &&
-          formData.nik &&
-          formData.npwp
-        );
-      case 2:
-        return !!(
-          formData.aboutMe &&
-          formData.yearsOfExperience &&
-          formData.skkLevel &&
-          formData.currentLocation &&
-          formData.preferedLocations &&
-          formData.skill &&
-          (formData.skill === 'lainnya' ? formData.otherSkill : true)
-        );
-      case 3:
-        return !!formData.price;
-      case 4:
-        // For step 4, we only check if fields are filled, not if they're valid
-        return formCompleteness.step4Complete;
-      default:
-        return true;
-    }
-  };
-
   const isStepValid = true;
 
   const handleNext = () => {
@@ -130,14 +99,15 @@ export const RegisterModule = () => {
       
       // Set validation errors
       setValidationErrors(validation.errors);
-      
-      // If form is valid, proceed with submission
-      if (validation.isValid) {
-        console.log('Final Form Data:', formData);
-        // Here you would submit the form data
-        navigate('/login');
 
+      updateFormCompleteness(validation.isValid);
+
+      if (formCompleteness.step4Complete) {
+        // Submit the form
+        console.log('Form Submitted:', formData);
+        navigate('/login');
       }
+
     }
   };
 
