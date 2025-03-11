@@ -114,8 +114,7 @@ export const RegisterModule = () => {
       return; 
     }
     
-    // isStepValid = True;
-      setFormState((prev) => Math.min(prev + 1, 4));
+    setFormState((prev) => Math.min(prev + 1, 4));
   };
 
   const handlePrev = () => {
