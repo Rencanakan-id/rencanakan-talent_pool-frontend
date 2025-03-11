@@ -121,7 +121,7 @@ describe('StepTwoForm Component', () => {
     yearsOfExperience: '',
     skkLevel: '',
     currentLocation: '',
-    prefferedLocations: [],
+    preferedLocations: [],
     skill: '',
     otherSkill: '',
     skkFile: null,
@@ -189,12 +189,12 @@ describe('StepTwoForm Component', () => {
       expect(mockUpdateFormData).toHaveBeenCalledWith({ currentLocation: 'Jakarta' });
     });
 
-    test('updates prefferedLocations when input changes', () => {
+    test('updates preferedLocations when input changes', () => {
       setup();
       const input = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
       fireEvent.change(input, { target: { value: 'Bandung, Surabaya' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({
-        prefferedLocations: ['Bandung', 'Surabaya'],
+        preferedLocations: ['Bandung', 'Surabaya'],
       });
     });
 
@@ -245,7 +245,7 @@ describe('StepTwoForm Component', () => {
         yearsOfExperience: undefined,
         skkLevel: undefined,
         currentLocation: undefined,
-        prefferedLocations: undefined,
+        preferedLocations: undefined,
         skill: undefined,
       } as Partial<RegisterFormData>);
 

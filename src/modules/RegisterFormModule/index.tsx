@@ -1,4 +1,4 @@
-import { Typography, Button } from '@/components';
+import { Button } from '@/components';
 import { ReactNode, useState } from 'react';
 import { StepOneForm } from './Section/register-1';
 import { StepTwoForm } from './Section/register-2';
@@ -6,6 +6,8 @@ import { StepFourForm } from "./Section/register-4";
 import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
 import { validatePasswordSection } from "@/lib/validation/passwordValidation";
+import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -27,16 +29,26 @@ export const RegisterModule = () => {
     step4Complete: false
   });
   const [validationErrors, setValidationErrors] = useState<{
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phoneNumber?: string;
+    nik?: string;
+    npwp?: string;
     password?: string;
     passwordConfirmation?: string;
   }>({});
 
+  const navigate = useNavigate();
+
   const updateFormData = (data: Partial<RegisterFormData>) => {
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
-    }));
+    setFormData((prev) => {
+      const newData = { ...prev, ...data };
+      console.log("Updated Form Data:", newData); 
+      return newData;
+    });
   };
+  
 
 
   const updateFormCompleteness = (isComplete: boolean) => {
@@ -46,43 +58,32 @@ export const RegisterModule = () => {
     }));
   };
 
-  const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(
-          formData.firstName &&
-          formData.lastName &&
-          formData.email &&
-          formData.phoneNumber &&
-          formData.nik &&
-          formData.npwp
-        );
-      case 2:
-        return !!(
-          formData.aboutMe &&
-          formData.yearsOfExperience &&
-          formData.skkLevel &&
-          formData.currentLocation &&
-          formData.prefferedLocations &&
-          formData.skill &&
-          (formData.skill === 'lainnya' ? formData.otherSkill : true)
-        );
-      case 3:
-        return !!formData.price;
-      case 4:
-        // For step 4, we only check if fields are filled, not if they're valid
-        return formCompleteness.step4Complete;
-      default:
-        return true;
-    }
-  };
-
-  const isStepValid = validateStep(formState);
+  const isStepValid = true;
 
   const handleNext = () => {
-    if (isStepValid) {
-      setFormState((prev) => Math.min(prev + 1, 4));
+    if (formState === 1) {
+      const { firstName, lastName, email, phoneNumber, nik, npwp } = formData;
+      console.log('Step 1 Form Data:', formData);
+      const stepOneValidation = validateStepOneForm({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        nik,
+        npwp,
+      });
+
+      setValidationErrors(stepOneValidation.errors);
+      console.log('Step 1 Validation:', stepOneValidation);
+
+      if (stepOneValidation.isValid) {
+        console.log('Step 1 Form Data:', formData);
+        setFormState((prev) => Math.min(prev + 1, 4));
+      }
+      return; 
     }
+    
+    setFormState((prev) => Math.min(prev + 1, 4));
   };
 
   const handlePrev = () => {
@@ -90,7 +91,7 @@ export const RegisterModule = () => {
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (formState === 4) {
       // Validate the form before submission
       const { password, passwordConfirmation, termsAndConditions } = formData;
@@ -98,17 +99,56 @@ export const RegisterModule = () => {
       
       // Set validation errors
       setValidationErrors(validation.errors);
-      
-      // If form is valid, proceed with submission
+
       if (validation.isValid) {
+        updateFormCompleteness(true);
+      }
+      // If form is valid, proceed with submission
+      if (validation.isValid && formCompleteness.step4Complete) {
         console.log('Final Form Data:', formData);
-        // Here you would submit the form data
+        const requestBody = {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          address: null,
+          job: "Software Engineer",
+          photo: null, 
+          token_amount: 0,
+          demo_quota: 1,
+          password: formData.password,
+          password_confirmation: formData.passwordConfirmation,
+        };
+  
+        try {
+          const response = await fetch('https://54.227.49.85:8000/api/auth/register-talent', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+          });
+  
+          const result = await response.json();
+          if (response.ok) {
+            console.log("Registration successful:", result);
+            navigate("/login");
+          } else {
+            console.error("Registration failed:", result);
+          }
+        } catch (error) {
+          console.error("Network error:", error);
+        }
       }
     }
   };
 
   const stepsContent: Record<number, ReactNode> = {
-    1: <StepOneForm formData={formData} updateFormData={updateFormData} />,
+    1: <StepOneForm 
+        formData={formData} 
+        updateFormData={updateFormData}
+        validationErrors={validationErrors} 
+        />,
     2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
     3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: <StepFourForm 
