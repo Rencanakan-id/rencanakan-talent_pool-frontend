@@ -48,7 +48,8 @@ const LoginModule = () => {
       if (isValid) {
         try {
           console.log(formData)
-          const response = await fetch('http://54.227.49.85:8000/api/auth/login-talent', {
+          // TODO: ganti api dengan variabel di env file
+          const response = await fetch('http://50.17.124.12:8000/api/auth/login-talent', {
             body: JSON.stringify(formData),
             method: 'POST',
             headers: {
