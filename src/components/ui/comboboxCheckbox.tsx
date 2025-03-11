@@ -108,8 +108,7 @@ export function ComboboxCheckBox({
           </Button>
           <Typography
             variant="p5"
-            id={`${label}-label`}
-            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white px-1"
           >
             {label}
           </Typography>

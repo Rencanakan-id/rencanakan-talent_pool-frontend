@@ -82,7 +82,7 @@ export function Combobox({
           </Button>
           <Typography
             variant="p5"
-            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white"
+            className="text-rencanakan-dark-gray absolute -top-2 left-3 bg-white px-1"
           >
             {label}
           </Typography>
