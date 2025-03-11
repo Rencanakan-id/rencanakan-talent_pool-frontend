@@ -17,7 +17,7 @@ export const Navbar: React.FC = () => {
   return (
     <div className="flex w-full">
       <div
-        className={`${!isMobileMenuOpen && 'shadow-lg transition-shadow duration-500'} bg-rencanakan-pure-white z-[999] flex h-18 w-full items-center justify-between px-6 lg:h-20 lg:px-10`}
+        className={`${!isMobileMenuOpen && 'shadow-lg transition-shadow delay-500'} bg-rencanakan-pure-white z-[999] flex h-18 w-full items-center justify-between px-6 lg:h-20 lg:px-10`}
       >
         <img src="./rencanakanLogo.svg" alt="Logo" className="h-7 lg:h-9" />
 
@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
       )}
 
       <div
-        className={`bg-rencanakan-pure-white absolute top-[68px] left-0 w-full transform transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-[68px]'}`}
+        className={`bg-rencanakan-pure-white absolute top-[68px] left-0 z-99 w-full transform transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-[68px]'}`}
       >
         <div className="flex w-full flex-col items-start">
           {MENU_OPTIONS.map((menu) => (
