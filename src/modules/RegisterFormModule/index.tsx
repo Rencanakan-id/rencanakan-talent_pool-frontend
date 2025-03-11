@@ -154,7 +154,6 @@ export const RegisterModule = () => {
     4: <StepFourForm 
         formData={formData} 
         updateFormData={updateFormData}
-        updateFormCompleteness={updateFormCompleteness}
         validationErrors={validationErrors}
        />,
   };

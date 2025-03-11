@@ -5,7 +5,6 @@ import { RegisterFormData } from "@/lib/register";
 interface StepFourFormProps {
   formData: RegisterFormData;
   updateFormData: (data: Partial<RegisterFormData>) => void;
-  updateFormCompleteness: (isComplete: boolean) => void;
   validationErrors?: {
     password?: string;
     passwordConfirmation?: string;
