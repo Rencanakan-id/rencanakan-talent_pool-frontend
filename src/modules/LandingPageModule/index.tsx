@@ -36,7 +36,7 @@ export const LandingPageModule: React.FC = () => {
               Gabung sekarang
             </Typography>
           </Button>
-          <Button variant="secondary-outline" className="lg:!h-11">
+          <Button variant="secondary-outline" className="lg:!h-11" onClick={() => { window.location.href = '/login'; }}>
             <Typography variant="p2">Login</Typography>
           </Button>
         </div>
