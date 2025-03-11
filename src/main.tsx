@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/design" element={<DesignSystemModule />} />
         <Route path="/register" element={<RegisterModule />} />
         <Route path="/login" element={<LoginModule />} />
-        <Route path="/register" element={<RegisterModule />} />
       </Route>
     </Routes>
   </BrowserRouter>
