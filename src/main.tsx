@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import './index.css';
 import App from './App';
 import { DesignSystemModule, LandingPageModule } from './modules';
-import { RegisterModule } from './modules/RegisterFormModule/index.tsx';
-import LoginModule from './modules/LoginFormModule/index.tsx';
+import { RegisterModule } from './modules/RegisterFormModule';
+import LoginModule from './modules/LoginFormModule';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
