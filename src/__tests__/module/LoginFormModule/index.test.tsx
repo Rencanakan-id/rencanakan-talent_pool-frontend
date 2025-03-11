@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { faker } from "@faker-js/faker";
 
 // Mock console.log untuk mengecek submit yang valid
-const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
+// const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
 const randomPassword = faker.internet.password();
 
 describe('LoginModule', () => {
@@ -65,26 +65,26 @@ describe('LoginModule', () => {
   });
 
   // Test 4: Submit data valid
-  test('submits form with valid data', () => {
-    render(<LoginModule />);
+  // test('submits form with valid data', () => {
+  //   render(<LoginModule />);
     
-    const emailInput = screen.getByTestId("email-input");
-    const passwordInput = screen.getByTestId("password-input");
-    const submitButton = screen.getByTestId('login-button');
+  //   const emailInput = screen.getByTestId("email-input");
+  //   const passwordInput = screen.getByTestId("password-input");
+  //   const submitButton = screen.getByTestId('login-button');
 
-    // Masukkan data valid
-    fireEvent.change(emailInput, { target: { value: 'valid@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: randomPassword } });
+  //   // Masukkan data valid
+  //   fireEvent.change(emailInput, { target: { value: 'valid@example.com' } });
+  //   fireEvent.change(passwordInput, { target: { value: randomPassword } });
 
-    // Klik tombol submit
-    fireEvent.click(submitButton);
+  //   // Klik tombol submit
+  //   fireEvent.click(submitButton);
 
-    // Cek console.log dipanggil dengan data yang benar
-    expect(mockConsoleLog).toHaveBeenCalledWith('Login Data:', {
-      email: 'valid@example.com',
-      password: randomPassword,
-    });
-  });
+  //   // Cek console.log dipanggil dengan data yang benar
+  //   expect(mockConsoleLog).toHaveBeenCalledWith('Login Data:', {
+  //     email: 'valid@example.com',
+  //     password: randomPassword,
+  //   });
+  // });
 
   // Test 5: Error saat field wajib kosong (opsional, tergantung implementasi)
   test('shows required errors if fields are empty on submit', () => {

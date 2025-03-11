@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { LoginForm } from './Section/login';
 import { LoginFormData } from "@/lib/login";
+// import AuthService from "@/services/AuthService";
 
 const LoginModule = () => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -37,19 +39,48 @@ const LoginModule = () => {
     return { isValid, emailErr, commentErr };
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (isFormValid) {
       const { isValid, emailErr, commentErr } = validateFormOnSubmit();
       setEmailError(emailErr);
       setPasswordError(commentErr);
 
       if (isValid) {
-        console.log('Login Data:', formData);
-        // Handle login logic
+        try {
+          console.log(formData)
+          const response = await fetch('http://54.227.49.85:8000/api/auth/login-talent', {
+            body: JSON.stringify(formData),
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            }
+          });
+          const result = await response.json();
+          if(result.status === 'success'){
+            console.log(result)
+            const token = result.data.token.plainTextToken;
+        
+            document.cookie = `access_token=${token}; path=/; Secure; SameSite=None`;
+            console.log("berhasil")
+            console.log(token)
+          }else{
+            console.log("gagal")
+            console.log(result)
+            setEmailError('Email atau password salah');
+            setPasswordError('Email atau password salah');
+          }
+          // // Tambahkan navigasi ke halaman utama
+          // // navigate('/home');
+        } 
+        catch (error) {
+            if (error instanceof Error && (error as any).response) {
+              console.error('Login Failed:', (error as any).response.data);
+            } else {
+              console.error('Login Failed:', error);
+            }
+          }
       }
-    } else {
-      setEmailError(formData.email ? '' : 'Email harus diisi');
-      setPasswordError(formData.password ? '' : 'Kata sandi harus diisi');
     }
   };
 
