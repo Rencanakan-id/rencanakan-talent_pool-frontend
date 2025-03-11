@@ -41,7 +41,6 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
           value={formData.aboutMe || ''}
           onChange={(e) => updateFormData({ aboutMe: e.target.value })}
-          error={validationErrors?.aboutMe}
         />
 
         <Combobox
