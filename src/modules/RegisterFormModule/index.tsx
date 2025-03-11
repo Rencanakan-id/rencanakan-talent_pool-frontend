@@ -91,7 +91,7 @@ export const RegisterModule = () => {
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (formState === 4) {
       // Validate the form before submission
       const { password, passwordConfirmation, termsAndConditions } = formData;
@@ -100,14 +100,46 @@ export const RegisterModule = () => {
       // Set validation errors
       setValidationErrors(validation.errors);
 
-      updateFormCompleteness(validation.isValid);
-
-      if (formCompleteness.step4Complete) {
-        // Submit the form
-        console.log('Form Submitted:', formData);
-        navigate('/login');
+      if (validation.isValid) {
+        updateFormCompleteness(true);
       }
-
+      // If form is valid, proceed with submission
+      if (validation.isValid && formCompleteness.step4Complete) {
+        console.log('Final Form Data:', formData);
+        const requestBody = {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          address: null,
+          job: "Software Engineer",
+          photo: null, 
+          token_amount: 0,
+          demo_quota: 1,
+          password: formData.password,
+          password_confirmation: formData.passwordConfirmation,
+        };
+  
+        try {
+          const response = await fetch('http://54.227.49.85:8000/api/auth/register-talent', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+          });
+  
+          const result = await response.json();
+          if (response.ok) {
+            console.log("Registration successful:", result);
+            navigate("/login");
+          } else {
+            console.error("Registration failed:", result);
+          }
+        } catch (error) {
+          console.error("Network error:", error);
+        }
+      }
     }
   };
 
