@@ -10,9 +10,19 @@ import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 interface StepTwoFormProps {
   formData: RegisterFormData;
   updateFormData: (data: Partial<RegisterFormData>) => void;
+  validationErrors?: {
+    aboutMe?: string;
+    yearsOfExperience?: string;
+    skkLevel?: string;
+    currentLocation?: string;
+    preferredLocations?: string;
+    skill?: string;
+    otherSkill?: string;
+    skkFile?: File;
+  };
 }
 
-export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormData }) => {
+export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormData, validationErrors = {} }) => {
   return (
     <>
       <Typography variant="h5">Ceritakan sedikit pengalaman kerja kamu</Typography>
@@ -31,6 +41,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
           value={formData.aboutMe || ''}
           onChange={(e) => updateFormData({ aboutMe: e.target.value })}
+          error={validationErrors?.aboutMe}
         />
 
         <Combobox
@@ -38,6 +49,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           label="Lama Pengalaman"
           value={formData.yearsOfExperience || ''}
           onChange={(value) => updateFormData({ yearsOfExperience: value })}
+          error={validationErrors?.yearsOfExperience}
         />
 
         <Combobox
@@ -45,6 +57,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           label="Level Sertifikasi SKK"
           value={formData.skkLevel || ''}
           onChange={(value) => updateFormData({ skkLevel: value })}
+          error={validationErrors?.skkLevel}
         />
 
         <Combobox
@@ -52,6 +65,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           label="Lokasi Saat Ini"
           value={formData.currentLocation || ''}
           onChange={(value) => updateFormData({ currentLocation: value })}
+          error={validationErrors?.currentLocation}
         />
 
         <div>
@@ -59,9 +73,12 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
             data={locations}
             label="Bersedia Ditempatkan Di Mana"
             placeholder="Search..."
-            value={(formData.preferedLocations || []).join(', ')}
-            onChange={(values) => updateFormData({ preferedLocations: values })}
+            value={(formData.preferredLocations || []).map(value => 
+              locations.find(item => item.value === value)?.label || value
+            ).join(', ')}
+            onChange={(values) => updateFormData({ preferredLocations: values })}
             maxSelection={5}
+            error={validationErrors?.preferredLocations}
           />
           <Typography variant="p4" className="my-2">
             Pilih maksimal 5 lokasi
@@ -74,6 +91,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
             label="Keahlian"
             value={formData.skill || ''}
             onChange={(value) => updateFormData({ skill: value })}
+            error={validationErrors?.skill}
           />
           {formData.skill === 'lainnya' && (
             <Input
@@ -81,6 +99,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
               placeholder="Tulis di sini keahlian kamu"
               value={formData.otherSkill || ''}
               onChange={(e) => updateFormData({ otherSkill: e.target.value })}
+              error={validationErrors?.otherSkill}
             />
           )}
         </div>

@@ -7,6 +7,7 @@ import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
 import { validatePasswordSection } from "@/lib/validation/passwordValidation";
 import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
+import { validateStepTwoForm } from "@/lib/validation/stepTwoFormValidation";
 import { useNavigate } from "react-router-dom";
 
 export const RegisterModule = () => {
@@ -24,6 +25,14 @@ export const RegisterModule = () => {
     price: '',
     password: '',
     passwordConfirmation: '',
+    aboutMe: '',
+    yearsOfExperience: '',
+    skkLevel: '',
+    currentLocation: '',
+    preferredLocations: [],
+    skill: '',
+    otherSkill: '',
+    skkFile: null,
   });
   const [formCompleteness, setFormCompleteness] = useState({
     step4Complete: false
@@ -37,6 +46,13 @@ export const RegisterModule = () => {
     npwp?: string;
     password?: string;
     passwordConfirmation?: string;
+    aboutMe?: string;
+    yearsOfExperience?: string;
+    skkLevel?: string;
+    currentLocation?: string;
+    preferredLocations?: string;
+    skill?: string;
+    otherSkill?: string;
   }>({});
 
   const navigate = useNavigate();
@@ -83,6 +99,30 @@ export const RegisterModule = () => {
       return; 
     }
     
+    if (formState === 2) {
+      const { aboutMe, yearsOfExperience, skkLevel, currentLocation, preferredLocations, skill, otherSkill } = formData;
+      console.log('Step 2 Form Data:', formData);
+      
+      const stepTwoValidation = validateStepTwoForm({
+        aboutMe,
+        yearsOfExperience,
+        skkLevel,
+        currentLocation,
+        preferredLocations,
+        skill,
+        otherSkill
+      });
+
+      setValidationErrors(stepTwoValidation.errors);
+      console.log('Step 2 Validation:', stepTwoValidation);
+
+      if (stepTwoValidation.isValid) {
+        console.log('Step 2 Form Data Valid:', formData);
+        setFormState((prev) => Math.min(prev + 1, 4));
+      }
+      return;
+    }
+    
     setFormState((prev) => Math.min(prev + 1, 4));
   };
 
@@ -117,7 +157,11 @@ export const RegisterModule = () => {
         updateFormData={updateFormData}
         validationErrors={validationErrors} 
         />,
-    2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
+    2: <StepTwoForm 
+        formData={formData} 
+        updateFormData={updateFormData}
+        validationErrors={validationErrors}
+        />,
     3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: <StepFourForm 
         formData={formData} 
