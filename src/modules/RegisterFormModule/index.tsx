@@ -105,40 +105,7 @@ export const RegisterModule = () => {
       }
       // If form is valid, proceed with submission
       if (validation.isValid && formCompleteness.step4Complete) {
-        console.log('Final Form Data:', formData);
-        const requestBody = {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.phoneNumber,
-          address: null,
-          job: "Software Engineer",
-          photo: null, 
-          token_amount: 0,
-          demo_quota: 1,
-          password: formData.password,
-          password_confirmation: formData.passwordConfirmation,
-        };
-  
-        try {
-          const response = await fetch('https://54.227.49.85:8000/api/auth/register-talent', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-          });
-  
-          const result = await response.json();
-          if (response.ok) {
-            console.log("Registration successful:", result);
-            navigate("/login");
-          } else {
-            console.error("Registration failed:", result);
-          }
-        } catch (error) {
-          console.error("Network error:", error);
-        }
+        navigate("/login");
       }
     }
   };
@@ -154,6 +121,7 @@ export const RegisterModule = () => {
     4: <StepFourForm 
         formData={formData} 
         updateFormData={updateFormData}
+        updateFormCompleteness={updateFormCompleteness}
         validationErrors={validationErrors}
        />,
   };
