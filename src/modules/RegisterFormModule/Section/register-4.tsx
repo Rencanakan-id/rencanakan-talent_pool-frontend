@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent } from "react";
 import { Typography, Stepper, Input } from "@/components";
 import { RegisterFormData } from "@/lib/register";
 
@@ -15,7 +15,6 @@ interface StepFourFormProps {
 export const StepFourForm: React.FC<StepFourFormProps> = ({
   formData,
   updateFormData,
-  updateFormCompleteness,
   validationErrors = {}, 
 }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,14 +23,6 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
       [name]: type === "checkbox" ? checked : value,
     });
   };
-
-  useEffect(() => {
-    const { password, passwordConfirmation, termsAndConditions } = formData;
-    
-    const isComplete = !!password && !!passwordConfirmation && !!termsAndConditions;
-    
-    updateFormCompleteness(isComplete);
-  }, [formData.password, formData.passwordConfirmation, formData.termsAndConditions, updateFormCompleteness]);
 
   return (
     <div>

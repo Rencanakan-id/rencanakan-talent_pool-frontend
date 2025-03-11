@@ -148,10 +148,7 @@ export const validateFirstName = (firstName: string | undefined): string => {
       emailError === "" && 
       phoneNumberError === "" && 
       nikError === "" && 
-      npwpError === "" && 
-      ktpFileError === "" && 
-      npwpFileError === "" && 
-      diplomaFileError === "";
+      npwpError === "";
   
     return { isValid, errors };
   };

@@ -14,7 +14,7 @@ export interface RegisterFormData {
   yearsOfExperience?: string;
   skkLevel?: string;
   currentLocation?: string;
-  prefferedLocations?: string[];
+  preferedLocations?: string[];
   skill?: string;
   otherSkill?: string;
   skkFile?: File | null;

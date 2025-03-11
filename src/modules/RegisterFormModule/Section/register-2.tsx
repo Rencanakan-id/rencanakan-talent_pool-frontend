@@ -59,8 +59,8 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
             data={locations}
             label="Bersedia Ditempatkan Di Mana"
             placeholder="Search..."
-            value={(formData.prefferedLocations || []).join(', ')}
-            onChange={(values) => updateFormData({ prefferedLocations: values })}
+            value={(formData.preferedLocations || []).join(', ')}
+            onChange={(values) => updateFormData({ preferedLocations: values })}
             maxSelection={5}
           />
           <Typography variant="p4" className="my-2">

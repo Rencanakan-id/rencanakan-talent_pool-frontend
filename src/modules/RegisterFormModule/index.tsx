@@ -7,6 +7,7 @@ import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
 import { validatePasswordSection } from "@/lib/validation/passwordValidation";
 import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -38,12 +39,16 @@ export const RegisterModule = () => {
     passwordConfirmation?: string;
   }>({});
 
+  const navigate = useNavigate();
+
   const updateFormData = (data: Partial<RegisterFormData>) => {
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
-    }));
+    setFormData((prev) => {
+      const newData = { ...prev, ...data };
+      console.log("Updated Form Data:", newData); 
+      return newData;
+    });
   };
+  
 
 
   const updateFormCompleteness = (isComplete: boolean) => {
@@ -70,7 +75,7 @@ export const RegisterModule = () => {
           formData.yearsOfExperience &&
           formData.skkLevel &&
           formData.currentLocation &&
-          formData.prefferedLocations &&
+          formData.preferedLocations &&
           formData.skill &&
           (formData.skill === 'lainnya' ? formData.otherSkill : true)
         );
@@ -84,11 +89,12 @@ export const RegisterModule = () => {
     }
   };
 
-  const isStepValid = validateStep(formState);
+  const isStepValid = true;
 
   const handleNext = () => {
     if (formState === 1) {
       const { firstName, lastName, email, phoneNumber, nik, npwp } = formData;
+      console.log('Step 1 Form Data:', formData);
       const stepOneValidation = validateStepOneForm({
         firstName,
         lastName,
@@ -99,16 +105,17 @@ export const RegisterModule = () => {
       });
 
       setValidationErrors(stepOneValidation.errors);
+      console.log('Step 1 Validation:', stepOneValidation);
 
       if (stepOneValidation.isValid) {
+        console.log('Step 1 Form Data:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
       return; 
     }
-
-    if (isStepValid) {
+    
+    // isStepValid = True;
       setFormState((prev) => Math.min(prev + 1, 4));
-    }
   };
 
   const handlePrev = () => {
@@ -129,6 +136,8 @@ export const RegisterModule = () => {
       if (validation.isValid) {
         console.log('Final Form Data:', formData);
         // Here you would submit the form data
+        navigate('/login');
+
       }
     }
   };
