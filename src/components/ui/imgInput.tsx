@@ -10,16 +10,8 @@ interface ImageUploadProps
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({
-    label,
-    className,
-    previewClassName,
-    onImageChange,
-    defaultImage = null,
-    maxSize = 5 * 1024 * 1024,
-    ...props
-  }) => {
-    const [selectedFile, setSelectedFile] = React.useState<File | null>(defaultImage);
+  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, ...props }) => {
+    const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -57,6 +49,15 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
       }
     };
 
+    const handleDelete = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setSelectedFile(null);
+      setPreview(null);
+      if (onImageChange) {
+        onImageChange(null);
+      }
+    };
+
     return (
       <div className="flex w-full max-w-sm flex-col gap-2">
         {label && (
@@ -84,14 +85,18 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             />
 
             {preview ? (
-              <div className={cn("absolute inset-0")}>
+              <div className="absolute inset-0">
                 <img 
                   src={preview} 
                   alt="Preview" 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-full object-cover hover:brightness-90 transition duration-300 ease-in-out"
                 />
-              <div className={cn('absolute inset-0', previewClassName)}>
-                <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+                <button
+                  onClick={handleDelete}
+                  className="absolute top-2 right-2 text-white p-1 hover:text-rencanakan-error-red-100"
+                >
+                  ✖
+                </button>
               </div>
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center">
