@@ -50,7 +50,7 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
           <div className="space-y-8">
             <Input
               name="password"
-              label="Kata Sandi"
+              label="Kata Sandi *"
               placeholder="Buat kata sandi yang sulit (pastikan ada angka dan minimal 8 karakter)"
               type="password"
               value={formData.password || ''}
@@ -59,7 +59,7 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
             />
             <Input
               name="passwordConfirmation"
-              label="Konfirmasi Kata Sandi"
+              label="Konfirmasi Kata Sandi *"
               placeholder="Masukkan kata sandimu lagi disini"
               type="password"
               value={formData.passwordConfirmation || ''}

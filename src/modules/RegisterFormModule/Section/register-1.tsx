@@ -55,7 +55,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             <div className="flex space-x-2">
               <Input
                 name="firstName"
-                label="Nama Depan"
+                label="Nama Depan *"
                 placeholder="Nama Depan"
                 error={validationErrors.firstName}
                 value={formData.firstName || ''}
@@ -63,7 +63,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               />
               <Input
                 name="lastName"
-                label="Nama Belakang"
+                label="Nama Belakang *"
                 placeholder="Nama Belakang"
                 error={validationErrors.lastName}
                 value={formData.lastName || ''}
@@ -73,7 +73,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
 
             <Input
               name="email"
-              label="Email"
+              label="Email *"
               placeholder="Masukkan email Anda"
               error={validationErrors.email}
               type="email"
@@ -83,7 +83,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
 
             <Input
               name="phoneNumber"
-              label="Nomor Telepon"
+              label="Nomor Telepon *"
               placeholder="Masukkan nomor WhatsApp Anda"
               error={validationErrors.phoneNumber}
               type="tel"
@@ -93,7 +93,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
 
             <Input
               name="nik"
-              label="No. NIK"
+              label="No. NIK *"
               placeholder="Masukkan NIK Anda"
               error={validationErrors.nik}
               value={formData.nik || ''}
@@ -102,7 +102,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
 
             <Input
               name="npwp"
-              label="No. NPWP"
+              label="No. NPWP *"
               error={validationErrors.npwp}
               placeholder="Masukkan NPWP Anda"
               value={formData.npwp || ''}

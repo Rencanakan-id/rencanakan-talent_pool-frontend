@@ -41,7 +41,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
 
       <div className="mb-4 space-y-6">
         <Textarea
-          textLabel="Tentang Saya"
+          textLabel="Tentang Saya *"
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
           value={formData.aboutMe || ''}
           onChange={(e) => updateFormData({ aboutMe: e.target.value })}
@@ -50,7 +50,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
 
         <Combobox
           data={yearsOfExperience}
-          label="Lama Pengalaman"
+          label="Lama Pengalaman *"
           value={formData.yearsOfExperience || ''}
           onChange={(value) => updateFormData({ yearsOfExperience: value })}
           error={validationErrors?.yearsOfExperience}
@@ -58,7 +58,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
 
         <Combobox
           data={skkLevels}
-          label="Level Sertifikasi SKK"
+          label="Level Sertifikasi SKK *"
           value={formData.skkLevel || ''}
           onChange={(value) => updateFormData({ skkLevel: value })}
           error={validationErrors?.skkLevel}
@@ -66,7 +66,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
 
         <Combobox
           data={locations}
-          label="Lokasi Saat Ini"
+          label="Lokasi Saat Ini *"
           value={formData.currentLocation || ''}
           onChange={(value) => updateFormData({ currentLocation: value })}
           error={validationErrors?.currentLocation}
@@ -75,7 +75,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
         <div>
           <ComboboxCheckBox
             data={locations}
-            label="Bersedia Ditempatkan Di Mana"
+            label="Bersedia Ditempatkan Di Mana *"
             placeholder="Search..."
             value={(formData.preferredLocations || [])
               .map((value) => locations.find((item) => item.value === value)?.label ?? value)
@@ -92,7 +92,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
         <div>
           <Combobox
             data={skills}
-            label="Keahlian"
+            label="Keahlian *"
             value={formData.skill || ''}
             onChange={(value) => updateFormData({ skill: value })}
             error={validationErrors?.skill}
@@ -100,7 +100,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
           {formData.skill === 'lainnya' && (
             <Input
               className="mt-2"
-              placeholder="Tulis di sini keahlian kamu"
+              placeholder="Tulis di sini keahlian kamu *"
               value={formData.otherSkill || ''}
               onChange={(e) => updateFormData({ otherSkill: e.target.value })}
               error={validationErrors?.otherSkill}

@@ -71,7 +71,7 @@ export const StepThreeForm: React.FC<StepThreeFormProps> = ({ formData, updateFo
       <Input
         ref={inputRef}
         className="my-4 font-semibold placeholder:font-medium"
-        label="Tentukan Harga Kamu"
+        label="Tentukan Harga Kamu *"
         style={{ marginTop: '30px' }}
         placeholder="Rp. -"
         onChange={handleHargaChange}
