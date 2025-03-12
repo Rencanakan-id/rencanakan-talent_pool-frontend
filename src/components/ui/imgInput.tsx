@@ -75,15 +75,24 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           </Typography>
         )}
         <div>
-          <div
+            <div
             className={cn(
               'border-rencanakan-base-gray bg-rencanakan-light-gray relative aspect-square w-full max-w-[250px] cursor-pointer rounded-md border-2 border-dashed',
               'flex flex-col items-center justify-center gap-4 overflow-hidden',
               className
             )}
             onClick={handleClick}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleClick();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label={label || "Upload image"}
             {...props}
-          >
+            >
             <input
               type="file"
               accept="image/*"
@@ -99,15 +108,28 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                   alt="Preview"
                   className="h-full w-full object-cover transition duration-300 ease-in-out hover:brightness-90"
                 />
-                <div
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(e);
                   }}
-                  className="hover:text-rencanakan-error-red-100 absolute top-2 right-2 cursor-pointer p-1 text-white"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedFile(null);
+                      setPreview(null);
+                      if (onImageChange) {
+                        onImageChange(null);
+                      }
+                    }
+                  }}
+                  className="hover:bg-rencanakan-error-red-100 hover:text-white absolute top-2 right-2 cursor-pointer rounded-full bg-white p-1 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-rencanakan-error-red-100"
+                  aria-label="Delete image"
+                  tabIndex={0}
                 >
                   ✖
-                </div>
+                </button>
               </div>
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center">
