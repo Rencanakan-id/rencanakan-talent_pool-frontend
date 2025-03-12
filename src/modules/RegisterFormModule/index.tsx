@@ -170,7 +170,12 @@ export const RegisterModule = () => {
         validationErrors={validationErrors}
       />
     ),
-    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
+    3: (
+      <StepThreeForm 
+        formData={formData} 
+        updateFormData={updateFormData} 
+      />
+    ),
     4: (
       <StepFourForm
         formData={formData}
