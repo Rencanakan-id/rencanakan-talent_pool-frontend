@@ -21,13 +21,13 @@ const modalVariants = cva(
 
 // Variants for the modal content
 const modalContentVariants = cva(
-  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto',
+  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto max-h-[90vh]',
   {
     variants: {
       size: {
-        small: 'p-4 w-auto max-w-sm',
-        medium: 'p-6 w-auto max-w-md',
-        large: 'p-8 w-auto max-w-lg',
+        small: 'p-4 w-full sm:w-auto sm:max-w-sm',
+        medium: 'p-6 w-full sm:w-auto sm:max-w-md',
+        large: 'p-8 w-full sm:w-auto sm:max-w-lg',
       },
     },
     defaultVariants: {
@@ -80,19 +80,30 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     // If the modal is not open, do not render anything
     if (!isOpen) return null;
 
+    // Handle click outside modal content
+    const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      // Check if the click is on the backdrop (outside the modal content)
+      if (e.target === e.currentTarget) {
+        onClose(); // Close the modal
+      }
+    };
+
     return (
       <div
         className={cn(modalVariants({ isError }), className)}
+        onClick={handleBackdropClick} // Add onClick handler for backdrop
         {...props}
         ref={ref}
       >
         {/* Modal Content */}
-        <div className={cn(modalContentVariants({ size }))}>
+        <div
+          className={cn(modalContentVariants({ size }))}
+          onClick={(e) => e.stopPropagation()} // Stop propagation to prevent closing when clicking inside modal
+        >
           {/* Close Button */}
-          {/* TODO GEDEIN ICON DLL */}
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors"
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors close-icon"
           >
             &times;
           </button>
@@ -105,7 +116,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           )}
 
           {/* Children Content */}
-          <div>{children}</div>
+          <div className="overflow-y-auto">{children}</div>
         </div>
       </div>
     );
