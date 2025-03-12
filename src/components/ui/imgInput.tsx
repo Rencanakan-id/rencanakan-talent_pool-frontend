@@ -2,15 +2,16 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Typography } from '../atoms/typography';
 interface ImageUploadProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'onChange'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'value' | 'onChange'> {
   onImageChange?: (file: File | null) => void;
   label?: string;
   maxSize?: number;
+  initialImage?: File | null;
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, ...props }) => {
-    const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, initialImage = null, ...props }, ref) => {
+    const [selectedFile, setSelectedFile] = React.useState<File | null>(initialImage);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -26,6 +27,12 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
 
       return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
+    
+    React.useEffect(() => {
+      if (initialImage) {
+        setSelectedFile(initialImage);
+      }
+    }, [initialImage]);
 
     const handleClick = () => {
       fileInputRef.current?.click();
@@ -65,8 +72,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           </Typography>
         )}
         <div>
-          <button
-            type="button"
+          <div
             className={cn(
               'border-rencanakan-base-gray bg-rencanakan-light-gray relative aspect-square w-full max-w-[250px] cursor-pointer rounded-md border-2 border-dashed',
               'flex flex-col items-center justify-center gap-4 overflow-hidden',
@@ -79,7 +85,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
               type="file"
               accept="image/*"
               className="hidden"
-              ref={fileInputRef}
+              ref={ref || fileInputRef}
               onChange={handleFileChange}
             />
 
@@ -90,12 +96,15 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                   alt="Preview"
                   className="h-full w-full object-cover transition duration-300 ease-in-out hover:brightness-90"
                 />
-                <button
-                  onClick={handleDelete}
-                  className="hover:text-rencanakan-error-red-100 absolute top-2 right-2 p-1 text-white"
+                <div 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(e);
+                  }}
+                  className="hover:text-rencanakan-error-red-100 absolute top-2 right-2 p-1 text-white cursor-pointer"
                 >
                   ✖
-                </button>
+                </div>
               </div>
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center">
@@ -104,7 +113,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                 </label>
               </div>
             )}
-          </button>
+          </div>
           {errorMessage && (
             <Typography variant="small" className="text-rencanakan-error-red-100 mt-2">
               {errorMessage}
