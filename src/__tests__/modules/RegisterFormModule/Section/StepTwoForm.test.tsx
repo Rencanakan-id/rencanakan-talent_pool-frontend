@@ -159,39 +159,39 @@ describe('StepTwoForm Component', () => {
       expect(screen.getByText('Tentang Pekerjaan')).toBeInTheDocument();
       expect(screen.getByText('Dokumen Pendukung')).toBeInTheDocument();
 
-      expect(screen.getByLabelText('Tentang Saya')).toBeInTheDocument();
-      expect(screen.getByLabelText('Lama Pengalaman')).toBeInTheDocument();
-      expect(screen.getByLabelText('Level Sertifikasi SKK')).toBeInTheDocument();
-      expect(screen.getByLabelText('Lokasi Saat Ini')).toBeInTheDocument();
-      expect(screen.getByLabelText('Bersedia Ditempatkan Di Mana')).toBeInTheDocument();
-      expect(screen.getByLabelText('Keahlian')).toBeInTheDocument();
+      expect(screen.getByLabelText('Tentang Saya *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Lama Pengalaman *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Level Sertifikasi SKK *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Lokasi Saat Ini *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Bersedia Ditempatkan Di Mana *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Keahlian *')).toBeInTheDocument();
       expect(screen.getByLabelText('SKK')).toBeInTheDocument();
     });
 
     test('updates aboutMe when textarea changes', () => {
       setup();
-      const textarea = screen.getByLabelText('Tentang Saya');
+      const textarea = screen.getByLabelText('Tentang Saya *');
       fireEvent.change(textarea, { target: { value: 'Test about me' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: 'Test about me' });
     });
 
     test('updates yearsOfExperience when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Lama Pengalaman');
+      const input = screen.getByLabelText('Lama Pengalaman *');
       fireEvent.change(input, { target: { value: '5 Tahun' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ yearsOfExperience: '5 Tahun' });
     });
 
     test('updates skkLevel when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Level Sertifikasi SKK');
+      const input = screen.getByLabelText('Level Sertifikasi SKK *');
       fireEvent.change(input, { target: { value: 'Operator' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkLevel: 'Operator' });
     });
 
     test('updates currentLocation when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Lokasi Saat Ini');
+      const input = screen.getByLabelText('Lokasi Saat Ini *');
       fireEvent.change(input, { target: { value: 'Jakarta' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ currentLocation: 'Jakarta' });
     });
@@ -200,7 +200,7 @@ describe('StepTwoForm Component', () => {
       setup({
         preferredLocations: ['jakarta', 'bandung', 'unknown-location'],
       });
-      const input = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
+      const input = screen.getByLabelText('Bersedia Ditempatkan Di Mana *');
       fireEvent.change(input, { target: { value: 'Bandung, Surabaya' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({
         preferredLocations: ['Bandung', 'Surabaya'],
@@ -209,20 +209,20 @@ describe('StepTwoForm Component', () => {
 
     test('updates skill when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Keahlian');
+      const input = screen.getByLabelText('Keahlian *');
       fireEvent.change(input, { target: { value: 'Sipil' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Sipil' });
     });
 
     test('shows otherSkill input when skill is "lainnya"', () => {
       setup({ skill: 'lainnya' });
-      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu');
+      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu *');
       expect(otherSkillInput).toBeInTheDocument();
     });
 
     test('updates otherSkill when input changes', () => {
       setup({ skill: 'lainnya' });
-      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu');
+      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu *');
       fireEvent.change(otherSkillInput, { target: { value: 'Custom Skill' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ otherSkill: 'Custom Skill' });
     });
@@ -265,9 +265,9 @@ describe('StepTwoForm Component', () => {
     test('handles changing skill from "lainnya" to another value', () => {
       const { rerender } = setup({ skill: 'lainnya', otherSkill: 'Custom Skill' });
 
-      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu *')).toBeInTheDocument();
 
-      const skillInput = screen.getByLabelText('Keahlian');
+      const skillInput = screen.getByLabelText('Keahlian *');
       fireEvent.change(skillInput, { target: { value: 'Sipil' } });
 
       rerender(
@@ -284,7 +284,7 @@ describe('StepTwoForm Component', () => {
     test('handles very long text input in textarea', () => {
       const longText = 'a'.repeat(1000);
       setup();
-      const textarea = screen.getByLabelText('Tentang Saya');
+      const textarea = screen.getByLabelText('Tentang Saya *');
       fireEvent.change(textarea, { target: { value: longText } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: longText });
     });
@@ -343,7 +343,7 @@ describe('StepTwoForm Component', () => {
     test('updates skill and clears otherSkill when changing from "lainnya"', () => {
       const { rerender } = setup({ skill: 'lainnya', otherSkill: 'Custom Skill' });
 
-      const skillInput = screen.getByLabelText('Keahlian');
+      const skillInput = screen.getByLabelText('Keahlian *');
       fireEvent.change(skillInput, { target: { value: 'Sipil' } });
 
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Sipil' });
@@ -362,7 +362,7 @@ describe('StepTwoForm Component', () => {
       const validationErrors = { otherSkill: 'Keahlian lainnya wajib diisi' };
       setup({ skill: 'lainnya' }, validationErrors);
 
-      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu');
+      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu *');
       expect(otherSkillInput).toBeInTheDocument();
       expect(screen.getByText('Keahlian lainnya wajib diisi')).toBeInTheDocument();
     });
@@ -377,27 +377,27 @@ describe('StepTwoForm Component', () => {
     test('updates multiple form fields in sequence', () => {
       setup();
 
-      const skkLevelInput = screen.getByLabelText('Level Sertifikasi SKK');
+      const skkLevelInput = screen.getByLabelText('Level Sertifikasi SKK *');
       fireEvent.change(skkLevelInput, { target: { value: 'Senior' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkLevel: 'Senior' });
 
-      const locationInput = screen.getByLabelText('Lokasi Saat Ini');
+      const locationInput = screen.getByLabelText('Lokasi Saat Ini *');
       fireEvent.change(locationInput, { target: { value: 'Jakarta' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ currentLocation: 'Jakarta' });
 
-      const prefLocInput = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
+      const prefLocInput = screen.getByLabelText('Bersedia Ditempatkan Di Mana *');
       fireEvent.change(prefLocInput, { target: { value: 'Surabaya, Bandung, Medan' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({
         preferredLocations: ['Surabaya', 'Bandung', 'Medan'],
       });
 
-      const skillInput = screen.getByLabelText('Keahlian');
+      const skillInput = screen.getByLabelText('Keahlian *');
       fireEvent.change(skillInput, { target: { value: 'lainnya' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'lainnya' });
 
       setup({ skill: 'lainnya' });
 
-      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu');
+      const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu *');
       fireEvent.change(otherSkillInput, { target: { value: 'DevOps' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ otherSkill: 'DevOps' });
     });
@@ -407,7 +407,7 @@ describe('StepTwoForm Component', () => {
 
       expect(screen.queryByPlaceholderText('Tulis di sini keahlian kamu')).not.toBeInTheDocument();
 
-      const skillInput = screen.getByLabelText('Keahlian');
+      const skillInput = screen.getByLabelText('Keahlian *');
       fireEvent.change(skillInput, { target: { value: 'lainnya' } });
 
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'lainnya' });
@@ -419,13 +419,13 @@ describe('StepTwoForm Component', () => {
         />
       );
 
-      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu *')).toBeInTheDocument();
     });
 
     test('changing skill value properly updates state and triggers conditional rendering', () => {
       const { rerender } = setup();
 
-      const skillInput = screen.getByLabelText('Keahlian');
+      const skillInput = screen.getByLabelText('Keahlian *');
       fireEvent.change(skillInput, { target: { value: 'Sipil' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Sipil' });
 
@@ -448,7 +448,7 @@ describe('StepTwoForm Component', () => {
         />
       );
 
-      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu *')).toBeInTheDocument();
 
       fireEvent.change(skillInput, { target: { value: 'Mechanical' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Mechanical' });
@@ -477,7 +477,7 @@ describe('StepTwoForm Component', () => {
 
       expect(screen.getByText('Pilih maksimal 5 lokasi')).toBeInTheDocument();
 
-      const locationsInput = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
+      const locationsInput = screen.getByLabelText('Bersedia Ditempatkan Di Mana *');
       fireEvent.change(locationsInput, {
         target: { value: 'Jakarta, Bandung, Surabaya, Medan, Makassar, Bali' },
       });
@@ -528,7 +528,7 @@ describe('StepTwoForm Component', () => {
         screen.queryByText((_content, element) => element?.className === 'error-message')
       ).not.toBeInTheDocument();
 
-      const textarea = screen.getByLabelText('Tentang Saya');
+      const textarea = screen.getByLabelText('Tentang Saya *');
       fireEvent.change(textarea, { target: { value: 'New about me text' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: 'New about me text' });
     });

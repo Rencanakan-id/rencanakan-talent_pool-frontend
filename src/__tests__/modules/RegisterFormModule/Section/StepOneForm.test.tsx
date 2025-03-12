@@ -122,42 +122,42 @@ describe('StepOneForm Component', () => {
 
     test('updates firstName when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Nama Depan');
+      const input = screen.getByLabelText('Nama Depan *');
       fireEvent.change(input, { target: { value: 'John' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ firstName: 'John' });
     });
 
     test('updates lastName when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Nama Belakang');
+      const input = screen.getByLabelText('Nama Belakang *');
       fireEvent.change(input, { target: { value: 'Cena' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ lastName: 'Cena' });
     });
 
     test('updates email when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Email');
+      const input = screen.getByLabelText('Email *');
       fireEvent.change(input, { target: { value: 'dummy@example.com' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ email: 'dummy@example.com' });
     });
 
     test('updates phoneNumber when input changes', () => {
       setup();
-      const input = screen.getByLabelText('Nomor Telepon');
+      const input = screen.getByLabelText('Nomor Telepon *');
       fireEvent.change(input, { target: { value: '0129102301212' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ phoneNumber: '0129102301212' });
     });
 
     test('updates nik when input changes', () => {
       setup();
-      const input = screen.getByLabelText('No. NIK');
+      const input = screen.getByLabelText('No. NIK *');
       fireEvent.change(input, { target: { value: '2312312413123' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ nik: '2312312413123' });
     });
 
     test('updates lastName when input changes', () => {
       setup();
-      const input = screen.getByLabelText('No. NPWP');
+      const input = screen.getByLabelText('No. NPWP *');
       fireEvent.change(input, { target: { value: '123123123123' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ npwp: '123123123123' });
     });

@@ -83,7 +83,7 @@ describe('StepThreeForm Component', () => {
       screen.getByText('Kira-kira begini perkiraan harga kamu, cocok gak?')
     ).toBeInTheDocument();
     expect(screen.getByText('Perkiraan Harga')).toBeInTheDocument();
-    expect(screen.getByLabelText('Tentukan Harga Kamu')).toBeInTheDocument();
+    expect(screen.getByLabelText('Tentukan Harga Kamu *')).toBeInTheDocument();
   });
 
   test('displays formatted price range based on form data', () => {
@@ -107,14 +107,14 @@ describe('StepThreeForm Component', () => {
 
   test('updates price field correctly', () => {
     setup();
-    const input = screen.getByLabelText('Tentukan Harga Kamu');
+    const input = screen.getByLabelText('Tentukan Harga Kamu *');
     fireEvent.change(input, { target: { value: '500000' } });
     expect(mockUpdateFormData).toHaveBeenCalledWith({ price: '500000' });
   });
 
   test('strips non-numeric characters from input', () => {
     setup();
-    const input = screen.getByLabelText('Tentukan Harga Kamu');
+    const input = screen.getByLabelText('Tentukan Harga Kamu *');
     fireEvent.change(input, { target: { value: 'abc123def456' } });
     expect(mockUpdateFormData).toHaveBeenCalledWith({ price: '123456' });
   });
