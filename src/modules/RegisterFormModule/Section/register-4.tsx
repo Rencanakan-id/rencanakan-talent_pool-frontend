@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { Typography, Stepper, Input } from '@/components';
 import { RegisterFormData } from '@/lib/register';
 
@@ -25,12 +25,18 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
     });
   };
 
+  const initialized = useRef(false);
+
   useEffect(() => {
-    const { password, passwordConfirmation, termsAndConditions } = formData;
+    if (!initialized.current) {
+      const { password, passwordConfirmation, termsAndConditions } = formData;
 
-    const isComplete = !!password && !!passwordConfirmation && !!termsAndConditions;
+      const isComplete = !!password && !!passwordConfirmation && !!termsAndConditions;
 
-    updateFormCompleteness(isComplete);
+      updateFormCompleteness(isComplete);
+
+      initialized.current = true;
+    }
   }, [formData, updateFormCompleteness]);
 
   return (
