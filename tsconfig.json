@@ -2,10 +2,15 @@
   "files": [],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
+    "types": ["jest", "@testing-library/jest-dom"],
+    "lib": ["es6", "dom", "es2016"],
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@lib/*": ["src/lib/*"]
-    }
+    },
+    "lib": ["DOM", "DOM.Iterable", "ES2016"]
   }
 }

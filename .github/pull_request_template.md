@@ -2,13 +2,13 @@
 
 [describe the problem or user story being addressed]
 
-# Jira
+# Ticket Issue
 
-[Provide links Jira]
+[Provide link to Jira]
 
 # Changes Made
 
-[Provide code snippets or screenshots as needed]
+[Describe your changes, it can be code snippets, screenshots, or plain sentences as needed]
 
 # Issue Type
 
@@ -21,7 +21,7 @@
 
 # Added/updated tests?
 
-[We encourage you to keep the code coverage percentage at 80% and above]
+<!--We encourage you to keep the code coverage percentage at 80% and above-->
 
 - [ ] Yes
 - [ ] No, and this is why: [please replace this line with details on why tests have not been included]

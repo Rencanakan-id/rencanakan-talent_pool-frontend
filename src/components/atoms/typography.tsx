@@ -62,7 +62,7 @@ const tags: Record<Variant, ElementType> = {
   small: 'span',
 };
 
-interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
+export interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
   variant: Variant;
   children: React.ReactNode;
   className?: string;

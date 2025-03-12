@@ -1,5 +1,8 @@
-import { Typography, Textarea, Button, FileInput, Input , Modal} from '@/components';
+import { Typography, Textarea, ImageUpload, Button, FileInput, Input, Modal } from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
+import { Combobox } from '@/components/ui/combobox';
+import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
+import { locations } from '@/data/location';
 import React, { useState } from 'react';
 
 export const DesignSystemModule = () => {
@@ -19,6 +22,19 @@ export const DesignSystemModule = () => {
         <Typography variant="d2">Display 2</Typography>
       </div>
 
+      <div className="w-full space-y-4">
+        <Combobox data={locations} label="Lokasi" />
+      </div>
+      <div className="w-full space-y-4">
+        <Combobox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+      </div>
+      <div className="w-full space-y-4">
+        <ComboboxCheckBox data={locations} label="Lokasi" />
+      </div>
+      <div className="w-full space-y-4">
+        <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+      </div>
+
       <div className="space-y-4">
         <Typography variant="h1">Heading 1</Typography>
         <Typography variant="h2">Heading 2</Typography>
@@ -35,6 +51,11 @@ export const DesignSystemModule = () => {
         <Typography variant="p4">Parapraph 4</Typography>
         <Typography variant="p5">Parapraph 5</Typography>
         <Typography variant="small">Small Text</Typography>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="mb-4 text-xl font-bold">Design System | Image Upload</h2>
+        <ImageUpload label="Upload foto" />
       </div>
 
       <Textarea textLabel="Nama Depan" placeholder="Masukkan nama depan"></Textarea>
