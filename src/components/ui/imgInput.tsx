@@ -10,7 +10,10 @@ interface ImageUploadProps
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, initialImage = null, ...props }, ref) => {
+  (
+    { label, className, onImageChange, maxSize = 5 * 1024 * 1024, initialImage = null, ...props },
+    ref
+  ) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(initialImage);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -27,7 +30,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
 
       return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
-    
+
     React.useEffect(() => {
       if (initialImage) {
         setSelectedFile(initialImage);
@@ -96,12 +99,12 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                   alt="Preview"
                   className="h-full w-full object-cover transition duration-300 ease-in-out hover:brightness-90"
                 />
-                <div 
+                <div
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(e);
                   }}
-                  className="hover:text-rencanakan-error-red-100 absolute top-2 right-2 p-1 text-white cursor-pointer"
+                  className="hover:text-rencanakan-error-red-100 absolute top-2 right-2 cursor-pointer p-1 text-white"
                 >
                   ✖
                 </div>

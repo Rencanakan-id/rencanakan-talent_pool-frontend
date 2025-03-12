@@ -42,13 +42,13 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             Masukkan Data Diri
           </Typography>
 
-            <div className="mt-4 mb-6 space-y-1">
-            <ImageUpload 
-              label="Foto Diri" 
+          <div className="mt-4 mb-6 space-y-1">
+            <ImageUpload
+              label="Foto Diri"
               maxSize={5 * 1024 * 1024}
               onImageChange={(file) => updateFormData({ profilePhoto: file })}
             />
-            </div>
+          </div>
 
           <div className="space-y-4">
             <div className="flex space-x-2">

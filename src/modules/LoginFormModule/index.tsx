@@ -59,13 +59,13 @@ const LoginModule = () => {
 
   const handleLogin = async () => {
     if (!isFormValid) return;
-    
+
     const { isValid, emailErr, commentErr } = validateFormOnSubmit();
     setEmailError(emailErr);
     setPasswordError(commentErr);
 
     if (!isValid) return;
-    
+
     try {
       console.log(formData);
       // TODO: ganti api dengan variabel di env file

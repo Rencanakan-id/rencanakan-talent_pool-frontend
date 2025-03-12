@@ -122,7 +122,7 @@ export const validateStepTwoForm = (formData: {
       formData.preferredLocations !== undefined ? preferredLocationsError : undefined,
     skill: formData.skill !== undefined ? skillError : undefined,
     otherSkill: formData.otherSkill !== undefined ? otherSkillError : undefined,
-    skkFile: formData.skkFile !== undefined ? skkFileError : undefined,
+    skkFile: formData.skkFile !== null ? skkFileError : undefined,
   };
 
   const isValid =
@@ -132,7 +132,7 @@ export const validateStepTwoForm = (formData: {
     currentLocationError === '' &&
     preferredLocationsError === '' &&
     skillError === '' &&
-    otherSkillError === ''
+    otherSkillError === '' &&
     skkFileError === '';
 
   return { isValid, errors };

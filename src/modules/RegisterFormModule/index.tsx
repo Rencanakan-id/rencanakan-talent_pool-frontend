@@ -82,7 +82,8 @@ export const RegisterModule = () => {
 
   const handleNext = () => {
     if (formState === 1) {
-      const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } = formData;
+      const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } =
+        formData;
       console.log('Step 1 Form Data:', formData);
       const stepOneValidation = validateStepOneForm({
         firstName,

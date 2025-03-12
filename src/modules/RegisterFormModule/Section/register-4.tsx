@@ -31,12 +31,7 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
     const isComplete = !!password && !!passwordConfirmation && !!termsAndConditions;
 
     updateFormCompleteness(isComplete);
-  }, [
-    formData.password,
-    formData.passwordConfirmation,
-    formData.termsAndConditions,
-    updateFormCompleteness,
-  ]);
+  }, [formData, updateFormCompleteness]);
 
   return (
     <div>

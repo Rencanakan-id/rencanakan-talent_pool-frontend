@@ -62,8 +62,6 @@ export const FileInput: React.FC<FileInputProps> = ({
   textLabel,
   value,
   onFileSelect,
-  icon,
-  buttonText,
   error,
   ...inputProps
 }) => {
