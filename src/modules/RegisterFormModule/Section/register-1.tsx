@@ -46,6 +46,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             <ImageUpload
               label="Foto Diri"
               maxSize={5 * 1024 * 1024}
+              initialImage={formData.profilePhoto}
               onImageChange={(file) => updateFormData({ profilePhoto: file })}
             />
           </div>
