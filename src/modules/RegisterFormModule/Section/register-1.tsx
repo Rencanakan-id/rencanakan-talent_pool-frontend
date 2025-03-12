@@ -12,6 +12,9 @@ interface StepOneFormProps {
     phoneNumber?: string;
     nik?: string;
     npwp?: string;
+    ktpFile?: string;
+    npwpFile?: string;
+    diplomaFile?: string;
   };
 }
 
@@ -39,9 +42,13 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             Masukkan Data Diri
           </Typography>
 
-          <div className="mt-4 mb-6 space-y-1">
-            <ImageUpload label="Foto Diri" maxSize={5 * 1024 * 1024} />
-          </div>
+            <div className="mt-4 mb-6 space-y-1">
+            <ImageUpload 
+              label="Foto Diri" 
+              maxSize={5 * 1024 * 1024}
+              onImageChange={(file) => updateFormData({ profilePhoto: file })}
+            />
+            </div>
 
           <div className="space-y-4">
             <div className="flex space-x-2">
@@ -116,6 +123,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               state={formData.ktpFile ? 'filled' : 'empty'}
               value={formData.ktpFile?.name || ''}
               onFileSelect={(file) => updateFormData({ ktpFile: file })}
+              error={validationErrors?.ktpFile}
             />
             <FileInput
               data-slot="input"
@@ -124,6 +132,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               state={formData.npwpFile ? 'filled' : 'empty'}
               value={formData.npwpFile?.name || ''}
               onFileSelect={(file) => updateFormData({ npwpFile: file })}
+              error={validationErrors?.npwpFile}
             />
             <FileInput
               data-slot="input"
@@ -132,6 +141,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               state={formData.diplomaFile ? 'filled' : 'empty'}
               value={formData.diplomaFile?.name || ''}
               onFileSelect={(file) => updateFormData({ diplomaFile: file })}
+              error={validationErrors?.diplomaFile}
             />
           </div>
         </section>

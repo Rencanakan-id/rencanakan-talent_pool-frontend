@@ -18,7 +18,7 @@ interface StepTwoFormProps {
     preferredLocations?: string;
     skill?: string;
     otherSkill?: string;
-    skkFile?: File;
+    skkFile?: string;
   };
 }
 
@@ -120,6 +120,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
             state={formData.skkFile ? 'filled' : 'empty'}
             value={formData.skkFile?.name || ''}
             onFileSelect={(file) => updateFormData({ skkFile: file })}
+            error={validationErrors?.skkFile}
           />
         </div>
       </div>

@@ -8,6 +8,7 @@ import { StepThreeForm } from './Section/register-3';
 import { validatePasswordSection } from '@/lib/validation/passwordValidation';
 import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
 import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
+import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
 import { useNavigate } from 'react-router-dom';
 
 export const RegisterModule = () => {
@@ -19,20 +20,20 @@ export const RegisterModule = () => {
     phoneNumber: '',
     nik: '',
     npwp: '',
-    ktpFile: null,
-    npwpFile: null,
-    diplomaFile: null,
-    price: '',
-    password: '',
-    passwordConfirmation: '',
+    ktpFile: undefined,
+    npwpFile: undefined,
+    diplomaFile: undefined,
     aboutMe: '',
     yearsOfExperience: '',
     skkLevel: '',
     currentLocation: '',
-    preferredLocations: [],
+    preferredLocations: [] as string[],
     skill: '',
     otherSkill: '',
-    skkFile: null,
+    skkFile: undefined,
+    price: '',
+    password: '',
+    passwordConfirmation: '',
   });
   const [formCompleteness, setFormCompleteness] = useState({
     step4Complete: false,
@@ -44,8 +45,9 @@ export const RegisterModule = () => {
     phoneNumber?: string;
     nik?: string;
     npwp?: string;
-    password?: string;
-    passwordConfirmation?: string;
+    ktpFile?: string;
+    npwpFile?: string;
+    diplomaFile?: string;
     aboutMe?: string;
     yearsOfExperience?: string;
     skkLevel?: string;
@@ -53,6 +55,10 @@ export const RegisterModule = () => {
     preferredLocations?: string;
     skill?: string;
     otherSkill?: string;
+    skkFile?: string;
+    price?: string;
+    password?: string;
+    passwordConfirmation?: string;
   }>({});
 
   const navigate = useNavigate();
@@ -72,11 +78,11 @@ export const RegisterModule = () => {
     }));
   };
 
-  const isStepValid = true;
+  const isStepValid = checkStepCompleteness(formState, formData);
 
   const handleNext = () => {
     if (formState === 1) {
-      const { firstName, lastName, email, phoneNumber, nik, npwp } = formData;
+      const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } = formData;
       console.log('Step 1 Form Data:', formData);
       const stepOneValidation = validateStepOneForm({
         firstName,
@@ -85,6 +91,9 @@ export const RegisterModule = () => {
         phoneNumber,
         nik,
         npwp,
+        ktpFile: ktpFile === null ? undefined : ktpFile,
+        npwpFile: npwpFile === null ? undefined : npwpFile,
+        diplomaFile: diplomaFile === null ? undefined : diplomaFile,
       });
 
       setValidationErrors(stepOneValidation.errors);
@@ -106,6 +115,7 @@ export const RegisterModule = () => {
         preferredLocations,
         skill,
         otherSkill,
+        skkFile,
       } = formData;
       console.log('Step 2 Form Data:', formData);
 
@@ -117,6 +127,7 @@ export const RegisterModule = () => {
         preferredLocations,
         skill,
         otherSkill,
+        skkFile: skkFile === null ? undefined : skkFile,
       });
 
       setValidationErrors(stepTwoValidation.errors);
@@ -138,7 +149,6 @@ export const RegisterModule = () => {
 
   const handleSubmit = async () => {
     if (formState === 4) {
-      // Validate the form before submission
       const { password, passwordConfirmation, termsAndConditions } = formData;
       const validation = validatePasswordSection(
         password,
@@ -146,13 +156,11 @@ export const RegisterModule = () => {
         termsAndConditions
       );
 
-      // Set validation errors
       setValidationErrors(validation.errors);
 
       if (validation.isValid) {
         updateFormCompleteness(true);
       }
-      // If form is valid, proceed with submission
       if (validation.isValid && formCompleteness.step4Complete) {
         navigate('/login');
       }

@@ -120,9 +120,9 @@ export const validateStepOneForm = (formData: {
     phoneNumber: formData.phoneNumber !== undefined ? phoneNumberError : undefined,
     nik: formData.nik !== undefined ? nikError : undefined,
     npwp: formData.npwp !== undefined ? npwpError : undefined,
-    ktpFile: formData.ktpFile !== undefined ? ktpFileError : undefined,
-    npwpFile: formData.npwpFile !== undefined ? npwpFileError : undefined,
-    diplomaFile: formData.diplomaFile !== undefined ? diplomaFileError : undefined,
+    ktpFile: formData.ktpFile !== null ? ktpFileError : undefined,
+    npwpFile: formData.npwpFile !== null ? npwpFileError : undefined,
+    diplomaFile: formData.diplomaFile !== null ? diplomaFileError : undefined,
   };
 
   const isValid =
@@ -130,7 +130,10 @@ export const validateStepOneForm = (formData: {
     emailError === '' &&
     phoneNumberError === '' &&
     nikError === '' &&
-    npwpError === '';
+    npwpError === '' &&
+    ktpFileError === '' &&
+    npwpFileError === '' &&
+    diplomaFileError === '';
 
   return { isValid, errors };
 };

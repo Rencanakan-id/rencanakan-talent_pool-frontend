@@ -132,7 +132,8 @@ export const validateStepTwoForm = (formData: {
     currentLocationError === '' &&
     preferredLocationsError === '' &&
     skillError === '' &&
-    otherSkillError === '';
+    otherSkillError === ''
+    skkFileError === '';
 
   return { isValid, errors };
 };
