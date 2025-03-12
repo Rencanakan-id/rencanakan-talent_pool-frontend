@@ -111,14 +111,14 @@ export function ComboboxCheckBox({
             </Button>
             <Typography
               variant="p5"
-              className={`absolute -top-2 left-3 bg-white px-1`}
+              className={`text-rencanakan-dark-gray absolute -top-2 left-3 bg-white px-1`}
             >
               {label}
             </Typography>
           </PopoverTrigger>
         </div>
         <PopoverContent
-          className="border-rencanakan-light-gray p-0 bg-white"
+          className="border-rencanakan-light-gray bg-white p-0"
           id="combobox-options"
           style={{ width }}
         >
@@ -195,7 +195,7 @@ export function ComboboxCheckBox({
         </PopoverContent>
       </Popover>
       {error && (
-        <Typography variant="small" className="mt-1 text-rencanakan-error-red-100">
+        <Typography variant="small" className="text-rencanakan-error-red-100 mt-1">
           {error}
         </Typography>
       )}
