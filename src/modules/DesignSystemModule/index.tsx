@@ -1,7 +1,15 @@
-import { Typography, Textarea, Button, FileInput, Input } from '@/components';
+import { Typography, Textarea, Button, FileInput, Input , Modal} from '@/components';
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const DesignSystemModule = () => {
+  // State untuk mengontrol modal
+  const [isDefaultOpen, setIsDefaultOpen] = useState(false);
+  const [isWithLabelOpen, setIsWithLabelOpen] = useState(false);
+  const [isSmallOpen, setIsSmallOpen] = useState(false);
+  const [isLargeOpen, setIsLargeOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+
   return (
     <div className="flex flex-col gap-5 p-6">
       <h1 className="text-2xl font-bold">Design System | Typography</h1>
@@ -206,6 +214,106 @@ export const DesignSystemModule = () => {
               error="This field is required"
             />
           </div>
+        </div>
+      </div>
+      {/* Modal Section */}
+      <h1 className="text-2xl font-bold">Design System | Modals</h1>
+      <div className="space-y-6">
+        {/* Default Modal */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Default Modal
+          </Typography>
+          <Button variant="primary" onClick={() => setIsDefaultOpen(true)}>
+            Open Default Modal
+          </Button>
+          <Modal isOpen={isDefaultOpen} onClose={() => setIsDefaultOpen(false)} title="Default Modal">
+            <Typography variant="p4" className="text-rencanakan-dark-gray">
+              This is a basic modal with no additional features.
+            </Typography>
+          </Modal>
+        </div>
+
+        {/* Modal with Title and Content */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Modal with Title and Custom Content
+          </Typography>
+          <Button variant="primary" onClick={() => setIsWithLabelOpen(true)}>
+            Open Modal with Title
+          </Button>
+          <Modal
+            isOpen={isWithLabelOpen}
+            onClose={() => setIsWithLabelOpen(false)}
+            title="Modal with Title"
+          >
+            <Typography variant="p4" className="text-rencanakan-dark-gray mb-4">
+              This modal has a title and some custom content.
+            </Typography>
+            <Button variant="secondary" onClick={() => setIsWithLabelOpen(false)}>
+              Close Modal
+            </Button>
+          </Modal>
+        </div>
+
+        {/* Small Modal */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Small Modal
+          </Typography>
+          <Button variant="primary" onClick={() => setIsSmallOpen(true)}>
+            Open Small Modal
+          </Button>
+          <Modal
+            isOpen={isSmallOpen}
+            onClose={() => setIsSmallOpen(false)}
+            title="Small Modal"
+            size="small"
+          >
+            <Typography variant="p4" className="text-rencanakan-dark-gray">
+              This is a small modal with limited content space.
+            </Typography>
+          </Modal>
+        </div>
+
+        {/* Large Modal */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Large Modal
+          </Typography>
+          <Button variant="primary" onClick={() => setIsLargeOpen(true)}>
+            Open Large Modal
+          </Button>
+          <Modal
+            isOpen={isLargeOpen}
+            onClose={() => setIsLargeOpen(false)}
+            title="Large Modal"
+            size="large"
+          >
+            <Typography variant="p4" className="text-rencanakan-dark-gray">
+              This is a large modal with more content space.
+            </Typography>
+          </Modal>
+        </div>
+
+        {/* Error Modal */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Modal with Error State
+          </Typography>
+          <Button variant="primary" onClick={() => setIsErrorOpen(true)}>
+            Open Error Modal
+          </Button>
+          <Modal
+            isOpen={isErrorOpen}
+            onClose={() => setIsErrorOpen(false)}
+            title="Error Modal"
+            isError={true}
+          >
+            <Typography variant="p4" className="text-rencanakan-error-red-100">
+              This modal indicates an error state.
+            </Typography>
+          </Modal>
         </div>
       </div>
     </div>
