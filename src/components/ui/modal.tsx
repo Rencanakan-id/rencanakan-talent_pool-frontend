@@ -46,6 +46,7 @@ interface ModalProps
   children: ReactNode;
   size?: 'small' | 'medium' | 'large';
   isError?: boolean;
+  onBackdropKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 // Modal Component
@@ -59,6 +60,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       children,
       size = 'medium',
       isError = false,
+      onBackdropKeyDown,
       ...props
     },
     ref
@@ -88,10 +90,27 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       }
     };
 
+    // Handle keyboard events for the backdrop
+    const handleBackdropKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      // If custom onKeyDown is provided, call it
+      if (onBackdropKeyDown) {
+        onBackdropKeyDown(e);
+      } else {
+        // Default behavior: Close the modal on 'Esc'
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      }
+    };
+
     return (
       <div
         className={cn(modalVariants({ isError }), className)}
         onClick={handleBackdropClick} // Add onClick handler for backdrop
+        onKeyDown={handleBackdropKeyDown} // Add onKeyDown handler for keyboard accessibility
+        role="button" // Indicate that this element is interactive
+        tabIndex={0} // Make the element focusable
+        aria-label="Close modal" // Provide a meaningful label for screen readers
         {...props}
         ref={ref}
       >
