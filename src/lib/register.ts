@@ -1,4 +1,5 @@
 export interface RegisterFormData {
+  profilePhoto?: File | null;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -9,20 +10,17 @@ export interface RegisterFormData {
   npwpFile?: File | null;
   diplomaFile?: File | null;
 
-  // Buat step 2
   aboutMe?: string;
   yearsOfExperience?: string;
   skkLevel?: string;
   currentLocation?: string;
-  preferedLocations?: string[];
+  preferredLocations?: string[];
   skill?: string;
   otherSkill?: string;
   skkFile?: File | null;
 
-  // Buat step 3
   price?: string;
 
-  // Buat step 4
   password?: string;
   passwordConfirmation?: string;
   termsAndConditions?: boolean;

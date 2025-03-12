@@ -30,13 +30,9 @@ interface ImageInputProps {
 }
 
 jest.mock('@/components', () => ({
-  Typography: ({
-    children,
-    className,
-  }: {
-    children: React.ReactNode;
-    className?: string;
-  }) => <div className={className}>{children}</div>,
+  Typography: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={className}>{children}</div>
+  ),
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
   ),
@@ -86,14 +82,13 @@ jest.mock('@/components', () => ({
 }));
 
 describe('StepOneForm Component', () => {
-
   const initialFormData: RegisterFormData = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    nik: "",
-    npwp: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    nik: '',
+    npwp: '',
     ktpFile: null,
     npwpFile: null,
     diplomaFile: null,
@@ -117,12 +112,12 @@ describe('StepOneForm Component', () => {
     test('renders form with all fields', () => {
       setup();
 
-      expect(screen.getByPlaceholderText("Nama Depan")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Nama Belakang")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Masukkan email Anda")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Masukkan NIK Anda")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Masukkan NPWP Anda")).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Nama Depan')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Nama Belakang')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Masukkan email Anda')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Masukkan nomor WhatsApp Anda')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Masukkan NIK Anda')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Masukkan NPWP Anda')).toBeInTheDocument();
     });
 
     test('updates firstName when input changes', () => {
@@ -140,72 +135,71 @@ describe('StepOneForm Component', () => {
     });
 
     test('updates email when input changes', () => {
-        setup();
-        const input = screen.getByLabelText('Email');
-        fireEvent.change(input, { target: { value: 'dummy@example.com' } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ email: 'dummy@example.com' });
-      });
+      setup();
+      const input = screen.getByLabelText('Email');
+      fireEvent.change(input, { target: { value: 'dummy@example.com' } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ email: 'dummy@example.com' });
+    });
 
     test('updates phoneNumber when input changes', () => {
-        setup();
-        const input = screen.getByLabelText('Nomor Telepon');
-        fireEvent.change(input, { target: { value: '0129102301212' } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ phoneNumber: '0129102301212' });
+      setup();
+      const input = screen.getByLabelText('Nomor Telepon');
+      fireEvent.change(input, { target: { value: '0129102301212' } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ phoneNumber: '0129102301212' });
     });
 
     test('updates nik when input changes', () => {
-        setup();
-        const input = screen.getByLabelText('No. NIK');
-        fireEvent.change(input, { target: { value: '2312312413123' } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ nik: '2312312413123' });
+      setup();
+      const input = screen.getByLabelText('No. NIK');
+      fireEvent.change(input, { target: { value: '2312312413123' } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ nik: '2312312413123' });
     });
 
     test('updates lastName when input changes', () => {
-        setup();
-        const input = screen.getByLabelText('No. NPWP');
-        fireEvent.change(input, { target: { value: '123123123123' } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ npwp: '123123123123' });
-    });  
+      setup();
+      const input = screen.getByLabelText('No. NPWP');
+      fireEvent.change(input, { target: { value: '123123123123' } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ npwp: '123123123123' });
+    });
 
     test('updates foto KTP when file is selected', () => {
-        setup();
-        const file = new File(['dummy content'], 'ktp.pdf', { type: 'application/pdf' });
-        const fileInput = screen.getByLabelText('Foto KTP');
-  
-        fireEvent.change(fileInput, { target: { files: [file] } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ ktpFile: file });
-  
-        setup({ ktpFile: file });
-        expect(screen.getByText('ktp.pdf')).toBeInTheDocument();
+      setup();
+      const file = new File(['dummy content'], 'ktp.pdf', { type: 'application/pdf' });
+      const fileInput = screen.getByLabelText('Foto KTP');
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ ktpFile: file });
+
+      setup({ ktpFile: file });
+      expect(screen.getByText('ktp.pdf')).toBeInTheDocument();
     });
 
     test('updates foto NPWP when file is selected', () => {
-        setup();
-        const file = new File(['dummy content'], 'npwp.pdf', { type: 'application/pdf' });
-        const fileInput = screen.getByLabelText('Foto NPWP');
-  
-        fireEvent.change(fileInput, { target: { files: [file] } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ npwpFile: file });
-  
-        setup({ npwpFile: file });
-        expect(screen.getByText('npwp.pdf')).toBeInTheDocument();
+      setup();
+      const file = new File(['dummy content'], 'npwp.pdf', { type: 'application/pdf' });
+      const fileInput = screen.getByLabelText('Foto NPWP');
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ npwpFile: file });
+
+      setup({ npwpFile: file });
+      expect(screen.getByText('npwp.pdf')).toBeInTheDocument();
     });
 
     test('updates foto ijazah when file is selected', () => {
-        setup();
-        const file = new File(['dummy content'], 'ijazah.pdf', { type: 'application/pdf' });
-        const fileInput = screen.getByLabelText('Scan Ijazah');
-  
-        fireEvent.change(fileInput, { target: { files: [file] } });
-        expect(mockUpdateFormData).toHaveBeenCalledWith({ diplomaFile: file });
-  
-        setup({ diplomaFile: file });
-        expect(screen.getByText('ijazah.pdf')).toBeInTheDocument();
+      setup();
+      const file = new File(['dummy content'], 'ijazah.pdf', { type: 'application/pdf' });
+      const fileInput = screen.getByLabelText('Scan Ijazah');
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ diplomaFile: file });
+
+      setup({ diplomaFile: file });
+      expect(screen.getByText('ijazah.pdf')).toBeInTheDocument();
     });
   });
 
   describe('Negative Cases', () => {
-
     test('handles empty form data on step one', () => {
       const { container } = setup({
         firstName: undefined,
@@ -221,7 +215,5 @@ describe('StepOneForm Component', () => {
 
       expect(container).toBeInTheDocument();
     });
-
   });
 });
-

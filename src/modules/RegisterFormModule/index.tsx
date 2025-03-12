@@ -2,12 +2,14 @@ import { Button } from '@/components';
 import { ReactNode, useState } from 'react';
 import { StepOneForm } from './Section/register-1';
 import { StepTwoForm } from './Section/register-2';
-import { StepFourForm } from "./Section/register-4";
+import { StepFourForm } from './Section/register-4';
 import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
-import { validatePasswordSection } from "@/lib/validation/passwordValidation";
-import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
-import { useNavigate } from "react-router-dom";
+import { validatePasswordSection } from '@/lib/validation/passwordValidation';
+import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
+import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
+import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -18,15 +20,23 @@ export const RegisterModule = () => {
     phoneNumber: '',
     nik: '',
     npwp: '',
-    ktpFile: null,
-    npwpFile: null,
-    diplomaFile: null,
+    ktpFile: undefined,
+    npwpFile: undefined,
+    diplomaFile: undefined,
+    aboutMe: '',
+    yearsOfExperience: '',
+    skkLevel: '',
+    currentLocation: '',
+    preferredLocations: [] as string[],
+    skill: '',
+    otherSkill: '',
+    skkFile: undefined,
     price: '',
     password: '',
     passwordConfirmation: '',
   });
   const [formCompleteness, setFormCompleteness] = useState({
-    step4Complete: false
+    step4Complete: false,
   });
   const [validationErrors, setValidationErrors] = useState<{
     firstName?: string;
@@ -35,6 +45,18 @@ export const RegisterModule = () => {
     phoneNumber?: string;
     nik?: string;
     npwp?: string;
+    ktpFile?: string;
+    npwpFile?: string;
+    diplomaFile?: string;
+    aboutMe?: string;
+    yearsOfExperience?: string;
+    skkLevel?: string;
+    currentLocation?: string;
+    preferredLocations?: string;
+    skill?: string;
+    otherSkill?: string;
+    skkFile?: string;
+    price?: string;
     password?: string;
     passwordConfirmation?: string;
   }>({});
@@ -44,25 +66,24 @@ export const RegisterModule = () => {
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData((prev) => {
       const newData = { ...prev, ...data };
-      console.log("Updated Form Data:", newData); 
+      console.log('Updated Form Data:', newData);
       return newData;
     });
   };
-  
-
 
   const updateFormCompleteness = (isComplete: boolean) => {
-    setFormCompleteness(prev => ({
+    setFormCompleteness((prev) => ({
       ...prev,
-      step4Complete: isComplete
+      step4Complete: isComplete,
     }));
   };
 
-  const isStepValid = true;
+  const isStepValid = checkStepCompleteness(formState, formData);
 
   const handleNext = () => {
     if (formState === 1) {
-      const { firstName, lastName, email, phoneNumber, nik, npwp } = formData;
+      const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } =
+        formData;
       console.log('Step 1 Form Data:', formData);
       const stepOneValidation = validateStepOneForm({
         firstName,
@@ -71,6 +92,9 @@ export const RegisterModule = () => {
         phoneNumber,
         nik,
         npwp,
+        ktpFile: ktpFile === null ? undefined : ktpFile,
+        npwpFile: npwpFile === null ? undefined : npwpFile,
+        diplomaFile: diplomaFile === null ? undefined : diplomaFile,
       });
 
       setValidationErrors(stepOneValidation.errors);
@@ -80,9 +104,43 @@ export const RegisterModule = () => {
         console.log('Step 1 Form Data:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
-      return; 
+      return;
     }
-    
+
+    if (formState === 2) {
+      const {
+        aboutMe,
+        yearsOfExperience,
+        skkLevel,
+        currentLocation,
+        preferredLocations,
+        skill,
+        otherSkill,
+        skkFile,
+      } = formData;
+      console.log('Step 2 Form Data:', formData);
+
+      const stepTwoValidation = validateStepTwoForm({
+        aboutMe,
+        yearsOfExperience,
+        skkLevel,
+        currentLocation,
+        preferredLocations,
+        skill,
+        otherSkill,
+        skkFile: skkFile === null ? undefined : skkFile,
+      });
+
+      setValidationErrors(stepTwoValidation.errors);
+      console.log('Step 2 Validation:', stepTwoValidation);
+
+      if (stepTwoValidation.isValid) {
+        console.log('Step 2 Form Data Valid:', formData);
+        setFormState((prev) => Math.min(prev + 1, 4));
+      }
+      return;
+    }
+
     setFormState((prev) => Math.min(prev + 1, 4));
   };
 
@@ -90,40 +148,50 @@ export const RegisterModule = () => {
     setFormState((prev) => Math.max(prev - 1, 1));
   };
 
-
   const handleSubmit = async () => {
     if (formState === 4) {
-      // Validate the form before submission
       const { password, passwordConfirmation, termsAndConditions } = formData;
-      const validation = validatePasswordSection(password, passwordConfirmation, termsAndConditions);
-      
-      // Set validation errors
+      const validation = validatePasswordSection(
+        password,
+        passwordConfirmation,
+        termsAndConditions
+      );
+
       setValidationErrors(validation.errors);
 
       if (validation.isValid) {
         updateFormCompleteness(true);
       }
-      // If form is valid, proceed with submission
       if (validation.isValid && formCompleteness.step4Complete) {
-        navigate("/login");
+        navigate('/login');
       }
     }
   };
 
   const stepsContent: Record<number, ReactNode> = {
-    1: <StepOneForm 
-        formData={formData} 
+    1: (
+      <StepOneForm
+        formData={formData}
         updateFormData={updateFormData}
-        validationErrors={validationErrors} 
-        />,
-    2: <StepTwoForm formData={formData} updateFormData={updateFormData} />,
+        validationErrors={validationErrors}
+      />
+    ),
+    2: (
+      <StepTwoForm
+        formData={formData}
+        updateFormData={updateFormData}
+        validationErrors={validationErrors}
+      />
+    ),
     3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
-    4: <StepFourForm 
-        formData={formData} 
+    4: (
+      <StepFourForm
+        formData={formData}
         updateFormData={updateFormData}
         updateFormCompleteness={updateFormCompleteness}
         validationErrors={validationErrors}
-       />,
+      />
+    ),
   };
 
   return (
@@ -132,9 +200,11 @@ export const RegisterModule = () => {
         {stepsContent[formState]}
 
         <div className="mt-4 flex justify-end space-x-2">
-          <Button variant="primary-outline" onClick={handlePrev}>
-            Kembali
-          </Button>
+          {formState !== 1 && (
+            <Button variant="primary-outline" onClick={handlePrev}>
+              Kembali
+            </Button>
+          )}
           <Button
             variant="primary"
             onClick={formState === 4 ? handleSubmit : handleNext}
