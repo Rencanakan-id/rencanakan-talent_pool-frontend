@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Experience,{ ExperienceDetail } from '../../components/ui/experience';
-
+import Experience, { ExperienceDetail } from '../../components/ui/experience';
 
 describe('Experience Component', () => {
   const mockExperiences: ExperienceDetail[] = [
@@ -32,12 +31,8 @@ describe('Experience Component', () => {
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
   test('renders message when there is no data', () => {
-    render(<Experience  />);
+    render(<Experience />);
 
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
-
 });
-
-
-

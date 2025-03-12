@@ -29,15 +29,15 @@ interface ExperienceProps {
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
   return (
-    <div className="min-h-[200px] w-auto max-w-[825px] min-w-[200px] rounded-[8px] border border-gray-500 px-6 py-6">
+    <div className="min-h-[200px] w-full rounded-[8px] border border-gray-300 px-6 py-6">
       <Typography variant="p1" className="pb-4">
         Pengalaman
       </Typography>
 
       {experiences.length > 0 ? (
-        <div className="w-auto max-w-[825px] min-w-[200px] space-y-2 divide-y divide-gray-300 pl-6">
+        <div className="w-full space-y-2 divide-y divide-gray-300 pl-6">
           {experiences.map((exp) => (
-            <div key = {exp.id} className="min-h-[112px] space-y-1">
+            <div key={exp.id} className="min-h-[112px] space-y-1">
               <Typography variant="h5"> {exp.title} </Typography>
               <Typography variant="p3">
                 {' '}

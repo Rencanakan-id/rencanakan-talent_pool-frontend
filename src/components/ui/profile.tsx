@@ -1,7 +1,6 @@
 import { FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
-import { Button } from './button';
 
 export interface UserProfile {
   id: string;
@@ -32,7 +31,7 @@ interface UserProfileProps {
 const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
   return (
     <div className="w-full space-y-4">
-      <div className="space-y-2">
+      <div className="flex flex-col items-center space-y-2 md:items-start">
         <Typography variant="h1">
           {user.firstName} {user.lastName}
         </Typography>
@@ -53,22 +52,22 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
           <Badge variant={'profileGray'}> {user.job}</Badge>
         </div>
       </div>
-      <div className="bg-rencanakan-lightest-gray relative flex w-full flex-col justify-center p-6 sm:flex-row sm:items-center sm:justify-start space-y-2">
+      <div className="bg-rencanakan-lightest-gray relative flex w-full flex-col justify-center space-y-2 p-6 md:flex-row md:items-center md:justify-start">
         {/* Button di atas kalau layar kecil */}
-   
-        <div className="sm:absolute sm:top-1/2 sm:right-6  w-full flex justify-center sm:justify-end sm:-translate-y-1/2">
+        {/* 
+        <div className="flex w-full justify-center md:absolute md:top-1/2 md:right-6 md:-translate-y-1/2 md:justify-end">
           <Button variant="primary" className="py-4">
             Hubungi {user.firstName}
           </Button>
-        </div>
+        </div> */}
 
         {/* Text bagian harga */}
-        <div className="flex w-full items-center sm:items-start flex-col">
+        <div className="flex w-full flex-col items-center md:items-start">
           <Typography variant="p2" className="text-gray-600">
             Perkiraan Harga
           </Typography>
           <Typography variant="h1" className="pt-4">
-            Rp {new Intl.NumberFormat("id-ID").format(user.price)}
+            Rp {new Intl.NumberFormat('id-ID').format(user.price)}
           </Typography>
         </div>
       </div>
