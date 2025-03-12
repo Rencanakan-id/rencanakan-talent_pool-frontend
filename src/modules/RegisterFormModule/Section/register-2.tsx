@@ -22,7 +22,11 @@ interface StepTwoFormProps {
   };
 }
 
-export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormData, validationErrors = {} }) => {
+export const StepTwoForm: React.FC<StepTwoFormProps> = ({
+  formData,
+  updateFormData,
+  validationErrors = {},
+}) => {
   return (
     <>
       <Typography variant="h5">Ceritakan sedikit pengalaman kerja kamu</Typography>
@@ -41,6 +45,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
           value={formData.aboutMe || ''}
           onChange={(e) => updateFormData({ aboutMe: e.target.value })}
+          error={validationErrors?.aboutMe}
         />
 
         <Combobox
@@ -72,14 +77,14 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
             data={locations}
             label="Bersedia Ditempatkan Di Mana"
             placeholder="Search..."
-            value={(formData.preferredLocations || []).map(value => 
-              locations.find(item => item.value === value)?.label || value
-            ).join(', ')}
+            value={(formData.preferredLocations || [])
+              .map((value) => locations.find((item) => item.value === value)?.label || value)
+              .join(', ')}
             onChange={(values) => updateFormData({ preferredLocations: values })}
             maxSelection={5}
             error={validationErrors?.preferredLocations}
           />
-          <Typography variant="p4" className="my-2">
+          <Typography variant="p5" className="my-2">
             Pilih maksimal 5 lokasi
           </Typography>
         </div>
