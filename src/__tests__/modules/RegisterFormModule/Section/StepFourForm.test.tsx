@@ -64,7 +64,6 @@ describe('StepFourForm Component', () => {
   const defaultProps = {
     formData: {} as RegisterFormData,
     updateFormData: jest.fn(),
-    updateFormCompleteness: jest.fn(),
     validationErrors: {},
   };
 
@@ -76,7 +75,6 @@ describe('StepFourForm Component', () => {
       <StepFourForm
         formData={formData as RegisterFormData}
         updateFormData={defaultProps.updateFormData}
-        updateFormCompleteness={defaultProps.updateFormCompleteness}
         validationErrors={validationErrors}
       />
     );
@@ -112,25 +110,9 @@ describe('StepFourForm Component', () => {
       const errorElement = await findByTestId('password-error');
       expect(errorElement).toHaveTextContent(validationErrors.password);
     });
-
-    it('marks form as incomplete with empty password', async () => {
-      renderFormWithData({
-        passwordConfirmation: generateValidPassword1(),
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
-    });
   });
 
   describe('Password Confirmation Validations', () => {
-    it('marks form as incomplete with empty password confirmation', async () => {
-      renderFormWithData({
-        password: generateValidPassword1(),
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
-    });
-
     it("shows error when passwords don't match from validation errors", async () => {
       const errorMessage = faker.lorem.sentence();
       const validationErrors = {
@@ -147,32 +129,6 @@ describe('StepFourForm Component', () => {
 
       const errorElement = await findByTestId('passwordConfirmation-error');
       expect(errorElement).toHaveTextContent(errorMessage);
-    });
-  });
-
-  describe('Terms and Conditions', () => {
-    it('marks form as incomplete when terms not accepted', async () => {
-      const validPassword = generateValidPassword1();
-
-      renderFormWithData({
-        password: validPassword,
-        passwordConfirmation: validPassword,
-        termsAndConditions: false,
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
-    });
-
-    it('marks form as complete when all fields valid and terms accepted', async () => {
-      const validPassword = generateValidPassword1();
-
-      renderFormWithData({
-        password: validPassword,
-        passwordConfirmation: validPassword,
-        termsAndConditions: true,
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(true);
     });
   });
 
@@ -209,57 +165,37 @@ describe('StepFourForm Component', () => {
     });
   });
 
-  describe('Form Completeness Status', () => {
-    it('updates completeness status when all fields are filled correctly', async () => {
-      const validPassword = generateValidPassword1();
-
-      renderFormWithData({
-        password: validPassword,
-        passwordConfirmation: validPassword,
-        termsAndConditions: true,
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(true);
-    });
-
-    it('updates completeness status when some fields are missing', async () => {
-      const validPassword = generateValidPassword1();
-
-      renderFormWithData({
-        password: validPassword,
-        termsAndConditions: true,
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
-    });
-
-    it('updates completeness status when terms are not accepted', async () => {
-      const validPassword = generateValidPassword1();
-
-      renderFormWithData({
-        password: validPassword,
-        passwordConfirmation: validPassword,
-        termsAndConditions: false,
-      });
-
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
-    });
-  });
-
   describe('Component with undefined validationErrors', () => {
     it('renders correctly when validationErrors prop is undefined', () => {
       const { queryByTestId } = render(
         <StepFourForm
           formData={{}}
           updateFormData={defaultProps.updateFormData}
-          updateFormCompleteness={defaultProps.updateFormCompleteness}
         />
       );
 
       expect(queryByTestId('password-error')).not.toBeInTheDocument();
       expect(queryByTestId('passwordConfirmation-error')).not.toBeInTheDocument();
+    });
+  });
 
-      expect(defaultProps.updateFormCompleteness).toHaveBeenCalledWith(false);
+  describe('Terms and Conditions Checkbox', () => {
+    it('renders terms and conditions checkbox unchecked by default', () => {
+      const { container } = renderFormWithData();
+      const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
+      
+      expect(checkbox).toBeInTheDocument();
+      expect(checkbox.checked).toBe(false);
+    });
+    
+    it('renders terms and conditions checkbox as checked when provided in formData', () => {
+      const { container } = renderFormWithData({
+        termsAndConditions: true
+      });
+      const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
+      
+      expect(checkbox).toBeInTheDocument();
+      expect(checkbox.checked).toBe(true);
     });
   });
 });
