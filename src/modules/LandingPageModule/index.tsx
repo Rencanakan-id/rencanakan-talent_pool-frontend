@@ -31,12 +31,12 @@ export const LandingPageModule: React.FC = () => {
         </Typography>
 
         <div className="relative mt-6 flex gap-3 font-semibold max-md:justify-center lg:mt-12">
-          <Button variant="secondary" className="lg:!h-11">
+          <Button variant="secondary" className="lg:!h-11" onClick={() => { window.location.href = '/register'; }}>
             <Typography variant="p2" className="text-gray-950">
               Gabung sekarang
             </Typography>
           </Button>
-          <Button variant="secondary-outline" className="lg:!h-11">
+          <Button variant="secondary-outline" className="lg:!h-11" onClick={() => { window.location.href = '/login'; }}>
             <Typography variant="p2">Login</Typography>
           </Button>
         </div>
