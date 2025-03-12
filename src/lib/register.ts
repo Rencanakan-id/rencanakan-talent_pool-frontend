@@ -1,4 +1,14 @@
+/**
+ * Registration form data, divided into 4 steps:
+ * 1. Personal info & documents
+ * 2. Professional profile
+ * 3. Pricing
+ * 4. Account & agreement
+ * 
+ * Fields with `| null` are optional.
+ */
 export interface RegisterFormData {
+  // Step 1: Personal info & documents
   profilePhoto?: File | null;
   firstName?: string;
   lastName?: string;
@@ -10,6 +20,7 @@ export interface RegisterFormData {
   npwpFile?: File | null;
   diplomaFile?: File | null;
 
+  // Step 2: Professional profile
   aboutMe?: string;
   yearsOfExperience?: string;
   skkLevel?: string;
@@ -19,8 +30,10 @@ export interface RegisterFormData {
   otherSkill?: string;
   skkFile?: File | null;
 
+  // Step 3: Pricing
   price?: string;
 
+  // Step 4: Account & agreement
   password?: string;
   passwordConfirmation?: string;
   termsAndConditions?: boolean;

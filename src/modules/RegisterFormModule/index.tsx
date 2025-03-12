@@ -5,7 +5,7 @@ import { StepTwoForm } from './Section/register-2';
 import { StepFourForm } from './Section/register-4';
 import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
-import { validatePasswordSection } from '@/lib/validation/passwordValidation';
+import { validateStepFourForm } from '@/lib/validation/stepFourFormValidation';
 import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
 import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
@@ -151,7 +151,7 @@ export const RegisterModule = () => {
   const handleSubmit = async () => {
     if (formState === 4) {
       const { password, passwordConfirmation, termsAndConditions } = formData;
-      const validation = validatePasswordSection(
+      const validation = validateStepFourForm(
         password,
         passwordConfirmation,
         termsAndConditions
@@ -183,7 +183,12 @@ export const RegisterModule = () => {
         validationErrors={validationErrors}
       />
     ),
-    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
+    3: (
+      <StepThreeForm 
+        formData={formData} 
+        updateFormData={updateFormData} 
+      />
+    ),
     4: (
       <StepFourForm
         formData={formData}

@@ -35,7 +35,7 @@ export const validatePasswordMatch = (
  * @param termsAccepted Whether terms and conditions have been accepted
  * @returns An object containing validation status and errors
  */
-export const validatePasswordSection = (
+export const validateStepFourForm = (
   password: string | undefined,
   confirmation: string | undefined,
   termsAccepted: boolean | undefined
