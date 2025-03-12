@@ -75,7 +75,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           </Typography>
         )}
         <div>
-            <div
+          <div
             className={cn(
               'border-rencanakan-base-gray bg-rencanakan-light-gray relative aspect-square w-full max-w-[250px] cursor-pointer rounded-md border-2 border-dashed',
               'flex flex-col items-center justify-center gap-4 overflow-hidden',
@@ -84,15 +84,15 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             onClick={handleClick}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              handleClick();
+                e.preventDefault();
+                handleClick();
               }
             }}
             tabIndex={0}
             role="button"
-            aria-label={label || "Upload image"}
+            aria-label={label || 'Upload image'}
             {...props}
-            >
+          >
             <input
               type="file"
               accept="image/*"
@@ -124,7 +124,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                       }
                     }
                   }}
-                  className="hover:bg-rencanakan-error-red-100 hover:text-white absolute top-2 right-2 cursor-pointer rounded-full bg-white p-1 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-rencanakan-error-red-100"
+                  className="hover:bg-rencanakan-error-red-100 focus:ring-rencanakan-error-red-100 absolute top-2 right-2 cursor-pointer rounded-full bg-white p-1 text-gray-700 shadow-sm hover:text-white focus:ring-2 focus:outline-none"
                   aria-label="Delete image"
                   tabIndex={0}
                 >

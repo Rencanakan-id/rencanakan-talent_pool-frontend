@@ -200,11 +200,11 @@ export const RegisterModule = () => {
         {stepsContent[formState]}
 
         <div className="mt-4 flex justify-end space-x-2">
-            {formState !== 1 && (
+          {formState !== 1 && (
             <Button variant="primary-outline" onClick={handlePrev}>
               Kembali
             </Button>
-            )}
+          )}
           <Button
             variant="primary"
             onClick={formState === 4 ? handleSubmit : handleNext}

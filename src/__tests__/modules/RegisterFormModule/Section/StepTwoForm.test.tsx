@@ -31,8 +31,8 @@ interface ComboboxCheckBoxProps {
 
 jest.mock('@/components/ui/comboboxCheckbox', () => ({
   ComboboxCheckBox: ({ label, onChange, values, placeholder, error }: ComboboxCheckBoxProps) => {
-    const displayValues = (values || []).map(v => v.charAt(0).toUpperCase() + v.slice(1));
-    
+    const displayValues = (values || []).map((v) => v.charAt(0).toUpperCase() + v.slice(1));
+
     return (
       <div>
         <label>{label}</label>
@@ -292,7 +292,7 @@ describe('StepTwoForm Component', () => {
 
   describe('StepTwoForm Component Additional Tests', () => {
     const setup = (
-      formData: Partial<RegisterFormData> = {}, 
+      formData: Partial<RegisterFormData> = {},
       validationErrors: Partial<Record<keyof RegisterFormData, string>> = {}
     ) => {
       const props = {
@@ -302,96 +302,101 @@ describe('StepTwoForm Component', () => {
       };
       return render(<StepTwoForm {...props} />);
     };
-  
+
     beforeEach(() => {
       jest.clearAllMocks();
     });
-  
+
     test('displays validation error for skkLevel field', () => {
       const validationErrors = { skkLevel: 'Level SKK wajib diisi' };
       setup({}, validationErrors);
-      
+
       expect(screen.getByText('Level SKK wajib diisi')).toBeInTheDocument();
     });
-  
+
     test('displays validation error for currentLocation field', () => {
       const validationErrors = { currentLocation: 'Lokasi saat ini wajib diisi' };
       setup({}, validationErrors);
-      
+
       expect(screen.getByText('Lokasi saat ini wajib diisi')).toBeInTheDocument();
     });
-  
+
     test('displays validation error for preferredLocations field', () => {
       const validationErrors = { preferredLocations: 'Pilih minimal satu lokasi' };
       setup({}, validationErrors);
-      
+
       expect(screen.getByText('Pilih minimal satu lokasi')).toBeInTheDocument();
     });
-  
+
     test('displays max selection message for preferredLocations', () => {
       setup();
       expect(screen.getByText('Pilih maksimal 5 lokasi')).toBeInTheDocument();
     });
-  
+
     test('displays validation error for skill field', () => {
       const validationErrors = { skill: 'Keahlian wajib diisi' };
       setup({}, validationErrors);
-      
+
       expect(screen.getByText('Keahlian wajib diisi')).toBeInTheDocument();
     });
-  
+
     test('updates skill and clears otherSkill when changing from "lainnya"', () => {
       const { rerender } = setup({ skill: 'lainnya', otherSkill: 'Custom Skill' });
-      
+
       const skillInput = screen.getByLabelText('Keahlian');
       fireEvent.change(skillInput, { target: { value: 'Sipil' } });
-      
+
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Sipil' });
-      
-      rerender(<StepTwoForm formData={{ ...defaultFormData, skill: 'Sipil' }} updateFormData={mockUpdateFormData} />);
-      
+
+      rerender(
+        <StepTwoForm
+          formData={{ ...defaultFormData, skill: 'Sipil' }}
+          updateFormData={mockUpdateFormData}
+        />
+      );
+
       expect(screen.queryByPlaceholderText('Tulis di sini keahlian kamu')).not.toBeInTheDocument();
     });
-  
+
     test('displays validation error for otherSkill when skill is "lainnya"', () => {
       const validationErrors = { otherSkill: 'Keahlian lainnya wajib diisi' };
       setup({ skill: 'lainnya' }, validationErrors);
-      
+
       const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu');
       expect(otherSkillInput).toBeInTheDocument();
       expect(screen.getByText('Keahlian lainnya wajib diisi')).toBeInTheDocument();
     });
-  
+
     test('displays validation error for skkFile field', () => {
       const validationErrors = { skkFile: 'File SKK wajib diunggah' };
       setup({}, validationErrors);
-      
+
       expect(screen.getByText('File SKK wajib diunggah')).toBeInTheDocument();
     });
-  
+
     test('updates multiple form fields in sequence', () => {
       setup();
-      
+
       const skkLevelInput = screen.getByLabelText('Level Sertifikasi SKK');
       fireEvent.change(skkLevelInput, { target: { value: 'Senior' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkLevel: 'Senior' });
-      
+
       const locationInput = screen.getByLabelText('Lokasi Saat Ini');
       fireEvent.change(locationInput, { target: { value: 'Jakarta' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ currentLocation: 'Jakarta' });
-      
+
       const prefLocInput = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
       fireEvent.change(prefLocInput, { target: { value: 'Surabaya, Bandung, Medan' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({
         preferredLocations: ['Surabaya', 'Bandung', 'Medan'],
       });
-      
+
       const skillInput = screen.getByLabelText('Keahlian');
       fireEvent.change(skillInput, { target: { value: 'lainnya' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'lainnya' });
-      
+
       setup({ skill: 'lainnya' });
-      
+
       const otherSkillInput = screen.getByPlaceholderText('Tulis di sini keahlian kamu');
       fireEvent.change(otherSkillInput, { target: { value: 'DevOps' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ otherSkill: 'DevOps' });
@@ -399,76 +404,87 @@ describe('StepTwoForm Component', () => {
 
     test('handles changing skill from another value to "lainnya"', () => {
       const { rerender } = setup({ skill: 'Sipil' });
-      
+
       expect(screen.queryByPlaceholderText('Tulis di sini keahlian kamu')).not.toBeInTheDocument();
-      
+
       const skillInput = screen.getByLabelText('Keahlian');
       fireEvent.change(skillInput, { target: { value: 'lainnya' } });
-      
+
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'lainnya' });
-      
-      rerender(<StepTwoForm formData={{ ...defaultFormData, skill: 'lainnya' }} updateFormData={mockUpdateFormData} />);
-      
+
+      rerender(
+        <StepTwoForm
+          formData={{ ...defaultFormData, skill: 'lainnya' }}
+          updateFormData={mockUpdateFormData}
+        />
+      );
+
       expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
     });
 
     test('changing skill value properly updates state and triggers conditional rendering', () => {
       const { rerender } = setup();
-      
+
       const skillInput = screen.getByLabelText('Keahlian');
       fireEvent.change(skillInput, { target: { value: 'Sipil' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Sipil' });
-      
-      rerender(<StepTwoForm 
-        formData={{ ...defaultFormData, skill: 'Sipil' }} 
-        updateFormData={mockUpdateFormData} 
-      />);
-      
+
+      rerender(
+        <StepTwoForm
+          formData={{ ...defaultFormData, skill: 'Sipil' }}
+          updateFormData={mockUpdateFormData}
+        />
+      );
+
       expect(screen.queryByPlaceholderText('Tulis di sini keahlian kamu')).not.toBeInTheDocument();
-      
+
       fireEvent.change(skillInput, { target: { value: 'lainnya' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'lainnya' });
-      
-      rerender(<StepTwoForm 
-        formData={{ ...defaultFormData, skill: 'lainnya' }} 
-        updateFormData={mockUpdateFormData}
-      />);
-      
+
+      rerender(
+        <StepTwoForm
+          formData={{ ...defaultFormData, skill: 'lainnya' }}
+          updateFormData={mockUpdateFormData}
+        />
+      );
+
       expect(screen.getByPlaceholderText('Tulis di sini keahlian kamu')).toBeInTheDocument();
-      
+
       fireEvent.change(skillInput, { target: { value: 'Mechanical' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skill: 'Mechanical' });
     });
 
     test('validates file size for skkFile uploads', () => {
       setup();
-      
+
       const smallFile = new File(['content'], 'small-skk.pdf', { type: 'application/pdf' });
       Object.defineProperty(smallFile, 'size', { value: 1 * 1024 * 1024 });
-      
+
       const largeFile = new File(['content'], 'large-skk.pdf', { type: 'application/pdf' });
       Object.defineProperty(largeFile, 'size', { value: 6 * 1024 * 1024 });
-      
+
       const fileInput = screen.getByLabelText('SKK');
-      
+
       fireEvent.change(fileInput, { target: { files: [smallFile] } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkFile: smallFile });
-      
+
       fireEvent.change(fileInput, { target: { files: [largeFile] } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ skkFile: largeFile });
     });
-    
+
     test('renders ComboboxCheckBox with max selection message', () => {
       setup();
-      
+
       expect(screen.getByText('Pilih maksimal 5 lokasi')).toBeInTheDocument();
-      
+
       const locationsInput = screen.getByLabelText('Bersedia Ditempatkan Di Mana');
-      fireEvent.change(locationsInput, { target: { value: 'Jakarta, Bandung, Surabaya, Medan, Makassar, Bali' } });
-      
+      fireEvent.change(locationsInput, {
+        target: { value: 'Jakarta, Bandung, Surabaya, Medan, Makassar, Bali' },
+      });
+
       expect(screen.getByText('Pilih maksimal 5 lokasi')).toBeInTheDocument();
     });
-    
+
     test('displays all possible validation errors', () => {
       const validationErrors = {
         aboutMe: 'Tentang saya wajib diisi',
@@ -478,11 +494,11 @@ describe('StepTwoForm Component', () => {
         preferredLocations: 'Pilih minimal satu lokasi',
         skill: 'Keahlian wajib diisi',
         otherSkill: 'Keahlian lainnya wajib diisi',
-        skkFile: 'File SKK wajib diunggah'
+        skkFile: 'File SKK wajib diunggah',
       };
-      
+
       setup({ skill: 'Sipil' }, validationErrors);
-      
+
       expect(screen.getByText('Tentang saya wajib diisi')).toBeInTheDocument();
       expect(screen.getByText('Lama pengalaman wajib diisi')).toBeInTheDocument();
       expect(screen.getByText('Level SKK wajib diisi')).toBeInTheDocument();
@@ -490,7 +506,7 @@ describe('StepTwoForm Component', () => {
       expect(screen.getByText('Pilih minimal satu lokasi')).toBeInTheDocument();
       expect(screen.getByText('Keahlian wajib diisi')).toBeInTheDocument();
       expect(screen.getByText('File SKK wajib diunggah')).toBeInTheDocument();
-      
+
       setup({ skill: 'lainnya' }, validationErrors);
       expect(screen.getByText('Keahlian lainnya wajib diisi')).toBeInTheDocument();
     });
@@ -498,7 +514,7 @@ describe('StepTwoForm Component', () => {
     test('renders form without validation errors when validationErrors is empty', () => {
       const emptyValidationErrors = {};
       setup({}, emptyValidationErrors);
-      
+
       expect(screen.queryByText('Tentang saya wajib diisi')).not.toBeInTheDocument();
       expect(screen.queryByText('Lama pengalaman wajib diisi')).not.toBeInTheDocument();
       expect(screen.queryByText('Level SKK wajib diisi')).not.toBeInTheDocument();
@@ -507,11 +523,11 @@ describe('StepTwoForm Component', () => {
       expect(screen.queryByText('Keahlian wajib diisi')).not.toBeInTheDocument();
       expect(screen.queryByText('File SKK wajib diunggah')).not.toBeInTheDocument();
       expect(screen.queryByText('Keahlian lainnya wajib diisi')).not.toBeInTheDocument();
-      
-      expect(screen.queryByText((_content, element) => 
-        element?.className === 'error-message'
-      )).not.toBeInTheDocument();
-      
+
+      expect(
+        screen.queryByText((_content, element) => element?.className === 'error-message')
+      ).not.toBeInTheDocument();
+
       const textarea = screen.getByLabelText('Tentang Saya');
       fireEvent.change(textarea, { target: { value: 'New about me text' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: 'New about me text' });
@@ -520,19 +536,21 @@ describe('StepTwoForm Component', () => {
     test('clears skkFile error when valid file is uploaded', () => {
       const validationErrors = { skkFile: 'File SKK wajib diunggah' };
       const { rerender } = setup({}, validationErrors);
-      
+
       expect(screen.getByText('File SKK wajib diunggah')).toBeInTheDocument();
-      
+
       const validFile = new File(['content'], 'valid-skk.pdf', { type: 'application/pdf' });
       const fileInput = screen.getByLabelText('SKK');
       fireEvent.change(fileInput, { target: { files: [validFile] } });
-      
-      rerender(<StepTwoForm 
-        formData={{ ...defaultFormData, skkFile: validFile }} 
-        updateFormData={mockUpdateFormData}
-        validationErrors={{}}
-      />);
-      
+
+      rerender(
+        <StepTwoForm
+          formData={{ ...defaultFormData, skkFile: validFile }}
+          updateFormData={mockUpdateFormData}
+          validationErrors={{}}
+        />
+      );
+
       expect(screen.queryByText('File SKK wajib diunggah')).not.toBeInTheDocument();
     });
   });
