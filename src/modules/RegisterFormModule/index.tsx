@@ -35,9 +35,6 @@ export const RegisterModule = () => {
     password: '',
     passwordConfirmation: '',
   });
-  const [formCompleteness, setFormCompleteness] = useState({
-    step4Complete: false,
-  });
   const [validationErrors, setValidationErrors] = useState<{
     firstName?: string;
     lastName?: string;
@@ -69,13 +66,6 @@ export const RegisterModule = () => {
       console.log('Updated Form Data:', newData);
       return newData;
     });
-  };
-
-  const updateFormCompleteness = (isComplete: boolean) => {
-    setFormCompleteness((prev) => ({
-      ...prev,
-      step4Complete: isComplete,
-    }));
   };
 
   const isStepValid = checkStepCompleteness(formState, formData);
@@ -160,9 +150,6 @@ export const RegisterModule = () => {
       setValidationErrors(validation.errors);
 
       if (validation.isValid) {
-        updateFormCompleteness(true);
-      }
-      if (validation.isValid && formCompleteness.step4Complete) {
         navigate('/login');
       }
     }
@@ -183,17 +170,11 @@ export const RegisterModule = () => {
         validationErrors={validationErrors}
       />
     ),
-    3: (
-      <StepThreeForm 
-        formData={formData} 
-        updateFormData={updateFormData} 
-      />
-    ),
+    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: (
       <StepFourForm
         formData={formData}
         updateFormData={updateFormData}
-        updateFormCompleteness={updateFormCompleteness}
         validationErrors={validationErrors}
       />
     ),
