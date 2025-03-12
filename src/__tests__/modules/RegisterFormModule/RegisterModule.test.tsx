@@ -1,6 +1,6 @@
 /**
  * Register Module Tests
- * 
+ *
  * This file serves as an entry point for all registration form tests.
  * Individual test files test specific components of the registration process.
  */

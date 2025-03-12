@@ -16,13 +16,9 @@ interface InputProps {
 }
 
 jest.mock('@/components', () => ({
-  Typography: ({
-    children,
-    className,
-  }: {
-    children: React.ReactNode;
-    className?: string;
-  }) => <div className={className}>{children}</div>,
+  Typography: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={className}>{children}</div>
+  ),
   Stepper: ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
   ),
@@ -44,21 +40,20 @@ jest.mock('@/components', () => ({
 }));
 
 jest.mock('@/data/hargaJasa', () => ({
-    hargaJasa: {
-      operator: {
-        "1 Tahun": { min: 700000, max: 1200000 },
-      },
+  hargaJasa: {
+    operator: {
+      '1 Tahun': { min: 700000, max: 1200000 },
     },
-  }));
-  
-  jest.mock('@/data/skkLevels', () => ({
-    skkLevels: [{ value: 'operator', label: 'Operator' }],
-  }));
-  
-  jest.mock('@/data/yearsOfExperience', () => ({
-    yearsOfExperience: [{ value: '1 Tahun', label: '1 Tahun' }],
-  }));
-  
+  },
+}));
+
+jest.mock('@/data/skkLevels', () => ({
+  skkLevels: [{ value: 'operator', label: 'Operator' }],
+}));
+
+jest.mock('@/data/yearsOfExperience', () => ({
+  yearsOfExperience: [{ value: '1 Tahun', label: '1 Tahun' }],
+}));
 
 describe('StepThreeForm Component', () => {
   const defaultFormData: RegisterFormData = {
@@ -66,28 +61,37 @@ describe('StepThreeForm Component', () => {
     yearsOfExperience: '1 Tahun',
     price: '',
   };
-  
+
   const mockUpdateFormData = jest.fn();
-  
+
   const setup = (formData: Partial<RegisterFormData> = {}) => {
-    return render(<StepThreeForm formData={{ ...defaultFormData, ...formData }} updateFormData={mockUpdateFormData} />);
+    return render(
+      <StepThreeForm
+        formData={{ ...defaultFormData, ...formData }}
+        updateFormData={mockUpdateFormData}
+      />
+    );
   };
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('renders form with expected elements', () => {
     setup();
-    expect(screen.getByText('Kira-kira begini perkiraan harga kamu, cocok gak?')).toBeInTheDocument();
+    expect(
+      screen.getByText('Kira-kira begini perkiraan harga kamu, cocok gak?')
+    ).toBeInTheDocument();
     expect(screen.getByText('Perkiraan Harga')).toBeInTheDocument();
     expect(screen.getByLabelText('Tentukan Harga Kamu')).toBeInTheDocument();
   });
-  
+
   test('displays formatted price range based on form data', () => {
     setup({ skkLevel: 'operator', yearsOfExperience: '1 Tahun' });
     expect(
-      screen.getByText((content) => content.includes("Rp700.000") && content.includes("Rp1.200.000"))
+      screen.getByText(
+        (content) => content.includes('Rp700.000') && content.includes('Rp1.200.000')
+      )
     ).toBeInTheDocument();
   });
 
@@ -100,7 +104,7 @@ describe('StepThreeForm Component', () => {
     expect(container).toHaveTextContent('tahun');
     expect(container).toHaveTextContent('pengalaman kerja');
   });
-  
+
   test('updates price field correctly', () => {
     setup();
     const input = screen.getByLabelText('Tentukan Harga Kamu');

@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useEffect } from "react";
-import { Typography, Stepper, Input } from "@/components";
-import { RegisterFormData } from "@/lib/register";
+import React, { ChangeEvent, useEffect } from 'react';
+import { Typography, Stepper, Input } from '@/components';
+import { RegisterFormData } from '@/lib/register';
 
 interface StepFourFormProps {
   formData: RegisterFormData;
@@ -16,30 +16,35 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
   formData,
   updateFormData,
   updateFormCompleteness,
-  validationErrors = {}, 
+  validationErrors = {},
 }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     updateFormData({
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   useEffect(() => {
     const { password, passwordConfirmation, termsAndConditions } = formData;
-    
+
     const isComplete = !!password && !!passwordConfirmation && !!termsAndConditions;
-    
+
     updateFormCompleteness(isComplete);
-  }, [formData.password, formData.passwordConfirmation, formData.termsAndConditions, updateFormCompleteness]);
+  }, [
+    formData.password,
+    formData.passwordConfirmation,
+    formData.termsAndConditions,
+    updateFormCompleteness,
+  ]);
 
   return (
     <div>
-      <Typography variant="h5" className="text-center mb-4">
+      <Typography variant="h5" className="mb-4 text-center">
         Semuanya udah oke, yuk buat akun!
       </Typography>
       <Stepper currentStep={3} />
-      <div className="space-y-6 mt-8 mb-4">
+      <div className="mt-8 mb-4 space-y-6">
         <section>
           <div className="space-y-8">
             <Input
@@ -60,7 +65,7 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
               onChange={handleInputChange}
               error={validationErrors.passwordConfirmation}
             />
-            
+
             <div className="flex items-start">
               <input
                 type="checkbox"
@@ -68,13 +73,13 @@ export const StepFourForm: React.FC<StepFourFormProps> = ({
                 name="termsAndConditions"
                 checked={formData.termsAndConditions || false}
                 onChange={handleInputChange}
-                className="mt-1 accent-rencanakan-sea-blue-300"
+                className="accent-rencanakan-sea-blue-300 mt-1"
               />
               <Typography variant="p4" className="ml-1.5">
-                Dengan ini, saya menyatakan bahwa saya telah membaca dan menyetujui{" "}
+                Dengan ini, saya menyatakan bahwa saya telah membaca dan menyetujui{' '}
                 <a href="#" className="font-semibold underline">
                   Syarat dan Ketentuan
-                </a>{" "}
+                </a>{' '}
                 yang berlaku pada Rencanakan.id
               </Typography>
             </div>

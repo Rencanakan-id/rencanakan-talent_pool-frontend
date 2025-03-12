@@ -1,7 +1,8 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Typography } from "../atoms/typography";
-interface ImageUploadProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+import { Typography } from '../atoms/typography';
+interface ImageUploadProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'onChange'> {
   onImageChange?: (file: File | null) => void;
   label?: string;
   maxSize?: number;
@@ -13,13 +14,13 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
-    
+
     React.useEffect(() => {
       if (!selectedFile) {
         setPreview(null);
         return;
       }
-      
+
       const objectUrl = URL.createObjectURL(selectedFile);
       setPreview(objectUrl);
 
@@ -34,7 +35,9 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
       const file = e.target.files?.[0] || null;
 
       if (file && file.size > maxSize) {
-        setErrorMessage(`Ukuran gambar yang Anda unggah melebihi batas maksimum ${maxSize / (1024 * 1024)}MB.`);
+        setErrorMessage(
+          `Ukuran gambar yang Anda unggah melebihi batas maksimum ${maxSize / (1024 * 1024)}MB.`
+        );
         return;
       }
 
@@ -55,14 +58,18 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
     };
 
     return (
-      <div className="flex flex-col gap-2 w-full max-w-sm">
-        {label && <Typography variant={'p5'} className="text-rencanakan-dark-gray font-semibold text-sm">{label}</Typography>}
+      <div className="flex w-full max-w-sm flex-col gap-2">
+        {label && (
+          <Typography variant={'p5'} className="text-rencanakan-dark-gray text-sm font-semibold">
+            {label}
+          </Typography>
+        )}
         <div>
           <button
             type="button"
             className={cn(
-              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-base-gray bg-rencanakan-light-gray cursor-pointer",
-              "flex flex-col justify-center items-center gap-4 overflow-hidden",
+              'border-rencanakan-base-gray bg-rencanakan-light-gray relative aspect-square w-full max-w-[250px] cursor-pointer rounded-md border-2 border-dashed',
+              'flex flex-col items-center justify-center gap-4 overflow-hidden',
               className
             )}
             onClick={handleClick}
@@ -78,20 +85,20 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
 
             {preview ? (
               <div className="absolute inset-0">
-                <img 
-                  src={preview} 
-                  alt="Preview" 
-                  className="w-full h-full object-cover hover:brightness-90 transition duration-300 ease-in-out"
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="h-full w-full object-cover transition duration-300 ease-in-out hover:brightness-90"
                 />
                 <button
                   onClick={handleDelete}
-                  className="absolute top-2 right-2 text-white p-1 hover:text-rencanakan-error-red-100"
+                  className="hover:text-rencanakan-error-red-100 absolute top-2 right-2 p-1 text-white"
                 >
                   ✖
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full w-full">
+              <div className="flex h-full w-full flex-col items-center justify-center">
                 <label className="text-rencanakan-dark-gray font-bold">
                   <Typography variant={'p5'}>Klik di sini untuk upload</Typography>
                 </label>
@@ -99,7 +106,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             )}
           </button>
           {errorMessage && (
-            <Typography variant='small' className="text-rencanakan-error-red-100 mt-2">
+            <Typography variant="small" className="text-rencanakan-error-red-100 mt-2">
               {errorMessage}
             </Typography>
           )}
@@ -109,6 +116,6 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
   }
 );
 
-ImageUpload.displayName = "ImageUpload";
+ImageUpload.displayName = 'ImageUpload';
 
 export { ImageUpload };

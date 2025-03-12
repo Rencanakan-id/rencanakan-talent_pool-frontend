@@ -2,13 +2,13 @@ import { Button } from '@/components';
 import { ReactNode, useState } from 'react';
 import { StepOneForm } from './Section/register-1';
 import { StepTwoForm } from './Section/register-2';
-import { StepFourForm } from "./Section/register-4";
+import { StepFourForm } from './Section/register-4';
 import { RegisterFormData } from '@/lib/register';
 import { StepThreeForm } from './Section/register-3';
-import { validatePasswordSection } from "@/lib/validation/passwordValidation";
-import { validateStepOneForm } from "@/lib/validation/stepOneFormValidation";
-import { validateStepTwoForm } from "@/lib/validation/stepTwoFormValidation";
-import { useNavigate } from "react-router-dom";
+import { validatePasswordSection } from '@/lib/validation/passwordValidation';
+import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
+import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -35,7 +35,7 @@ export const RegisterModule = () => {
     skkFile: null,
   });
   const [formCompleteness, setFormCompleteness] = useState({
-    step4Complete: false
+    step4Complete: false,
   });
   const [validationErrors, setValidationErrors] = useState<{
     firstName?: string;
@@ -60,17 +60,15 @@ export const RegisterModule = () => {
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData((prev) => {
       const newData = { ...prev, ...data };
-      console.log("Updated Form Data:", newData); 
+      console.log('Updated Form Data:', newData);
       return newData;
     });
   };
-  
-
 
   const updateFormCompleteness = (isComplete: boolean) => {
-    setFormCompleteness(prev => ({
+    setFormCompleteness((prev) => ({
       ...prev,
-      step4Complete: isComplete
+      step4Complete: isComplete,
     }));
   };
 
@@ -96,13 +94,21 @@ export const RegisterModule = () => {
         console.log('Step 1 Form Data:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
-      return; 
+      return;
     }
-    
+
     if (formState === 2) {
-      const { aboutMe, yearsOfExperience, skkLevel, currentLocation, preferredLocations, skill, otherSkill } = formData;
+      const {
+        aboutMe,
+        yearsOfExperience,
+        skkLevel,
+        currentLocation,
+        preferredLocations,
+        skill,
+        otherSkill,
+      } = formData;
       console.log('Step 2 Form Data:', formData);
-      
+
       const stepTwoValidation = validateStepTwoForm({
         aboutMe,
         yearsOfExperience,
@@ -110,7 +116,7 @@ export const RegisterModule = () => {
         currentLocation,
         preferredLocations,
         skill,
-        otherSkill
+        otherSkill,
       });
 
       setValidationErrors(stepTwoValidation.errors);
@@ -122,7 +128,7 @@ export const RegisterModule = () => {
       }
       return;
     }
-    
+
     setFormState((prev) => Math.min(prev + 1, 4));
   };
 
@@ -130,13 +136,16 @@ export const RegisterModule = () => {
     setFormState((prev) => Math.max(prev - 1, 1));
   };
 
-
   const handleSubmit = async () => {
     if (formState === 4) {
       // Validate the form before submission
       const { password, passwordConfirmation, termsAndConditions } = formData;
-      const validation = validatePasswordSection(password, passwordConfirmation, termsAndConditions);
-      
+      const validation = validatePasswordSection(
+        password,
+        passwordConfirmation,
+        termsAndConditions
+      );
+
       // Set validation errors
       setValidationErrors(validation.errors);
 
@@ -145,29 +154,35 @@ export const RegisterModule = () => {
       }
       // If form is valid, proceed with submission
       if (validation.isValid && formCompleteness.step4Complete) {
-        navigate("/login");
+        navigate('/login');
       }
     }
   };
 
   const stepsContent: Record<number, ReactNode> = {
-    1: <StepOneForm 
-        formData={formData} 
-        updateFormData={updateFormData}
-        validationErrors={validationErrors} 
-        />,
-    2: <StepTwoForm 
-        formData={formData} 
+    1: (
+      <StepOneForm
+        formData={formData}
         updateFormData={updateFormData}
         validationErrors={validationErrors}
-        />,
+      />
+    ),
+    2: (
+      <StepTwoForm
+        formData={formData}
+        updateFormData={updateFormData}
+        validationErrors={validationErrors}
+      />
+    ),
     3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
-    4: <StepFourForm 
-        formData={formData} 
+    4: (
+      <StepFourForm
+        formData={formData}
         updateFormData={updateFormData}
         updateFormCompleteness={updateFormCompleteness}
         validationErrors={validationErrors}
-       />,
+      />
+    ),
   };
 
   return (

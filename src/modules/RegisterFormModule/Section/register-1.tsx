@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from "react";
-import { Typography, Stepper, Input, FileInput, ImageUpload } from "@/components";
-import { RegisterFormData } from "@/lib/register";
+import React, { ChangeEvent } from 'react';
+import { Typography, Stepper, Input, FileInput, ImageUpload } from '@/components';
+import { RegisterFormData } from '@/lib/register';
 
 interface StepOneFormProps {
   formData: RegisterFormData;
@@ -15,11 +15,11 @@ interface StepOneFormProps {
   };
 }
 
-export const StepOneForm: React.FC<StepOneFormProps> = ({ 
-  formData, 
+export const StepOneForm: React.FC<StepOneFormProps> = ({
+  formData,
   updateFormData,
   validationErrors = {},
-  }) => {
+}) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     updateFormData({ [name]: value });
@@ -27,21 +27,22 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
 
   return (
     <div>
-      <Typography variant="h5" className="mb-4 text-rencanakan-type-black">
+      <Typography variant="h5" className="text-rencanakan-type-black mb-4">
         Lengkapi formulir dan mulai perjalanan karier kamu!
       </Typography>
-      
+
       <Stepper currentStep={0} />
 
-
-      <div className="space-y-6 mt-8">
+      <div className="mt-8 space-y-6">
         <section>
-          <Typography variant="h6" className="my-2 text-rencanakan-type-black">Masukkan Data Diri</Typography>
+          <Typography variant="h6" className="text-rencanakan-type-black my-2">
+            Masukkan Data Diri
+          </Typography>
 
-          <div className="space-y-1 mb-6 mt-4">
-            <ImageUpload label="Foto Diri" maxSize={5*1024*1024} />
+          <div className="mt-4 mb-6 space-y-1">
+            <ImageUpload label="Foto Diri" maxSize={5 * 1024 * 1024} />
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex space-x-2">
               <Input
@@ -103,28 +104,30 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
         </section>
 
         <section>
-          <Typography variant="h6" className="mb-4">Upload Dokumen</Typography>
+          <Typography variant="h6" className="mb-4">
+            Upload Dokumen
+          </Typography>
 
           <div className="space-y-4">
-            <FileInput 
-              data-slot="input" 
-              textLabel="Foto KTP" 
+            <FileInput
+              data-slot="input"
+              textLabel="Foto KTP"
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.ktpFile ? 'filled' : 'empty'}
               value={formData.ktpFile?.name || ''}
               onFileSelect={(file) => updateFormData({ ktpFile: file })}
             />
-            <FileInput 
-              data-slot="input" 
-              textLabel="Foto NPWP" 
+            <FileInput
+              data-slot="input"
+              textLabel="Foto NPWP"
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.npwpFile ? 'filled' : 'empty'}
               value={formData.npwpFile?.name || ''}
               onFileSelect={(file) => updateFormData({ npwpFile: file })}
             />
-            <FileInput 
-              data-slot="input" 
-              textLabel="Scan Ijazah" 
+            <FileInput
+              data-slot="input"
+              textLabel="Scan Ijazah"
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.diplomaFile ? 'filled' : 'empty'}
               value={formData.diplomaFile?.name || ''}
