@@ -3,7 +3,7 @@ import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from
 import { Combobox } from '@/components/ui/combobox';
 import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 import { locations } from '@/data/location';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export const DesignSystemModule = () => {
   // State untuk mengontrol modal
