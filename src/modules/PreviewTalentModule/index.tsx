@@ -5,24 +5,24 @@ import UserProfileCard, { UserProfile } from '@/components/ui/profile';
 import { ArrowLeft, BookmarkIcon } from 'lucide-react';
 import Location from '@/components/ui/location';
 import Cookies from 'js-cookie';
+import { useAuth } from '@/components/context/authContext';
 
 export const PreviewTalentModule: React.FC = () => {
   console.log("PreviewTalentModule rendered");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [experience, setExperience] = useState<ExperienceDetail[] | null>(null);
-  const [token, setToken] = useState('');
-
-  useEffect(() => {
-    const value = Cookies.get('jwt');
-    setToken(value || '');
-  }, []);
+  const { user, token} = useAuth() 
+  // useEffect(() => {
+  //   // const value = Cookies.get('jwt');
+  //   // setToken(value || '');
+  // }, []);
 
   useEffect(() => {
     const VITE_BE_URL = 'http://localhost:8080';
 
     const fetchUserProfile = async () => {
       try {
-        const res = await fetch(`${VITE_BE_URL}/api/user`, {
+        const res = await fetch(`${VITE_BE_URL}/api/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,15 +43,15 @@ export const PreviewTalentModule: React.FC = () => {
 
     const fetchExperience = async () => {
       try {
-        const res = await fetch(`${VITE_BE_URL}/api/experiences`, {
+        const res = await fetch(`${VITE_BE_URL}/api/experiences/${user.id}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`  
           },
         });
 
         if (res.ok) {
-          const data = await res.json();
-          setExperience(data);
+          const resData = await res.json();
+          setExperience(resData.data || null);
         } else {
           console.error(`Unexpected response status: ${res.status}`);
           setExperience(null);
@@ -93,7 +93,7 @@ export const PreviewTalentModule: React.FC = () => {
         </div>
 
         <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-x-6 md:space-y-0">
-          <img src="image-3.png" alt="Logo" className="h-[330px] w-[298px]" />
+          <img src="profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
           <div className="w-full flex-col items-center space-y-4">
             <UserProfileCard user={userProfile} />
             <Experience experiences={experience} />
