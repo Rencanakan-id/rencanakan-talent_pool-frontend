@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { LoginForm } from './Section/login';
 import { LoginFormData } from '@/lib/login';
+import { useNavigate } from 'react-router-dom';
 // import AuthService from "@/services/AuthService";
 
 const LoginModule = () => {
@@ -20,6 +21,8 @@ const LoginModule = () => {
   };
 
   const isFormValid = !!formData.email && !!formData.password;
+
+  const navigate = useNavigate();
 
   const validateFormOnSubmit = () => {
     let isValid = true;
@@ -69,17 +72,18 @@ const LoginModule = () => {
     try {
       console.log(formData);
       // TODO: ganti api dengan variabel di env file
-      const response = await fetch('http://50.17.124.12:8000/api/auth/login-talent', {
-        body: JSON.stringify(formData),
-        method: 'POST',
+      const response = await fetch('http://localhost:8080/api/auth/login', {
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json',
+          'Accept': 'application/json',
         },
+        body: JSON.stringify(formData),
+        method: 'POST',
       });
       await processLoginResponse(response);
+      console.log(response);
       // // Tambahkan navigasi ke halaman utama
-      // // navigate('/home');
+      navigate('/');
     } catch (error) {
       if (error instanceof Error && (error as any).response) {
         console.error('Login Failed:', (error as any).response.data);
