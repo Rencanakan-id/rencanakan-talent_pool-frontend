@@ -13,7 +13,7 @@ export const hargaJasa = {
     '5 Tahun': { min: 1800000, max: 3500000 },
     '> 5 Tahun': { min: 2000000, max: 4500000 },
   },
-  'ahli-profesional': {
+  'profesional': {
     '< 1 Tahun': { min: 1000000, max: 2000000 },
     '1 Tahun': { min: 1500000, max: 3000000 },
     '2-3 Tahun': { min: 2000000, max: 4000000 },
