@@ -30,12 +30,12 @@ const LoginModule = () => {
     let commentErr = '';
 
     if ((formData.email ?? '').length < 4) {
-      emailErr = 'Email harus memiliki setidaknya 4 karakter';
+      emailErr = 'Email yang dimasukkan tidak valid';
       isValid = false;
     }
 
     if ((formData.password ?? '').length < 6) {
-      commentErr = 'Kata sandi harus memiliki setidaknya 6 karakter';
+      commentErr = 'Kata sandi harus memiliki setidaknya 8 karakter';
       isValid = false;
     }
 
@@ -44,12 +44,14 @@ const LoginModule = () => {
 
   const processLoginResponse = async (response: Response) => {
     const result = await response.json();
-    if (result.status === 'success') {
+    console.log(response.ok);
+    if (response.ok) {
       console.log(result);
-      const token = result.data.token.plainTextToken;
+      const token = result.token;
       document.cookie = `access_token=${token}; path=/; Secure; SameSite=None`;
       console.log('berhasil');
       console.log(token);
+      navigate('/preview');
       return true;
     } else {
       console.log('gagal');
@@ -81,9 +83,8 @@ const LoginModule = () => {
         method: 'POST',
       });
       await processLoginResponse(response);
-      console.log(response);
       // // Tambahkan navigasi ke halaman utama
-      navigate('/');
+      // navigate('/');
     } catch (error) {
       if (error instanceof Error && (error as any).response) {
         console.error('Login Failed:', (error as any).response.data);
