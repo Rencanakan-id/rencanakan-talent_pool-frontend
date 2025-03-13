@@ -87,7 +87,7 @@ export const DesignSystemModule = () => {
         <Combobox data={locations} label="Lokasi" />
       </div>
       <div className="w-full space-y-4">
-        <Combobox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+        <Combobox data={locations} label="Lokasi" error="Field tidak boleh kosong" />
       </div>
       <div className="w-full space-y-4">
         <ComboboxCheckBox data={locations} label="Lokasi" />
