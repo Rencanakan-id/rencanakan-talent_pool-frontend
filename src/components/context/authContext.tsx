@@ -1,3 +1,5 @@
+
+
 import { DEFAULT_USER } from "@/types/const";
 import { UserProps } from "@/types/interface";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -7,7 +9,7 @@ import Cookies from 'js-cookie';
 
 interface AuthContextProps {
     user: UserProps;
-    login: () => void;
+    login: (token: string) => void;
     logout: () => void;
     isAuthenticated: boolean;
     token: string;
@@ -40,15 +42,14 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                 const decodedUser = jwtDecode<UserProps>(token);
                 setUser(decodedUser);
                 setIsAuthenticated(true);
-
-                const res = await axios.get(`${process.env.BASE_URL}/auth/me`, {
+                const res = await axios.get(`${process.env.BASE_URL}/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
                 if (res.status === 200) {
-                    const jwt = Cookies.get('jwt') || "";
+                    const jwt = Cookies.get('token') || "";
                     const decodedUser = jwtDecode<UserProps>(jwt);
                     setUser(decodedUser);
                     setToken(jwt);
@@ -60,7 +61,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                 console.error('Error decoding token or token not authorized:', error);
                 setIsAuthenticated(false);
                 setUser(DEFAULT_USER);
-                Cookies.remove('jwt');
+                Cookies.remove('token');
                 setToken('');
             }
         }
@@ -72,9 +73,9 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
     }, [token]);
 
     useEffect(() => {
-        const jwt = Cookies.get("jwt");
+        const jwt = Cookies.get("token");
         if (jwt) {
-            Cookies.set('jwt', jwt);
+            Cookies.set('token', jwt);
             try {
                 const decodedUser = jwtDecode<UserProps>(jwt);
                 setUser(decodedUser);
@@ -87,13 +88,20 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
         }
     }, []);
 
-    const login = () => {
-        //TODO: HANDLE LOGIN
-    };
+    const login = (token: string) => {
+        console.log(token, "ini tok")
+        // Cookies.set('token', token); // Simpan token di cookie
+        Cookies.set('token', token);
+        const decodedUser = jwtDecode<UserProps>(token); // Dekode token
+        setUser(decodedUser); // Set data pengguna
+        console.log("ANAK")
+        setToken(token); // Set token
+        setIsAuthenticated(true); // Set status otentikasi menjadi true
+      };
 
     const logout = () => {
         setIsLoggingOut(true);
-        Cookies.remove('jwt');
+        Cookies.remove('token');
         Cookies.remove('user');
         setToken('');
         setIsAuthenticated(false);
