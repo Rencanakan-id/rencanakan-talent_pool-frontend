@@ -57,13 +57,15 @@ export const RegisterModule = () => {
     password?: string;
     passwordConfirmation?: string;
   }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData((prev) => {
       const newData = { ...prev, ...data };
-      console.log('Updated Form Data:', newData);
+      // console.log('Updated Form Data:', newData);
       return newData;
     });
   };
@@ -74,7 +76,7 @@ export const RegisterModule = () => {
     if (formState === 1) {
       const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } =
         formData;
-      console.log('Step 1 Form Data:', formData);
+      // console.log('Step 1 Form Data:', formData);
       const stepOneValidation = validateStepOneForm({
         firstName,
         lastName,
@@ -88,10 +90,10 @@ export const RegisterModule = () => {
       });
 
       setValidationErrors(stepOneValidation.errors);
-      console.log('Step 1 Validation:', stepOneValidation);
+      // console.log('Step 1 Validation:', stepOneValidation);
 
       if (stepOneValidation.isValid) {
-        console.log('Step 1 Form Data:', formData);
+        // console.log('Step 1 Form Data:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
       return;
@@ -108,7 +110,7 @@ export const RegisterModule = () => {
         otherSkill,
         skkFile,
       } = formData;
-      console.log('Step 2 Form Data:', formData);
+      // console.log('Step 2 Form Data:', formData);
 
       const stepTwoValidation = validateStepTwoForm({
         aboutMe,
@@ -122,10 +124,10 @@ export const RegisterModule = () => {
       });
 
       setValidationErrors(stepTwoValidation.errors);
-      console.log('Step 2 Validation:', stepTwoValidation);
+      // console.log('Step 2 Validation:', stepTwoValidation);
 
       if (stepTwoValidation.isValid) {
-        console.log('Step 2 Form Data Valid:', formData);
+        // console.log('Step 2 Form Data Valid:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
       return;
@@ -136,6 +138,21 @@ export const RegisterModule = () => {
 
   const handlePrev = () => {
     setFormState((prev) => Math.max(prev - 1, 1));
+  };
+
+  const parseExperienceYears = (yearsExp: string): number => {
+    switch (yearsExp) {
+      case '1 Tahun':
+        return 1;
+      case '2-3 Tahun':
+        return 2;
+      case '5 Tahun':
+        return 3;
+      case '> 5 Tahun':
+        return 4;
+      default:
+        return 0;
+    }
   };
 
   const handleSubmit = async () => {
@@ -150,7 +167,56 @@ export const RegisterModule = () => {
       setValidationErrors(validation.errors);
 
       if (validation.isValid) {
-        navigate('/login');
+        setSubmitError(null);
+        setIsSubmitting(true);
+
+        try {
+          const requestData = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phoneNumber: formData.phoneNumber,
+            nik: formData.nik,
+            npwp: formData.npwp,
+            aboutMe: formData.aboutMe,
+            experienceYears: parseExperienceYears(formData.yearsOfExperience || ''),
+            skkLevel: formData.skkLevel,
+            currentLocation: formData.currentLocation,
+            preferredLocations: formData.preferredLocations || [],
+            skill: formData.skill === 'lainnya' ? formData.otherSkill : formData.skill,
+            price: formData.price,
+            password: formData.password
+          };
+
+          console.log('Registration request data:', requestData);
+          const response = await fetch('http://localhost:8080/api/auth/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Registration failed');
+          }
+
+          const responseData = await response.json().catch(() => ({}));
+          console.log('Registration successful:', responseData);
+          
+          navigate('/login');
+        } catch (error) {
+          console.error('Registration error:', error);
+          setSubmitError(
+            error instanceof Error 
+              ? error.message 
+              : 'Failed to register. Please check if the server is running and CORS is properly configured.'
+          );
+        } finally {
+          setIsSubmitting(false);
+        }
       }
     }
   };
@@ -190,18 +256,24 @@ export const RegisterModule = () => {
       <div className="bg-rencanakan-pure-white mx-auto flex h-screen flex-col justify-center overflow-y-auto rounded-t-xl px-8 py-6 drop-shadow-md md:h-full md:w-lg md:rounded-xl">
         {stepsContent[formState]}
 
+        {submitError && (
+          <div className="mt-4 rounded-md bg-red-100 p-3 text-red-700">
+            <p>{submitError}</p>
+          </div>
+        )}
+
         <div className="mt-4 flex justify-end space-x-2">
           {formState !== 1 && (
-            <Button variant="primary-outline" onClick={handlePrev}>
+            <Button variant="primary-outline" onClick={handlePrev} disabled={isSubmitting}>
               Kembali
             </Button>
           )}
           <Button
             variant="primary"
             onClick={formState === 4 ? handleSubmit : handleNext}
-            disabled={!isStepValid}
+            disabled={!isStepValid || isSubmitting}
           >
-            {formState === 4 ? 'Daftar Kerja' : 'Selanjutnya'}
+            {isSubmitting ? 'Memproses...' : formState === 4 ? 'Daftar Kerja' : 'Selanjutnya'}
           </Button>
         </div>
       </div>
