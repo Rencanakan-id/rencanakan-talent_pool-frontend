@@ -9,10 +9,16 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
+        profileGray: 'bg-rencanakan-lightest-gray border-transparent text-black rounded-[4px]',
+        profileOrange:
+          'bg-rencanakan-premium-gold-100 border-transparent text-rencanakan-premium-gold-500 rounded-[4px]',
+        profileLocation:
+          'bg-rencanakan-light-gray border-transparent text-rencanakan-dark-gray rounded-[4px]',
         location:
-          'bg-rencanakan-sea-blue-100 border-transparent text-blue-700 text-secondary-foreground  hover:bg-rencanakan-sea-blue-200 hover:text-blue-900',
+          'bg-rencanakan-sea-blue-100 border-transparent text-blue-700 text-secondary-foreground hover:bg-rencanakan-sea-blue-200 hover:text-blue-900',
       },
     },
+
     defaultVariants: {
       variant: 'location',
     },

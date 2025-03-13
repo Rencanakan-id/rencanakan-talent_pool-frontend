@@ -2,8 +2,69 @@ import { Typography, Textarea, ImageUpload, Button, FileInput, Input, Modal } fr
 import { Mail, Search, ArrowRight, ChevronRight, User, Bell, ExternalLink } from 'lucide-react';
 import { Combobox } from '@/components/ui/combobox';
 import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
+import Location from '@/components/ui/location';
+import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
-import { useState } from 'react';
+import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
+const dummyExperience= [
+  {
+    id: 1,
+    title: 'Software Engineer',
+    company: 'Tech Corp',
+    employmentType: 'FULL_TIME' as EmploymentType,
+    startDate: '2020-06-01',
+    endDate: '2023-08-31',
+    location: 'Jakarta, Indonesia',
+    locationType: 'ON_SITE' as LocationType,
+    talentId: 101,
+  },
+  {
+    id: 2,
+    title: 'Frontend Developer',
+    company: 'Startup XYZ',
+    employmentType: 'FULL_TIME' as EmploymentType, 
+    startDate: '2019-02-15',
+    endDate: '2020-05-30',
+    location: 'Remote',
+    locationType: 'ON_SITE' as LocationType, 
+    talentId: 102,
+  },
+  {
+    id: 3,
+    title: 'Backend Developer',
+    company: 'Enterprise Solutions',
+    employmentType: 'FULL_TIME' as EmploymentType, 
+    startDate: '2018-09-01',
+    endDate: '2019-12-15',
+    location: 'Bandung, Indonesia',
+    locationType: 'ON_SITE' as LocationType, 
+    talentId: 103,
+  },
+];
+
+
+const dummyUser = {
+  id: '1',
+  firstName: 'Gabriella',
+  price: 7500000,
+  lastName: 'Naomi',
+  email: 'gabriella@example.com',
+  phoneNumber: '+62 8123456789',
+  address: 'Jl. Sudirman No. 1, Jakarta',
+  job: 'Software Engineer',
+  photo: 'https://via.placeholder.com/150',
+  aboutMe: 'Passionate about web development and cloud computing.',
+  nik: '1234567890123456',
+  npwp: '12.345.678.9-012.345',
+  photoKtp: 'https://via.placeholder.com/150',
+  photoNpwp: 'https://via.placeholder.com/150',
+  photoIjazah: 'https://via.placeholder.com/150',
+  experienceYears: 5,
+  skkLevel: 'Senior',
+  currentLocation: 'Jakarta, Indonesia',
+  preferredLocations: ['Bali', 'Surabaya', 'Bandung'],
+  skill: 'React, NestJS, Kubernetes',
+};import { useState } from 'react';
 
 export const DesignSystemModule = () => {
   // State untuk mengontrol modal
@@ -30,6 +91,37 @@ export const DesignSystemModule = () => {
       </div>
       <div className="w-full space-y-4">
         <ComboboxCheckBox data={locations} label="Lokasi" />
+      </div>
+      <div className="w-full space-y-4">
+        {/* <Combobox /> */}
+        <UserProfileCard user={dummyUser} />
+      </div>
+      <div className="w-full space-y-4">
+        <h1> Location on Profile</h1>
+        <Location
+          data={[
+            'Jakarta',
+            'Surabaya',
+            'Bandung',
+            'Medan',
+            'Semarang',
+            'Makassar',
+            'Palembang',
+            'Yogyakarta',
+            'Denpasar',
+            'Balikpapan',
+            'Jakarta',
+            'Surabaya',
+            'Bandung',
+            'Medan',
+            'Semarang',
+            'Makassar',
+            'Palembang',
+            'Yogyakarta',
+            'Denpasar',
+            'Balikpapan',
+          ]}
+        />
       </div>
       <div className="w-full space-y-4">
         <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
@@ -156,6 +248,10 @@ export const DesignSystemModule = () => {
             </Button>
           </div>
         </div>
+      </div>
+      <div>
+        <h1> Experience Detail </h1>
+        <Experience experiences={dummyExperience}/>
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
