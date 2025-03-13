@@ -93,22 +93,41 @@ export const RegisterModule = () => {
 
   const handleSubmit = async () => {
     if (formState === 4) {
-      // Validate the form before submission
       const { password, passwordConfirmation, termsAndConditions } = formData;
       const validation = validatePasswordSection(password, passwordConfirmation, termsAndConditions);
-      
+  
       // Set validation errors
       setValidationErrors(validation.errors);
-
+  
       if (validation.isValid) {
         updateFormCompleteness(true);
       }
-      // If form is valid, proceed with submission
+  
       if (validation.isValid && formCompleteness.step4Complete) {
-        navigate("/login");
+        try {
+          const response = await fetch("http://localhost:8080/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify(formData),
+          });
+  
+          const data = await response.json();
+  
+          if (!response.ok) {
+            throw new Error(data.message || "Registration failed");
+          }
+  
+          console.log("Registration successful:", data);
+          navigate("/login"); // Redirect on success
+        } catch (error) {
+          console.error("Error during registration:", error);;
+        }
       }
     }
-  };
+  }
 
   const stepsContent: Record<number, ReactNode> = {
     1: <StepOneForm 
