@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Typography } from '../atoms/typography';
-
 interface ImageUploadProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'onChange'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'value' | 'onChange'> {
   onImageChange?: (file: File | null) => void;
   label?: string;
   maxSize?: number;
+  initialImage?: File | null;
 }
 
 const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
-  ({ label, className, onImageChange, maxSize = 5 * 1024 * 1024, ...props }) => {
-    const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  (
+    { label, className, onImageChange, maxSize = 5 * 1024 * 1024, initialImage = null, ...props },
+    ref
+  ) => {
+    const [selectedFile, setSelectedFile] = React.useState<File | null>(initialImage);
     const [preview, setPreview] = React.useState<string | null>(null);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -27,6 +30,12 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
 
       return () => URL.revokeObjectURL(objectUrl);
     }, [selectedFile]);
+
+    React.useEffect(() => {
+      if (initialImage) {
+        setSelectedFile(initialImage);
+      }
+    }, [initialImage]);
 
     const handleClick = () => {
       fileInputRef.current?.click();
@@ -66,34 +75,58 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
           </Typography>
         )}
         <div>
-          <button
-            type="button"
+          <div
             className={cn(
-              "relative w-full aspect-square max-w-[250px] rounded-md border-2 border-dashed border-rencanakan-base-gray bg-rencanakan-light-gray cursor-pointer",
-              "flex flex-col justify-center items-center gap-4 overflow-hidden",
+              'border-rencanakan-base-gray bg-rencanakan-light-gray relative aspect-square w-full max-w-[250px] cursor-pointer rounded-md border-2 border-dashed',
+              'flex flex-col items-center justify-center gap-4 overflow-hidden',
               className
             )}
             onClick={handleClick}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleClick();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label={label || 'Upload image'}
             {...props}
           >
             <input
               type="file"
               accept="image/*"
               className="hidden"
-              ref={fileInputRef}
+              ref={ref || fileInputRef}
               onChange={handleFileChange}
             />
 
             {preview ? (
               <div className="absolute inset-0">
-                <img 
-                  src={preview} 
-                  alt="Preview" 
-                  className="w-full h-full object-cover hover:brightness-90 transition duration-300 ease-in-out"
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="h-full w-full object-cover transition duration-300 ease-in-out hover:brightness-90"
                 />
                 <button
-                  onClick={handleDelete}
-                  className="absolute top-2 right-2 text-white p-1 hover:text-rencanakan-error-red-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(e);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedFile(null);
+                      setPreview(null);
+                      if (onImageChange) {
+                        onImageChange(null);
+                      }
+                    }
+                  }}
+                  className="hover:bg-rencanakan-error-red-100 focus:ring-rencanakan-error-red-100 absolute top-2 right-2 cursor-pointer rounded-full bg-white p-1 text-gray-700 shadow-sm hover:text-white focus:ring-2 focus:outline-none"
+                  aria-label="Delete image"
+                  tabIndex={0}
                 >
                   ✖
                 </button>
@@ -105,7 +138,7 @@ const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                 </label>
               </div>
             )}
-          </button>
+          </div>
           {errorMessage && (
             <Typography variant="small" className="text-rencanakan-error-red-100 mt-2">
               {errorMessage}

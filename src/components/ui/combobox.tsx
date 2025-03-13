@@ -85,14 +85,14 @@ export function Combobox({
             </Button>
             <Typography
               variant="p5"
-              className={`absolute -top-2 left-3 bg-white px-1`}
+              className={`text-rencanakan-dark-gray absolute -top-2 left-3 bg-white px-1`}
             >
               {label}
             </Typography>
           </PopoverTrigger>
         </div>
         <PopoverContent
-          className="border-rencanakan-light-gray w-full p-0 pt-2 bg-white"
+          className="border-rencanakan-light-gray w-full bg-white p-0 pt-2"
           style={{ width: width }}
         >
           <Command>
@@ -119,7 +119,7 @@ export function Combobox({
         </PopoverContent>
       </Popover>
       {error && (
-        <Typography variant="small" className="mt-1 text-rencanakan-error-red-100">
+        <Typography variant="small" className="text-rencanakan-error-red-100 mt-1">
           {error}
         </Typography>
       )}
