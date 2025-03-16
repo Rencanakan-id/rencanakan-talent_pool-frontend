@@ -34,15 +34,15 @@ export const Navbar: React.FC = () => {
             <Typography variant="h6" className="mr-3 font-medium">
               Yoga Listyadana
             </Typography>
-            <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
+            <img src="./dummy/profile.svg" alt="Profile" className="mr-1" />
           </div>
 
           <div className="hidden lg:flex">
-            <Button 
+            <Button
               variant={'primary'}
               size={'lg'}
               onClick={handleLogout}
-              className="transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+              className="bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400 transition-colors duration-200"
             >
               <Typography variant="p2" className="font-medium">
                 Logout
@@ -92,8 +92,8 @@ export const Navbar: React.FC = () => {
               </Typography>
             </a>
           ))}
-          
-          <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
+
+          <div className="flex w-full items-center justify-between border-t border-gray-200 px-6 py-5">
             <div className="flex items-center gap-2">
               <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
               <Typography variant="p2" className="font-medium">
@@ -103,7 +103,7 @@ export const Navbar: React.FC = () => {
             <Button
               variant="primary"
               size={'lg'}
-              className="flex items-center gap-1 px-3 py-1 transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+              className="bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400 flex items-center gap-1 px-3 py-1 transition-colors duration-200"
               onClick={handleLogout}
             >
               <Typography variant="p2" className="font-medium">

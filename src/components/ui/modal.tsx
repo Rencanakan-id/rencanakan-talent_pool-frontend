@@ -4,37 +4,31 @@ import { cn } from '@/lib/utils';
 import { Typography } from '@/components';
 
 // Variants for the modal container (backdrop)
-const modalVariants = cva(
-  'fixed inset-0 z-50 flex items-center justify-center bg-black/50',
-  {
-    variants: {
-      isError: {
-        true: '',
-        false: '',
-      },
+const modalVariants = cva('fixed inset-0 z-50 flex items-center justify-center bg-black/50', {
+  variants: {
+    isError: {
+      true: '',
+      false: '',
     },
-    defaultVariants: {
-      isError: false,
-    },
-  }
-);
+  },
+  defaultVariants: {
+    isError: false,
+  },
+});
 
 // Variants for the modal content
-const modalContentVariants = cva(
-  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto',
-  {
-    variants: {
-      size: {
-        small: 'p-4 w-auto max-w-sm',
-        medium: 'p-6 w-auto max-w-md',
-        large: 'p-8 w-auto max-w-lg',
-      },
+const modalContentVariants = cva('relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto', {
+  variants: {
+    size: {
+      small: 'p-4 w-auto max-w-sm',
+      medium: 'p-6 w-auto max-w-md',
+      large: 'p-8 w-auto max-w-lg',
     },
-    defaultVariants: {
-      size: 'medium',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'medium',
+  },
+});
 
 // Props interface for the Modal component
 interface ModalProps
@@ -51,16 +45,7 @@ interface ModalProps
 // Modal Component
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
   (
-    {
-      className,
-      isOpen,
-      onClose,
-      title,
-      children,
-      size = 'medium',
-      isError = false,
-      ...props
-    },
+    { className, isOpen, onClose, title, children, size = 'medium', isError = false, ...props },
     ref
   ) => {
     // Disable body scrolling when modal is open
@@ -81,24 +66,20 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     if (!isOpen) return null;
 
     return (
-      <div
-        className={cn(modalVariants({ isError }), className)}
-        {...props}
-        ref={ref}
-      >
+      <div className={cn(modalVariants({ isError }), className)} {...props} ref={ref}>
         {/* Modal Content */}
         <div className={cn(modalContentVariants({ size }))}>
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors"
+            className="absolute top-2 right-2 text-gray-500 transition-colors hover:text-gray-700"
           >
             &times;
           </button>
 
           {/* Title */}
           {title && (
-            <Typography variant="h6" className="mb-4 text-rencanakan-main-black">
+            <Typography variant="h6" className="text-rencanakan-main-black mb-4">
               {title}
             </Typography>
           )}
