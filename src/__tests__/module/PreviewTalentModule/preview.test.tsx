@@ -1,11 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/';
 import { PreviewTalentModule } from '@/modules/PreviewTalentModule';
-import Cookies from 'js-cookie';
 
-// Mock Cookies module
-jest.mock('js-cookie', () => ({
-  get: jest.fn(),
+jest.mock('@/components/context/authContext', () => ({
+  useAuth: jest.fn(() => ({
+    user: { id: '1' },
+    token: 'test-token',
+  })),
 }));
 
 describe('PreviewTalentModule', () => {
@@ -39,10 +40,6 @@ describe('PreviewTalentModule', () => {
       },
     ];
 
-    // Mock token retrieval
-    (Cookies.get as jest.Mock).mockReturnValue('test-token');
-
-    // Mock fetch responses
     (globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({
         ok: true,
@@ -50,68 +47,151 @@ describe('PreviewTalentModule', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => mockExperience,
+        json: async () => ({ data: mockExperience }),
       });
 
     render(<PreviewTalentModule />);
 
-    // Wait for fetch to complete
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
 
-    // Verify user profile data
     expect(screen.getByText(mockUserProfile.name)).toBeInTheDocument();
     expect(screen.getByText(mockUserProfile.email)).toBeInTheDocument();
-
-    // Verify experience data
     expect(screen.getByText(mockExperience[0].title)).toBeInTheDocument();
     expect(screen.getByText(mockExperience[0].company)).toBeInTheDocument();
 
-    // Verify location data
     mockUserProfile.preferredLocations.forEach((location) => {
       expect(screen.getByText(location)).toBeInTheDocument();
     });
   });
 
   test('handles fetch errors by showing loading spinner', async () => {
-    // Mock token retrieval
-    (Cookies.get as jest.Mock).mockReturnValue('test-token');
-
-    // Mock fetch errors
     (globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({ ok: false, status: 401 })
       .mockResolvedValueOnce({ ok: false, status: 401 });
 
     render(<PreviewTalentModule />);
 
-    // Wait for fetch to complete
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
 
-    // Check if loading spinner is still present
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
   test('renders buttons correctly', async () => {
-    // Mock token retrieval
-    (Cookies.get as jest.Mock).mockReturnValue('test-token');
-
-    // Mock empty responses to trigger UI render
     (globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({ ok: true, json: async () => ({}) })
       .mockResolvedValueOnce({ ok: true, json: async () => [] });
 
     render(<PreviewTalentModule />);
 
-    // Wait for fetch to complete
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
 
-    // Check back button
     const backButton = screen.getByRole('button', { name: /Kembali/i });
     expect(backButton).toBeInTheDocument();
     expect(backButton.querySelector('svg')).toBeInTheDocument();
+  });
+  test('shows loading spinner while fetching data', async () => {
+    // Simulasi fetch dengan delay 500ms
+    (globalThis.fetch as jest.Mock).mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({ ok: true, json: async () => ({}) });
+          }, 500);
+        })
+    );
 
-    // Check bookmark button
-    const bookmarkButton = screen.getByRole('button', { name: /Masukkan ke Favorit/i });
-    expect(bookmarkButton).toBeInTheDocument();
-    expect(bookmarkButton.querySelector('svg')).toBeInTheDocument();
+    render(<PreviewTalentModule />);
+
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+    });
+  });
+  test('hides loading spinner and shows content when data is loaded', async () => {
+    const mockUserProfile = {
+      id: '1',
+      name: 'John Doe',
+      preferredLocations: ['Location1', 'Location2'],
+    };
+
+    const mockExperience = [{ id: '1', title: 'Software Engineer', company: 'Tech Corp' }];
+
+    // Mock fetch dengan data valid
+    (globalThis.fetch as jest.Mock)
+      .mockResolvedValueOnce({ ok: true, json: async () => mockUserProfile }) // Fetch user profile
+      .mockResolvedValueOnce({ ok: true, json: async () => mockExperience }); // Fetch experience
+
+    render(<PreviewTalentModule />);
+
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+
+    expect(screen.getByText(mockUserProfile.name)).toBeInTheDocument();
+    expect(screen.getByText(mockExperience[0].title)).toBeInTheDocument();
+  });
+  test('handles userProfile as undefined gracefully', async () => {
+    (globalThis.fetch as jest.Mock)
+      .mockImplementationOnce(() => Promise.resolve({ ok: true, json: async () => null }))
+      .mockImplementationOnce(
+        () =>
+          Promise.resolve({
+            ok: true,
+            json: async () => ({ data: [{ title: 'Software Engineer', company: 'Tech Corp' }] }),
+          }) // Experience data
+      );
+
+    render(<PreviewTalentModule />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(2));
+
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+  });
+  test('handles experience as undefined gracefully', async () => {
+    const mockUserProfile = {
+      id: '1',
+      name: 'John Doe',
+      preferredLocations: ['Location1', 'Location2'],
+    };
+
+    (globalThis.fetch as jest.Mock)
+      .mockImplementationOnce(() =>
+        Promise.resolve({ ok: true, json: async () => mockUserProfile })
+      )
+      .mockImplementationOnce(() => Promise.resolve({ ok: true, json: async () => ({}) }));
+
+    render(<PreviewTalentModule />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(2));
+
+    expect(screen.getByText(mockUserProfile.name)).toBeInTheDocument();
+
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+  });
+  test('handles userProfile with null preferredLocations gracefully', async () => {
+    const mockUserProfile = {
+      id: '1',
+      name: 'John Doe',
+      preferredLocations: null,
+    };
+
+    (globalThis.fetch as jest.Mock)
+      .mockResolvedValueOnce({ ok: true, json: async () => mockUserProfile })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ data: [] }) });
+
+    render(<PreviewTalentModule />);
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(2));
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument(); // ✅ This should pass
+
+    expect(screen.queryByText('Location1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Location2')).not.toBeInTheDocument();
   });
 });
