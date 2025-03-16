@@ -76,10 +76,6 @@ export const PreviewTalentModule: React.FC = () => {
             <ArrowLeft size={20} />
             <span>Kembali</span>
           </Button>
-          <Button variant="primary" className="flex py-2">
-            <BookmarkIcon className="h-6 w-6 text-white" />
-            <span>Masukkan ke Favorit</span>
-          </Button>
         </div>
 
         <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-y-0 md:space-x-6">

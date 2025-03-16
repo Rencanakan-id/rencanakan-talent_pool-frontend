@@ -53,15 +53,7 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
         </div>
       </div>
       <div className="bg-rencanakan-lightest-gray relative flex w-full flex-col justify-center space-y-2 p-6 md:flex-row md:items-center md:justify-start">
-        {/* Button di atas kalau layar kecil */}
-        {/* 
-        <div className="flex w-full justify-center md:absolute md:top-1/2 md:right-6 md:-translate-y-1/2 md:justify-end">
-          <Button variant="primary" className="py-4">
-            Hubungi {user.firstName}
-          </Button>
-        </div> */}
-
-        {/* Text bagian harga */}
+      
         <div className="flex w-full flex-col items-center md:items-start">
           <Typography variant="p2" className="text-gray-600">
             Perkiraan Harga
