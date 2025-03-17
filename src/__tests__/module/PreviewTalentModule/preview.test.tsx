@@ -134,9 +134,9 @@ describe('PreviewTalentModule', () => {
   });
 
   test('handles missing user gracefully', async () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: null });
-    (useUserProfile as jest.Mock).mockReturnValue({ userProfile: {}, isLoading: false });
-    (useExperience as jest.Mock).mockReturnValue({ experience: [], isLoading: false });
+    (useAuth as jest.Mock).mockReturnValue({ token: null, user:null });
+    (useUserProfile as jest.Mock).mockReturnValue({ userProfile: null, isLoading: false });
+    (useExperience as jest.Mock).mockReturnValue({ experience: null, isLoading: false });
 
     render(<PreviewTalentModule />);
 

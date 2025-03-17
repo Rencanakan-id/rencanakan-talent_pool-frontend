@@ -8,13 +8,9 @@ import { useUserProfile } from '@/components/hooks/useUserPorfile';
 import { useExperience } from '@/components/hooks/useExperience';
 
 export const PreviewTalentModule: React.FC = () => {
-  console.log('PreviewTalentModule rendered');
   const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
   const { experience, isLoading: isExperienceLoading } = useExperience(user?.id);
-  if(!user){
-    return;
-  }
   if (isUserLoading || isExperienceLoading) {
     return (
       <div className="absolute inset-0 flex h-full w-full items-center justify-center">
