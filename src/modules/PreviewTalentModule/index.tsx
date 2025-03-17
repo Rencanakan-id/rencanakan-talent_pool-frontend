@@ -4,7 +4,7 @@ import Experience, { ExperienceDetail } from '@/components/ui/experience';
 import UserProfileCard, { UserProfile } from '@/components/ui/profile';
 import { ArrowLeft, BookmarkIcon } from 'lucide-react';
 import Location from '@/components/ui/location';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import { useAuth } from '@/components/context/authContext';
 
 export const PreviewTalentModule: React.FC = () => {
