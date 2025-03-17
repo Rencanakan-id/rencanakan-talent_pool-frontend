@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { LoginForm } from './login';
+import { LoginForm } from '../../../modules/LoginFormModule/Section/login';
 import { faker } from '@faker-js/faker';
 import '@testing-library/jest-dom';
 
