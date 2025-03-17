@@ -6,7 +6,8 @@ import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { validateStepFourForm } from '@/lib/validation/stepFourFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
 import { BrowserRouter } from 'react-router-dom';
-import { RegisterFormData } from '@/lib/register';
+import '@testing-library/jest-dom';
+
 
 // Mock the validation functions
 jest.mock('@/lib/validation/stepOneFormValidation', () => ({
