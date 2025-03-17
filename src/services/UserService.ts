@@ -1,6 +1,6 @@
 // services/UserService.ts
 export class UserService {
-    private static BASE_URL = import.meta.env.VITE_BE_URL || "http://localhost:8080";
+    private static readonly BASE_URL = import.meta.env.VITE_BE_URL || "http://localhost:8080";
   
     static async getUserProfile(token: string) {
       const res = await fetch(`${this.BASE_URL}/api/users/me`, {

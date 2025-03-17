@@ -15,7 +15,6 @@ jest.mock('@/components/hooks/useExperience', () => ({
   useExperience: jest.fn(),
 }));
 
-// Mock components
 jest.mock('@/components/ui/profile', () => ({
   __esModule: true,
   default: jest.fn(() => <div data-testid="user-profile">Mocked Profile</div>),
