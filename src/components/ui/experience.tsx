@@ -48,7 +48,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
   };
 
   return (
-    <div className="min-h-[200px] w-full rounded-[8px] border border-gray-300 px-6 py-6">
+    <div className="min-h-[200px] w-full rounded-lg border border-rencanakan-base-gray p-6">
       {/* Header dengan tombol Add dan Edit */}
       <div className="flex justify-between items-center">
         <Typography variant="p1">Pengalaman</Typography>
@@ -74,15 +74,20 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         <div className="w-full space-y-2 divide-y divide-gray-300 pl-6">
           {experiences.map((exp) => (
             <div key={exp.id} className="min-h-[112px] space-y-1 flex justify-between items-center">
-              <div>
-                <Typography variant="h5">{exp.title}</Typography>
-                <Typography variant="p3">{exp.company} • {exp.employmentType}</Typography>
-                <Typography variant="p3" className="text-gray-500">
-                  {exp.startDate} - {exp.endDate}
-                </Typography>
-                <Typography variant="p3" className="text-gray-500">
-                  {exp.location} - {exp.locationType}
-                </Typography>
+              <div className='flex gap-4 items-center'>
+                <div>
+                  <img src='' alt='No image'/>
+                </div>
+                <div>
+                  <Typography variant="h6">{exp.title}</Typography>
+                  <Typography variant="p4">{exp.company} • {exp.employmentType}</Typography>
+                  <Typography variant="p4" className="text-rencanakan-dark-gray">
+                    {exp.startDate} - {exp.endDate}
+                  </Typography>
+                  <Typography variant="p4" className="text-rencanakan-dark-gray">
+                    {exp.location} • {exp.locationType}
+                  </Typography>
+                </div>
               </div>
               {/* Tampilkan ikon Pensil jika isEditMode true */}
               {isEditMode && (
