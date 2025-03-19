@@ -38,8 +38,10 @@ jest.mock('@/components', () => ({
   ),
   ImageUpload: ({ label, className, onImageChange }: ImageInputProps) => (
     <div className={className}>
-      {label && <label>{label}</label>}
+      {label && <label htmlFor={label}>{label}</label>}
       <input
+        id={label}
+        name={label}
         type="file"
         accept="image/*"
         onChange={(e) => {
@@ -83,6 +85,7 @@ jest.mock('@/components', () => ({
 
 describe('StepOneForm Component', () => {
   const initialFormData: RegisterFormData = {
+    profilePhoto: null,
     firstName: '',
     lastName: '',
     email: '',
@@ -120,10 +123,19 @@ describe('StepOneForm Component', () => {
       expect(screen.getByPlaceholderText('Masukkan NPWP Anda')).toBeInTheDocument();
     });
 
+    test('updates image when file is selected', () => {
+      setup();
+      const file = new File(['dummy content'], 'image.png', { type: 'image/png' });
+      const fileInput = screen.getByLabelText('Foto Diri');
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ profilePhoto: file });
+    });
+
     test('updates firstName when input changes', () => {
       setup();
       const input = screen.getByLabelText('Nama Depan *');
-      fireEvent.change(input, { target: { value: 'John' } });
+      fireEvent.change(input, { target: { value: 'john' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ firstName: 'John' });
     });
 
