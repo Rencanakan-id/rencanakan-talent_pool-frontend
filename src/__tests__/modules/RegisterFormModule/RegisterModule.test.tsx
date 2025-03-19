@@ -80,10 +80,6 @@ describe("Registration Page Positive Case", () => {
     await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), nullFormData.nik);
     await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), nullFormData.npwp);
 
-    // Try to proceed to next step
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Now test with valid files
     const ktpFile = new File(['ktp content'], 'ktp.pdf', { type: 'application/pdf' });
     const npwpFile = new File(['npwp content'], 'npwp.pdf', { type: 'application/pdf' });
     const diplomaFile = new File(['diploma content'], 'diploma.pdf', { type: 'application/pdf' });
