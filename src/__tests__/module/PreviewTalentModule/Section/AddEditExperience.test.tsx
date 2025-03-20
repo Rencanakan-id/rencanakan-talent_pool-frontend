@@ -142,30 +142,39 @@ describe('Experience Section Negative Case', () => {
   });
 });
 
-// describe('Experience Section Edge Case', () => {
-//     test('should not submit if end date is before start date', () => {
-//         render(<Experience experiences={[]} />);
+describe('Experience Section Edge Case', () => {
+    test('should not submit if end date is before start date', () => {
+        render(<Experience experiences={[]} />);
         
-//         fireEvent.click(screen.getByRole('button', { name: /Tambah/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Tambah/i }));
         
-//         fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Frontend Developer' } });
-//         fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'Startup XYZ' } });
-//         fireEvent.change(screen.getByLabelText(/Tanggal Mulai/i), { target: { value: '2024-02-01' } });
-//         fireEvent.change(screen.getByLabelText(/Tanggal Selesai/i), { target: { value: '2024-01-01' } });
+        fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Frontend Developer' } });
+        fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'Startup XYZ' } });
+        fireEvent.change(screen.getByTestId("input-location"), { target: { value: 'Jakarta' } });
+        fireEvent.change(screen.getByTestId("input-start-date"), { target: { value: '2024-02-01' } });
+        fireEvent.change(screen.getByTestId("input-end-date"), { target: { value: '2024-01-01' } });
         
-//         fireEvent.click(screen.getByText('Tambah'));
+        fireEvent.click(screen.getByTestId('submit-button'));
         
-//         expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
-//     });
+        expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
+    });
 
-//     test('should keep the same data if no changes are made', () => {
-//         render(<Experience experiences={mockExperience} />);
+    test('should keep the same data if no changes are made', () => {
+        render(<Experience experiences={mockExperience} />);
         
-//         fireEvent.click(screen.getByRole('button', { name: /Edit/i }));
-//         fireEvent.click(screen.getByText('Simpan'));
+        fireEvent.click(screen.getByRole('button', { name: /Edit/i }));
+
+        expect(screen.getByText('Tech Corp • Penuh Waktu')).toBeInTheDocument();
+        expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+        expect(screen.getByText('01 Januari 2023 - 01 Januari 2024')).toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId('edit-button-1'));
+
+        fireEvent.click(screen.getByText('Simpan'));
+
+        expect(screen.getByText('Tech Corp • Penuh Waktu')).toBeInTheDocument();
+        expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+        expect(screen.getByText('01 Januari 2023 - 01 Januari 2024')).toBeInTheDocument();
         
-//         expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-//         expect(screen.getByText('Tech Corp')).toBeInTheDocument();
-//         expect(screen.getByText('01 Januari 2023 - 01 Januari 2024')).toBeInTheDocument();
-//     });
-// });
+    });
+});
