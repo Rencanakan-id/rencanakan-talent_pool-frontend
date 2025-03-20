@@ -141,12 +141,14 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
             onClick={() => setIsEditMode(!isEditMode)}
             className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
           >
-            <Edit size={20} />
+            <span>Edit</span>
+            {/* <Edit size={20} /> */}
           </button>
           <button
             onClick={handleAdd}
             className="p-2 rounded-full bg-rencanakan-sea-blue-300 text-white hover:bg-rencanakan-sea-blue-500 cursor-pointer"
           >
+            <span>Tambah</span>
             <Plus size={20} />
           </button>
         </div>
@@ -175,7 +177,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 </div>
               </div>
               {isEditMode && (
-                <button onClick={() => handleEdit(exp)} className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer">
+                <button data-testid={exp.id} onClick={() => handleEdit(exp)} className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer">
                   <Pencil size={16} />
                 </button>
               )}
@@ -194,7 +196,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
           onClose={() => setIsModalOpen(false)}
         >
           <div className="flex flex-col space-y-4">
-            <Input label="Judul*" placeholder='Masukkan judul pekerjaan Anda' name="title" value={experienceFormData.title} onChange={handleChange} />
+            <Input label="Judul*" data-testid={experienceFormData.title} placeholder='Masukkan judul pekerjaan Anda' name="title" value={experienceFormData.title} onChange={handleChange} />
             <Input label="Perusahaan*" placeholder='Masukkan nama perusahaan tempat bekerja' name="company" value={experienceFormData.company} onChange={handleChange} />
             
             <Combobox
@@ -216,21 +218,28 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
             />
 
             <div className="flex items-center space-x-2">
-              <input type="checkbox" checked={isCurrentlyWorking} onChange={() => {
-                setIsCurrentlyWorking(!isCurrentlyWorking);
-                setExperienceFormData(prev => ({ ...prev, endDate: !isCurrentlyWorking ? null : '' }));
-              }} />
-              <label><Typography variant='p5'>Saya sedang bekerja di posisi ini</Typography></label>
+              <input 
+                id="currently-working"
+                type="checkbox" 
+                checked={isCurrentlyWorking} 
+                onChange={() => {
+                  setIsCurrentlyWorking(!isCurrentlyWorking);
+                  setExperienceFormData(prev => ({ ...prev, endDate: !isCurrentlyWorking ? null : '' }));
+                }} 
+              />
+              <label htmlFor="currently-working">
+                <Typography variant='p5'>Saya sedang bekerja di posisi ini</Typography>
+              </label>
             </div>
 
             <div className='flex space-x-2'>
-              <Input label="Tanggal Mulai*" name="startDate" value={experienceFormData.startDate} onChange={handleChange} type="date" />
+              <Input label="Tanggal Mulai*" data-testid="tanggal-mulai" name="startDate" value={experienceFormData.startDate} onChange={handleChange} type="date" />
               {!isCurrentlyWorking && (
                 <Input label="Tanggal Selesai" name="endDate" value={experienceFormData.endDate || ''} onChange={handleChange} type="date" />
               )}
             </div>
 
-            <Button variant="primary" className="rounded-md font-[500]" onClick={handleSubmit}>
+            <Button variant="primary" data-testid="add-button" className="rounded-md font-[500]" onClick={handleSubmit}>
               <Typography variant="p2">{editingExperience ? 'Simpan' : 'Tambah'}</Typography>
             </Button>
           </div>
