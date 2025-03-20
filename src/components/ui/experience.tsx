@@ -58,12 +58,25 @@ interface ExperienceProps {
   experiences?: ExperienceDetail[];
 }
 
+// Define error state interface
+interface FormErrors {
+  title?: string;
+  company?: string;
+  employmentType?: string;
+  startDate?: string;
+  location?: string;
+  locationType?: string;
+  endDate?: string;
+}
+
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
   const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [wasValidated, setWasValidated] = useState(false);
 
   const [experienceFormData, setExperienceFormData] = useState<ExperienceDetail>({
     id: 0,
@@ -80,6 +93,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setExperienceFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear error for this field if it was previously set
+    if (wasValidated && formErrors[name as keyof FormErrors]) {
+      setFormErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const formatDate = (dateStr: string | null) => {
@@ -102,6 +120,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     });
     setIsCurrentlyWorking(false);
     setIsModalOpen(true);
+    setFormErrors({});
+    setWasValidated(false);
   };
 
   const handleEdit = (exp: ExperienceDetail) => {
@@ -109,9 +129,63 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     setExperienceFormData(exp);
     setIsCurrentlyWorking(exp.endDate === null);
     setIsModalOpen(true);
+    setFormErrors({});
+    setWasValidated(false);
+  };
+
+  const validateForm = (): boolean => {
+    const errors: FormErrors = {};
+    let isValid = true;
+
+    // Validate required fields
+    if (!experienceFormData.title.trim()) {
+      errors.title = 'Judul pekerjaan harus diisi';
+      isValid = false;
+    }
+
+    if (!experienceFormData.company.trim()) {
+      errors.company = 'Nama perusahaan harus diisi';
+      isValid = false;
+    }
+
+    if (!experienceFormData.employmentType) {
+      errors.employmentType = 'Jenis pekerjaan harus dipilih';
+      isValid = false;
+    }
+
+    if (!experienceFormData.location.trim()) {
+      errors.location = 'Lokasi harus diisi';
+      isValid = false;
+    }
+
+    if (!experienceFormData.locationType) {
+      errors.locationType = 'Tipe lokasi harus dipilih';
+      isValid = false;
+    }
+
+    if (!experienceFormData.startDate) {
+      errors.startDate = 'Tanggal mulai harus diisi';
+      isValid = false;
+    }
+
+    // Validate end date is after start date if provided
+    if (!isCurrentlyWorking && experienceFormData.endDate) {
+      if (experienceFormData.startDate && new Date(experienceFormData.startDate) > new Date(experienceFormData.endDate)) {
+        errors.endDate = 'Tanggal selesai harus setelah tanggal mulai';
+        isValid = false;
+      }
+    }
+
+    setFormErrors(errors);
+    setWasValidated(true);
+    return isValid;
   };
 
   const handleSubmit = () => {
+    if (!validateForm()) {
+      return;
+    }
+
     if (editingExperience) {
       setExperienceList((prev) =>
         prev.map((exp) => (exp.id === editingExperience.id ? { ...experienceFormData } : exp))
@@ -120,6 +194,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       setExperienceList((prev) => [...prev, experienceFormData]);
     }
     setIsModalOpen(false);
+    setFormErrors({});
+    setWasValidated(false);
   };
 
   // Helper function to get the display label for employment type
@@ -147,6 +223,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
           <button
             onClick={handleAdd}
             className="p-2 rounded-full bg-rencanakan-sea-blue-300 text-white hover:bg-rencanakan-sea-blue-500 cursor-pointer"
+            data-testid="add-experience-button"
           >
             <span>Tambah</span>
             <Plus size={20} />
@@ -177,7 +254,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 </div>
               </div>
               {isEditMode && (
-                <button data-testid={exp.id} onClick={() => handleEdit(exp)} className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer">
+                <button 
+                  data-testid={`edit-button-${exp.id}`}
+                  onClick={() => handleEdit(exp)} 
+                  className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
+                >
                   <Pencil size={16} />
                 </button>
               )}
@@ -196,35 +277,98 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
           onClose={() => setIsModalOpen(false)}
         >
           <div className="flex flex-col space-y-4">
-            <Input label="Judul*" data-testid={experienceFormData.title} placeholder='Masukkan judul pekerjaan Anda' name="title" value={experienceFormData.title} onChange={handleChange} />
-            <Input label="Perusahaan*" placeholder='Masukkan nama perusahaan tempat bekerja' name="company" value={experienceFormData.company} onChange={handleChange} />
+            <div>
+              <Input 
+                label="Judul*" 
+                data-testid="input-title"
+                placeholder='Masukkan judul pekerjaan Anda' 
+                name="title" 
+                value={experienceFormData.title} 
+                onChange={handleChange} 
+              />
+              {wasValidated && formErrors.title && (
+                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.title}</Typography>
+              )}
+            </div>
+
+            <div>
+              <Input 
+                label="Perusahaan*" 
+                data-testid="input-company"
+                placeholder='Masukkan nama perusahaan tempat bekerja' 
+                name="company" 
+                value={experienceFormData.company} 
+                onChange={handleChange} 
+              />
+              {wasValidated && formErrors.company && (
+                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.company}</Typography>
+              )}
+            </div>
             
-            <Combobox
-              data={Object.entries(employmentTypeLabels).filter(([value]) => value !== '').map(([value, label]) => ({ value, label }))}
-              value={experienceFormData.employmentType}
-              onChange={(value) => setExperienceFormData((prev) => ({ ...prev, employmentType: value as EmploymentType }))}
-              label="Jenis Pekerjaan*"
-              placeholder="Cari jenis pekerjaan..."
-            />
+            <div>
+              <Combobox
+                data={Object.entries(employmentTypeLabels).filter(([value]) => value !== '').map(([value, label]) => ({ value, label }))}
+                value={experienceFormData.employmentType}
+                onChange={(value) => {
+                  setExperienceFormData((prev) => ({ ...prev, employmentType: value as EmploymentType }));
+                  if (wasValidated && formErrors.employmentType) {
+                    setFormErrors(prev => ({ ...prev, employmentType: undefined }));
+                  }
+                }}
+                label="Jenis Pekerjaan*"
+                placeholder="Cari jenis pekerjaan..."
+                data-testid="input-employment-type"
+              />
+              {wasValidated && formErrors.employmentType && (
+                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.employmentType}</Typography>
+              )}
+            </div>
 
-            <Input label="Lokasi*" name="location" value={experienceFormData.location} onChange={handleChange} placeholder="Masukjan lokasi tempat bekerja" />
+            <div>
+              <Input 
+                label="Lokasi*" 
+                data-testid="input-location"
+                name="location" 
+                value={experienceFormData.location} 
+                onChange={handleChange} 
+                placeholder="Masukkan lokasi tempat bekerja"
+              />
+              {wasValidated && formErrors.location && (
+                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.location}</Typography>
+              )}
+            </div>
 
-            <Combobox
-              data={Object.entries(locationTypeLabels).filter(([value]) => value !== '').map(([value, label]) => ({ value, label }))}
-              value={experienceFormData.locationType}
-              onChange={(value) => setExperienceFormData((prev) => ({ ...prev, locationType: value as LocationType }))}
-              label="Tipe Lokasi*"
-              placeholder="Cari tipe lokasi..."
-            />
+            <div>
+              <Combobox
+                data={Object.entries(locationTypeLabels).filter(([value]) => value !== '').map(([value, label]) => ({ value, label }))}
+                value={experienceFormData.locationType}
+                onChange={(value) => {
+                  setExperienceFormData((prev) => ({ ...prev, locationType: value as LocationType }));
+                  if (wasValidated && formErrors.locationType) {
+                    setFormErrors(prev => ({ ...prev, locationType: undefined }));
+                  }
+                }}
+                label="Tipe Lokasi*"
+                placeholder="Cari tipe lokasi..."
+                data-testid="input-location-type"
+              />
+              {wasValidated && formErrors.locationType && (
+                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.locationType}</Typography>
+              )}
+            </div>
 
             <div className="flex items-center space-x-2">
               <input 
                 id="currently-working"
                 type="checkbox" 
+                data-testid="checkbox-currently-working"
                 checked={isCurrentlyWorking} 
                 onChange={() => {
                   setIsCurrentlyWorking(!isCurrentlyWorking);
                   setExperienceFormData(prev => ({ ...prev, endDate: !isCurrentlyWorking ? null : '' }));
+                  if (wasValidated && formErrors.endDate) {
+                    setFormErrors(prev => ({ ...prev, endDate: undefined }));
+                  }
                 }} 
               />
               <label htmlFor="currently-working">
@@ -233,13 +377,43 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
             </div>
 
             <div className='flex space-x-2'>
-              <Input label="Tanggal Mulai*" data-testid="tanggal-mulai" name="startDate" value={experienceFormData.startDate} onChange={handleChange} type="date" />
+              <div className="flex-1">
+                <Input 
+                  label="Tanggal Mulai*" 
+                  data-testid="input-start-date"
+                  name="startDate" 
+                  value={experienceFormData.startDate} 
+                  onChange={handleChange} 
+                  type="date" 
+                />
+                {wasValidated && formErrors.startDate && (
+                  <Typography variant="p5" className="text-red-500 mt-1">{formErrors.startDate}</Typography>
+                )}
+              </div>
+              
               {!isCurrentlyWorking && (
-                <Input label="Tanggal Selesai" name="endDate" value={experienceFormData.endDate || ''} onChange={handleChange} type="date" />
+                <div className="flex-1">
+                  <Input 
+                    label="Tanggal Selesai" 
+                    data-testid="input-end-date"
+                    name="endDate" 
+                    value={experienceFormData.endDate || ''} 
+                    onChange={handleChange} 
+                    type="date" 
+                  />
+                  {wasValidated && formErrors.endDate && (
+                    <Typography variant="p5" className="text-red-500 mt-1">{formErrors.endDate}</Typography>
+                  )}
+                </div>
               )}
             </div>
 
-            <Button variant="primary" data-testid="add-button" className="rounded-md font-[500]" onClick={handleSubmit}>
+            <Button 
+              variant="primary" 
+              data-testid="submit-button"
+              className="rounded-md font-[500]" 
+              onClick={handleSubmit}
+            >
               <Typography variant="p2">{editingExperience ? 'Simpan' : 'Tambah'}</Typography>
             </Button>
           </div>

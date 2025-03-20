@@ -71,20 +71,22 @@ describe('Experience Section Positive Case', () => {
     
     fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Frontend Developer' } });
     fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'Startup XYZ' } });
-    fireEvent.change(screen.getByTestId("tanggal-mulai"), { target: { value: '2024-02-01' } });
+    fireEvent.change(screen.getByTestId("input-location"), { target: { value: 'Jakarta' } });
+    fireEvent.change(screen.getByTestId("input-start-date"), { target: { value: '2024-02-01' } });
+    fireEvent.change(screen.getByTestId("input-end-date"), { target: { value: '2024-03-01' } });
     
-    fireEvent.click(screen.getByTestId('add-button'));
+    fireEvent.click(screen.getByTestId('submit-button'));
     
     expect(screen.getByText('Frontend Developer')).toBeInTheDocument();
     expect(screen.getByText('Startup XYZ • Penuh Waktu')).toBeInTheDocument();
-    expect(screen.getByText('01 Februari 2024 - Sekarang')).toBeInTheDocument();
+    expect(screen.getByText('01 Februari 2024 - 01 Maret 2024')).toBeInTheDocument();
   });
 
   test('should open edit experience modal and update data', () => {
     render(<Experience experiences={mockExperience} />);
     
     fireEvent.click(screen.getByRole('button', { name: /Edit/i }));
-    fireEvent.click(screen.getByTestId("1")); // Ini button edit yang ada di tiap exp (ini exp pertama)
+    fireEvent.click(screen.getByTestId("edit-button-1")); // Ini button edit yang ada di tiap exp (ini exp pertama)
     
     fireEvent.change(screen.getByPlaceholderText("Masukkan judul pekerjaan Anda"), { target: { value: 'Senior Software Engineer' } });
     fireEvent.click(screen.getByText('Simpan'));
@@ -96,7 +98,7 @@ describe('Experience Section Positive Case', () => {
     render(<Experience experiences={mockExperience} />);
     
     fireEvent.click(screen.getByRole('button', { name: /Edit/i }));
-    fireEvent.click(screen.getByTestId("1")); // Ini button edit yang ada di tiap exp (ini exp pertama)
+    fireEvent.click(screen.getByTestId("edit-button-1")); // Ini button edit yang ada di tiap exp (ini exp pertama)
     
     const checkbox = screen.getByLabelText(/Saya sedang bekerja di posisi ini/i);
     fireEvent.click(checkbox);
@@ -109,37 +111,36 @@ describe('Experience Section Positive Case', () => {
 
 });
 
-// describe('Experience Section Negative Case', () => {
-//   test('should render no experience message', () => {
-//     render(<Experience experiences={[]} />);
+describe('Experience Section Negative Case', () => {
+  test('should render no experience message', () => {
+    render(<Experience experiences={[]} />);
     
-//     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
-//   });
-
+    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+  });
   
-//   test('should not submit if start date is empty', () => {
-//     render(<Experience experiences={[]} />);
+  test('should not submit if start date is empty', () => {
+    render(<Experience experiences={[]} />);
     
-//     fireEvent.click(screen.getByRole('button', { name: /Tambah/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Tambah/i }));
     
-//     fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Backend Developer' } });
-//     fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'AI Startup' } });
+    fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Backend Developer' } });
+    fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'AI Startup' } });
     
-//     fireEvent.click(screen.getByText('Tambah'));
+    fireEvent.click(screen.getByTestId('add-experience-button'));
     
-//     expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
-//   });
+    expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
+  });
 
-//   test('should not submit when required fields are empty', () => {
-//     render(<Experience experiences={[]} />);
+  test('should not submit when required fields are empty', () => {
+    render(<Experience experiences={[]} />);
     
-//     fireEvent.click(screen.getByRole('button', { name: /Tambah/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Tambah/i }));
     
-//     fireEvent.click(screen.getByText('Tambah'));
+    fireEvent.click(screen.getByTestId('add-experience-button'));
     
-//     expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
-//   });
-// });
+    expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
+  });
+});
 
 // describe('Experience Section Edge Case', () => {
 //     test('should not submit if end date is before start date', () => {
