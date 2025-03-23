@@ -3,6 +3,7 @@ import { Typography } from '../atoms/typography';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { useOutsideClick } from '../hooks';
 import { Button } from '../ui/button';
+import { useAuth } from '../context/authContext';
 
 export const Navbar: React.FC = () => {
   const MENU_OPTIONS = [{ name: 'Beranda', href: '/' }];
@@ -13,6 +14,8 @@ export const Navbar: React.FC = () => {
     // Add your logout logic here
     console.log('Logout clicked');
   };
+
+  const { user } = useAuth();
 
   return (
     <div className="flex w-full">
@@ -93,11 +96,11 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
           
-          <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
+          { user.id != undefined && <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
             <div className="flex items-center gap-2">
               <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
               <Typography variant="p2" className="font-medium">
-                Yoga Listyadana
+                {user.firstName} {user.lastName}
               </Typography>
             </div>
             <Button
@@ -110,7 +113,7 @@ export const Navbar: React.FC = () => {
                 Logout
               </Typography>
             </Button>
-          </div>
+          </div>}
         </div>
       </div>
     </div>
