@@ -177,3 +177,72 @@ describe('Experience Section Edge Case', () => {
         
     });
 });
+
+describe('Experience Delete Functionality', () => {
+  test('should delete an experience when delete button is clicked', () => {
+    render(<Experience experiences={mockExperience} />);
+    
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    
+    const deleteButton = screen.getByTestId("delete-button");
+    expect(deleteButton).toBeInTheDocument();
+    
+    fireEvent.click(deleteButton);
+    
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+  });
+  
+  test('should delete only the selected experience when multiple exist', () => {
+    const multipleExperiences: ExperienceDetail[] = [
+      ...mockExperience,
+      {
+        id: 2,
+        title: 'Product Manager',
+        company: 'ABC Company',
+        employmentType: 'FULL_TIME' as const,
+        startDate: '2022-01-01',
+        endDate: '2023-01-01',
+        location: 'Bandung',
+        locationType: 'HYBRID' as const,
+        talentId: 1,
+      }
+    ];
+    
+    render(<Experience experiences={multipleExperiences} />);
+    
+    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    expect(screen.getByText('Product Manager')).toBeInTheDocument();
+    
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+    expect(screen.getByText('Product Manager')).toBeInTheDocument();
+  });
+  
+  test('should not show delete button in add experience mode', () => {
+    render(<Experience experiences={mockExperience} />);
+    
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+    
+    expect(screen.getByTestId("submit-button")).toBeInTheDocument();
+    expect(screen.getByText('Tambah')).toBeInTheDocument();
+
+    expect(screen.queryByTestId("delete-button")).not.toBeInTheDocument();
+  });
+  
+  test('should close the modal after deleting an experience', () => {
+    render(<Experience experiences={mockExperience} />);
+    
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    expect(screen.getByText('Edit Pengalaman')).toBeInTheDocument();
+    
+    fireEvent.click(screen.getByTestId("delete-button"));
+    expect(screen.queryByText('Edit Pengalaman')).not.toBeInTheDocument();
+  });
+});
