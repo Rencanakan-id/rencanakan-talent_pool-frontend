@@ -1,10 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Button } from '@/components';
 import Experience, { ExperienceDetail } from '@/components/ui/experience';
-import UserProfileCard, { UserProfile } from '@/components/ui/profile';
 import { ArrowLeft, BookmarkIcon } from 'lucide-react';
-import Location from '@/components/ui/location';
-import Cookies from 'js-cookie';
 
 export const TalentExperience: React.FC = () => {
 
