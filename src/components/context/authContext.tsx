@@ -42,7 +42,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                 const decodedUser = jwtDecode<UserProps>(token);
                 setUser(decodedUser);
                 setIsAuthenticated(true);
-                const res = await axios.get(`http://localhost:8080/users/me`, {
+                const res = await axios.get(`http://localhost:8080/api/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -102,6 +102,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
             setIsAuthenticated(true);
         } catch (error) {
             console.error('Login Failed: ', error);
+            throw new Error('Login Failed');
         }
     };
 
