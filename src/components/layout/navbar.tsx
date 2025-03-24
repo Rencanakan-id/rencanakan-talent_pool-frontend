@@ -4,18 +4,21 @@ import { HiMenu, HiX } from 'react-icons/hi';
 import { useOutsideClick } from '../hooks';
 import { Button } from '../ui/button';
 import { useAuth } from '../context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar: React.FC = () => {
   const MENU_OPTIONS = [{ name: 'Beranda', href: '/' }];
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeMenu = useOutsideClick(() => setIsMobileMenuOpen(false));
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     // Add your logout logic here
+    logout();
+    navigate('/');
     console.log('Logout clicked');
   };
-
-  const { user } = useAuth();
 
   return (
     <div className="flex w-full">
