@@ -216,16 +216,15 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
           <button
             onClick={() => setIsEditMode(!isEditMode)}
             className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
+            data-testid="edit-experience-button"
           >
-            <span>Edit</span>
-            {/* <Edit size={20} /> */}
+            <Edit size={20} />
           </button>
           <button
             onClick={handleAdd}
             className="p-2 rounded-full bg-rencanakan-sea-blue-300 text-white hover:bg-rencanakan-sea-blue-500 cursor-pointer"
             data-testid="add-experience-button"
           >
-            <span>Tambah</span>
             <Plus size={20} />
           </button>
         </div>
@@ -376,8 +375,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
               </label>
             </div>
 
-            <div className='flex space-x-2'>
-              <div className="flex-1">
+            <div className='grid grid-cols-2 gap-2'>
+              <div className={isCurrentlyWorking ? "col-span-2" : "col-span-1"}>
                 <Input 
                   label="Tanggal Mulai*" 
                   data-testid="input-start-date"
@@ -385,21 +384,22 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                   value={experienceFormData.startDate} 
                   onChange={handleChange} 
                   type="date" 
+                  className="w-full"
                 />
                 {wasValidated && formErrors.startDate && (
                   <Typography variant="p5" className="text-red-500 mt-1">{formErrors.startDate}</Typography>
                 )}
               </div>
-              
               {!isCurrentlyWorking && (
-                <div className="flex-1">
+                <div>
                   <Input 
                     label="Tanggal Selesai" 
                     data-testid="input-end-date"
                     name="endDate" 
                     value={experienceFormData.endDate || ''} 
                     onChange={handleChange} 
-                    type="date" 
+                    type="date"
+                    className="w-full"
                   />
                   {wasValidated && formErrors.endDate && (
                     <Typography variant="p5" className="text-red-500 mt-1">{formErrors.endDate}</Typography>
