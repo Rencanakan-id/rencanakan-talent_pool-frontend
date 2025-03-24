@@ -134,15 +134,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
   };
 
   const handleDelete = () => {
-    if (editingExperience !== null && editingExperience !== undefined) {
-        let newList = [];
-        for (let i = 0; i < experienceList.length; i++) {
-            if (experienceList[i].id !== editingExperience.id) {
-                newList.push(experienceList[i]);
-            }
-        }
-        setExperienceList(newList);
-        setIsModalOpen(false);
+    if (editingExperience) {
+      setExperienceList((prev) =>
+        prev.filter((exp) => exp.id !== editingExperience.id)
+      );
+      setIsModalOpen(false);
     }
   };
 
