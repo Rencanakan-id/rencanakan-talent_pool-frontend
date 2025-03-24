@@ -422,6 +422,5 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     </div>
   );
 };
-};
 
 export default Experience;

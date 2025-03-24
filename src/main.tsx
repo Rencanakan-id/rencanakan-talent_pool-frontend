@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import { DesignSystemModule, LandingPageModule } from './modules';
 import { PreviewTalentModule } from './modules/PreviewTalentModule';
-import { PreviewTalentModule } from './modules/PreviewTalentModule';
 import { RegisterModule } from './modules/RegisterFormModule';
 import LoginModule from './modules/LoginFormModule';
 import { TalentProfilePage } from './modules/TalentProfileModule';
