@@ -245,4 +245,39 @@ describe('Experience Delete Functionality', () => {
     fireEvent.click(screen.getByTestId("delete-button"));
     expect(screen.queryByText('Edit Pengalaman')).not.toBeInTheDocument();
   });
+
+  test('should show "no experience" message after deleting the last experience', () => {
+    render(<Experience experiences={mockExperience} />);
+    
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+  }); 
+  
+  test('should keep edit mode active after deleting an experience', () => {
+    const multipleExperiences: ExperienceDetail[] = [
+      ...mockExperience,
+      {
+        id: 2,
+        title: 'Product Manager',
+        company: 'ABC Company',
+        employmentType: 'FULL_TIME',
+        startDate: '2022-01-01',
+        endDate: '2023-01-01',
+        location: 'Bandung',
+        locationType: 'HYBRID',
+        talentId: 1,
+      }
+    ];
+    
+    render(<Experience experiences={multipleExperiences} />);
+    
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    expect(screen.getByTestId("edit-button-2")).toBeInTheDocument();
+  });
 });
