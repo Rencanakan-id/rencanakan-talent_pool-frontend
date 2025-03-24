@@ -133,6 +133,19 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     setWasValidated(false);
   };
 
+  const handleDelete = () => {
+    if (editingExperience !== null && editingExperience !== undefined) {
+        let newList = [];
+        for (let i = 0; i < experienceList.length; i++) {
+            if (experienceList[i].id !== editingExperience.id) {
+                newList.push(experienceList[i]);
+            }
+        }
+        setExperienceList(newList);
+        setIsModalOpen(false);
+    }
+  };
+
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
     let isValid = true;
@@ -408,14 +421,36 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
               )}
             </div>
 
-            <Button 
-              variant="primary" 
-              data-testid="submit-button"
-              className="rounded-md font-[500]" 
-              onClick={handleSubmit}
-            >
-              <Typography variant="p2">{editingExperience ? 'Simpan' : 'Tambah'}</Typography>
-            </Button>
+            {editingExperience ? (
+              <div className='grid grid-cols-2 gap-2'>
+                <Button 
+                  variant="primary" 
+                  data-testid="delete-button"
+                  className="rounded-md font-[500] bg-[rgba(196,61,75,0.95)] border-[rgba(196,61,75,0.95)] hover:bg-rencanakan-error-red-100 hover:border-rencanakan-error-red-100"
+                  onClick={handleDelete}
+                >
+                  <Typography variant="p2">Hapus</Typography>
+                </Button>
+
+                <Button 
+                  variant="primary" 
+                  data-testid="submit-button"
+                  className="rounded-md font-[500]" 
+                  onClick={handleSubmit}
+                >
+                  <Typography variant="p2">Simpan</Typography>
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                variant="primary" 
+                data-testid="submit-button"
+                className="rounded-md font-[500]" 
+                onClick={handleSubmit}
+              >
+                <Typography variant="p2">Tambah</Typography>
+              </Button>
+            )}
           </div>
         </Modal>
       )}
