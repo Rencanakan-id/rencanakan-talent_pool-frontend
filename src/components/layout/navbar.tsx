@@ -1,29 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Typography } from '../atoms/typography';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { useOutsideClick } from '../hooks';
 import { Button } from '../ui/button';
-import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/components/context/authContext';
 
 export const Navbar: React.FC = () => {
-  const MENU_OPTIONS = [{ name: 'Beranda', href: '/' }];
+  const MENU_OPTIONS = [
+    { name: 'Beranda', href: '/' },
+  ];
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeMenu = useOutsideClick(() => setIsMobileMenuOpen(false));
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { logout, isAuthenticated, user } = useAuth();
+  
+  // Update body overflow when mobile menu opens/closes to prevent scrolling
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+  
+  // Ensure main content has proper padding for the fixed navbar
+  useEffect(() => {
+    const mainContent = document.querySelector('main') || document.querySelector('#root > div:not(.navbar-container)');
+    if (mainContent) {
+      mainContent.style.paddingTop = '68px';
+    }
+    
+    return () => {
+      if (mainContent) {
+        mainContent.style.paddingTop = '';
+      }
+    };
+  }, []);
 
   const handleLogout = () => {
-    // Add your logout logic here
     logout();
     navigate('/');
-    console.log('Logout clicked');
   };
 
   return (
-    <div className="flex w-full">
+    <div className="navbar-container fixed top-0 left-0 w-full z-50" style={{ height: '68px' }}>
       <div
-        className={`${!isMobileMenuOpen && 'shadow-lg transition-shadow delay-500'} bg-rencanakan-pure-white z-[999] flex h-18 w-full items-center justify-between px-6 lg:h-20 lg:px-10`}
+        className={`${!isMobileMenuOpen && 'shadow-lg transition-shadow delay-500'} bg-rencanakan-pure-white flex h-18 w-full items-center justify-between px-6 lg:h-20 lg:px-10`}
       >
         <img src="./rencanakanLogo.svg" alt="Logo" className="h-7 lg:h-9" />
 
@@ -36,25 +63,29 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
 
-          <div className="hidden items-center gap-1 lg:flex">
-            <Typography variant="h6" className="mr-3 font-medium">
-              Yoga Listyadana
-            </Typography>
-            <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
-          </div>
-
-          <div className="hidden lg:flex">
-            <Button 
-              variant={'primary'}
-              size={'lg'}
-              onClick={handleLogout}
-              className="transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
-            >
-              <Typography variant="p2" className="font-medium">
-                Logout
+          {isAuthenticated && (
+            <div className="hidden items-center gap-1 lg:flex">
+              <Typography variant="h6" className="mr-3 font-medium">
+                {user?.firstName + user?.lastName || 'User'}
               </Typography>
-            </Button>
-          </div>
+              <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
+            </div>
+          )}
+
+          {isAuthenticated && (
+            <div className="hidden lg:flex">
+              <Button 
+                variant={'primary'}
+                size={'lg'}
+                onClick={handleLogout}
+                className="transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+              >
+                <Typography variant="p2" className="font-medium">
+                  Logout
+                </Typography>
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="flex lg:hidden" ref={closeMenu}>
@@ -67,23 +98,27 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {isMobileMenuOpen && (
-        <div
-          className="bg-rencanakan-pure-black fixed inset-0 opacity-30 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              setIsMobileMenuOpen(false);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Mobile Menu Backdrop"
-        />
-      )}
-
+      {/* Mobile menu backdrop - covers the entire screen behind the menu */}
       <div
-        className={`bg-rencanakan-pure-white absolute top-[68px] left-0 z-99 w-full transform transition-transform duration-500 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-[68px]'}`}
+        className={`bg-rencanakan-pure-black fixed top-[68px] left-0 right-0 bottom-0 opacity-30 transition-opacity duration-500 lg:hidden ${
+          isMobileMenuOpen ? 'opacity-30 visible' : 'opacity-0 invisible'
+        }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            setIsMobileMenuOpen(false);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Mobile Menu Backdrop"
+      />
+
+      {/* Mobile menu - using fixed position with high z-index to ensure visibility */}
+      <div
+        className={`mobile-menu-container bg-rencanakan-pure-white fixed top-[68px] left-0 w-full z-[100] shadow-lg transition-all duration-500 ease-in-out lg:hidden ${
+          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
       >
         <div className="flex w-full flex-col items-start">
           {MENU_OPTIONS.map((menu) => (
@@ -99,24 +134,26 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
           
-          { user.id != undefined && <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
-            <div className="flex items-center gap-2">
-              <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
-              <Typography variant="p2" className="font-medium">
-                {user.firstName} {user.lastName}
-              </Typography>
+          {isAuthenticated && (
+            <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
+              <div className="flex items-center gap-2">
+                <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
+                <Typography variant="p2" className="font-medium">
+                  {user?.firstName + user?.lastName || 'User'}
+                </Typography>
+              </div>
+              <Button
+                variant="primary"
+                size={'lg'}
+                className="flex items-center gap-1 px-3 py-1 transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+                onClick={handleLogout}
+              >
+                <Typography variant="p2" className="font-medium">
+                  Logout
+                </Typography>
+              </Button>
             </div>
-            <Button
-              variant="primary"
-              size={'lg'}
-              className="flex items-center gap-1 px-3 py-1 transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
-              onClick={handleLogout}
-            >
-              <Typography variant="p2" className="font-medium">
-                Logout
-              </Typography>
-            </Button>
-          </div>}
+          )}
         </div>
       </div>
     </div>
