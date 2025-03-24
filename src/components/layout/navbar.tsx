@@ -2,11 +2,17 @@ import { useState } from 'react';
 import { Typography } from '../atoms/typography';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { useOutsideClick } from '../hooks';
+import { Button } from '../ui/button';
 
 export const Navbar: React.FC = () => {
   const MENU_OPTIONS = [{ name: 'Beranda', href: '/' }];
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeMenu = useOutsideClick(() => setIsMobileMenuOpen(false));
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    console.log('Logout clicked');
+  };
 
   return (
     <div className="flex w-full">
@@ -28,7 +34,20 @@ export const Navbar: React.FC = () => {
             <Typography variant="h6" className="mr-3 font-medium">
               Yoga Listyadana
             </Typography>
-            <img src="./dummy/profile.svg" alt="Profile" />
+            <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
+          </div>
+
+          <div className="hidden lg:flex">
+            <Button 
+              variant={'primary'}
+              size={'lg'}
+              onClick={handleLogout}
+              className="transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+            >
+              <Typography variant="p2" className="font-medium">
+                Logout
+              </Typography>
+            </Button>
           </div>
         </div>
 
@@ -73,6 +92,25 @@ export const Navbar: React.FC = () => {
               </Typography>
             </a>
           ))}
+          
+          <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
+            <div className="flex items-center gap-2">
+              <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
+              <Typography variant="p2" className="font-medium">
+                Yoga Listyadana
+              </Typography>
+            </div>
+            <Button
+              variant="primary"
+              size={'lg'}
+              className="flex items-center gap-1 px-3 py-1 transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+              onClick={handleLogout}
+            >
+              <Typography variant="p2" className="font-medium">
+                Logout
+              </Typography>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

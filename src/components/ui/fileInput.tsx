@@ -5,8 +5,6 @@ import { IoClose } from 'react-icons/io5';
 import { FiPlus } from 'react-icons/fi';
 import { Typography } from '../atoms/typography';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
-
 const fileContainerVariants = cva(['w-full flex items-center']);
 
 const buttonVariants = cva([
@@ -39,7 +37,7 @@ const fileNameVariants = cva([
   'xxl:text-[0.8125rem] xxl:leading-[calc(0.8125rem*1.5)] xl:text-[0.8rem] xl:leading-[calc(0.8rem*1.5)] md:text-[0.75rem] md:leading-[calc(0.75rem*1.5)] text-[0.7rem] leading-[calc(0.7rem*1.5)]',
 ]);
 
-const errorMessageVariants = cva([
+const errorVariants = cva([
   'text-rencanakan-error-red-100 mt-1',
   'xxl:text-[0.75rem] xxl:leading-[calc(0.75rem*1.5)] xl:text-[0.75rem] xl:leading-[calc(0.75rem*1.5)] md:text-[0.7rem] md:leading-[calc(0.7rem*1.5)] text-[0.65rem] leading-[calc(0.65rem*1.5)]',
 ]);
@@ -53,9 +51,9 @@ interface FileInputProps
   buttonText?: string;
   onFileSelect?: (file: File | null) => void;
   value?: string;
+  maxSize?: number;
+  error?: string;
 }
-
-type ErrorType = 'size' | 'type' | null;
 
 export const FileInput: React.FC<FileInputProps> = ({
   className,
@@ -63,11 +61,12 @@ export const FileInput: React.FC<FileInputProps> = ({
   onClear,
   textLabel,
   value,
-  ...props
+  onFileSelect,
+  error,
+  ...inputProps
 }) => {
   const [fileState, setFileState] = React.useState<'empty' | 'filled' | 'error'>(state || 'empty');
   const [fileName, setFileName] = React.useState<string>(value || '');
-  const [errorType, setErrorType] = React.useState<ErrorType>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -82,19 +81,20 @@ export const FileInput: React.FC<FileInputProps> = ({
     }
   }, [value]);
 
+  React.useEffect(() => {
+    if (error) {
+      setFileState('error');
+    }
+  }, [error]);
+
   const handleClear = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
     }
     setFileName('');
     setFileState('empty');
-    setErrorType(null);
     onClear?.();
-    props.onFileSelect?.(null);
-  };
-
-  const isValidFileType = (fileType: string): boolean => {
-    return fileType === 'application/pdf' || fileType.startsWith('image/');
+    onFileSelect?.(null);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,35 +106,18 @@ export const FileInput: React.FC<FileInputProps> = ({
         setFileName(file.name);
       }
 
-      // Check file type
-      if (!isValidFileType(file.type)) {
-        setFileState('error');
-        setErrorType('type');
-        props.onFileSelect?.(null);
-      }
-      // Check file size
-      else if (file.size > MAX_FILE_SIZE) {
-        setFileState('error');
-        setErrorType('size');
-        props.onFileSelect?.(null);
-      }
-      // File is valid
-      else {
-        setFileState('filled');
-        setErrorType(null);
-        props.onFileSelect?.(file);
-      }
+      setFileState('filled');
+      onFileSelect?.(file);
     } else {
       if (value === undefined) {
         setFileName('');
       }
       setFileState('empty');
-      setErrorType(null);
-      props.onFileSelect?.(null);
+      onFileSelect?.(null);
     }
 
-    if (props.onChange) {
-      props.onChange(e);
+    if (inputProps.onChange) {
+      inputProps.onChange(e);
     }
   };
 
@@ -147,16 +130,6 @@ export const FileInput: React.FC<FileInputProps> = ({
   ) : (
     'Tidak ada file yang dipilih'
   );
-
-  const getErrorMessage = (): string => {
-    if (errorType === 'size') {
-      return 'Ukuran file melebihi batas maksimal 5MB';
-    }
-    if (errorType === 'type') {
-      return 'Format file tidak didukung. Harap unggah file gambar atau PDF saja';
-    }
-    return '';
-  };
 
   return (
     <div className="relative">
@@ -201,13 +174,13 @@ export const FileInput: React.FC<FileInputProps> = ({
           type="file"
           className="hidden"
           onChange={handleFileChange}
-          {...props}
+          {...inputProps}
         />
       </div>
 
-      {errorType && (
-        <div className={errorMessageVariants()}>
-          <Typography variant="p5">{getErrorMessage()}</Typography>
+      {error && (
+        <div className={errorVariants()}>
+          <Typography variant="p5">{error}</Typography>
         </div>
       )}
     </div>

@@ -10,9 +10,23 @@ import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 interface StepTwoFormProps {
   formData: RegisterFormData;
   updateFormData: (data: Partial<RegisterFormData>) => void;
+  validationErrors?: {
+    aboutMe?: string;
+    yearsOfExperience?: string;
+    skkLevel?: string;
+    currentLocation?: string;
+    preferredLocations?: string;
+    skill?: string;
+    otherSkill?: string;
+    skkFile?: string;
+  };
 }
 
-export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormData }) => {
+export const StepTwoForm: React.FC<StepTwoFormProps> = ({
+  formData,
+  updateFormData,
+  validationErrors = {},
+}) => {
   return (
     <>
       <Typography variant="h5">Ceritakan sedikit pengalaman kerja kamu</Typography>
@@ -27,43 +41,50 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
 
       <div className="mb-4 space-y-6">
         <Textarea
-          textLabel="Tentang Saya"
+          textLabel="Tentang Saya *"
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
           value={formData.aboutMe || ''}
           onChange={(e) => updateFormData({ aboutMe: e.target.value })}
+          error={validationErrors?.aboutMe}
         />
 
         <Combobox
           data={yearsOfExperience}
-          label="Lama Pengalaman"
+          label="Lama Pengalaman *"
           value={formData.yearsOfExperience || ''}
           onChange={(value) => updateFormData({ yearsOfExperience: value })}
+          error={validationErrors?.yearsOfExperience}
         />
 
         <Combobox
           data={skkLevels}
-          label="Level Sertifikasi SKK"
+          label="Level Sertifikasi SKK *"
           value={formData.skkLevel || ''}
           onChange={(value) => updateFormData({ skkLevel: value })}
+          error={validationErrors?.skkLevel}
         />
 
         <Combobox
           data={locations}
-          label="Lokasi Saat Ini"
+          label="Lokasi Saat Ini *"
           value={formData.currentLocation || ''}
           onChange={(value) => updateFormData({ currentLocation: value })}
+          error={validationErrors?.currentLocation}
         />
 
         <div>
           <ComboboxCheckBox
             data={locations}
-            label="Bersedia Ditempatkan Di Mana"
+            label="Bersedia Ditempatkan Di Mana *"
             placeholder="Search..."
-            value={(formData.preferedLocations || []).join(', ')}
-            onChange={(values) => updateFormData({ preferedLocations: values })}
+            value={(formData.preferredLocations || [])
+              .map((value) => locations.find((item) => item.value === value)?.label ?? value)
+              .join(', ')}
+            onChange={(values) => updateFormData({ preferredLocations: values })}
             maxSelection={5}
+            error={validationErrors?.preferredLocations}
           />
-          <Typography variant="p4" className="my-2">
+          <Typography variant="p5" className="my-2">
             Pilih maksimal 5 lokasi
           </Typography>
         </div>
@@ -71,16 +92,18 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
         <div>
           <Combobox
             data={skills}
-            label="Keahlian"
+            label="Keahlian *"
             value={formData.skill || ''}
             onChange={(value) => updateFormData({ skill: value })}
+            error={validationErrors?.skill}
           />
           {formData.skill === 'lainnya' && (
             <Input
               className="mt-2"
-              placeholder="Tulis di sini keahlian kamu"
+              placeholder="Tulis di sini keahlian kamu *"
               value={formData.otherSkill || ''}
               onChange={(e) => updateFormData({ otherSkill: e.target.value })}
+              error={validationErrors?.otherSkill}
             />
           )}
         </div>
@@ -97,6 +120,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({ formData, updateFormDa
             state={formData.skkFile ? 'filled' : 'empty'}
             value={formData.skkFile?.name || ''}
             onFileSelect={(file) => updateFormData({ skkFile: file })}
+            error={validationErrors?.skkFile}
           />
         </div>
       </div>

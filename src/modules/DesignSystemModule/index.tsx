@@ -6,6 +6,8 @@ import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
+import { useState } from 'react';
+
 const dummyExperience= [
   {
     id: 1,
@@ -64,7 +66,7 @@ const dummyUser = {
   currentLocation: 'Jakarta, Indonesia',
   preferredLocations: ['Bali', 'Surabaya', 'Bandung'],
   skill: 'React, NestJS, Kubernetes',
-};import { useState } from 'react';
+};
 
 export const DesignSystemModule = () => {
   // State untuk mengontrol modal
@@ -87,7 +89,7 @@ export const DesignSystemModule = () => {
         <Combobox data={locations} label="Lokasi" />
       </div>
       <div className="w-full space-y-4">
-        <Combobox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+        <Combobox data={locations} label="Lokasi" error="Field tidak boleh kosong" />
       </div>
       <div className="w-full space-y-4">
         <ComboboxCheckBox data={locations} label="Lokasi" />
