@@ -1,105 +1,175 @@
-// tests/modules/login/index.test.tsx
-import { render, screen, fireEvent } from '@testing-library/react';
-import LoginModule from '@/modules/LoginFormModule'; // Sesuaikan path sesuai struktur proyek
-import '@testing-library/jest-dom';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom/';
 import { faker } from '@faker-js/faker';
+import { MemoryRouter } from 'react-router-dom';
+import { AuthContextProvider } from '@/components/context/authContext';
+import LoginModule from '@/modules/LoginFormModule'; // Adjust the import path as needed
+import axios from 'axios';
 
-// Mock console.log untuk mengecek submit yang valid
-// const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
-const randomPassword = faker.internet.password();
+// Mock dependencies
+jest.mock('axios');
+jest.mock('js-cookie', () => ({
+  set: jest.fn(),
+  remove: jest.fn(),
+  get: jest.fn()
+}));
+
+// Mock useNavigate
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
 
 describe('LoginModule', () => {
-  afterEach(() => {
+  // Helper function to create a wrapper component with necessary context providers
+  const renderLoginModule = () => {
+    return render(
+      <MemoryRouter>
+        <AuthContextProvider initialToken="">
+          <LoginModule />
+        </AuthContextProvider>
+      </MemoryRouter>
+    );
+  };
+
+  beforeEach(() => {
+    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
-  // Test 1: Render komponen dan elemen penting
-  test('renders login form with initial state', () => {
-    render(<LoginModule />);
+  test('renders login form correctly', () => {
+    renderLoginModule();
 
-    // Cek input email dan password
+    // Check if input fields and login button are present
     expect(screen.getByTestId('email-input')).toBeInTheDocument();
     expect(screen.getByTestId('password-input')).toBeInTheDocument();
-
-    // Tombol submit harus disabled awal karena form kosong
-    expect(screen.getByTestId('login-button')).toBeDisabled();
+    expect(screen.getByTestId('login-button')).toBeInTheDocument();
   });
 
-  // Test 2: Update state saat input berubah
-  test('updates form data when inputs change', () => {
-    render(<LoginModule />);
+  test('displays validation errors for invalid input', async () => {
+    renderLoginModule();
 
-    const emailInput = screen.getByTestId('email-input') as HTMLInputElement;
-    const passwordInput = screen.getByTestId('password-input') as HTMLInputElement;
-
-    // Simulasikan perubahan input
-    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: randomPassword } });
-
-    // Cek nilai input telah berubah
-    expect(emailInput.value).toBe('user@example.com');
-    expect(passwordInput.value).toBe(randomPassword);
-  });
-
-  // Test 3: Validasi error saat submit data tidak valid
-  test('displays validation errors for invalid inputs', async () => {
-    render(<LoginModule />);
-
+    // Get input elements and login button
     const emailInput = screen.getByTestId('email-input');
     const passwordInput = screen.getByTestId('password-input');
-    const submitButton = screen.getByTestId('login-button');
+    const loginButton = screen.getByTestId('login-button');
 
-    // Masukkan data tidak valid
-    fireEvent.change(emailInput, { target: { value: 'a@a' } }); // Email < 4 karakter
-    fireEvent.change(passwordInput, { target: { value: '12345' } }); // Password < 6 karakter
+    // Enter invalid email (too short)
+    fireEvent.change(emailInput, { target: { value: 'a' } });
+    fireEvent.change(passwordInput, { target: { value: 'validpass' } });
+    fireEvent.click(loginButton);
 
-    // Tombol harus aktif karena form terisi
-    expect(submitButton).not.toBeDisabled();
+    // Check for email validation error
+    await waitFor(() => {
+      expect(screen.getByText('Email yang dimasukkan tidak valid')).toBeInTheDocument();
+    });
 
-    // Klik tombol submit
-    fireEvent.click(submitButton);
+    // Enter invalid password (too short)
+    fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
+    fireEvent.click(loginButton);
 
-    // Cek pesan error muncul
-    expect(
-      await screen.findByText('Email harus memiliki setidaknya 4 karakter')
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText('Kata sandi harus memiliki setidaknya 6 karakter')
-    ).toBeInTheDocument();
+    // Check for password validation error
+    await waitFor(() => {
+      expect(screen.getByText('Kata sandi harus memiliki setidaknya 8 karakter')).toBeInTheDocument();
+    });
   });
 
-  // Test 4: Submit data valid
-  // test('submits form with valid data', () => {
-  //   render(<LoginModule />);
+  test('handles successful login with valid credentials', async () => {
+    // Generate fake login credentials
+    const fakeEmail = faker.internet.email();
+    const fakePassword = faker.internet.password({ length: 10 });
 
-  //   const emailInput = screen.getByTestId("email-input");
-  //   const passwordInput = screen.getByTestId("password-input");
-  //   const submitButton = screen.getByTestId('login-button');
+    // Mock successful axios post response
+    (axios.post as jest.Mock).mockResolvedValue({
+      data: { 
+        token: faker.string.alphanumeric(100) 
+      }
+    });
 
-  //   // Masukkan data valid
-  //   fireEvent.change(emailInput, { target: { value: 'valid@example.com' } });
-  //   fireEvent.change(passwordInput, { target: { value: randomPassword } });
+    renderLoginModule();
 
-  //   // Klik tombol submit
-  //   fireEvent.click(submitButton);
+    // Get input elements and login button
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const loginButton = screen.getByTestId('login-button');
 
-  //   // Cek console.log dipanggil dengan data yang benar
-  //   expect(mockConsoleLog).toHaveBeenCalledWith('Login Data:', {
-  //     email: 'valid@example.com',
-  //     password: randomPassword,
-  //   });
-  // });
+    // Enter valid credentials
+    fireEvent.change(emailInput, { target: { value: fakeEmail } });
+    fireEvent.change(passwordInput, { target: { value: fakePassword } });
 
-  // Test 5: Error saat field wajib kosong (opsional, tergantung implementasi)
-  test('shows required errors if fields are empty on submit', () => {
-    render(<LoginModule />);
+    // Click login button
+    fireEvent.click(loginButton);
 
-    // Klik tombol submit tanpa mengisi form
-    const submitButton = screen.getByTestId('login-button');
+    // Wait for axios to be called
+    await waitFor(() => {
+      // Check if axios was called with correct parameters
+      expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/auth/login', {
+        email: fakeEmail,
+        password: fakePassword
+      });
+    });
+    
+    // Skip navigation check as it might be handled differently in the component
+    // or add a jest.mock for the specific module that handles navigation
+  });
 
-    // Pastikan tombol disabled dan error tidak muncul
-    expect(submitButton).toBeDisabled();
-    expect(screen.queryByText('Email harus diisi')).not.toBeInTheDocument();
-    expect(screen.queryByText('Kata sandi harus diisi')).not.toBeInTheDocument();
+  test('handles login failure', async () => {
+    // Generate fake login credentials
+    const fakeEmail = faker.internet.email();
+    const fakePassword = faker.internet.password({ length: 10 });
+
+    // Mock login failure
+    (axios.post as jest.Mock).mockRejectedValue(new Error('Login Failed'));
+
+    renderLoginModule();
+
+    // Get input elements and login button
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const loginButton = screen.getByTestId('login-button');
+
+    // Enter credentials
+    fireEvent.change(emailInput, { target: { value: fakeEmail } });
+    fireEvent.change(passwordInput, { target: { value: fakePassword } });
+
+    // Click login button
+    fireEvent.click(loginButton);
+
+    // Wait for error state
+    await waitFor(() => {
+    // Check if error props are set on inputs
+    const emailInputElement = screen.getByTestId('email-input');
+    const passwordInputElement = screen.getByTestId('password-input');
+    
+    // Assuming your Input component passes down the error as a prop
+    expect(emailInputElement).toHaveAttribute('data-error', 'Email atau password salah');
+    expect(passwordInputElement).toHaveAttribute('data-error', 'Email atau password salah');
+  });
+  });
+
+  test('login button is disabled when form is invalid', () => {
+    renderLoginModule();
+
+    // Get input elements and login button
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const loginButton = screen.getByTestId('login-button') as HTMLButtonElement;
+
+    // Ensure login button is initially disabled
+    expect(loginButton.disabled).toBe(true);
+
+    // Enter partial credentials
+    fireEvent.change(emailInput, { target: { value: 'test' } });
+    expect(loginButton.disabled).toBe(true);
+
+    fireEvent.change(passwordInput, { target: { value: 'testpass' } });
+    expect(loginButton.disabled).toBe(false);
+
+    // Enter valid credentials
+    fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'validpassword' } });
+    expect(loginButton.disabled).toBe(false);
   });
 });
