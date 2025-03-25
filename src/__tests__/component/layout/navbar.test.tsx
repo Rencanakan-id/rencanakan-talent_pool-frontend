@@ -40,6 +40,15 @@ describe('Navbar Logout Functionality', () => {
     (jwtDecode as jest.Mock).mockReturnValue(mockUser);
   });
 
+  // Helper functions to reduce duplication
+  const setupAuthenticatedEnvironment = () => {
+    (Cookies.get as jest.Mock).mockImplementation((key) => {
+      if (key === 'token') return mockToken;
+      if (key === 'user') return JSON.stringify(mockUser);
+      return null;
+    });
+  };
+
   const renderNavbarWithAuth = (initialToken = '') => {
     return render(
       <MemoryRouter>
@@ -50,18 +59,24 @@ describe('Navbar Logout Functionality', () => {
     );
   };
 
-  test('renders desktop logout button when authenticated', () => {
-    // Mock cookie implementation
-    (Cookies.get as jest.Mock).mockImplementation((key) => {
-      if (key === 'token') return mockToken;
-      if (key === 'user') return JSON.stringify(mockUser);
-      return null;
-    });
+  const getHamburgerMenuButton = () => {
+    const buttons = screen.getAllByRole('button');
+    return buttons.find(button => !button.hasAttribute('data-testid')) || buttons[0];
+  };
 
+  const verifyLogoutActions = async () => {
+    await waitFor(() => {
+      expect(Cookies.remove).toHaveBeenCalledWith('token');
+      expect(Cookies.remove).toHaveBeenCalledWith('user');
+      expect(mockedUsedNavigate).toHaveBeenCalledWith('/');
+    });
+  };
+
+  test('renders desktop logout button when authenticated', () => {
+    setupAuthenticatedEnvironment();
     renderNavbarWithAuth(mockToken);
 
     expect(screen.getByTestId('desktop-logout-button')).toBeInTheDocument();
-    // Looking for JohnDoe in the h6 element within the items-center div
     expect(screen.getAllByText('JohnDoe').length).toBeGreaterThan(0);
   });
 
@@ -74,77 +89,39 @@ describe('Navbar Logout Functionality', () => {
   });
 
   test('handles successful desktop logout', async () => {
-    // Mock cookie implementation
-    (Cookies.get as jest.Mock).mockImplementation((key) => {
-      if (key === 'token') return mockToken;
-      if (key === 'user') return JSON.stringify(mockUser);
-      return null;
-    });
-
+    setupAuthenticatedEnvironment();
     renderNavbarWithAuth(mockToken);
 
     const logoutButton = screen.getByTestId('desktop-logout-button');
     fireEvent.click(logoutButton);
 
-    // Wait for the asynchronous action to complete
-    await waitFor(() => {
-      expect(Cookies.remove).toHaveBeenCalledWith('token');
-      expect(Cookies.remove).toHaveBeenCalledWith('user');
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/');
-    });
+    await verifyLogoutActions();
   });
 
   test('renders mobile logout button when authenticated and menu is open', async () => {
-    // Mock cookie implementation
-    (Cookies.get as jest.Mock).mockImplementation((key) => {
-      if (key === 'token') return mockToken;
-      if (key === 'user') return JSON.stringify(mockUser);
-      return null;
-    });
-
+    setupAuthenticatedEnvironment();
     renderNavbarWithAuth(mockToken);
 
-    // Get the first button in the mobile menu container (the hamburger menu)
-    const buttons = screen.getAllByRole('button');
-    // Find the hamburger menu button - it should be the one without a data-testid
-    const menuButton = buttons.find(button => !button.hasAttribute('data-testid')) || buttons[0];
-    
+    const menuButton = getHamburgerMenuButton();
     fireEvent.click(menuButton);
 
-    // Check if mobile logout button appears
     await waitFor(() => {
       expect(screen.getByTestId('mobile-logout-button')).toBeInTheDocument();
     });
   });
 
   test('handles successful mobile logout', async () => {
-    // Mock cookie implementation
-    (Cookies.get as jest.Mock).mockImplementation((key) => {
-      if (key === 'token') return mockToken;
-      if (key === 'user') return JSON.stringify(mockUser);
-      return null;
-    });
-
+    setupAuthenticatedEnvironment();
     renderNavbarWithAuth(mockToken);
 
-    // Get the first button in the mobile menu container (the hamburger menu)
-    const buttons = screen.getAllByRole('button');
-    // Find the hamburger menu button - it should be the one without a data-testid
-    const menuButton = buttons.find(button => !button.hasAttribute('data-testid')) || buttons[0];
-    
+    const menuButton = getHamburgerMenuButton();
     fireEvent.click(menuButton);
 
-    // Find and click mobile logout button
     await waitFor(() => {
       const mobileLogoutButton = screen.getByTestId('mobile-logout-button');
       fireEvent.click(mobileLogoutButton);
     });
 
-    // Wait for logout actions to complete
-    await waitFor(() => {
-      expect(Cookies.remove).toHaveBeenCalledWith('token');
-      expect(Cookies.remove).toHaveBeenCalledWith('user');
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/');
-    });
+    await verifyLogoutActions();
   });
 });
