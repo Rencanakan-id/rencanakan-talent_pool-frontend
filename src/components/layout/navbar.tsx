@@ -65,11 +65,15 @@ export const Navbar: React.FC = () => {
 
           {isAuthenticated && (
             <div className="hidden items-center gap-1 lg:flex">
-              <Typography variant="h6" className="mr-3 font-medium">
-                {user?.firstName + user?.lastName || 'User'}
-              </Typography>
-              <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
-            </div>
+            <Typography 
+              variant="h6" 
+              className="mr-3 font-medium"
+              data-testid="desktop-user-name" // Add this line
+            >
+              {user?.firstName + user?.lastName || 'User'}
+            </Typography>
+            <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
+          </div>
           )}
 
           {isAuthenticated && (
@@ -79,6 +83,7 @@ export const Navbar: React.FC = () => {
                 size={'lg'}
                 onClick={handleLogout}
                 className="transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
+                data-testid = "desktop-logout-button"  
               >
                 <Typography variant="p2" className="font-medium">
                   Logout
@@ -138,7 +143,7 @@ export const Navbar: React.FC = () => {
             <div className="w-full px-6 py-5 flex items-center justify-between border-t border-gray-200">
               <div className="flex items-center gap-2">
                 <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
-                <Typography variant="p2" className="font-medium">
+                <Typography variant="p2" className="font-medium" data-testid="mobile-user-name">
                   {user?.firstName + user?.lastName || 'User'}
                 </Typography>
               </div>
@@ -147,6 +152,7 @@ export const Navbar: React.FC = () => {
                 size={'lg'}
                 className="flex items-center gap-1 px-3 py-1 transition-colors duration-200 bg-rencanakan-premium-gold-300 hover:bg-rencanakan-premium-gold-400 border-rencanakan-premium-gold-300 hover:border-rencanakan-premium-gold-400"
                 onClick={handleLogout}
+                data-testid="mobile-logout-button"
               >
                 <Typography variant="p2" className="font-medium">
                   Logout
