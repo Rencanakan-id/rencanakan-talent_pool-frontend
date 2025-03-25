@@ -9,9 +9,9 @@ global.fetch = jest.fn() as jest.Mock;
 
 // Properly define ResizeObserver mock
 global.ResizeObserver = class ResizeObserver {
-  observe(): void {}
-  unobserve(): void {}
-  disconnect(): void {}
+  observe(): void { console.log('ResizeObserver: observe called'); }
+  unobserve(): void { console.log('ResizeObserver: unobserve called'); }
+  disconnect(): void { console.log('ResizeObserver: disconnect called'); }
 } as unknown as typeof ResizeObserver;
 
 // Fix scrollIntoView mock
