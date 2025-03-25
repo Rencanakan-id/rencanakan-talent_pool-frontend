@@ -29,6 +29,88 @@ Object.defineProperty(window, 'location', {
 });
 
 describe("Registration Page Positive Case", () => {
+  const fillFirstStep = async () => {
+    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
+    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
+    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john.doe@example.com");
+    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
+    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
+    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
+  };
+
+  const fillSecondStep = async (experienceText: string) => {
+    await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Saya seorang developer berpengalaman.");
+    await userEvent.click(screen.getByText("Pilih Lama Pengalaman *"));
+    await userEvent.click(screen.getByText(experienceText));
+    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
+    await userEvent.click(screen.getByText("Operator"));
+    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
+    await userEvent.click(screen.getByText("Jakarta"));
+    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
+    await userEvent.click(screen.getByText("Bandung"));
+    await userEvent.click(screen.getByText("Keahlian *"));
+    await userEvent.click(screen.getByText("Arsitektur"));
+  };
+
+  const fillThirdStep = async () => {
+    await userEvent.type(screen.getByPlaceholderText("Rp. -"), "5000000");
+  };
+
+  const fillFourthStep = async () => {
+    await userEvent.type(screen.getByPlaceholderText("Buat kata sandi yang sulit (pastikan ada angka dan minimal 8 karakter)"), "Password123");
+    await userEvent.type(screen.getByPlaceholderText("Masukkan kata sandimu lagi disini"), "Password123");
+    fireEvent.click(screen.getByRole("checkbox"));
+  };
+
+  const submitRegistration = async (expectedExperienceYears: number) => {
+    fireEvent.click(screen.getByText("Daftar Kerja"));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/api/auth/register', expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+        body: expect.any(String)
+      }));
+
+      const requestBody = JSON.parse((fetch as jest.Mock).mock.calls[0][1].body);
+      expect(requestBody.experienceYears).toBe(expectedExperienceYears);
+      expect(window.location.href).toBe('/login');
+    });
+  };
+
+  const completeRegistration = async (experienceText: string, expectedExperienceYears: number) => {
+    // Mock successful fetch response
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ message: "Registration successful" })
+    });
+    
+    render(<RegisterModule />);
+    
+    // Fill Step 1
+    await fillFirstStep();
+    fireEvent.click(screen.getByText("Selanjutnya"));
+
+    // Fill Step 2
+    await waitFor(() => expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument());
+    await fillSecondStep(experienceText);
+    fireEvent.click(screen.getByText("Selanjutnya"));
+
+    // Fill Step 3
+    await waitFor(() => expect(screen.getByText("Kira-kira begini perkiraan harga kamu, cocok gak?")).toBeInTheDocument());
+    await fillThirdStep();
+    fireEvent.click(screen.getByText("Selanjutnya"));
+    
+    // Fill Step 4 and submit
+    await waitFor(() => expect(screen.getByText("Semuanya udah oke, yuk buat akun!")).toBeInTheDocument());
+    await fillFourthStep();
+    
+    await submitRegistration(expectedExperienceYears);
+  };
+
   beforeEach(() => {
     // Reset fetch mock before each test
     (global.fetch as jest.Mock).mockReset();
@@ -151,240 +233,16 @@ describe("Registration Page Positive Case", () => {
     await waitFor(() => expect(screen.getByText("Lengkapi formulir dan mulai perjalanan karier kamu!")).toBeInTheDocument());
   });
 
-  it("correctly parses experience years with parseExperienceYears function", async () => {
-    render(<RegisterModule />);
-    
-    // Fill out steps to reach the part where experience is selected
-    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
-    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john.doe@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
-    
-    fireEvent.click(screen.getByText("Selanjutnya"));
-    
-    // Test different experience year selections
-    await userEvent.click(screen.getByText("Pilih Lama Pengalaman *"));
-    await userEvent.click(screen.getByText("1 Tahun"));
-    
-    // Move to the next step again to test if the value gets processed
-    await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Test bio 10 karakter");
-    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
-    await userEvent.click(screen.getByText("Operator"));
-    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
-    await userEvent.click(screen.getByText("Jakarta"));
-    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
-    await userEvent.click(screen.getByText("Bandung"));
-    await userEvent.click(screen.getByText("Keahlian *"));
-    await userEvent.click(screen.getByText("Arsitektur"));
-    
-    fireEvent.click(screen.getByText("Selanjutnya"));
-    
-    // Test switching back and changing the value
-    fireEvent.click(screen.getByText("Kembali"));
-    
-    await userEvent.click(screen.getByText("1 Tahun"));
-    await userEvent.click(screen.getByText("5 Tahun"));
-
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    await waitFor(() => expect(screen.getByText("Kira-kira begini perkiraan harga kamu, cocok gak?")).toBeInTheDocument());
+  it("successfully submits the form with 1 year experience", async () => {
+    await completeRegistration("1 Tahun", 1);
   });
 
-  it("successfully submits the form when all data is valid", async () => {
-    // Mock successful fetch response
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ message: "Registration successful" })
-    });
-    
-    render(<RegisterModule />);
-    
-    // Fill Step 1
-    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
-    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john.doe@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
-    
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Fill Step 2
-    await waitFor(() => expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Saya seorang developer berpengalaman.");
-    await userEvent.click(screen.getByText("Pilih Lama Pengalaman *"));
-    await userEvent.click(screen.getByText("2-3 Tahun"));
-    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
-    await userEvent.click(screen.getByText("Operator"));
-    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
-    await userEvent.click(screen.getByText("Jakarta"));
-    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
-    await userEvent.click(screen.getByText("Bandung"));
-    await userEvent.click(screen.getByText("Keahlian *"));
-    await userEvent.click(screen.getByText("Arsitektur"));
-
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Fill Step 3
-    await waitFor(() => expect(screen.getByText("Kira-kira begini perkiraan harga kamu, cocok gak?")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Rp. -"), "5000000");
-    fireEvent.click(screen.getByText("Selanjutnya"));
-    
-    // Fill Step 4 and submit
-    await waitFor(() => expect(screen.getByText("Semuanya udah oke, yuk buat akun!")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Buat kata sandi yang sulit (pastikan ada angka dan minimal 8 karakter)"), "Password123");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan kata sandimu lagi disini"), "Password123");
-    fireEvent.click(screen.getByRole("checkbox"));
-    
-    fireEvent.click(screen.getByText("Daftar Kerja"));
-
-    await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/api/auth/register', expect.objectContaining({
-        method: 'POST',
-        headers: expect.objectContaining({
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-        body: expect.any(String)
-      }));
-
-      const requestBody = JSON.parse((fetch as jest.Mock).mock.calls[0][1].body);
-      expect(requestBody.experienceYears).toBe(2);
-
-      expect(window.location.href).toBe('/login');
-    });
+  it("successfully submits the form with 2-3 years experience", async () => {
+    await completeRegistration("2-3 Tahun", 2);
   });
 
-  it("successfully submits the form with 1 yrs exp", async () => {
-    // Mock successful fetch response
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ message: "Registration successful" })
-    });
-    
-    render(<RegisterModule />);
-    
-    // Fill Step 1
-    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
-    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john.doe@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
-    
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Fill Step 2
-    await waitFor(() => expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Saya seorang developer berpengalaman.");
-    await userEvent.click(screen.getByText("Pilih Lama Pengalaman *"));
-    await userEvent.click(screen.getByText("1 Tahun"));
-    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
-    await userEvent.click(screen.getByText("Operator"));
-    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
-    await userEvent.click(screen.getByText("Jakarta"));
-    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
-    await userEvent.click(screen.getByText("Bandung"));
-    await userEvent.click(screen.getByText("Keahlian *"));
-    await userEvent.click(screen.getByText("Arsitektur"));
-
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Fill Step 3
-    await waitFor(() => expect(screen.getByText("Kira-kira begini perkiraan harga kamu, cocok gak?")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Rp. -"), "5000000");
-    fireEvent.click(screen.getByText("Selanjutnya"));
-    
-    // Fill Step 4 and submit
-    await waitFor(() => expect(screen.getByText("Semuanya udah oke, yuk buat akun!")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Buat kata sandi yang sulit (pastikan ada angka dan minimal 8 karakter)"), "Password123");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan kata sandimu lagi disini"), "Password123");
-    fireEvent.click(screen.getByRole("checkbox"));
-    
-    fireEvent.click(screen.getByText("Daftar Kerja"));
-
-    await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/api/auth/register', expect.objectContaining({
-        method: 'POST',
-        headers: expect.objectContaining({
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-        body: expect.any(String)
-      }));
-
-      const requestBody = JSON.parse((fetch as jest.Mock).mock.calls[0][1].body);
-      expect(requestBody.experienceYears).toBe(1);
-
-      expect(window.location.href).toBe('/login');
-    });
-  });
-
-  it("successfully submits the form with 5 yrs exp", async () => {
-    // Mock successful fetch response
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ message: "Registration successful" })
-    });
-    
-    render(<RegisterModule />);
-    
-    // Fill Step 1
-    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
-    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john.doe@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
-    
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Fill Step 2
-    await waitFor(() => expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Saya seorang developer berpengalaman.");
-    await userEvent.click(screen.getByText("Pilih Lama Pengalaman *"));
-    await userEvent.click(screen.getByText("5 Tahun"));
-    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
-    await userEvent.click(screen.getByText("Operator"));
-    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
-    await userEvent.click(screen.getByText("Jakarta"));
-    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
-    await userEvent.click(screen.getByText("Bandung"));
-    await userEvent.click(screen.getByText("Keahlian *"));
-    await userEvent.click(screen.getByText("Arsitektur"));
-
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Fill Step 3
-    await waitFor(() => expect(screen.getByText("Kira-kira begini perkiraan harga kamu, cocok gak?")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Rp. -"), "5000000");
-    fireEvent.click(screen.getByText("Selanjutnya"));
-    
-    // Fill Step 4 and submit
-    await waitFor(() => expect(screen.getByText("Semuanya udah oke, yuk buat akun!")).toBeInTheDocument());
-    await userEvent.type(screen.getByPlaceholderText("Buat kata sandi yang sulit (pastikan ada angka dan minimal 8 karakter)"), "Password123");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan kata sandimu lagi disini"), "Password123");
-    fireEvent.click(screen.getByRole("checkbox"));
-    
-    fireEvent.click(screen.getByText("Daftar Kerja"));
-
-    await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/api/auth/register', expect.objectContaining({
-        method: 'POST',
-        headers: expect.objectContaining({
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-        body: expect.any(String)
-      }));
-
-      const requestBody = JSON.parse((fetch as jest.Mock).mock.calls[0][1].body);
-      expect(requestBody.experienceYears).toBe(3);
-
-      expect(window.location.href).toBe('/login');
-    });
+  it("successfully submits the form with 5 years experience", async () => {
+    await completeRegistration("5 Tahun", 3);
   });
 });
 
