@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthContextProvider } from '@/components/context/authContext';
 import {Navbar} from '@/components/layout/navbar';
-// import axios from 'axios';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
