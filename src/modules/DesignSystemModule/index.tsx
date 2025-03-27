@@ -6,6 +6,8 @@ import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
+import { toast } from 'sonner';
+
 const dummyExperience= [
   {
     id: 1,
@@ -42,6 +44,7 @@ const dummyExperience= [
   },
 ];
 import { useState } from 'react';
+import { Toaster } from 'sonner';
 
 
 const dummyUser = {
@@ -331,6 +334,24 @@ export const DesignSystemModule = () => {
           </div>
         </div>
       </div>
+
+      <Button
+        variant="primary"
+        onClick={() =>
+          toast("Event has been created", {
+            description: "Sunday, December 03, 2023 at 9:00 AM",
+            action: {
+              label: "Undo",
+              onClick: () => console.log("Undo"),
+            },
+          })
+        }
+      >
+        Show Toast
+      </Button>
+
+      <Toaster />
+    
       {/* Modal Section */}
       <h1 className="text-2xl font-bold">Design System | Modals</h1>
       <div className="space-y-6">
