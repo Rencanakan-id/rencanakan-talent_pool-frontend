@@ -6,6 +6,9 @@ import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
+import { ConfirmationBox } from '@/components/ui/confirmation-box';
+import { useState } from 'react';
+
 const dummyExperience= [
   {
     id: 1,
@@ -41,8 +44,6 @@ const dummyExperience= [
     talentId: 103,
   },
 ];
-import { useState } from 'react';
-
 
 const dummyUser = {
   id: '1',
@@ -73,6 +74,13 @@ export const DesignSystemModule = () => {
   const [isSmallOpen, setIsSmallOpen] = useState(false);
   const [isLargeOpen, setIsLargeOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isBasicConfirmationOpen, setIsBasicConfirmationOpen] = useState(false);
+  const [isCustomConfirmationOpen, setIsCustomConfirmationOpen] = useState(false);
+  
+  const handleConfirm = () => {
+    console.log('Action confirmed!');
+    // Your confirmation logic here
+  };
 
   return (
     <div className="flex flex-col gap-5 p-6">
@@ -431,6 +439,50 @@ export const DesignSystemModule = () => {
           </Modal>
         </div>
       </div>
+
+      <h1 className="text-2xl font-bold mt-10">Design System | Confirmation Box</h1>
+      <div className="space-y-6">
+        {/* Basic Confirmation Box */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Basic Confirmation Box
+          </Typography>
+          <Button variant="primary" onClick={() => setIsBasicConfirmationOpen(true)}>
+            Show Basic Confirmation
+          </Button>
+          <ConfirmationBox
+            isOpen={isBasicConfirmationOpen}
+            onClose={() => setIsBasicConfirmationOpen(false)}
+            onConfirm={handleConfirm}
+            title="Konfirmasi Penerimaan"
+            description="Apakah Anda yakin ingin menerima rekomendasi ini?"
+            additionalMessage="Aksi ini tidak dapat dibatalkan."
+          />
+        </div>
+
+        {/* Custom Confirmation Box */}
+        <div>
+          <Typography variant="p2" className="mb-2">
+            Custom Confirmation Box
+          </Typography>
+          <Button variant="secondary" onClick={() => setIsCustomConfirmationOpen(true)}>
+            Show Custom Confirmation
+          </Button>
+          <ConfirmationBox
+            isOpen={isCustomConfirmationOpen}
+            onClose={() => setIsCustomConfirmationOpen(false)}
+            onConfirm={handleConfirm}
+            title="Konfirmasi Pembayaran"
+            description="Lanjutkan pembayaran sekarang?"
+            additionalMessage="Anda akan diarahkan ke halaman pembayaran."
+            confirmButtonText="Lanjutkan"
+            cancelButtonText="Batal"
+            confirmButtonVariant="secondary"
+          />
+        </div>
+      </div>
     </div>
   );
 };
+
+export default DesignSystemModule;
