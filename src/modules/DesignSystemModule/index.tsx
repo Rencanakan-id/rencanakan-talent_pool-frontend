@@ -338,7 +338,7 @@ export const DesignSystemModule = () => {
       <Button
         variant="primary"
         onClick={() =>
-          toast("Event has been created", {
+          toast("Rekomendasi berhasil dihapus", {
             description: "Sunday, December 03, 2023 at 9:00 AM",
             action: {
               label: "Undo",
@@ -347,7 +347,7 @@ export const DesignSystemModule = () => {
           })
         }
       >
-        Show Toast
+        Show Toaster
       </Button>
 
       <Toaster />
