@@ -19,28 +19,17 @@ export interface RecommendationResponseDTO {
 
 export interface RecommendationProps {
   recommendations: RecommendationResponseDTO[];
-  onAccept?: (id: string) => void;
-  onDecline?: (id: string) => void;
 }
 
-const RecommendationCard: React.FC<RecommendationProps> = ({
-  recommendations = [],
-  onAccept,
-  onDecline,
-}) => {
+const RecommendationCard: React.FC<RecommendationProps> = ({ recommendations = [] }) => {
   return (
     <div className="min-h-[200px] w-full rounded-[8px] border border-gray-300 px-6 py-6">
       <Typography variant="p1">Rekomendasi</Typography>
-      
+
       {recommendations.length > 0 ? (
         <div className="w-full space-y-2 divide-y divide-gray-300">
           {recommendations.map((recommendation) => (
-            <ExpandableRecommendation 
-              key={recommendation.id} 
-              recommendation={recommendation} 
-              onAccept={onAccept}
-              onDecline={onDecline}
-            />
+            <ExpandableRecommendation key={recommendation.id} recommendation={recommendation} />
           ))}
         </div>
       ) : (
@@ -52,70 +41,58 @@ const RecommendationCard: React.FC<RecommendationProps> = ({
   );
 };
 
-interface ExpandableRecommendationProps {
-  recommendation: RecommendationResponseDTO;
-  onAccept?: (id: string) => void;
-  onDecline?: (id: string) => void;
-}
-
-const ExpandableRecommendation: React.FC<ExpandableRecommendationProps> = ({
+const ExpandableRecommendation: React.FC<{ recommendation: RecommendationResponseDTO }> = ({
   recommendation,
-  onAccept,
-  onDecline,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (contentRef.current) {
       setIsOverflowing(contentRef.current.scrollHeight > 112);
     }
   }, []);
-  
-  const handleAccept = () => {
-    if (onAccept) {
-      onAccept(recommendation.id);
-    }
-  };
-  
-  const handleDecline = () => {
-    if (onDecline) {
-      onDecline(recommendation.id);
-    }
-  };
 
   return (
     <div className={`space-y-1 py-4`}>
       <Typography variant="h5" className="pb-1">
         {recommendation.contractorName}
       </Typography>
-      <div className="flex items-center space-x-4">
+      <div className=" flex items-center space-x-4 md:flex-row">
         {/* Pesan dengan proporsi 4 */}
         <div
           ref={contentRef}
-          className={`relative flex-4 transition-all ${expanded ? 'h-full' : 'max-h-[112px] overflow-hidden'}`}
+          className={`relative   ${expanded ? 'h-auto': 'h-[112px]'} md:flex-4`}
         >
-          <Typography variant="p3">{recommendation.message}</Typography>
+          <div className={` transition-all ${expanded ? 'line-clamp-none' : 'line-clamp-4'}`}>
+            <Typography variant="p3">{recommendation.message}</Typography>
+          </div>
+          <div className='mt-2'>
+            {isOverflowing && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="text-sm text-blue-700 italic underline hover:cursor-pointer"
+              >
+                {expanded ? 'Lihat Lebih Sedikit' : 'Lihat Lebih Banyak'}
+              </button>
+            )}
+          </div>
+       
+         
         </div>
         {
           recommendation.status === StatusType.PENDING && (
-            <div className="flex-1 flex flex-col space-y-2">
-              <Button variant="primary" onClick={handleAccept}>Terima</Button>
-              <Button variant="primary-outline" onClick={handleDecline}>Tolak</Button>
-            </div>
+          <div className="flex flex-col space-y-2 md:flex-1">
+            <Button variant="primary">Terima</Button>
+            <Button variant="primary-outline">Tolak</Button>
+          </div>
           )
         }
+       
       </div>
-      
-      {isOverflowing && (
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="text-sm text-blue-700 italic underline hover:cursor-pointer"
-        >
-          {expanded ? 'Lihat Lebih Sedikit' : 'Lihat Lebih Banyak'}
-        </button>
-      )}
+
+     
     </div>
   );
 };
