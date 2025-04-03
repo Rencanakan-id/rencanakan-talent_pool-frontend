@@ -6,7 +6,7 @@ import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
-const dummyExperience= [
+const dummyExperience = [
   {
     id: 1,
     title: 'Software Engineer',
@@ -22,27 +22,86 @@ const dummyExperience= [
     id: 2,
     title: 'Frontend Developer',
     company: 'Startup XYZ',
-    employmentType: 'FULL_TIME' as EmploymentType, 
+    employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2019-02-15',
     endDate: '2020-05-30',
     location: 'Remote',
-    locationType: 'ON_SITE' as LocationType, 
+    locationType: 'ON_SITE' as LocationType,
     talentId: 102,
   },
   {
     id: 3,
     title: 'Backend Developer',
     company: 'Enterprise Solutions',
-    employmentType: 'FULL_TIME' as EmploymentType, 
+    employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2018-09-01',
     endDate: '2019-12-15',
     location: 'Bandung, Indonesia',
-    locationType: 'ON_SITE' as LocationType, 
+    locationType: 'ON_SITE' as LocationType,
     talentId: 103,
   },
 ];
-import { useState } from 'react';
+const loremIpsum = `
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+  in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+  sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+  Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, 
+  nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. 
+  Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien 
+  risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, 
+  commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus 
+  eget erat. Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat. Curabitur augue lorem, dapibus quis, laoreet et, pretium ac, 
+  nisi. Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci. In hac habitasse platea dictumst.
+
+  Fusce convallis, mauris imperdiet gravida bibendum, nisl turpis suscipit mauris, sed placerat ipsum urna sit amet elit. Sed bibendum 
+  ornare urna, non varius ligula molestie vel. Nulla facilisi. Vivamus ut arcu vel elit ultrices tincidunt. Mauris interdum, nulla ut 
+  fermentum venenatis, orci erat varius felis, id fringilla lectus neque id eros. Donec vel neque in felis feugiat dignissim. 
+  Praesent consequat, libero ac cursus ultrices, mauris dolor fermentum risus, ac feugiat quam justo non turpis. 
+   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+  in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+  sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+  Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, 
+  nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. 
+  Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien 
+  risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, 
+  commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus 
+  eget erat. Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat. Curabitur augue lorem, dapibus quis, laoreet et, pretium ac, 
+  nisi. Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci. In hac habitasse platea dictumst.
+
+  Fusce convallis, mauris imperdiet gravida bibendum, nisl turpis suscipit mauris, sed placerat ipsum urna sit amet elit. Sed bibendum 
+  ornare urna, non varius ligula molestie vel. Nulla facilisi. Vivamus ut arcu vel elit ultrices tincidunt. Mauris interdum, nulla ut 
+  fermentum venenatis, orci erat varius felis, id fringilla lectus neque id eros. Donec vel neque in felis feugiat dignissim. 
+  Praesent consequat, libero ac cursus ultrices, mauris dolor fermentum risus, ac feugiat quam justo non turpis. 
+
+  `;
+
+const recommendations: RecommendationResponseDTO[] = [
+  {
+    id: '1',
+    talentId: '101',
+    contractorId: 202,
+    contractorName: 'John Doe',
+    message: loremIpsum,
+    status: StatusType.PENDING,
+  },
+  {
+    id: '2',
+    talentId: '102',
+    contractorId: 203,
+    contractorName: 'Jane Smith',
+    message: 'Pekerjaan luar biasa, sangat detail dan komunikatif.',
+    status: StatusType.APPROVED
+  },
+];
+import { useState } from 'react';
+import RecommendationCard, {
+  RecommendationResponseDTO,
+  StatusType,
+} from '@/components/ui/recommendation';
 
 const dummyUser = {
   id: '1',
@@ -122,7 +181,10 @@ export const DesignSystemModule = () => {
             'Balikpapan',
           ]}
         />
-        <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+        <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong" />
+      </div>
+      <div className="p-6">
+        <RecommendationCard recommendations={recommendations} />
       </div>
 
       <div className="space-y-4">
@@ -249,7 +311,7 @@ export const DesignSystemModule = () => {
       </div>
       <div>
         <h1> Experience Detail </h1>
-        <Experience experiences={dummyExperience}/>
+        <Experience experiences={dummyExperience} />
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
@@ -342,7 +404,11 @@ export const DesignSystemModule = () => {
           <Button variant="primary" onClick={() => setIsDefaultOpen(true)}>
             Open Default Modal
           </Button>
-          <Modal isOpen={isDefaultOpen} onClose={() => setIsDefaultOpen(false)} title="Default Modal">
+          <Modal
+            isOpen={isDefaultOpen}
+            onClose={() => setIsDefaultOpen(false)}
+            title="Default Modal"
+          >
             <Typography variant="p4" className="text-rencanakan-dark-gray">
               This is a basic modal with no additional features.
             </Typography>

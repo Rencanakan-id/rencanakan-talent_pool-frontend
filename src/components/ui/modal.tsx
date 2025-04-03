@@ -4,20 +4,17 @@ import { cn } from '@/lib/utils';
 import { Typography } from '@/components';
 
 // Variants for the modal container (backdrop)
-const modalVariants = cva(
-  'fixed inset-0 z-50 flex items-center justify-center bg-black/50',
-  {
-    variants: {
-      isError: {
-        true: '',
-        false: '',
-      },
+const modalVariants = cva('fixed inset-0 z-50 flex items-center justify-center bg-black/50', {
+  variants: {
+    isError: {
+      true: '',
+      false: '',
     },
-    defaultVariants: {
-      isError: false,
-    },
-  }
-);
+  },
+  defaultVariants: {
+    isError: false,
+  },
+});
 
 // Variants for the modal content
 const modalContentVariants = cva(
@@ -122,14 +119,14 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors close-icon"
+            className="close-icon absolute top-2 right-2 text-gray-500 transition-colors hover:text-gray-700"
           >
             &times;
           </button>
 
           {/* Title */}
           {title && (
-            <Typography variant="h6" className="mb-4 text-rencanakan-main-black">
+            <Typography variant="h6" className="text-rencanakan-main-black mb-4">
               {title}
             </Typography>
           )}

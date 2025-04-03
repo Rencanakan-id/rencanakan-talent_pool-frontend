@@ -38,12 +38,11 @@ describe('UserProfileCard Component', () => {
     expect(screen.getByText('5 Tahun Pengalaman')).toBeInTheDocument();
     expect(screen.getByText('Tentang Saya')).toBeInTheDocument();
     expect(
-      screen.getByText('Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.')
+      screen.getByText(
+        'Saya adalah seorang software engineer dengan pengalaman di React dan NestJS.'
+      )
     ).toBeInTheDocument();
     expect(screen.getByText('Perkiraan Harga')).toBeInTheDocument();
     expect(screen.getByText('Rp 7.500.000')).toBeInTheDocument();
-    
   });
-
- 
 });

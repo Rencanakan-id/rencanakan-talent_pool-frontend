@@ -4,14 +4,13 @@ import Experience, { ExperienceDetail } from '@/components/ui/experience';
 import UserProfileCard, { UserProfile } from '@/components/ui/profile';
 import { ArrowLeft, BookmarkIcon } from 'lucide-react';
 import Location from '@/components/ui/location';
-import Cookies from 'js-cookie';
 import { useAuth } from '@/components/context/authContext';
 
 export const PreviewTalentModule: React.FC = () => {
-  console.log("PreviewTalentModule rendered");
+  console.log('PreviewTalentModule rendered');
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [experience, setExperience] = useState<ExperienceDetail[] | null>(null);
-  const { user, token} = useAuth() 
+  const { user, token } = useAuth();
   // useEffect(() => {
   //   // const value = Cookies.get('jwt');
   //   // setToken(value || '');
@@ -45,7 +44,7 @@ export const PreviewTalentModule: React.FC = () => {
       try {
         const res = await fetch(`${VITE_BE_URL}/api/experiences/${user.id}`, {
           headers: {
-            Authorization: `Bearer ${token}`  
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -92,7 +91,7 @@ export const PreviewTalentModule: React.FC = () => {
           </Button>
         </div>
 
-        <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-x-6 md:space-y-0">
+        <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-y-0 md:space-x-6">
           <img src="profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
           <div className="w-full flex-col items-center space-y-4">
             <UserProfileCard user={userProfile} />
