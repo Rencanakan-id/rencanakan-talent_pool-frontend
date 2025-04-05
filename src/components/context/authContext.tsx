@@ -56,7 +56,7 @@ export const AuthContextProvider = ({
         });
 
         if (res.status === 200) {
-          const jwt = Cookies.get('jwt') || '';
+          const jwt = Cookies.get('jwt')?? '';
           const decodedUser = jwtDecode<UserProps>(jwt);
           setUser(decodedUser);
           setToken(jwt);

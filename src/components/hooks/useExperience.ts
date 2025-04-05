@@ -13,7 +13,7 @@ export function useExperience(userId?: string) {
       if (!token || !userId) return;
       try {
         const experienceData = await UserService.getUserExperience(userId, token);
-        setExperience(experienceData.data || null);
+        setExperience(experienceData.data?? null);
       } catch (err) {
         console.error(err);
         setExperience(null);
