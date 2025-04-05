@@ -14,7 +14,7 @@ interface CertificateProps {
 const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
 
     const formatFileSize = (bytes: number): string => {
-        if (bytes === 0) return '0 Bytes';
+        if (bytes === 0) return '0Bytes';
         
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];

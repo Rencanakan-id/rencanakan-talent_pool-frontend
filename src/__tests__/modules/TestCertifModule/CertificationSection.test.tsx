@@ -22,7 +22,7 @@ describe('Certificate Component', () => {
 
     expect(screen.getByText('Sertifikasi')).toBeInTheDocument();
     expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
-    expect(screen.getByText('13 Bytes')).toBeInTheDocument();
+    expect(screen.getByText('13Bytes')).toBeInTheDocument();
   });
 
   test('renders message when there is no data', () => {
@@ -35,7 +35,7 @@ describe('Certificate Component', () => {
     render(<Certificate certificates={[mockCertificates[1]]} />);
 
     expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
-    expect(screen.getByText('0 Bytes')).toBeInTheDocument();
+    expect(screen.getByText('0Bytes')).toBeInTheDocument();
   });
 
 });
