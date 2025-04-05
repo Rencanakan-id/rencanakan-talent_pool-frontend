@@ -1,4 +1,5 @@
 import { Typography } from "../atoms/typography";
+import { Button } from "./button";
 
 export interface CertificateDetail {
     id: number;
@@ -32,12 +33,20 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             {certificates.length > 0 ? (
                 <div className="w-full space-y-4">
                     {certificates.map((cert) => (
-                        <div key={cert.id} className="min-h-18 space-y-1 space-x-2 flex items-center bg-rencanakan-lightest-gray border-rencanakan-light-gray border-[1px] rounded-xl p-4">
-                            <img src="/pdf.svg" alt="Logo" className="h-8 w-8" />
-                            <div>
-                                <Typography variant="p4" className="font-medium text-rencanakan-type-black"> {cert.file.name} </Typography>
-                                <Typography variant="p4" className="text-rencanakan-dark-gray">{formatFileSize(cert.file.size)}</Typography>
+                        <div key={cert.id} className="min-h-18 space-y-1 space-x-2 flex items-center justify-between bg-rencanakan-lightest-gray border-rencanakan-light-gray border-[1px] rounded-xl p-4">
+                            <div className="flex space-x-2 items-center">
+                                <img src="/pdf.svg" alt="Logo" className="h-8 w-8" draggable={false} />
+                                <div>
+                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black"> {cert.file.name} </Typography>
+                                    <Typography variant="p4" className="text-rencanakan-dark-gray">{formatFileSize(cert.file.size)}</Typography>
+                                </div>
                             </div>
+                            <Button 
+                                variant="primary" 
+                                icon={<img src="/download.svg" alt="" className="h-4 w-4" draggable={false} />} 
+                                iconPosition="end">
+                                Download File
+                            </Button>
                         </div>
                     ))}
                 </div>
