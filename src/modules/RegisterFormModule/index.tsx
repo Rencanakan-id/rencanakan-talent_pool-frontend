@@ -158,11 +158,7 @@ export const RegisterModule = () => {
   const handleSubmit = async () => {
     if (formState === 4) {
       const { password, passwordConfirmation, termsAndConditions } = formData;
-      const validation = validateStepFourForm(
-        password,
-        passwordConfirmation,
-        termsAndConditions
-      );
+      const validation = validateStepFourForm(password, passwordConfirmation, termsAndConditions);
 
       setValidationErrors(validation.errors);
 
@@ -185,7 +181,7 @@ export const RegisterModule = () => {
             preferredLocations: formData.preferredLocations || [],
             skill: formData.skill === 'lainnya' ? formData.otherSkill : formData.skill,
             price: formData.price,
-            password: formData.password
+            password: formData.password,
           };
 
           console.log('Registration request data:', requestData);
@@ -193,7 +189,7 @@ export const RegisterModule = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Accept': 'application/json',
+              Accept: 'application/json',
             },
             body: JSON.stringify(requestData),
           });
@@ -205,13 +201,13 @@ export const RegisterModule = () => {
 
           const responseData = await response.json().catch(() => ({}));
           console.log('Registration successful:', responseData);
-          
+
           navigate('/login');
         } catch (error) {
           console.error('Registration error:', error);
           setSubmitError(
-            error instanceof Error 
-              ? error.message 
+            error instanceof Error
+              ? error.message
               : 'Failed to register. Please check if the server is running and CORS is properly configured.'
           );
         } finally {
@@ -236,12 +232,7 @@ export const RegisterModule = () => {
         validationErrors={validationErrors}
       />
     ),
-    3: (
-      <StepThreeForm 
-        formData={formData} 
-        updateFormData={updateFormData} 
-      />
-    ),
+    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: (
       <StepFourForm
         formData={formData}
