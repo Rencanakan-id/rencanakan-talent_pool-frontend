@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Certificate, { CertificateDetail } from '@/components/ui/certificate';
 
 describe('Certificate Component', () => {
@@ -31,6 +31,12 @@ describe('Certificate Component', () => {
     expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
   });
 
+  test('render component with undefined certificates', () => {
+    render(<Certificate />);
+
+    expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
+  });
+
   test('formats pdf with 0 bytes data', () => {
     render(<Certificate certificates={[mockCertificates[1]]} />);
 
@@ -46,6 +52,7 @@ describe('Certificate Component', () => {
   });
 
   test('initiates download when button is clicked', () => {
+    render(<Certificate certificates={mockCertificates} />);
     const mockCreateObjectURL = jest.fn().mockReturnValue('mock-url');
     URL.createObjectURL = mockCreateObjectURL;
 
@@ -63,7 +70,6 @@ describe('Certificate Component', () => {
     
     URL.revokeObjectURL = jest.fn();
     
-    render(<Certificate certificates={mockCertificates} />);
     
     const downloadButton = screen.getByTestId('download-btn-1');
     fireEvent.click(downloadButton);

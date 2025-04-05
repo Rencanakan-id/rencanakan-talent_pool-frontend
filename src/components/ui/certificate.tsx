@@ -11,7 +11,6 @@ interface CertificateProps {
     certificates?: CertificateDetail[];
 }
 
-
 const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
 
     const formatFileSize = (bytes: number): string => {
@@ -22,6 +21,20 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + sizes[i];
+    };
+
+    const handleDownload = (file: File) => {
+        const url = URL.createObjectURL(file);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -44,7 +57,10 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                             <Button 
                                 variant="primary" 
                                 icon={<img src="/download.svg" alt="" className="h-4 w-4" draggable={false} />} 
-                                iconPosition="end">
+                                iconPosition="end"
+                                onClick={() => handleDownload(cert.file)}
+                                data-testid={`download-btn-${cert.id}`}
+                            >
                                 Download File
                             </Button>
                         </div>
