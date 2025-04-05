@@ -77,7 +77,7 @@ const LoginModule = () => {
       const response = await fetch('http://localhost:8080/api/auth/login', {
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify(formData),
         method: 'POST',
