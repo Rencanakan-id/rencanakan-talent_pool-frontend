@@ -7,18 +7,18 @@ export const TalentCertificate: React.FC = () => {
     const certificate: CertificateDetail[] = [
         {
           id: 1,
-          title: 'Web Development Bootcamp by Udemy',
-          file: new File(["dummy content"], "webdev-certificate.pdf", { type: "application/pdf" })
+          title: 'Sertifikasi 1',
+          file: new File(['12345'], "Sertifikasi 1.pdf", { type: "application/pdf" })
         },
         {
           id: 2,
-          title: 'SQL for Data Science by Coursera',
-          file: new File(["dummy content"], "sql-certificate.pdf", { type: "application/pdf" })
+          title: 'Sertifikasi 2',
+          file: new File(['1234'], "Sertifikasi 2.pdf", { type: "application/pdf" })
         },
         {
           id: 3,
-          title: 'UI/UX Design by Coursera',
-          file: new File(["dummy content"], "uiux-certificate.pdf", { type: "application/pdf" })
+          title: 'Sertifikasi 3',
+          file: new File(["dummy content"], "Sertifikasi 3.pdf", { type: "application/pdf" })
         },
       ];
       
