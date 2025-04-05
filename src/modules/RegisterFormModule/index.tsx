@@ -65,7 +65,6 @@ export const RegisterModule = () => {
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData((prev) => {
       const newData = { ...prev, ...data };
-      // console.log('Updated Form Data:', newData);
       return newData;
     });
   };
@@ -76,7 +75,6 @@ export const RegisterModule = () => {
     if (formState === 1) {
       const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } =
         formData;
-      // console.log('Step 1 Form Data:', formData);
       const stepOneValidation = validateStepOneForm({
         firstName,
         lastName,
@@ -90,10 +88,8 @@ export const RegisterModule = () => {
       });
 
       setValidationErrors(stepOneValidation.errors);
-      // console.log('Step 1 Validation:', stepOneValidation);
 
       if (stepOneValidation.isValid) {
-        // console.log('Step 1 Form Data:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
       return;
@@ -110,7 +106,6 @@ export const RegisterModule = () => {
         otherSkill,
         skkFile,
       } = formData;
-      // console.log('Step 2 Form Data:', formData);
 
       const stepTwoValidation = validateStepTwoForm({
         aboutMe,
@@ -124,10 +119,8 @@ export const RegisterModule = () => {
       });
 
       setValidationErrors(stepTwoValidation.errors);
-      // console.log('Step 2 Validation:', stepTwoValidation);
 
       if (stepTwoValidation.isValid) {
-        // console.log('Step 2 Form Data Valid:', formData);
         setFormState((prev) => Math.min(prev + 1, 4));
       }
       return;
