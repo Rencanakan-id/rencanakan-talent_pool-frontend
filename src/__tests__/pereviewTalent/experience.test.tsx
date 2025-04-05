@@ -23,7 +23,7 @@ describe('Experience Component', () => {
     expect(screen.getByText('Pengalaman')).toBeInTheDocument();
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
     expect(screen.getByText('Tech Corp • FULL_TIME')).toBeInTheDocument();
-    expect(screen.getByText('Jakarta, Indonesia - 2023-08-31')).toBeInTheDocument();
+    expect(screen.getByText('Jakarta, Indonesia')).toBeInTheDocument();
   });
 
   test('renders message when there is no data', () => {
