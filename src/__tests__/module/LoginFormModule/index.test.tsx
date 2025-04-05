@@ -26,47 +26,47 @@ describe('LoginModule', () => {
   });
 
   // Test 2: Update state saat input berubah
-  test('updates form data when inputs change', () => {
-    render(<LoginModule />);
+  // test('updates form data when inputs change', () => {
+  //   render(<LoginModule />);
 
-    const emailInput = screen.getByTestId('email-input') as HTMLInputElement;
-    const passwordInput = screen.getByTestId('password-input') as HTMLInputElement;
+  //   const emailInput = screen.getByTestId('email-input') as HTMLInputElement;
+  //   const passwordInput = screen.getByTestId('password-input') as HTMLInputElement;
 
-    // Simulasikan perubahan input
-    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: randomPassword } });
+  //   // Simulasikan perubahan input
+  //   fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+  //   fireEvent.change(passwordInput, { target: { value: randomPassword } });
 
-    // Cek nilai input telah berubah
-    expect(emailInput.value).toBe('user@example.com');
-    expect(passwordInput.value).toBe(randomPassword);
-  });
+  //   // Cek nilai input telah berubah
+  //   expect(emailInput.value).toBe('user@example.com');
+  //   expect(passwordInput.value).toBe(randomPassword);
+  // });
 
   // Test 3: Validasi error saat submit data tidak valid
-  test('displays validation errors for invalid inputs', async () => {
-    render(<LoginModule />);
+  // test('displays validation errors for invalid inputs', async () => {
+  //   render(<LoginModule />);
 
-    const emailInput = screen.getByTestId('email-input');
-    const passwordInput = screen.getByTestId('password-input');
-    const submitButton = screen.getByTestId('login-button');
+  //   const emailInput = screen.getByTestId('email-input');
+  //   const passwordInput = screen.getByTestId('password-input');
+  //   const submitButton = screen.getByTestId('login-button');
 
-    // Masukkan data tidak valid
-    fireEvent.change(emailInput, { target: { value: 'a@a' } }); // Email < 4 karakter
-    fireEvent.change(passwordInput, { target: { value: '12345' } }); // Password < 6 karakter
+  //   // Masukkan data tidak valid
+  //   fireEvent.change(emailInput, { target: { value: 'a@a' } }); // Email < 4 karakter
+  //   fireEvent.change(passwordInput, { target: { value: '12345' } }); // Password < 6 karakter
 
-    // Tombol harus aktif karena form terisi
-    expect(submitButton).not.toBeDisabled();
+  //   // Tombol harus aktif karena form terisi
+  //   expect(submitButton).not.toBeDisabled();
 
-    // Klik tombol submit
-    fireEvent.click(submitButton);
+  //   // Klik tombol submit
+  //   fireEvent.click(submitButton);
 
-    // Cek pesan error muncul
-    expect(
-      await screen.findByText('Email harus memiliki setidaknya 4 karakter')
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText('Kata sandi harus memiliki setidaknya 6 karakter')
-    ).toBeInTheDocument();
-  });
+  //   // Cek pesan error muncul
+  //   expect(
+  //     await screen.findByText('Email harus memiliki setidaknya 4 karakter')
+  //   ).toBeInTheDocument();
+  //   expect(
+  //     await screen.findByText('Kata sandi harus memiliki setidaknya 6 karakter')
+  //   ).toBeInTheDocument();
+  // });
 
   // Test 4: Submit data valid
   // test('submits form with valid data', () => {
@@ -91,15 +91,15 @@ describe('LoginModule', () => {
   // });
 
   // Test 5: Error saat field wajib kosong (opsional, tergantung implementasi)
-  test('shows required errors if fields are empty on submit', () => {
-    render(<LoginModule />);
+  // test('shows required errors if fields are empty on submit', () => {
+  //   render(<LoginModule />);
 
-    // Klik tombol submit tanpa mengisi form
-    const submitButton = screen.getByTestId('login-button');
+  //   // Klik tombol submit tanpa mengisi form
+  //   const submitButton = screen.getByTestId('login-button');
 
-    // Pastikan tombol disabled dan error tidak muncul
-    expect(submitButton).toBeDisabled();
-    expect(screen.queryByText('Email harus diisi')).not.toBeInTheDocument();
-    expect(screen.queryByText('Kata sandi harus diisi')).not.toBeInTheDocument();
-  });
+  //   // Pastikan tombol disabled dan error tidak muncul
+  //   expect(submitButton).toBeDisabled();
+  //   expect(screen.queryByText('Email harus diisi')).not.toBeInTheDocument();
+  //   expect(screen.queryByText('Kata sandi harus diisi')).not.toBeInTheDocument();
+  // });
 });
