@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Certificate, { CertificateDetail } from '@/components/ui/certificate';
 
@@ -36,6 +36,41 @@ describe('Certificate Component', () => {
 
     expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
     expect(screen.getByText('0Bytes')).toBeInTheDocument();
+  });
+
+  test('renders download buttons for each certificate', () => {
+    render(<Certificate certificates={mockCertificates} />);
+    
+    const downloadButtons = screen.getAllByText('Download File');
+    expect(downloadButtons).toHaveLength(2);
+  });
+
+  test('initiates download when button is clicked', () => {
+    const mockCreateObjectURL = jest.fn().mockReturnValue('mock-url');
+    URL.createObjectURL = mockCreateObjectURL;
+
+    const mockAppendChild = jest.fn();
+    const mockRemoveChild = jest.fn();
+    document.body.appendChild = mockAppendChild;
+    document.body.removeChild = mockRemoveChild;
+    
+    const mockClick = jest.fn();
+    document.createElement = jest.fn().mockImplementation(() => ({
+      href: '',
+      download: '',
+      click: mockClick
+    }));
+    
+    URL.revokeObjectURL = jest.fn();
+    
+    render(<Certificate certificates={mockCertificates} />);
+    
+    const downloadButton = screen.getByTestId('download-btn-1');
+    fireEvent.click(downloadButton);
+
+    expect(mockCreateObjectURL).toHaveBeenCalledWith(mockCertificates[0].file);
+    expect(mockClick).toHaveBeenCalled();
+    expect(URL.revokeObjectURL).toHaveBeenCalled();
   });
 
 });
