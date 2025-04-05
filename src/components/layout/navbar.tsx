@@ -72,7 +72,7 @@ export const Navbar: React.FC = () => {
             >
               {user?.firstName + user?.lastName || 'User'}
             </Typography>
-            <img src="./dummy/profile.svg" alt="Profile" className='mr-1'/>
+            <img src="./dummy/profile.svg" alt="Profile" className="mr-1" />
           </div>
           )}
 

@@ -168,10 +168,7 @@ describe('StepFourForm Component', () => {
   describe('Component with undefined validationErrors', () => {
     it('renders correctly when validationErrors prop is undefined', () => {
       const { queryByTestId } = render(
-        <StepFourForm
-          formData={{}}
-          updateFormData={defaultProps.updateFormData}
-        />
+        <StepFourForm formData={{}} updateFormData={defaultProps.updateFormData} />
       );
 
       expect(queryByTestId('password-error')).not.toBeInTheDocument();
@@ -183,17 +180,17 @@ describe('StepFourForm Component', () => {
     it('renders terms and conditions checkbox unchecked by default', () => {
       const { container } = renderFormWithData();
       const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
-      
+
       expect(checkbox).toBeInTheDocument();
       expect(checkbox.checked).toBe(false);
     });
-    
+
     it('renders terms and conditions checkbox as checked when provided in formData', () => {
       const { container } = renderFormWithData({
-        termsAndConditions: true
+        termsAndConditions: true,
       });
       const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
-      
+
       expect(checkbox).toBeInTheDocument();
       expect(checkbox.checked).toBe(true);
     });

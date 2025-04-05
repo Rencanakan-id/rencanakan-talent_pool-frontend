@@ -7,13 +7,13 @@ type LocationProps = Readonly<{
 
 function Location({ data = [] }: LocationProps) {
   return (
-    <div className="min-h-[119px] w-auto max-w-[825px] min-w-[200px] rounded-[4px] border border-gray-500 px-6 py-6">
+    <div className="min-h-[119px] w-full rounded-[4px] border border-gray-300 px-6 py-6">
       <Typography variant="p1" className="pb-4">
         Bersedia Ditempatkan di Kota
       </Typography>
 
       {data.length > 0 ? (
-        <div className="min-h-[23]px w-auto max-w-[825px] min-w-[200px] flex-wrap space-y-3 space-x-1">
+        <div className="min-h-[23]px w-full flex-wrap space-y-3 space-x-1">
           {data.map((loc) => (
             <Badge asChild key={loc} variant={'profileLocation'}>
               <Typography variant="small" className="font-bold text-black">
