@@ -9,6 +9,12 @@ describe('Certificate Component', () => {
       title: 'Software Engineer',
       file: new File(['dummy content'], 'software-engineer.pdf', { type: 'application/pdf' }), 
     },
+    {
+      id: 2,
+      title: 'UI/UX Design',
+      // Edge case: 0 byte file
+      file: new File([], 'empty-cert.pdf', { type: 'application/pdf' })
+    }
   ];
 
   test('renders the component with experience data', () => {
@@ -23,6 +29,13 @@ describe('Certificate Component', () => {
     render(<Certificate certificates={[]} />);
 
     expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
+  });
+
+  test('formats pdf with 0 bytes data', () => {
+    render(<Certificate certificates={[mockCertificates[1]]} />);
+
+    expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
+    expect(screen.getByText('0 Bytes')).toBeInTheDocument();
   });
 
 });
