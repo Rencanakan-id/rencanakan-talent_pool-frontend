@@ -18,7 +18,7 @@ export interface RecommendationResponseDTO {
 }
 
 export interface RecommendationProps {
-  recommendations: RecommendationResponseDTO[];
+  recommendations?: RecommendationResponseDTO[];
   onAccept?: (id: string) => void;
   onDecline?: (id: string) => void;
 }
@@ -35,8 +35,8 @@ const RecommendationCard: React.FC<RecommendationProps> = ({
       {recommendations.length > 0 ? (
         <div className="w-full space-y-2 divide-y divide-gray-300">
           {recommendations.map((recommendation) => (
-            <ExpandableRecommendation 
-              key={recommendation.id} 
+            <ExpandableRecommendation
+              key={recommendation.id}
               recommendation={recommendation}
               onAccept={onAccept}
               onDecline={onDecline}
@@ -84,53 +84,55 @@ const ExpandableRecommendation: React.FC<ExpandableRecommendationProps> = ({
   };
 
   return (
-    <div className="flex flex-col py-4 md:flex-row md:items-center md:space-x-4">
-      <div>
+    <div className="flex w-full flex-col space-y-4 py-4 md:flex-row md:items-center md:space-x-4">
+      <div className="w-full md:w-3/4">
         <Typography variant="h5" className="pb-1">
           {recommendation.contractorName}
         </Typography>
-        <div className="md:flex-4">
-          {/* Message section */}
-          <div>
-            <Typography variant="p3">
-              {expanded ? (
+
+        {/* Message section */}
+
+        <Typography variant="p3">
+          {expanded ? (
+            <>
+              {recommendation.message}{' '}
+              {isLongMessage && (
+                <button
+                  onClick={() => setExpanded(false)}
+                  className="text-sm text-gray-500 italic underline hover:cursor-pointer"
+                >
+                  Lihat Lebih Sedikit
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              {isLongMessage ? (
                 <>
-                  {recommendation.message}{' '}
-                  {isLongMessage && (
-                    <button
-                      onClick={() => setExpanded(false)}
-                      className="text-sm text-gray-500 italic underline hover:cursor-pointer"
-                    >
-                      Lihat Lebih Sedikit
-                    </button>
-                  )}
+                  {recommendation.message.substring(0, CHARACTER_LIMIT)}{' '}
+                  <button
+                    onClick={() => setExpanded(true)}
+                    className="text-sm text-gray-500 italic underline hover:cursor-pointer"
+                  >
+                    Lihat Lebih Banyak
+                  </button>
                 </>
               ) : (
-                <>
-                  {isLongMessage ? (
-                    <>
-                      {recommendation.message.substring(0, CHARACTER_LIMIT)}{' '}
-                      <button
-                        onClick={() => setExpanded(true)}
-                        className=" text-sm text-gray-500 italic underline hover:cursor-pointer"
-                      >
-                        Lihat Lebih Banyak
-                      </button>
-                    </>
-                  ) : (
-                    recommendation.message
-                  )}
-                </>
+                recommendation.message
               )}
-            </Typography>
-          </div>
-        </div>
+            </>
+          )}
+        </Typography>
       </div>
 
       {recommendation.status === StatusType.PENDING && (
-        <div className="flex flex-col space-y-2 md:flex-1">
-          <Button variant="primary" onClick={handleAccept}>Terima</Button>
-          <Button variant="primary-outline" onClick={handleDecline}>Tolak</Button>
+        <div className="flex w-full flex-col space-y-2 md:w-1/4">
+          <Button variant="primary" onClick={handleAccept}>
+            Terima
+          </Button>
+          <Button variant="primary-outline" onClick={handleDecline}>
+            Tolak
+          </Button>
         </div>
       )}
     </div>

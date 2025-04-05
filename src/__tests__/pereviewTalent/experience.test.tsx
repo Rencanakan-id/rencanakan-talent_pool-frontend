@@ -30,9 +30,4 @@ describe('Experience Component', () => {
 
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
-  test('renders message when there is no data', () => {
-    render(<Experience />);
-
-    expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
-  });
 });

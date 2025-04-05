@@ -5,6 +5,12 @@ import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
+import { useState } from 'react';
+import RecommendationCard, {
+  RecommendationResponseDTO,
+  StatusType,
+} from '@/components/ui/recommendation';
+
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
 const dummyExperience = [
   {
@@ -69,11 +75,6 @@ const recommendations: RecommendationResponseDTO[] = [
     status: StatusType.APPROVED,
   },
 ];
-import { useState } from 'react';
-import RecommendationCard, {
-  RecommendationResponseDTO,
-  StatusType,
-} from '@/components/ui/recommendation';
 
 const dummyUser = {
   id: '1',
