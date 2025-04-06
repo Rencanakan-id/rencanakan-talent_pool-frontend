@@ -6,6 +6,8 @@ import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
+import { useState } from 'react';
+
 const dummyExperience = [
   {
     id: 1,
@@ -41,7 +43,7 @@ const dummyExperience = [
     talentId: 103,
   },
 ];
-import { useState } from 'react';
+
 
 const dummyUser = {
   id: '1',
@@ -65,6 +67,7 @@ const dummyUser = {
   preferredLocations: ['Bali', 'Surabaya', 'Bandung'],
   skill: 'React, NestJS, Kubernetes',
 };
+
 export const DesignSystemModule = () => {
   // State untuk mengontrol modal
   const [isDefaultOpen, setIsDefaultOpen] = useState(false);
