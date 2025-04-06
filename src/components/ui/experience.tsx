@@ -277,7 +277,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 pt-1">
             <div>
               <Input 
                 label="Judul*" 
