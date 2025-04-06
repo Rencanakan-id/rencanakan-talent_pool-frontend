@@ -1,0 +1,198 @@
+import React from 'react';
+import { render, fireEvent, RenderResult } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { StepFourForm } from '../../../../modules/RegisterFormModule/Section/register-4';
+import { RegisterFormData } from '@/lib/register';
+import { faker } from '@faker-js/faker';
+
+const generateValidPassword1 = () => {
+  return `${faker.string.alpha(1).toUpperCase()}${faker.string.alpha(5).toLowerCase()}${faker.string.numeric(3)}`;
+};
+
+const generateValidPassword2 = () => {
+  return `${faker.string.alpha(2).toUpperCase()}${faker.string.alpha(7).toLowerCase()}${faker.string.numeric(4)}`;
+};
+
+jest.mock('@/components', () => ({
+  Typography: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={className}>{children}</div>
+  ),
+  Stepper: ({ currentStep }: { currentStep: number }) => (
+    <div data-testid="stepper">{`Current step: ${currentStep}`}</div>
+  ),
+  Input: ({
+    name,
+    label,
+    placeholder,
+    type,
+    value,
+    onChange,
+    onBlur,
+    error,
+  }: {
+    name: string;
+    label?: string;
+    placeholder?: string;
+    type?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+    error?: string;
+  }) => (
+    <div>
+      <label htmlFor={name}>{label}</label>
+      <input
+        id={name}
+        name={name}
+        placeholder={placeholder}
+        type={type}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        data-testid={name}
+      />
+      {error && (
+        <div data-testid={`${name}-error`} className="error-message">
+          {error}
+        </div>
+      )}
+    </div>
+  ),
+}));
+
+describe('StepFourForm Component', () => {
+  const defaultProps = {
+    formData: {} as RegisterFormData,
+    updateFormData: jest.fn(),
+    validationErrors: {},
+  };
+
+  const renderFormWithData = (
+    formData: Partial<RegisterFormData> = {},
+    validationErrors = {}
+  ): RenderResult => {
+    return render(
+      <StepFourForm
+        formData={formData as RegisterFormData}
+        updateFormData={defaultProps.updateFormData}
+        validationErrors={validationErrors}
+      />
+    );
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders correctly with default props', () => {
+    const { getByText, getByTestId, queryByTestId } = renderFormWithData();
+
+    expect(getByText('Semuanya udah oke, yuk buat akun!')).toBeInTheDocument();
+    expect(getByTestId('stepper')).toBeInTheDocument();
+    expect(getByTestId('password')).toBeInTheDocument();
+    expect(getByTestId('passwordConfirmation')).toBeInTheDocument();
+
+    expect(queryByTestId('password-error')).not.toBeInTheDocument();
+    expect(queryByTestId('passwordConfirmation-error')).not.toBeInTheDocument();
+  });
+
+  describe('Password Field Validations', () => {
+    it('shows error from validation errors prop when present', async () => {
+      const validationErrors = {
+        password: faker.lorem.sentence(),
+      };
+
+      const { findByTestId } = renderFormWithData(
+        { password: faker.string.alphanumeric(4) },
+        validationErrors
+      );
+
+      const errorElement = await findByTestId('password-error');
+      expect(errorElement).toHaveTextContent(validationErrors.password);
+    });
+  });
+
+  describe('Password Confirmation Validations', () => {
+    it("shows error when passwords don't match from validation errors", async () => {
+      const errorMessage = faker.lorem.sentence();
+      const validationErrors = {
+        passwordConfirmation: errorMessage,
+      };
+
+      const { findByTestId } = renderFormWithData(
+        {
+          password: generateValidPassword1(),
+          passwordConfirmation: generateValidPassword2(),
+        },
+        validationErrors
+      );
+
+      const errorElement = await findByTestId('passwordConfirmation-error');
+      expect(errorElement).toHaveTextContent(errorMessage);
+    });
+  });
+
+  describe('Form Data Updates', () => {
+    it('updates form data when user types in password field', () => {
+      const { getByTestId } = renderFormWithData();
+      const newPassword = generateValidPassword1();
+
+      fireEvent.change(getByTestId('password'), { target: { value: newPassword } });
+
+      expect(defaultProps.updateFormData).toHaveBeenCalledWith({ password: newPassword });
+    });
+
+    it('updates form data when user types in password confirmation field', () => {
+      const { getByTestId } = renderFormWithData();
+      const newPassword = generateValidPassword1();
+
+      fireEvent.change(getByTestId('passwordConfirmation'), { target: { value: newPassword } });
+
+      expect(defaultProps.updateFormData).toHaveBeenCalledWith({
+        passwordConfirmation: newPassword,
+      });
+    });
+
+    it('updates form data when user toggles terms and conditions checkbox', () => {
+      const { container } = renderFormWithData();
+
+      const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
+      expect(checkbox).toBeInTheDocument();
+
+      fireEvent.click(checkbox);
+
+      expect(defaultProps.updateFormData).toHaveBeenCalledWith({ termsAndConditions: true });
+    });
+  });
+
+  describe('Component with undefined validationErrors', () => {
+    it('renders correctly when validationErrors prop is undefined', () => {
+      const { queryByTestId } = render(
+        <StepFourForm formData={{}} updateFormData={defaultProps.updateFormData} />
+      );
+
+      expect(queryByTestId('password-error')).not.toBeInTheDocument();
+      expect(queryByTestId('passwordConfirmation-error')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Terms and Conditions Checkbox', () => {
+    it('renders terms and conditions checkbox unchecked by default', () => {
+      const { container } = renderFormWithData();
+      const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
+
+      expect(checkbox).toBeInTheDocument();
+      expect(checkbox.checked).toBe(false);
+    });
+
+    it('renders terms and conditions checkbox as checked when provided in formData', () => {
+      const { container } = renderFormWithData({
+        termsAndConditions: true,
+      });
+      const checkbox = container.querySelector('#termsAndConditions') as HTMLInputElement;
+
+      expect(checkbox).toBeInTheDocument();
+      expect(checkbox.checked).toBe(true);
+    });
+  });
+});
