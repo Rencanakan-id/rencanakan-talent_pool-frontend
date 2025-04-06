@@ -393,19 +393,21 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 )}
               </div>
               {!isCurrentlyWorking && (
-                <div>
-                  <Input 
-                    label="Tanggal Selesai" 
-                    data-testid="input-end-date"
-                    name="endDate" 
-                    value={experienceFormData.endDate || ''} 
-                    onChange={handleChange} 
-                    type="date"
-                    className="w-full"
-                  />
-                  {wasValidated && formErrors.endDate && (
-                    <Typography variant="p5" className="text-red-500 mt-1">{formErrors.endDate}</Typography>
-                  )}
+                <div className="flex justify-end">
+                  <div className="w-full">
+                    <Input 
+                      label="Tanggal Selesai" 
+                      data-testid="input-end-date"
+                      name="endDate" 
+                      value={experienceFormData.endDate || ''} 
+                      onChange={handleChange} 
+                      type="date"
+                      className="w-full"
+                    />
+                    {wasValidated && formErrors.endDate && (
+                      <Typography variant="p5" className="text-red-500 mt-1">{formErrors.endDate}</Typography>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
