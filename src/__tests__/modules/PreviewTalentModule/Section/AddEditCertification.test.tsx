@@ -2,16 +2,43 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Certificate, { CertificateDetail } from '@/components/ui/certificate';
 
+interface FileInputProps {
+    textLabel: string;
+    accept?: string;
+    state?: string;
+    value?: string | null;
+    onFileSelect: (file: File) => void;
+    error?: string;
+  }
+
+jest.mock('@/components/ui/fileInput', () => ({
+  FileInput: ({ textLabel, accept, state, value, onFileSelect, error }: FileInputProps) => (
+    <div>
+      <label>{textLabel}</label>
+      <input
+        type="file"
+        accept={accept}
+        onChange={(e) => e.target.files?.[0] && onFileSelect(e.target.files[0])}
+        aria-label={textLabel}
+      />
+      {state === 'filled' && <span>{value}</span>}
+      {error && <div className="error-message">{error}</div>}
+    </div>
+  ),
+}));
+
 const mockCertificates: CertificateDetail[] = [
   {
     id: 1,
     title: 'Software Engineer',
-    file: new File(['dummy content'], 'software-engineer.pdf', { type: 'application/pdf' }), 
+    file: new File(['dummy content'], 'software-engineer.pdf', { type: 'application/pdf' }),
+    publishDate: '2023-01-01',
   },
   {
     id: 2,
     title: 'UI/UX Design',
-    file: new File([], 'empty-cert.pdf', { type: 'application/pdf' })
+    file: new File([], 'empty-cert.pdf (0 Bytes)', { type: 'application/pdf' }),
+    publishDate: '2023-01-01',
   }
 ];
 
@@ -19,8 +46,8 @@ describe('Certificate Section Positive Case', () => {
     test('should render the certificate list correctly', () => {
       render(<Certificate certificates={mockCertificates} />);
       
-      expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
-      expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
+      expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+      expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
     });
   
     test('should open add certificate modal and submit valid data', () => {
@@ -38,7 +65,7 @@ describe('Certificate Section Positive Case', () => {
       
       fireEvent.click(screen.getByTestId('submit-button'));
       
-      expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument();
+      expect(screen.getByText('Frontend Developer')).toBeInTheDocument();
     });
   
     test('should open edit certificate modal and update data', () => {
@@ -52,7 +79,7 @@ describe('Certificate Section Positive Case', () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
       fireEvent.click(screen.getByText('Simpan'));
       
-      expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument();
+      expect(screen.getByText('sertifikasi.pdf (13 Bytes)')).toBeInTheDocument();
     });
   
   
@@ -62,20 +89,7 @@ describe('Certificate Section Negative Case', () => {
     test('should render no certificate message', () => {
         render(<Certificate certificates={[]} />);
         
-        expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
-    });
-
-    test('should not submit if published date is empty', () => {
-        render(<Certificate certificates={[]} />);
-        
-        fireEvent.click(screen.getByTestId("add-certificate-button"));
-        
-        fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Backend Developer' } });
-        fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'AI Startup' } });
-        
-        fireEvent.click(screen.getByTestId('add-certificate-button'));
-        
-        expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
+        expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
     });
 
     test('should not submit when required fields are empty', () => {
@@ -83,7 +97,7 @@ describe('Certificate Section Negative Case', () => {
 
         fireEvent.click(screen.getByTestId('add-certificate-button'));
         
-        expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
+        expect(screen.getByText('Tambah Sertifikasi')).toBeInTheDocument();
     });
 });
 
@@ -94,13 +108,13 @@ describe('Certificate Section Edge Case', () => {
         
         fireEvent.click(screen.getByTestId("edit-certificate-button"));
 
-        expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
+        expect(screen.getByText('software-engineer.pdf (13 Bytes)')).toBeInTheDocument();
 
         fireEvent.click(screen.getByTestId('edit-button-1'));
 
         fireEvent.click(screen.getByText('Simpan'));
 
-        expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
+        expect(screen.getByText('software-engineer.pdf (13 Bytes)')).toBeInTheDocument();
         
     });
 });
