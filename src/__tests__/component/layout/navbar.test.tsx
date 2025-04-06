@@ -7,19 +7,19 @@ jest.spyOn(console, 'log').mockImplementation(() => {});
 describe('Navbar Component', () => {
   test('calls handleLogout when Logout button is clicked (website page)', () => {
     render(<Navbar />);
-    
+
     const logoutButton = screen.getAllByText('Logout')[0]; // Ambil tombol logout pertama yang ditemukan
     fireEvent.click(logoutButton);
-    
+
     expect(console.log).toHaveBeenCalledWith('Logout clicked');
   });
 
   test('calls handleLogout when Logout button is clicked (mobile page)', () => {
     render(<Navbar />);
-    
+
     const logoutButton = screen.getAllByText('Logout')[1]; // Ambil tombol logout pertama yang ditemukan
     fireEvent.click(logoutButton);
-    
+
     expect(console.log).toHaveBeenCalledWith('Logout clicked');
   });
 });

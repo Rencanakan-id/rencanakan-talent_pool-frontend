@@ -120,6 +120,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             <FileInput
               data-slot="input"
               textLabel="Foto KTP"
+              compTestId='ktp-file-input'
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.ktpFile ? 'filled' : 'empty'}
               value={formData.ktpFile?.name || ''}
@@ -129,6 +130,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             <FileInput
               data-slot="input"
               textLabel="Foto NPWP"
+              compTestId='npwp-file-input'
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.npwpFile ? 'filled' : 'empty'}
               value={formData.npwpFile?.name || ''}
@@ -138,6 +140,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
             <FileInput
               data-slot="input"
               textLabel="Scan Ijazah"
+              compTestId='diploma-file-input'
               accept=".pdf,.jpg,.jpeg,.png"
               state={formData.diplomaFile ? 'filled' : 'empty'}
               value={formData.diplomaFile?.name || ''}

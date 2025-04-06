@@ -5,17 +5,17 @@ import { AuthContextProvider } from './components/context/authContext';
 import Cookies from 'js-cookie';
 
 function App() {
-  const initialToken = Cookies.get('jwt') || ''; 
+  const initialToken = Cookies.get('jwt') || '';
   return (
-    <AuthContextProvider initialToken={initialToken}> 
-    <div>
-      <Navbar />
-      <div className="min-h-[calc(100vh-80px)]">
-        <Outlet />
+    <AuthContextProvider initialToken={initialToken}>
+      <div>
+        <Navbar />
+        <div className="min-h-[calc(100vh-80px)]">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-    </AuthContextProvider> 
+    </AuthContextProvider>
   );
 }
 
