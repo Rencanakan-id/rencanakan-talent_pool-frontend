@@ -57,7 +57,7 @@ export interface ExperienceDetail {
 }
 
 interface ExperienceProps {
-  experiences?: ExperienceDetail[] | null;
+  experiences?: ExperienceDetail[] | undefined;
 }
 
 // Define error state interface
