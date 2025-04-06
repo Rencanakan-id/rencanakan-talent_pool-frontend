@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Typography } from '../atoms/typography';
 import { Modal } from './modal';
 import { Pencil, Plus, Edit } from 'lucide-react';
@@ -7,8 +7,6 @@ import { Button } from './button';
 import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
-
-import React from 'react';
 
 export type EmploymentType =
   | 'FULL_TIME'
@@ -57,7 +55,7 @@ export interface ExperienceDetail {
 }
 
 interface ExperienceProps {
-  experiences?: ExperienceDetail[] | undefined;
+  experiences?: ExperienceDetail[];
 }
 
 // Define error state interface
@@ -399,7 +397,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                       label="Tanggal Selesai" 
                       data-testid="input-end-date"
                       name="endDate" 
-                      value={experienceFormData.endDate || ''} 
+                      value={experienceFormData.endDate?? ''} 
                       onChange={handleChange} 
                       type="date"
                       className="w-full"
