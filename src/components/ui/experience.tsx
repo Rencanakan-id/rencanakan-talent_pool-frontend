@@ -8,6 +8,8 @@ import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 
+import React from 'react';
+
 export type EmploymentType =
   | 'FULL_TIME'
   | 'PART_TIME'
@@ -55,7 +57,7 @@ export interface ExperienceDetail {
 }
 
 interface ExperienceProps {
-  experiences?: ExperienceDetail[];
+  experiences?: ExperienceDetail[] | null;
 }
 
 // Define error state interface

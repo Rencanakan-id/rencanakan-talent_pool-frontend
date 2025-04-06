@@ -9,7 +9,6 @@ import { validateStepFourForm } from '@/lib/validation/stepFourFormValidation';
 import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
 import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
-import { useNavigate } from 'react-router-dom';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -59,8 +58,6 @@ export const RegisterModule = () => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const navigate = useNavigate();
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData((prev) => {
@@ -140,7 +137,7 @@ export const RegisterModule = () => {
     setFormState((prev) => Math.max(prev - 1, 1));
   };
 
-  const parseExperienceYears = (yearsExp: string): number => {
+  const parseExperienceYears = (yearsExp: string ): number | undefined => {
     switch (yearsExp) {
       case '1 Tahun':
         return 1;
@@ -150,19 +147,13 @@ export const RegisterModule = () => {
         return 3;
       case '> 5 Tahun':
         return 4;
-      default:
-        return 0;
     }
   };
 
   const handleSubmit = async () => {
     if (formState === 4) {
       const { password, passwordConfirmation, termsAndConditions } = formData;
-      const validation = validateStepFourForm(
-        password,
-        passwordConfirmation,
-        termsAndConditions
-      );
+      const validation = validateStepFourForm(password, passwordConfirmation, termsAndConditions);
 
       setValidationErrors(validation.errors);
 
@@ -185,7 +176,7 @@ export const RegisterModule = () => {
             preferredLocations: formData.preferredLocations || [],
             skill: formData.skill === 'lainnya' ? formData.otherSkill : formData.skill,
             price: formData.price,
-            password: formData.password
+            password: formData.password,
           };
 
           console.log('Registration request data:', requestData);
@@ -193,7 +184,7 @@ export const RegisterModule = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Accept': 'application/json',
+              Accept: 'application/json',
             },
             body: JSON.stringify(requestData),
           });
@@ -206,12 +197,12 @@ export const RegisterModule = () => {
           const responseData = await response.json().catch(() => ({}));
           console.log('Registration successful:', responseData);
           
-          navigate('/login');
+          window.location.href = '/login';
         } catch (error) {
           console.error('Registration error:', error);
           setSubmitError(
-            error instanceof Error 
-              ? error.message 
+            error instanceof Error
+              ? error.message
               : 'Failed to register. Please check if the server is running and CORS is properly configured.'
           );
         } finally {
@@ -236,12 +227,7 @@ export const RegisterModule = () => {
         validationErrors={validationErrors}
       />
     ),
-    3: (
-      <StepThreeForm 
-        formData={formData} 
-        updateFormData={updateFormData} 
-      />
-    ),
+    3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
     4: (
       <StepFourForm
         formData={formData}
