@@ -18,13 +18,13 @@ const modalVariants = cva('fixed inset-0 z-50 flex items-center justify-center b
 
 // Variants for the modal content
 const modalContentVariants = cva(
-  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto max-h-[90vh]',
+  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto max-w-sm max-h-[90vh]',
   {
     variants: {
       size: {
-        small: 'p-4 w-full sm:w-auto sm:max-w-sm',
-        medium: 'p-6 w-full sm:w-auto sm:max-w-md',
-        large: 'p-8 w-full sm:w-auto sm:max-w-lg',
+        small: 'p-4 w-full',
+        medium: 'p-6 w-full',
+        large: 'p-8 w-full',
       },
     },
     defaultVariants: {
@@ -132,7 +132,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           )}
 
           {/* Children Content */}
-          <div className="overflow-y-auto">{children}</div>
+          <div className="overflow-hidden">{children}</div>
         </div>
       </div>
     );

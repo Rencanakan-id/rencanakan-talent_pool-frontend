@@ -22,8 +22,8 @@ describe('Experience Component', () => {
 
     expect(screen.getByText('Pengalaman')).toBeInTheDocument();
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-    expect(screen.getByText('Tech Corp • FULL_TIME')).toBeInTheDocument();
-    expect(screen.getByText('Jakarta, Indonesia')).toBeInTheDocument();
+    expect(screen.getByText('Tech Corp • Penuh Waktu')).toBeInTheDocument();
+    expect(screen.getByText('Jakarta, Indonesia • Di Lokasi')).toBeInTheDocument();
   });
 
   test('renders message when there is no data', () => {
