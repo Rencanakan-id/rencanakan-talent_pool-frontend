@@ -135,7 +135,7 @@ describe('StepOneForm Component', () => {
     test('updates firstName when input changes', () => {
       setup();
       const input = screen.getByLabelText('Nama Depan *');
-      fireEvent.change(input, { target: { value: 'john' } });
+      fireEvent.change(input, { target: { value: 'John' } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ firstName: 'John' });
     });
 
