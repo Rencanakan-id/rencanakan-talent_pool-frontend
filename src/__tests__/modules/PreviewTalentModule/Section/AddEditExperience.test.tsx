@@ -2,8 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Experience, { ExperienceDetail } from '@/components/ui/experience';
 import '@testing-library/jest-dom';
 
-
-
 jest.mock('@/components', () => ({
   Typography: ({
     children,
