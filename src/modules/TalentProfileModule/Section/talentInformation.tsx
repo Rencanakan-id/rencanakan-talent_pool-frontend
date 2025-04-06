@@ -9,23 +9,23 @@ export const TalentInformation: React.FC = () => {
 
   const userProfile: UserProfile = {
     id: "user123",
-    firstName: "John",
-    lastName: "Doe",
+    firstName: "Rudy",
+    lastName: "Handoko",
     email: "dummy@example.com",
-    phoneNumber: "081234567890",
+    phoneNumber: "+628123456789",
     address: "Jakarta Kota, DKI Jakarta",
-    job: "Software Engineer",
+    job: "Ahli Bangunan Gedung",
     photo: "image-3.png",
-    aboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    price: 10000000,
+    aboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci ut diam condimentum, vel euismod erat placerat.",
+    price: 7550000,
     nik: "1234567890123456",
     npwp: "123456789012345",
     photoKtp: "image-3.png",
     photoNpwp: "image-3.png",
     photoIjazah: "image-3.png",
-    experienceYears: 5,
-    skkLevel: "Senior",
-    currentLocation: "Jakarta",
+    experienceYears: 2,
+    skkLevel: "Intermediate",
+    currentLocation: "Surabaya, Jawa Timur",
     preferredLocations: ["Jakarta", "Bandung", "Surabaya"],
     skill: "React, Node.js, TypeScript",
   }
@@ -106,7 +106,7 @@ export const TalentInformation: React.FC = () => {
         </div>
 
         <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-x-6 md:space-y-0">
-          <img src="image-3.png" alt="Logo" className="h-[330px] w-[298px]" />
+          <img src="/dummy/profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
           <div className="w-full flex-col items-center space-y-4">
             <UserProfileCard user={userProfile} />
             <Experience experiences={experience} />
