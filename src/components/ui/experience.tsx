@@ -1,4 +1,6 @@
 import { Typography } from '../atoms/typography';
+import React from 'react';
+
 export type EmploymentType =
   | 'FULL_TIME'
   | 'PART_TIME'

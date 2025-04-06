@@ -9,7 +9,6 @@ import { validateStepFourForm } from '@/lib/validation/stepFourFormValidation';
 import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
 import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
-import { useNavigate } from 'react-router-dom';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -59,8 +58,6 @@ export const RegisterModule = () => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const navigate = useNavigate();
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
     setFormData((prev) => {
@@ -140,7 +137,7 @@ export const RegisterModule = () => {
     setFormState((prev) => Math.max(prev - 1, 1));
   };
 
-  const parseExperienceYears = (yearsExp: string): number => {
+  const parseExperienceYears = (yearsExp: string ): number | undefined => {
     switch (yearsExp) {
       case '1 Tahun':
         return 1;
@@ -150,8 +147,6 @@ export const RegisterModule = () => {
         return 3;
       case '> 5 Tahun':
         return 4;
-      default:
-        return 0;
     }
   };
 
@@ -201,8 +196,8 @@ export const RegisterModule = () => {
 
           const responseData = await response.json().catch(() => ({}));
           console.log('Registration successful:', responseData);
-
-          navigate('/login');
+          
+          window.location.href = '/login';
         } catch (error) {
           console.error('Registration error:', error);
           setSubmitError(
