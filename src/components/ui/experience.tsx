@@ -239,7 +239,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                   src="https://i.pinimg.com/736x/11/48/4f/11484f06170418c48b0b183b8868b64f.jpg"
                   width={32}
                   height={32}
-                  alt="No image"
+                  alt="Exp logo"
+                  draggable="false"
                 />
                 <div>
                   <Typography variant="h6">{exp.title}</Typography>
