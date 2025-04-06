@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import Location from '../../components/ui/location';
-import '@testing-library/jest-dom'; 
 
 describe('Location Component', () => {
   test('menampilkan teks default jika tidak ada data', () => {

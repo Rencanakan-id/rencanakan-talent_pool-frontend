@@ -4,7 +4,7 @@
  * 2. Professional profile
  * 3. Pricing
  * 4. Account & agreement
- * 
+ *
  * Fields with `| null` are optional.
  */
 export interface RegisterFormData {

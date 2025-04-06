@@ -8,7 +8,7 @@ import { locations } from '@/data/location';
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
 import { useState } from 'react';
 
-const dummyExperience= [
+const dummyExperience = [
   {
     id: 1,
     title: 'Software Engineer',
@@ -24,22 +24,22 @@ const dummyExperience= [
     id: 2,
     title: 'Frontend Developer',
     company: 'Startup XYZ',
-    employmentType: 'FULL_TIME' as EmploymentType, 
+    employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2019-02-15',
     endDate: '2020-05-30',
     location: 'Remote',
-    locationType: 'ON_SITE' as LocationType, 
+    locationType: 'ON_SITE' as LocationType,
     talentId: 102,
   },
   {
     id: 3,
     title: 'Backend Developer',
     company: 'Enterprise Solutions',
-    employmentType: 'FULL_TIME' as EmploymentType, 
+    employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2018-09-01',
     endDate: '2019-12-15',
     location: 'Bandung, Indonesia',
-    locationType: 'ON_SITE' as LocationType, 
+    locationType: 'ON_SITE' as LocationType,
     talentId: 103,
   },
 ];
@@ -124,9 +124,7 @@ export const DesignSystemModule = () => {
             'Balikpapan',
           ]}
         />
-      </div>
-      <div className="w-full space-y-4">
-        <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong"/>
+        <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong" />
       </div>
 
       <div className="space-y-4">
@@ -253,7 +251,7 @@ export const DesignSystemModule = () => {
       </div>
       <div>
         <h1> Experience Detail </h1>
-        <Experience experiences={dummyExperience}/>
+        <Experience experiences={dummyExperience} />
       </div>
 
       <h1 className="text-2xl font-bold">Design System | Input File</h1>
@@ -346,7 +344,11 @@ export const DesignSystemModule = () => {
           <Button variant="primary" onClick={() => setIsDefaultOpen(true)}>
             Open Default Modal
           </Button>
-          <Modal isOpen={isDefaultOpen} onClose={() => setIsDefaultOpen(false)} title="Default Modal">
+          <Modal
+            isOpen={isDefaultOpen}
+            onClose={() => setIsDefaultOpen(false)}
+            title="Default Modal"
+          >
             <Typography variant="p4" className="text-rencanakan-dark-gray">
               This is a basic modal with no additional features.
             </Typography>

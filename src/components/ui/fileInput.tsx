@@ -46,6 +46,7 @@ interface FileInputProps
   extends Omit<React.ComponentProps<'input'>, 'type'>,
     VariantProps<typeof fileInputWrapperVariants> {
   onClear?: () => void;
+  compTestId?: string;
   textLabel?: string;
   icon?: React.ReactNode;
   buttonText?: string;
@@ -59,6 +60,7 @@ export const FileInput: React.FC<FileInputProps> = ({
   className,
   state,
   onClear,
+  compTestId,
   textLabel,
   value,
   onFileSelect,
@@ -172,6 +174,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         <input
           ref={inputRef}
           type="file"
+          data-testid={compTestId}
           className="hidden"
           onChange={handleFileChange}
           {...inputProps}

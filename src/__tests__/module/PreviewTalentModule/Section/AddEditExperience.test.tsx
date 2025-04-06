@@ -2,16 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Experience, { ExperienceDetail } from '@/components/ui/experience';
 import '@testing-library/jest-dom';
 
-interface InputProps {
-  name?: string;
-  label?: string;
-  placeholder?: string;
-  type?: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  className?: string;
-}
 
 
 jest.mock('@/components', () => ({
@@ -21,22 +11,7 @@ jest.mock('@/components', () => ({
   }: {
     children: React.ReactNode;
     className?: string;
-  }) => <div className={className}>{children}</div>,
-  Input: ({ name, label, placeholder, type, value, onChange, error, className }: InputProps) => (
-    <div className={className}>
-      {label && <label htmlFor={name}>{label}</label>}
-      <input
-        id={name}
-        name={name}
-        placeholder={placeholder ?? ''}
-        type={type}
-        value={value ?? ''}
-        onChange={onChange}
-        aria-label={label}
-      />
-      {error && <div className="error-message">{error}</div>}
-    </div>
-  )
+  }) => <div className={className}>{children}</div>
 }));
 
 const mockExperience: ExperienceDetail[] = [

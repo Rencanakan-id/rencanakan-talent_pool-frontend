@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Typography } from '../atoms/typography';
 import { Modal } from './modal';
 import { Pencil, Plus, Edit } from 'lucide-react';
@@ -248,7 +248,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                   src="https://i.pinimg.com/736x/11/48/4f/11484f06170418c48b0b183b8868b64f.jpg"
                   width={32}
                   height={32}
-                  alt="No image"
+                  alt="Exp logo"
+                  draggable="false"
                 />
                 <div>
                   <Typography variant="h6">{exp.title}</Typography>
@@ -284,7 +285,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 pt-1">
             <div>
               <Input 
                 label="Judul*" 
@@ -400,19 +401,21 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 )}
               </div>
               {!isCurrentlyWorking && (
-                <div>
-                  <Input 
-                    label="Tanggal Selesai" 
-                    data-testid="input-end-date"
-                    name="endDate" 
-                    value={experienceFormData.endDate || ''} 
-                    onChange={handleChange} 
-                    type="date"
-                    className="w-full"
-                  />
-                  {wasValidated && formErrors.endDate && (
-                    <Typography variant="p5" className="text-red-500 mt-1">{formErrors.endDate}</Typography>
-                  )}
+                <div className="flex justify-end">
+                  <div className="w-full">
+                    <Input 
+                      label="Tanggal Selesai" 
+                      data-testid="input-end-date"
+                      name="endDate" 
+                      value={experienceFormData.endDate?? ''} 
+                      onChange={handleChange} 
+                      type="date"
+                      className="w-full"
+                    />
+                    {wasValidated && formErrors.endDate && (
+                      <Typography variant="p5" className="text-red-500 mt-1">{formErrors.endDate}</Typography>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

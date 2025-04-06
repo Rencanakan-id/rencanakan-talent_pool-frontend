@@ -4,30 +4,27 @@ import { cn } from '@/lib/utils';
 import { Typography } from '@/components';
 
 // Variants for the modal container (backdrop)
-const modalVariants = cva(
-  'fixed inset-0 z-50 flex items-center justify-center bg-black/50',
-  {
-    variants: {
-      isError: {
-        true: '',
-        false: '',
-      },
+const modalVariants = cva('fixed inset-0 z-50 flex items-center justify-center bg-black/50', {
+  variants: {
+    isError: {
+      true: '',
+      false: '',
     },
-    defaultVariants: {
-      isError: false,
-    },
-  }
-);
+  },
+  defaultVariants: {
+    isError: false,
+  },
+});
 
 // Variants for the modal content
 const modalContentVariants = cva(
-  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto max-h-[90vh]',
+  'relative rounded-lg bg-white shadow-lg overflow-y-auto mx-auto max-w-sm max-h-[90vh]',
   {
     variants: {
       size: {
-        small: 'p-4 w-full sm:w-auto sm:max-w-sm',
-        medium: 'p-6 w-full sm:w-auto sm:max-w-md',
-        large: 'p-8 w-full sm:w-auto sm:max-w-lg',
+        small: 'p-4 w-full',
+        medium: 'p-6 w-full',
+        large: 'p-8 w-full',
       },
     },
     defaultVariants: {
@@ -129,13 +126,13 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
 
           {/* Title */}
           {title && (
-            <Typography variant="h6" className="mb-4 text-rencanakan-main-black">
+            <Typography variant="h6" className="text-rencanakan-main-black mb-4">
               {title}
             </Typography>
           )}
 
           {/* Children Content */}
-          <div className="overflow-y-auto">{children}</div>
+          <div className="overflow-hidden">{children}</div>
         </div>
       </div>
     );
