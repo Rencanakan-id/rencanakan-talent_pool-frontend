@@ -203,3 +203,12 @@
 .animate-glow {
   animation: glow 3s ease-in-out infinite;
 }
+
+.close-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

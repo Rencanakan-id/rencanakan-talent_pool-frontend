@@ -1,6 +1,9 @@
 import { Typography } from '../atoms/typography';
+<<<<<<< HEAD
 import React from 'react';
 
+=======
+>>>>>>> c1c814002715c1dda0b0b4fc693668a83dc32b03
 export type EmploymentType =
   | 'FULL_TIME'
   | 'PART_TIME'
@@ -26,7 +29,7 @@ export interface ExperienceDetail {
 }
 
 interface ExperienceProps {
-  experiences?: ExperienceDetail[];
+  experiences?: ExperienceDetail[] | null;
 }
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
@@ -36,22 +39,19 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         Pengalaman
       </Typography>
 
-      {experiences.length > 0 ? (
+      {Array.isArray(experiences) && experiences.length > 0 ? (
         <div className="w-full space-y-2 divide-y divide-gray-300 pl-6">
           {experiences.map((exp) => (
             <div key={exp.id} className="min-h-[112px] space-y-1">
               <Typography variant="h5"> {exp.title} </Typography>
               <Typography variant="p3">
-                {' '}
-                {exp.company} • {exp.employmentType}{' '}
+                {exp.company} • {exp.employmentType}
               </Typography>
               <Typography variant="p3" className="text-gray-500">
-                {' '}
-                {exp.startDate} - {exp.endDate}{' '}
+                {exp.startDate} - {exp.endDate ?? 'Present'}
               </Typography>
               <Typography variant="p3" className="text-gray-500">
-                {' '}
-                {exp.location} - {exp.endDate}{' '}
+                {exp.location}
               </Typography>
             </div>
           ))}
