@@ -16,7 +16,7 @@ function Location({ data = [] }: LocationProps) {
         <div className="min-h-[23]px w-full flex-wrap space-y-3 space-x-1">
           {data.map((loc) => (
             <Badge asChild key={loc} variant={'profileLocation'}>
-              <Typography variant="small" className="font-bold text-black">
+              <Typography variant="p4" className="font-semibold text-black">
                 {loc}
               </Typography>
             </Badge>
