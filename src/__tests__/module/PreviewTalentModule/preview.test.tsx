@@ -2,6 +2,11 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/';
 import { PreviewTalentModule } from '@/modules/PreviewTalentModule';
 
+import { useUserProfile } from '@/components/hooks/useUserProfile';
+import { useExperience } from '@/components/hooks/useExperience';
+import { useAuth } from '@/components/context/authContext';
+import { useRecommendation } from '@/components/hooks/useRecommendation';
+
 // Mock hooks
 jest.mock('@/components/context/authContext', () => ({
   useAuth: jest.fn(() => ({ user: { id: '1' } })),
@@ -37,11 +42,6 @@ jest.mock('@/components/ui/recommendation', () => ({
   __esModule: true,
   default: jest.fn(() => <div data-testid="recommendation">Mocked Recommendation</div>),
 }));
-
-import { useUserProfile } from '@/components/hooks/useUserPorfile';
-import { useExperience } from '@/components/hooks/useExperience';
-import { useAuth } from '@/components/context/authContext';
-import { useRecommendation } from '@/components/hooks/useRecommendation';
 
 describe('PreviewTalentModule', () => {
   beforeEach(() => {
