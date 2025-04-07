@@ -100,7 +100,7 @@ export const TalentInformation: React.FC = () => {
       contractorId: 203,
       contractorName: 'Jane Smith',
       message: 'Pekerjaan luar biasa, sangat detail dan komunikatif.',
-      status: StatusType.APPROVED,
+      status: StatusType.PENDING,
     },
   ];
 
