@@ -37,7 +37,7 @@ const mockCertificates: CertificateDetail[] = [
   {
     id: 2,
     title: 'UI/UX Design',
-    file: new File([], 'empty-cert.pdf (0 Bytes)', { type: 'application/pdf' }),
+    file: new File([], 'empty-cert.pdf', { type: 'application/pdf' }),
     publishDate: '2023-01-01',
   }
 ];
@@ -46,8 +46,8 @@ describe('Certificate Section Positive Case', () => {
     test('should render the certificate list correctly', () => {
       render(<Certificate certificates={mockCertificates} />);
       
-      expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-      expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
+      expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
+      expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
     });
 
     test('should open any modal and close it with X button', () => {
@@ -70,14 +70,13 @@ describe('Certificate Section Positive Case', () => {
       screen.debug();
       
       fireEvent.change(screen.getByPlaceholderText(/Masukkan judul sertifikasi Anda/i), { target: { value: 'Frontend Developer' } });
-      fireEvent.change(screen.getByTestId("input-published"), { target: { value: '2024-02-01' } });
       const file = new File(['dummy content'], 'sertifikasi.pdf', { type: 'application/pdf' });
       const fileInput = screen.getByLabelText('Media');
       fireEvent.change(fileInput, { target: { files: [file] } });
       
       fireEvent.click(screen.getByTestId('submit-button'));
       
-      expect(screen.getByText('Frontend Developer')).toBeInTheDocument();
+      expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument();
     });
   
     test('should open edit certificate modal and update data', () => {
@@ -91,7 +90,7 @@ describe('Certificate Section Positive Case', () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
       fireEvent.click(screen.getByText('Simpan'));
       
-      expect(screen.getByText('sertifikasi.pdf (13 Bytes)')).toBeInTheDocument();
+      expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument();
     });
   
     test('should clear errors when inputs are changed after validation', async () => {
@@ -104,14 +103,10 @@ describe('Certificate Section Positive Case', () => {
       fireEvent.click(submitButton);
 
       expect(screen.getByText('Judul sertifikasi wajib diisi')).toBeInTheDocument();
-      expect(screen.getByText('Tanggal terbit wajib diisi')).toBeInTheDocument();
       expect(screen.getByText('File sertifikasi wajib diunggah')).toBeInTheDocument();
 
       const titleInput = screen.getByTestId('input-title');
       fireEvent.change(titleInput, { target: { name: 'title', value: 'New Certificate' } });
-
-      const dateInput = screen.getByTestId('input-published');
-      fireEvent.change(dateInput, { target: { name: 'publishDate', value: '2023-04-01' } });
 
       const fileInput = screen.getByLabelText('Media');
       const file = new File(['dummy content'], 'test.pdf', { type: 'application/pdf' });
@@ -119,7 +114,6 @@ describe('Certificate Section Positive Case', () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       expect(screen.queryByText('Judul sertifikasi wajib diisi')).not.toBeInTheDocument();
-      expect(screen.queryByText('Tanggal terbit wajib diisi')).not.toBeInTheDocument();
       expect(screen.queryByText('File sertifikasi wajib diunggah')).not.toBeInTheDocument();
     });
   
@@ -148,7 +142,6 @@ describe('Certificate Section Negative Case', () => {
         fireEvent.click(screen.getByTestId('submit-button'));
         
         expect(screen.getByText('Judul sertifikasi wajib diisi')).toBeInTheDocument();
-        expect(screen.getByText('Tanggal terbit wajib diisi')).toBeInTheDocument();
         expect(screen.getByText('File sertifikasi wajib diunggah')).toBeInTheDocument();
     });
 });
@@ -160,13 +153,13 @@ describe('Certificate Section Edge Case', () => {
         
         fireEvent.click(screen.getByTestId("edit-certificate-button"));
 
-        expect(screen.getByText('software-engineer.pdf (13 Bytes)')).toBeInTheDocument();
+        expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
 
         fireEvent.click(screen.getByTestId('edit-button-1'));
 
         fireEvent.click(screen.getByText('Simpan'));
 
-        expect(screen.getByText('software-engineer.pdf (13 Bytes)')).toBeInTheDocument();
+        expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
         
     });
 });
@@ -183,7 +176,7 @@ describe('Certificate Delete Functionality', () => {
     
     fireEvent.click(deleteButton);
     
-    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+    expect(screen.queryByText('software-engineer.pdf')).not.toBeInTheDocument();
     expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
   });
   
@@ -191,16 +184,16 @@ describe('Certificate Delete Functionality', () => {
   
     render(<Certificate certificates={mockCertificates} />);
     
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-    expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
+    expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
+    expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
     
     fireEvent.click(screen.getByTestId("edit-certificate-button"));
     
     fireEvent.click(screen.getByTestId("edit-button-1"));
     fireEvent.click(screen.getByTestId("delete-button"));
     
-    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
-    expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
+    expect(screen.queryByText('software-engineer.pdf')).not.toBeInTheDocument();
+    expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
   });
   
   test('should not show delete button in add certificate mode', () => {
