@@ -25,11 +25,6 @@ export class CertificationService {
     try {
       const formData = new FormData();
       formData.append('title', certificateData.title);
-      
-      if (certificateData.publishDate) {
-        formData.append('publishDate', certificateData.publishDate);
-      }
-      
       formData.append('file', certificateData.file);
 
       const res = await fetch(`${this.BASE_URL}/api/certificates`, {
@@ -55,12 +50,7 @@ export class CertificationService {
   static async editCertificate(token: string, certificateId: number, certificateData: CertificateDetail) {
     try {
       const formData = new FormData();
-      formData.append('title', certificateData.title);
-      
-      if (certificateData.publishDate) {
-        formData.append('publishDate', certificateData.publishDate);
-      }
-      
+      formData.append('title', certificateData.title);      
       formData.append('file', certificateData.file);
 
       const res = await fetch(`${this.BASE_URL}/api/certificates/${certificateId}`, {

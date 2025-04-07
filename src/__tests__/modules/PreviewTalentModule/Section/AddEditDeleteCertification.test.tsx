@@ -32,13 +32,11 @@ const mockCertificates: CertificateDetail[] = [
     id: 1,
     title: 'Software Engineer',
     file: new File(['dummy content'], 'software-engineer.pdf', { type: 'application/pdf' }),
-    publishDate: '2023-01-01',
   },
   {
     id: 2,
     title: 'UI/UX Design',
     file: new File([], 'empty-cert.pdf', { type: 'application/pdf' }),
-    publishDate: '2023-01-01',
   }
 ];
 
