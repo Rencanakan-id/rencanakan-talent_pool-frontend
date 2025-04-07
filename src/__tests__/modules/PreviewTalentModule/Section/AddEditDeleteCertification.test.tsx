@@ -94,6 +94,34 @@ describe('Certificate Section Positive Case', () => {
       expect(screen.getByText('sertifikasi.pdf (13 Bytes)')).toBeInTheDocument();
     });
   
+    test('should clear errors when inputs are changed after validation', async () => {
+      render(<Certificate />);
+
+      const addButton = screen.getByTestId('add-certificate-button');
+      fireEvent.click(addButton);
+
+      const submitButton = screen.getByTestId('submit-button');
+      fireEvent.click(submitButton);
+
+      expect(screen.getByText('Judul sertifikasi wajib diisi')).toBeInTheDocument();
+      expect(screen.getByText('Tanggal terbit wajib diisi')).toBeInTheDocument();
+      expect(screen.getByText('File sertifikasi wajib diunggah')).toBeInTheDocument();
+
+      const titleInput = screen.getByTestId('input-title');
+      fireEvent.change(titleInput, { target: { name: 'title', value: 'New Certificate' } });
+
+      const dateInput = screen.getByTestId('input-published');
+      fireEvent.change(dateInput, { target: { name: 'publishDate', value: '2023-04-01' } });
+
+      const fileInput = screen.getByLabelText('Media');
+      const file = new File(['dummy content'], 'test.pdf', { type: 'application/pdf' });
+      
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      expect(screen.queryByText('Judul sertifikasi wajib diisi')).not.toBeInTheDocument();
+      expect(screen.queryByText('Tanggal terbit wajib diisi')).not.toBeInTheDocument();
+      expect(screen.queryByText('File sertifikasi wajib diunggah')).not.toBeInTheDocument();
+    });
   
   });
   
