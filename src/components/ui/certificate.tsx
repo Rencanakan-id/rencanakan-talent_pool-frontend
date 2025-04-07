@@ -2,21 +2,19 @@ import { useState } from "react";
 import { Typography } from "../atoms/typography";
 import { Button } from "./button";
 import { Input } from "./input";
-import { Modal } from "./modal";
 import { Edit, Plus, Download, Pencil } from "lucide-react";
 import { FileInput } from "./fileInput";
+import { ModalFormWrapper } from "./modalFormWrapper";
 
 export interface CertificateDetail {
     id: number;
     title: string;
     file: File;
-    publishDate?: string;
 }
 
 interface FormErrors {
     title?: string;
     file?: string;
-    publishDate?: string;
 }
 
 interface CertificateProps {
@@ -35,14 +33,12 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         id: 0,
         title: '',
         file: new File([], ''),
-        publishDate: '',
     });
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setCertificateFormData((prev) => ({ ...prev, [name]: value }));
         
-        // Clear error for this field if it was previously set
         if (wasValidated && formErrors[name as keyof FormErrors]) {
             setFormErrors(prev => ({ ...prev, [name]: undefined }));
         }
@@ -67,7 +63,6 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             id: certificateList.length + 1,
             title: '',
             file: new File([], ''),
-            publishDate: '',
         });
         setIsModalOpen(true);
         setFormErrors({});
@@ -82,6 +77,15 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         setWasValidated(false);
     };
 
+    const handleDelete = () => {
+        if (editingCertificate) {
+          setCertificateList((prev) =>
+            prev.filter((exp) => exp.id !== editingCertificate.id)
+          );
+          setIsModalOpen(false);
+        }
+      };
+
     const validateForm = (): boolean => {
         const errors: FormErrors = {};
         
@@ -91,10 +95,6 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         
         if (!certificateFormData.file || certificateFormData.file.size === 0) {
             errors.file = "File sertifikasi wajib diunggah";
-        }
-        
-        if (!certificateFormData.publishDate) {
-            errors.publishDate = "Tanggal terbit wajib diisi";
         }
         
         setFormErrors(errors);
@@ -120,13 +120,13 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
     };
 
     const formatFileSize = (bytes: number): string => {
-        if (bytes === 0) return '0 Bytes';
+        if (bytes === 0) return '0Bytes';
         
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + sizes[i];
     };
 
     const handleDownload = (file: File) => {
@@ -178,15 +178,10 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                             <div className="flex space-x-2 items-center">
                                 <img src="/pdf.svg" alt="Logo" className="h-8 w-8" draggable={false} />
                                 <div>
-                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black">{cert.title}</Typography>
+                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black">{cert.file.name}</Typography>
                                     <Typography variant="p4" className="text-rencanakan-dark-gray">
-                                        {cert.file.name} ({formatFileSize(cert.file.size)})
+                                        {formatFileSize(cert.file.size)}
                                     </Typography>
-                                    {cert.publishDate && (
-                                        <Typography variant="p5" className="text-rencanakan-gray">
-                                            Tanggal Terbit: {new Date(cert.publishDate).toLocaleDateString('id-ID')}
-                                        </Typography>
-                                    )}
                                 </div>
                             </div>
                             <div className="flex space-x-2">
@@ -220,64 +215,40 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             )}
 
             {isModalOpen && (
-                <Modal
-                    size="large"
-                    title={editingCertificate ? 'Edit Sertifikasi' : 'Tambah Sertifikasi'}
+                <ModalFormWrapper
                     isOpen={isModalOpen}
+                    title={editingCertificate ? "Edit Sertifikasi" : "Tambah Sertifikasi"}
                     onClose={() => setIsModalOpen(false)}
+                    onSubmit={handleSubmit}
+                    onDelete={editingCertificate ? handleDelete : undefined}
+                    submitLabel={editingCertificate ? "Simpan" : "Tambah"}
+                    isEditMode={!!editingCertificate}
                 >
-                    <div className="flex flex-col space-y-4 pt-1">
-                        <div>
-                            <Input 
-                                label="Judul*" 
-                                data-testid="input-title"
-                                placeholder="Masukkan judul sertifikasi Anda" 
-                                name="title" 
-                                value={certificateFormData.title} 
-                                onChange={handleChange} 
-                            />
-                            {wasValidated && formErrors.title && (
-                                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.title}</Typography>
-                            )}
-                        </div>
-                        
-                        <div>
-                            <Input 
-                                label="Tanggal Terbit*" 
-                                data-testid="input-published"
-                                name="publishDate" 
-                                value={certificateFormData.publishDate?? ''} 
-                                onChange={handleChange} 
-                                type="date" 
-                                className="w-full"
-                            />
-                            {wasValidated && formErrors.publishDate && (
-                                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.publishDate}</Typography>
-                            )}
-                        </div>
-
-                        <div>
-                            <FileInput 
-                                onFileSelect={handleFileChange}
-                                textLabel="Media"
-                                data-testid="file-input"
-                                error={wasValidated && formErrors.file ? formErrors.file : undefined}
-                            />
-                        </div>
-
-                        <div className="flex justify-between w-full space-x-4 pt-4">
-                            
-                            <Button 
-                                variant="primary" 
-                                data-testid="submit-button"
-                                className="w-full" 
-                                onClick={handleSubmit}
-                            >
-                                <Typography variant="p2">{editingCertificate ? 'Simpan' : 'Tambah'}</Typography>
-                            </Button>
-                        </div>
+                    <div>
+                        <Input
+                            label="Judul*"
+                            data-testid="input-title"
+                            placeholder="Masukkan judul sertifikasi Anda"
+                            name="title"
+                            value={certificateFormData.title}
+                            onChange={handleChange}
+                        />
+                        {wasValidated && formErrors.title && (
+                            <Typography variant="p5" className="text-red-500 mt-1">
+                            {formErrors.title}
+                            </Typography>
+                        )}
                     </div>
-                </Modal>
+
+                    <div>
+                        <FileInput
+                            onFileSelect={handleFileChange}
+                            textLabel="Media"
+                            data-testid="file-input"
+                            error={wasValidated && formErrors.file ? formErrors.file : undefined}
+                        />
+                    </div>
+                </ModalFormWrapper>
             )}
         </div>
     );

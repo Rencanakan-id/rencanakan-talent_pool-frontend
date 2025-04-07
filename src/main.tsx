@@ -15,7 +15,6 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<LandingPageModule />} />
         <Route path="/design" element={<DesignSystemModule />} />
         <Route path="/preview" element={<PreviewTalentModule />} />
-        <Route path="/preview" element={<PreviewTalentModule />} />
         <Route path="/register" element={<RegisterModule />} />
         <Route path="/login" element={<LoginModule />} />
         <Route path="/me" element={<TalentProfilePage />} />
