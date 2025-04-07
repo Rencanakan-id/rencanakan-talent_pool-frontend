@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { JobInfoSection } from '@/modules/EditProfileModule/Section/jobInfo';
 import '@testing-library/jest-dom';
@@ -48,66 +47,6 @@ jest.mock('@/components/ui/comboboxCheckbox', () => ({
   },
 }));
 
-interface InputProps {
-  name?: string;
-  label?: string;
-  placeholder?: string;
-  type?: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  className?: string;
-}
-
-interface TextareaProps {
-  textLabel: string;
-  placeholder?: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  error?: string;
-}
-
-jest.mock('@/components', () => ({
-  Typography: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-  Button: ({ children, onClick, variant }: { children: React.ReactNode; onClick: () => void; variant?: string }) => (
-    <button onClick={onClick} className={variant}>
-      {children}
-    </button>
-  ),
-  Stepper: ({ currentStep }: { currentStep: number }) => (
-    <div>{`Current step: ${currentStep}`}</div>
-  ),
-  Input: ({ name, label, placeholder, type, value, onChange, error, className }: InputProps) => (
-    <div className={className}>
-      {label && <label htmlFor={name}>{label}</label>}
-      <input
-        id={name}
-        name={name}
-        placeholder={placeholder ?? ''}
-        type={type}
-        value={value ?? ''}
-        onChange={onChange}
-        aria-label={label}
-      />
-      {error && <div className="error-message">{error}</div>}
-    </div>
-  ),
-  Textarea: ({ textLabel, placeholder, value, onChange, error }: TextareaProps) => (
-    <div>
-      <label>{textLabel}</label>
-      <textarea
-        placeholder={placeholder ?? ''}
-        value={value ?? ''}
-        onChange={onChange}
-        aria-label={textLabel}
-      />
-      {error && <div className="error-message">{error}</div>}
-    </div>
-  ),
-}));
-
 const completeMockUserProfile: UserProfile = {
     id: "user123",
     firstName: "Rudy",
@@ -152,24 +91,24 @@ describe('JobInfoSection', () => {
   });
 
   it('renders all form fields', () => {
-    expect(screen.getByLabelText('Tentang Saya')).toBeInTheDocument();
+    expect(screen.getByTestId('about-me')).toBeInTheDocument();
     expect(screen.getByLabelText('Lama Pengalaman *')).toBeInTheDocument();
     expect(screen.getByLabelText('Level Sertifikasi SKK *')).toBeInTheDocument();
     expect(screen.getByLabelText('Lokasi Saat Ini *')).toBeInTheDocument();
     expect(screen.getByText('Bersedia Ditempatkan Di Mana *')).toBeInTheDocument();
     expect(screen.getByLabelText('Keahlian *')).toBeInTheDocument();
-    expect(screen.getByLabelText('Harga')).toBeInTheDocument();
+    expect(screen.getByTestId('price-input')).toBeInTheDocument();
   });
 
   it('handles about me change', () => {
-    const textarea = screen.getByLabelText('Tentang Saya');
+    const textarea = screen.getByTestId('about-me');
     fireEvent.change(textarea, { target: { value: 'New about me' } });
     expect(mockOnChange).toHaveBeenCalledWith({ aboutMe: 'New about me' });
   });
 
   it('handles price change and formats correctly', () => {
-    const priceInput = screen.getByLabelText('Harga');
-    fireEvent.change(priceInput, { target: { value: 'Rp2.000.000' } });
+    const priceInput = screen.getByTestId('price-input');
+    fireEvent.change(priceInput, { target: { value: '2000000' } });
     expect(mockOnChange).toHaveBeenCalledWith({ price: 2000000 });
   });
 

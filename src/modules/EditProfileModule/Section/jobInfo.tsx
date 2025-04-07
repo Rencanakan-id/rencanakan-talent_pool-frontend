@@ -77,6 +77,7 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
           <Textarea
             textLabel="Tentang Saya"
             value={data.aboutMe}
+            data-testid='about-me'
             onChange={(e) => onChange({ aboutMe: e.target.value })}
           />
         </div>
@@ -126,6 +127,7 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
             onChange={handleHargaChange}
             className="h-9 px-[14px] py-[9px] sm:h-10 sm:px-5 sm:py-[11px]"
             defaultValue={formatToRupiah(data.price)}
+            data-testid = "price-input"
             ref={inputRef}
           />
         </div>
