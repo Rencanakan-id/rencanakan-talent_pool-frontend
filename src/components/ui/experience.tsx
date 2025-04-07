@@ -70,7 +70,7 @@ interface FormErrors {
 }
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
-  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences);
+  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
