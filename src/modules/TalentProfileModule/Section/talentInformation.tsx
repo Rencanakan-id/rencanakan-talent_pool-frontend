@@ -3,10 +3,11 @@ import Certificate, { CertificateDetail } from '@/components/ui/certificate';
 import Experience, { ExperienceDetail } from '@/components/ui/experience';
 import Location from '@/components/ui/location';
 import UserProfileCard, { UserProfile } from '@/components/ui/profile';
+import RecommendationCard, { RecommendationResponseDTO, StatusType } from '@/components/ui/recommendation';
 import { ArrowLeft, BookmarkIcon } from 'lucide-react';
+import { useState } from 'react';
 
 export const TalentInformation: React.FC = () => {
-
   const userProfile: UserProfile = {
     id: "user123",
     firstName: "Rudy",
@@ -83,6 +84,41 @@ export const TalentInformation: React.FC = () => {
         file: new File(["dummy content"], "Sertifikasi 3.pdf", { type: "application/pdf" })
       },
     ];
+
+  const initialRecommendations: RecommendationResponseDTO[] = [
+    {
+      id: '1',
+      talentId: '101',
+      contractorId: 202,
+      contractorName: 'John Doe',
+      message: 'Pekerjaan sangat memuaskan, hasilnya sesuai harapan.',
+      status: StatusType.PENDING,
+    },
+    {
+      id: '2',
+      talentId: '102',
+      contractorId: 203,
+      contractorName: 'Jane Smith',
+      message: 'Pekerjaan luar biasa, sangat detail dan komunikatif.',
+      status: StatusType.APPROVED,
+    },
+  ];
+
+  const [recommendationsList, setRecommendationsList] = useState<RecommendationResponseDTO[]>(initialRecommendations);
+  
+  const handleAcceptRecommendation = (id: string) => {
+    setRecommendationsList(prevRecommendations =>
+      prevRecommendations.map(rec =>
+        rec.id === id ? { ...rec, status: StatusType.APPROVED } : rec
+      )
+    );
+  };
+
+  const handleDeclineRecommendation = (id: string) => {
+    setRecommendationsList(prevRecommendations =>
+      prevRecommendations.filter(rec => rec.id !== id)
+    );
+  };
       
   return !experience ? (
     <div className="absolute inset-0 flex h-full w-full items-center justify-center">
@@ -112,6 +148,11 @@ export const TalentInformation: React.FC = () => {
             <Experience experiences={experience} />
             <Location data={userProfile.preferredLocations} />
             <Certificate certificates={certificate} />
+            <RecommendationCard 
+              recommendations={recommendationsList} 
+              onAccept={handleAcceptRecommendation}
+              onDecline={handleDeclineRecommendation}
+            />
           </div>
         </div>
       </div>
