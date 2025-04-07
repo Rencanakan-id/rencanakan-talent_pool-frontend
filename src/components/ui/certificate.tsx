@@ -246,7 +246,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                                 label="Tanggal Terbit*" 
                                 data-testid="input-published"
                                 name="publishDate" 
-                                value={certificateFormData.publishDate || ''} 
+                                value={certificateFormData.publishDate?? ''} 
                                 onChange={handleChange} 
                                 type="date" 
                                 className="w-full"
