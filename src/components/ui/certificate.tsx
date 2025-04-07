@@ -89,7 +89,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             errors.title = "Judul sertifikasi wajib diisi";
         }
         
-        if (!certificateFormData.file) {
+        if (!certificateFormData.file || certificateFormData.file.size === 0) {
             errors.file = "File sertifikasi wajib diunggah";
         }
         
@@ -261,10 +261,8 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                                 onFileSelect={handleFileChange}
                                 textLabel="Media"
                                 data-testid="file-input"
+                                error={wasValidated && formErrors.file ? formErrors.file : undefined}
                             />
-                            {wasValidated && formErrors.file && (
-                                <Typography variant="p5" className="text-red-500 mt-1">{formErrors.file}</Typography>
-                            )}
                         </div>
 
                         <div className="flex justify-between w-full space-x-4 pt-4">
