@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/context/authContext";
-import { CertificationService } from "@/services/certificationService";
+import { CertificationService } from "@/services/CertificationService";
 import { CertificateDetail } from "../ui/certificate";
 
 export function useCertification(userId?: string) {

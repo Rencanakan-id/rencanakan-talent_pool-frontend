@@ -179,10 +179,10 @@ describe('Certificate Delete Functionality', () => {
     
     fireEvent.click(screen.getByTestId("edit-certificate-button"));
     fireEvent.click(screen.getByTestId("edit-button-1"));
-    expect(screen.getByText('Edit sertifikasi')).toBeInTheDocument();
+    expect(screen.getByText('Edit Sertifikasi')).toBeInTheDocument();
     
     fireEvent.click(screen.getByTestId("delete-button"));
-    expect(screen.queryByText('Edit sertifikasi')).not.toBeInTheDocument();
+    expect(screen.queryByText('Edit Sertifikasi')).not.toBeInTheDocument();
   });
 
   test('should show "no certificate" message after deleting the last certificate', () => {

@@ -42,7 +42,6 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         const { name, value } = e.target;
         setCertificateFormData((prev) => ({ ...prev, [name]: value }));
         
-        // Clear error for this field if it was previously set
         if (wasValidated && formErrors[name as keyof FormErrors]) {
             setFormErrors(prev => ({ ...prev, [name]: undefined }));
         }
@@ -81,6 +80,15 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         setFormErrors({});
         setWasValidated(false);
     };
+
+    const handleDelete = () => {
+        if (editingCertificate) {
+          setCertificateList((prev) =>
+            prev.filter((exp) => exp.id !== editingCertificate.id)
+          );
+          setIsModalOpen(false);
+        }
+      };
 
     const validateForm = (): boolean => {
         const errors: FormErrors = {};
@@ -265,17 +273,36 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                             />
                         </div>
 
-                        <div className="flex justify-between w-full space-x-4 pt-4">
-                            
+                        {editingCertificate ? (
+                            <div className='grid grid-cols-2 gap-2'>
+                                <Button 
+                                    variant="primary" 
+                                    data-testid="delete-button"
+                                    className="rounded-md font-[500] bg-[rgba(196,61,75,0.95)] border-[rgba(196,61,75,0.95)] hover:bg-rencanakan-error-red-100 hover:border-rencanakan-error-red-100"
+                                    onClick={handleDelete}
+                                >
+                                    <Typography variant="p2">Hapus</Typography>
+                                </Button>
+                
+                                <Button 
+                                    variant="primary" 
+                                    data-testid="submit-button"
+                                    className="rounded-md font-[500]" 
+                                    onClick={handleSubmit}
+                                >
+                                    <Typography variant="p2">Simpan</Typography>
+                                </Button>
+                            </div>
+                        ) : (
                             <Button 
-                                variant="primary" 
-                                data-testid="submit-button"
-                                className="w-full" 
-                                onClick={handleSubmit}
+                            variant="primary" 
+                            data-testid="submit-button"
+                            className="rounded-md font-[500]" 
+                            onClick={handleSubmit}
                             >
-                                <Typography variant="p2">{editingCertificate ? 'Simpan' : 'Tambah'}</Typography>
+                            <Typography variant="p2">Tambah</Typography>
                             </Button>
-                        </div>
+                        )}
                     </div>
                 </Modal>
             )}

@@ -1,23 +1,17 @@
-import Experience from '@/components/ui/experience';
-import Certificate from '@/components/ui/certificate';
-import UserProfileCard from '@/components/ui/profile';
-import Location from '@/components/ui/location';
-
 import { Button } from '@/components';
+import Experience from '@/components/ui/experience';
+import UserProfileCard from '@/components/ui/profile';
 import { ArrowLeft } from 'lucide-react';
-
+import Location from '@/components/ui/location';
 import { useAuth } from '@/components/context/authContext';
 import { useUserProfile } from '@/components/hooks/useUserPorfile';
 import { useExperience } from '@/components/hooks/useExperience';
-import { useCertification } from '@/components/hooks/useCertification';
 
 export const PreviewTalentModule: React.FC = () => {
   const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
   const { experience, isLoading: isExperienceLoading } = useExperience(user?.id);
-  const { certification, isLoading: isCertificationLoading } = useCertification(user?.id);
-
-  if (isUserLoading || isExperienceLoading || isCertificationLoading) {
+  if (isUserLoading || isExperienceLoading) {
     return (
       <div className="absolute inset-0 flex h-full w-full items-center justify-center">
         <div
@@ -42,9 +36,8 @@ export const PreviewTalentModule: React.FC = () => {
           <img src="profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
           <div className="w-full flex-col items-center space-y-4">
             {userProfile && <UserProfileCard user={userProfile} />}
-            {experience && <Experience experiences={experience} />}
             {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
-            {certification && <Certificate certificates={certification} />}
+            {experience && <Experience experiences={experience} />}
           </div>
         </div>
       </div>
