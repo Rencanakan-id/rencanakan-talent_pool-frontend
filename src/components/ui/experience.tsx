@@ -55,7 +55,7 @@ export interface ExperienceDetail {
 }
 
 interface ExperienceProps {
-  experiences?: ExperienceDetail[];
+  experiences?: ExperienceDetail[] | null;
 }
 
 // Define error state interface
@@ -70,7 +70,7 @@ interface FormErrors {
 }
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
-  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences);
+  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);

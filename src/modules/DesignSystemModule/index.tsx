@@ -5,9 +5,14 @@ import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
 import Location from '@/components/ui/location';
 import UserProfileCard from '@/components/ui/profile';
 import { locations } from '@/data/location';
+import { useState } from 'react';
+import RecommendationCard, {
+  RecommendationResponseDTO,
+  StatusType,
+} from '@/components/ui/recommendation';
+
 import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
 import { ConfirmationBox } from '@/components/ui/confirmation-box';
-import { useState } from 'react';
 
 const dummyExperience = [
   {
@@ -42,6 +47,34 @@ const dummyExperience = [
     location: 'Bandung, Indonesia',
     locationType: 'ON_SITE' as LocationType,
     talentId: 103,
+  },
+];
+const loremIpsum = `
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+  in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+  sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+  
+
+  `;
+
+const recommendations: RecommendationResponseDTO[] = [
+  {
+    id: '1',
+    talentId: '101',
+    contractorId: 202,
+    contractorName: 'John Doe',
+    message: loremIpsum,
+    status: StatusType.PENDING,
+  },
+  {
+    id: '2',
+    talentId: '102',
+    contractorId: 203,
+    contractorName: 'Jane Smith',
+    message: 'Pekerjaan luar biasa, sangat detail dan komunikatif.',
+    status: StatusType.APPROVED,
   },
 ];
 
@@ -132,6 +165,9 @@ export const DesignSystemModule = () => {
           ]}
         />
         <ComboboxCheckBox data={locations} label="Lokasi" error="Field tidak boleh kosong" />
+      </div>
+      <div className="p-6">
+        <RecommendationCard recommendations={recommendations} />
       </div>
 
       <div className="space-y-4">

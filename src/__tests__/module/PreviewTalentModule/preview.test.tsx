@@ -2,17 +2,28 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/';
 import { PreviewTalentModule } from '@/modules/PreviewTalentModule';
 
+import { useUserProfile } from '@/components/hooks/useUserProfile';
+import { useExperience } from '@/components/hooks/useExperience';
+import { useAuth } from '@/components/context/authContext';
+import { useRecommendation } from '@/components/hooks/useRecommendation';
+
 // Mock hooks
 jest.mock('@/components/context/authContext', () => ({
   useAuth: jest.fn(() => ({ user: { id: '1' } })),
 }));
 
-jest.mock('@/components/hooks/useUserPorfile', () => ({
-  useUserProfile: jest.fn(),
-}));
+
 
 jest.mock('@/components/hooks/useExperience', () => ({
   useExperience: jest.fn(),
+}));
+
+jest.mock('@/components/hooks/useUserProfile', () => ({
+  useUserProfile: jest.fn(),
+}));
+
+jest.mock('@/components/hooks/useRecommendation', () => ({
+  useRecommendation: jest.fn(),
 }));
 
 jest.mock('@/components/ui/profile', () => ({
@@ -30,9 +41,10 @@ jest.mock('@/components/ui/location', () => ({
   default: jest.fn(() => <div data-testid="location">Mocked Location</div>),
 }));
 
-import { useUserProfile } from '@/components/hooks/useUserPorfile';
-import { useExperience } from '@/components/hooks/useExperience';
-import { useAuth } from '@/components/context/authContext';
+jest.mock('@/components/ui/recommendation', () => ({
+  __esModule: true,
+  default: jest.fn(() => <div data-testid="recommendation">Mocked Recommendation</div>),
+}));
 
 describe('PreviewTalentModule', () => {
   beforeEach(() => {
@@ -42,14 +54,16 @@ describe('PreviewTalentModule', () => {
   test('renders loading spinner initially', () => {
     (useUserProfile as jest.Mock).mockReturnValue({ userProfile: null, isLoading: true });
     (useExperience as jest.Mock).mockReturnValue({ experience: null, isLoading: true });
+    (useRecommendation as jest.Mock).mockReturnValue({ recommendations: null, isLoading: true });
 
     render(<PreviewTalentModule />);
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
-  test('renders user profile and experience after loading completes', async () => {
+  test('renders user profile ,experience,and recommendation after loading completes', async () => {
     (useUserProfile as jest.Mock).mockReturnValue({ userProfile: {}, isLoading: false });
     (useExperience as jest.Mock).mockReturnValue({ experience: [], isLoading: false });
+    (useRecommendation as jest.Mock).mockReturnValue({ recommendations: [], isLoading: false });
 
     render(<PreviewTalentModule />);
 
@@ -57,7 +71,7 @@ describe('PreviewTalentModule', () => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
       expect(screen.getByTestId('user-profile')).toBeInTheDocument();
       expect(screen.getByTestId('experience')).toBeInTheDocument();
-
+      expect(screen.getByTestId('recommendation')).toBeInTheDocument();
     });
   });
 
@@ -80,26 +94,63 @@ describe('PreviewTalentModule', () => {
       name: 'John Doe',
       preferredLocations: ['New York', 'San Francisco'],
     };
-  
-    (useUserProfile as jest.Mock).mockReturnValue({ userProfile: mockUserProfile, isLoading: false });
+
+    (useUserProfile as jest.Mock).mockReturnValue({
+      userProfile: mockUserProfile,
+      isLoading: false,
+    });
     (useExperience as jest.Mock).mockReturnValue({ experience: null, isLoading: false });
-  
+
     render(<PreviewTalentModule />);
-  
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-      
+
       // User Profile should be rendered
       expect(screen.getByTestId('user-profile')).toBeInTheDocument();
-      
+
       // Experience should NOT be rendered
       expect(screen.queryByTestId('experience')).not.toBeInTheDocument();
-      
+
       // Location should be rendered
       expect(screen.getByTestId('location')).toBeInTheDocument();
     });
   });
-  
+
+  test('handles missing recommendation gracefully', async () => {
+    const mockUserProfile = {
+      id: '1',
+      name: 'John Doe',
+      preferredLocations: ['New York', 'San Francisco'],
+    };
+
+    (useUserProfile as jest.Mock).mockReturnValue({
+      userProfile: mockUserProfile,
+      isLoading: false,
+    });
+    (useExperience as jest.Mock).mockReturnValue({ experience: [], isLoading: false });
+    (useRecommendation as jest.Mock).mockReturnValue({
+      recommendations : null,
+      isLoading: false,
+    });
+    render(<PreviewTalentModule />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+
+      // User Profile should be rendered
+      expect(screen.getByTestId('user-profile')).toBeInTheDocument();
+
+      // Experience should NOT be rendered
+      expect(screen.queryByTestId('experience')).toBeInTheDocument();
+
+      // Location should be rendered
+      expect(screen.getByTestId('location')).toBeInTheDocument();
+      // Recommendation should NOT be rendered
+      expect(screen.queryByTestId('recommendation')).not.toBeInTheDocument();
+
+    });
+  });
 
   test('renders buttons correctly', async () => {
     (useUserProfile as jest.Mock).mockReturnValue({ userProfile: {}, isLoading: false });
@@ -116,10 +167,11 @@ describe('PreviewTalentModule', () => {
     expect(backButton.querySelector('svg')).toBeInTheDocument();
   });
 
- 
-
   test('handles userProfile with null preferredLocations gracefully', async () => {
-    (useUserProfile as jest.Mock).mockReturnValue({ userProfile: { preferredLocations: null }, isLoading: false });
+    (useUserProfile as jest.Mock).mockReturnValue({
+      userProfile: { preferredLocations: null },
+      isLoading: false,
+    });
     (useExperience as jest.Mock).mockReturnValue({ experience: [], isLoading: false });
 
     render(<PreviewTalentModule />);
@@ -133,7 +185,7 @@ describe('PreviewTalentModule', () => {
   });
 
   test('handles missing user gracefully', async () => {
-    (useAuth as jest.Mock).mockReturnValue({ token: null, user:null });
+    (useAuth as jest.Mock).mockReturnValue({ token: null, user: null });
     (useUserProfile as jest.Mock).mockReturnValue({ userProfile: null, isLoading: false });
     (useExperience as jest.Mock).mockReturnValue({ experience: null, isLoading: false });
 
@@ -144,6 +196,7 @@ describe('PreviewTalentModule', () => {
       expect(screen.queryByTestId('user-profile')).not.toBeInTheDocument();
       expect(screen.queryByTestId('experience')).not.toBeInTheDocument();
       expect(screen.queryByTestId('location')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('recommendation')).not.toBeInTheDocument();
     });
   });
 });
