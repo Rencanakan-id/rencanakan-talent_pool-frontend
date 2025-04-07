@@ -1,33 +1,106 @@
-import { CertificateDetail } from '@/components/ui/certificate';
+import { CertificateDetail } from "@/components/ui/certificate";
 
-const API_BASE_URL = 'http://localhost:8000/api';
+export class CertificationService {
+  private static readonly BASE_URL = "http://localhost:8080/api";
 
-interface ApiResponse<T> {
-  data: T;
-  status: string;
-  message?: string;
-}
+  static async getCertificates(userId: string, token: string) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/api/certificates/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-export const getUserCertificates = async (userId: string): Promise<CertificateDetail[]> => {
-  try {
-    const token = localStorage.getItem('token');
-    
-    const response = await fetch(`${API_BASE_URL}/certificates/user/${userId}/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.message || `Failed to fetch certificates: ${res.status}`);
       }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      
+      return res.json();
+    } catch (error) {
+      console.error("Error fetching certificates:", error);
+      throw error;
     }
-    
-    const responseData: ApiResponse<CertificateDetail[]> = await response.json();
-    return responseData.data;
-  } catch (error) {
-    console.error('Error fetching certificates:', error);
-    throw error;
   }
-};
+
+  static async addCertificate(token: string, certificateData: CertificateDetail) {
+    try {
+      const formData = new FormData();
+      formData.append('title', certificateData.title);
+      
+      if (certificateData.publishDate) {
+        formData.append('publishDate', certificateData.publishDate);
+      }
+      
+      formData.append('file', certificateData.file);
+
+      const res = await fetch(`${this.BASE_URL}/api/certificates`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.message || `Failed to add certificate: ${res.status}`);
+      }
+      
+      return res.json();
+    } catch (error) {
+      console.error("Error adding certificate:", error);
+      throw error;
+    }
+  }
+
+  static async editCertificate(token: string, certificateId: number, certificateData: CertificateDetail) {
+    try {
+      const formData = new FormData();
+      formData.append('title', certificateData.title);
+      
+      if (certificateData.publishDate) {
+        formData.append('publishDate', certificateData.publishDate);
+      }
+      
+      formData.append('file', certificateData.file);
+
+      const res = await fetch(`${this.BASE_URL}/api/certificates/${certificateId}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.message || `Failed to update certificate: ${res.status}`);
+      }
+      
+      return res.json();
+    } catch (error) {
+      console.error("Error updating certificate:", error);
+      throw error;
+    }
+  }
+
+  static async deleteCertificate(token: string, certificateId: number) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/api/certificates/${certificateId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.message || `Failed to delete certificate: ${res.status}`);
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("Error deleting certificate:", error);
+      throw error;
+    }
+  }
+}

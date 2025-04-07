@@ -130,4 +130,78 @@ describe('Certificate Section Edge Case', () => {
         
     });
 });
+
+describe('Certificate Delete Functionality', () => {
+  test('should delete an certificate when delete button is clicked', () => {
+    render(<Certificate certificates={[mockCertificates[0]]} />);
+    
+    fireEvent.click(screen.getByTestId("edit-certificate-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    
+    const deleteButton = screen.getByTestId("delete-button");
+    expect(deleteButton).toBeInTheDocument();
+    
+    fireEvent.click(deleteButton);
+    
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+    expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
+  });
   
+  test('should delete only the selected certificate when multiple exist', () => {
+  
+    render(<Certificate certificates={mockCertificates} />);
+    
+    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
+    
+    fireEvent.click(screen.getByTestId("edit-certificate-button"));
+    
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+    expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
+  });
+  
+  test('should not show delete button in add certificate mode', () => {
+    render(<Certificate certificates={mockCertificates} />);
+    
+    fireEvent.click(screen.getByTestId("add-certificate-button"));
+    
+    expect(screen.getByTestId("submit-button")).toBeInTheDocument();
+    expect(screen.getByText('Tambah')).toBeInTheDocument();
+
+    expect(screen.queryByTestId("delete-button")).not.toBeInTheDocument();
+  });
+  
+  test('should close the modal after deleting an certificate', () => {
+    render(<Certificate certificates={mockCertificates} />);
+    
+    fireEvent.click(screen.getByTestId("edit-certificate-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    expect(screen.getByText('Edit sertifikasi')).toBeInTheDocument();
+    
+    fireEvent.click(screen.getByTestId("delete-button"));
+    expect(screen.queryByText('Edit sertifikasi')).not.toBeInTheDocument();
+  });
+
+  test('should show "no certificate" message after deleting the last certificate', () => {
+    render(<Certificate certificates={[mockCertificates[0]]} />);
+    
+    fireEvent.click(screen.getByTestId("edit-certificate-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
+  }); 
+  
+  test('should keep edit mode active after deleting an certificate', () => { 
+    render(<Certificate certificates={mockCertificates} />);
+    
+    fireEvent.click(screen.getByTestId("edit-certificate-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    expect(screen.getByTestId("edit-button-2")).toBeInTheDocument();
+  });
+});
