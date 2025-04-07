@@ -99,6 +99,18 @@ describe('Certificate Section Negative Case', () => {
         
         expect(screen.getByText('Tambah Sertifikasi')).toBeInTheDocument();
     });
+
+    test('should show error message when required fields arent filled', () => {
+        render(<Certificate certificates={[]} />);
+        
+        fireEvent.click(screen.getByTestId('add-certificate-button'));
+        
+        fireEvent.click(screen.getByTestId('submit-button'));
+        
+        expect(screen.getByText('Judul sertifikasi wajib diisi')).toBeInTheDocument();
+        expect(screen.getByText('Tanggal terbit wajib diisi')).toBeInTheDocument();
+        expect(screen.getByText('File sertifikasi wajib diunggah')).toBeInTheDocument();
+    });
 });
 
 describe('Certificate Section Edge Case', () => {

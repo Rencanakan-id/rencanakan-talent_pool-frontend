@@ -89,7 +89,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             errors.title = "Judul sertifikasi wajib diisi";
         }
         
-        if (!certificateFormData.file || certificateFormData.file.size === 0) {
+        if (!certificateFormData.file) {
             errors.file = "File sertifikasi wajib diunggah";
         }
         
