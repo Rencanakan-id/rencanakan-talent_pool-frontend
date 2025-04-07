@@ -14,7 +14,7 @@ export const Navbar: React.FC = () => {
   const closeMenu = useOutsideClick(() => setIsMobileMenuOpen(false));
   const navigate = useNavigate();
   const { logout, isAuthenticated, user } = useAuth();
-  
+  console.log('user', user);
   // Update body overflow when mobile menu opens/closes to prevent scrolling
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -70,7 +70,7 @@ export const Navbar: React.FC = () => {
               className="mr-3 font-medium"
               data-testid="desktop-user-name" // Add this line
             >
-              {user?.firstName + user?.lastName || 'User'}
+              {user?.firstName || 'User'}
             </Typography>
             <img src="./dummy/profile.svg" alt="Profile" className="mr-1" />
           </div>
@@ -144,7 +144,7 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <img src="./dummy/profile.svg" alt="Profile" className="h-8 w-8" />
                 <Typography variant="p2" className="font-medium" data-testid="mobile-user-name">
-                  {user?.firstName + user?.lastName || 'User'}
+                  {user?.firstName  || 'User'}
                 </Typography>
               </div>
               <Button

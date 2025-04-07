@@ -35,7 +35,7 @@ export const PreviewTalentModule: React.FC = () => {
                 </div>
 
                 <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-y-0 md:space-x-6">
-                    <img src="profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
+                    <img src="./dummy/profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
                     <div className="w-full flex-col items-center space-y-4">
                         {userProfile && <UserProfileCard user={userProfile} />}
                         {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}

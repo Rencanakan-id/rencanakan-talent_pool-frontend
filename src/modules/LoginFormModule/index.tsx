@@ -60,7 +60,7 @@ const LoginModule = () => {
       console.log('Login berhasil');
       navigate('/preview'); // Navigasi ke halaman lain
     } catch (error: any) {
-      console.error('Login Failed:', error.message);
+      // console.error('Login Failed:', error.message);
       setEmailError('Email atau password salah');
       setPasswordError('Email atau password salah');
     }

@@ -27,10 +27,7 @@ describe('Navbar Logout Functionality', () => {
   const mockUser = {
     id: 1,
     email: 'test@example.com',
-    firstName: 'John',
-    lastName: 'Doe',
-    nik: '1234567890123456',
-    phoneNumber: '081234567890',
+    firstName: 'JohnDoe',
   };
 
   const mockToken = 'mocked-jwt-token';
