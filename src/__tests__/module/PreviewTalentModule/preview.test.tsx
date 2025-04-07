@@ -12,13 +12,16 @@ jest.mock('@/components/context/authContext', () => ({
   useAuth: jest.fn(() => ({ user: { id: '1' } })),
 }));
 
-jest.mock('@/components/hooks/useUserPorfile', () => ({
-  useUserProfile: jest.fn(),
-}));
+
 
 jest.mock('@/components/hooks/useExperience', () => ({
   useExperience: jest.fn(),
 }));
+
+jest.mock('@/components/hooks/useUserProfile', () => ({
+  useUserProfile: jest.fn(),
+}));
+
 jest.mock('@/components/hooks/useRecommendation', () => ({
   useRecommendation: jest.fn(),
 }));
