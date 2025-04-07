@@ -5,7 +5,7 @@ export class CertificationService {
 
   static async getCertificates(userId: string, token: string) {
     try {
-      const res = await fetch(`${this.BASE_URL}/api/certificates/${userId}`, {
+      const res = await fetch(`${this.BASE_URL}/api/certificates/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
