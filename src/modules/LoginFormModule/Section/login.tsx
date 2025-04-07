@@ -48,6 +48,7 @@ export const LoginForm = ({
               value={formData.email ?? ''}
               onChange={handleInputChange}
               error={emailError}
+              data-error={emailError} // Add this line
             />
 
             <Input
@@ -59,6 +60,7 @@ export const LoginForm = ({
               value={formData.password ?? ''}
               onChange={handleInputChange}
               error={commentError}
+              data-error={commentError} // Add this line
             />
           </div>
 

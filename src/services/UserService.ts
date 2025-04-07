@@ -12,7 +12,7 @@ export class UserService {
   }
 
   static async getUserExperience(userId: string, token: string) {
-    const res = await fetch(`${this.BASE_URL}/api/experiences/${userId}`, {
+    const res = await fetch(`${this.BASE_URL}/api/experiences/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

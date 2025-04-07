@@ -120,6 +120,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           <button
             onClick={onClose}
             className="close-icon absolute top-2 right-2 text-gray-500 transition-colors hover:text-gray-700"
+            data-testid="close-modal-button"
           >
             &times;
           </button>
