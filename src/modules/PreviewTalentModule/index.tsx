@@ -4,7 +4,7 @@ import UserProfileCard from '@/components/ui/profile';
 import { ArrowLeft } from 'lucide-react';
 import Location from '@/components/ui/location';
 // import { useAuth } from '@/components/context/authContext';
-import { useUserProfile } from '@/components/hooks/useUserPorfile';
+import { useUserProfile } from '@/components/hooks/useUserProfile';
 import { useExperience } from '@/components/hooks/useExperience';
 import { useRecommendation } from '@/components/hooks/useRecommendation';
 import RecommendationCard from '@/components/ui/recommendation';
