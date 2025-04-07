@@ -37,7 +37,7 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
         </Typography>
         <div className="flex items-center space-x-2">
           <FaMapMarkerAlt />
-          <Typography variant="p1" className="text-rencanakan-dark-gray font-lighter">
+          <Typography variant="p1" className="text-gray-600">
             {user?.currentLocation}
           </Typography>
           <div className="h-5 border-l border-gray-400"></div>

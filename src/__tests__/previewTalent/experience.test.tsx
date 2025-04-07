@@ -31,5 +31,4 @@ describe('Experience Component', () => {
 
     expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
-
 });
