@@ -49,6 +49,18 @@ describe('Certificate Section Positive Case', () => {
       expect(screen.getByText('Software Engineer')).toBeInTheDocument();
       expect(screen.getByText('UI/UX Design')).toBeInTheDocument();
     });
+
+    test('should open any modal and close it with X button', () => {
+      render(<Certificate certificates={[]} />);
+      
+      fireEvent.click(screen.getByTestId("add-certificate-button"));
+  
+      expect(screen.getByText('Tambah Sertifikasi')).toBeInTheDocument();
+  
+      fireEvent.click(screen.getByTestId("close-modal-button"));
+  
+      expect(screen.queryByText('Tambah Sertifikasi')).not.toBeInTheDocument();
+    });
   
     test('should open add certificate modal and submit valid data', () => {
       render(<Certificate certificates={[]} />);
