@@ -42,28 +42,28 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
           </Typography>
           <div className="h-5 border-l border-gray-400"></div>
           <FaWhatsapp className="text-green-500" />
-          <Typography variant="p1" className="text-gray-600">
+          <Typography variant="p1" className="text-rencanakan-dark-gray font-lighter">
             {user?.phoneNumber}
           </Typography>
         </div>
-        <div className="flex flex-wrap items-center space-y-2 space-x-2">
-          <Badge variant={'profileOrange'}> {user?.skkLevel}</Badge>
-          <Badge variant={'profileOrange'}> {user?.experienceYears} Tahun Pengalaman</Badge>
+        <div className="flex items-center space-y-2 space-x-2">
+          <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400'> {user?.skkLevel}</Badge>
+          <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400'> {user?.experienceYears} Tahun Pengalaman</Badge>
           <Badge variant={'profileGray'}> {user?.job}</Badge>
         </div>
       </div>
       <div className="bg-rencanakan-lightest-gray relative flex w-full flex-col justify-center space-y-2 p-6 md:flex-row md:items-center md:justify-start">
         <div className="flex w-full flex-col items-center md:items-start">
-          <Typography variant="p2" className="text-gray-600">
+          <Typography variant="p2" className="text-rencanakan-dark-gray">
             Perkiraan Harga
           </Typography>
-          <Typography variant="h1" className="pt-4">
+          <Typography variant="h2" className="pt-4">
             Rp {new Intl.NumberFormat('id-ID').format(user?.price ?? 0)}
           </Typography>
         </div>
       </div>
 
-      <div className="w-full rounded-[4px] border border-gray-300 px-6 py-6">
+      <div className="w-full rounded-lg border border-gray-300 px-6 py-6">
         <Typography variant="p1" className="pb-4">
           Tentang Saya
         </Typography>

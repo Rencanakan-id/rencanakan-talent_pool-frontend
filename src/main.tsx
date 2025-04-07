@@ -5,6 +5,7 @@ import App from './App';
 import { DesignSystemModule, LandingPageModule, PreviewTalentModule } from './modules';
 import { RegisterModule } from './modules/RegisterFormModule';
 import LoginModule from './modules/LoginFormModule';
+import { TalentProfilePage } from './modules/TalentProfileModule';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/preview" element={<PreviewTalentModule />} />
         <Route path="/register" element={<RegisterModule />} />
         <Route path="/login" element={<LoginModule />} />
+        <Route path="/me" element={<TalentProfilePage />} />
       </Route>
     </Routes>
   </BrowserRouter>

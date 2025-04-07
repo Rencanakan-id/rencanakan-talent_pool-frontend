@@ -6,7 +6,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { fa, fi } from "@faker-js/faker";
 
 interface AuthContextProps {
     user: UserProps;
