@@ -19,25 +19,12 @@ export const PreviewTalentModule: React.FC = () => {
 
   if (isUserLoading || isExperienceLoading || isRecommendationLoading) {
     return (
-        <div className="flex w-full justify-center">
-            <div className="m-6 w-full max-w-6xl justify-center bg-white">
-                <div className="flex w-full justify-between p-4">
-                    <Button variant="primary-outline" className="flex py-2">
-                        <ArrowLeft size={20} />
-                        <span>Kembali</span>
-                    </Button>
-                </div>
-
-                <div className="flex w-full flex-col items-center space-y-2 p-4 md:flex-row md:items-start md:space-y-0 md:space-x-6">
-                    <img src="./dummy/profile.svg" alt="Logo" className="h-[330px] w-[298px]" />
-                    <div className="w-full flex-col items-center space-y-4">
-                        {userProfile && <UserProfileCard user={userProfile} />}
-                        {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
-                        {experience && <Experience experiences={experience} />}
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div className="absolute inset-0 flex h-full w-full items-center justify-center">
+        <div
+          data-testid="loading-spinner"
+          className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500"
+        ></div>
+      </div>
     );
   }
 
