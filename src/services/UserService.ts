@@ -1,6 +1,6 @@
 // services/UserService.ts
 export class UserService {
-    private static readonly BASE_URL = process.env.REACT_APP_API_URLL?? "http://localhost:8080";
+    private static readonly BASE_URL = "http://localhost:8080";
   
     static async getUserProfile(token: string) {
       const res = await fetch(`${this.BASE_URL}/api/users/me`, {
@@ -12,7 +12,7 @@ export class UserService {
     }
   
     static async getUserExperience(userId: string, token: string) {
-      const res = await fetch(`${this.BASE_URL}/api/experiences/${userId}`, {
+      const res = await fetch(`${this.BASE_URL}/api/experiences/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   

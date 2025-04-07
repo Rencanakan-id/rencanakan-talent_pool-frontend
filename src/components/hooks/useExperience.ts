@@ -12,6 +12,7 @@ export function useExperience(userId?: string) {
     const fetchExperience = async () => {
       if (!token || !userId) return;
       try {
+
         const experienceData = await UserService.getUserExperience(userId, token);
         setExperience(experienceData.data?? null);
       } catch (err) {

@@ -6,6 +6,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { fa, fi } from "@faker-js/faker";
 
 interface AuthContextProps {
     user: UserProps;
@@ -37,6 +38,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
     const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
     const check = async () => {
+        setIsLoading(true);
         if (token) {
             try {
                 const decodedUser = jwtDecode<UserProps>(token);
@@ -48,21 +50,22 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                     },
                 });
 
+                console.log('ini res check', res.data);
+
                 if (res.status === 200) {
                     const jwt = Cookies.get('token') || "";
                     const decodedUser = jwtDecode<UserProps>(jwt);
                     setUser(decodedUser);
                     setToken(jwt);
                     setIsAuthenticated(true);
-                } else {
-                    throw new Error('Token not authorized');
                 }
             } catch (error) {
-                console.error('Error decoding token or token not authorized:', error);
                 setIsAuthenticated(false);
                 setUser(DEFAULT_USER);
                 Cookies.remove('token');
                 setToken('');
+            } finally {
+                setIsLoading(false);
             }
         }
         setIsLoading(false);
@@ -74,6 +77,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
 
     useEffect(() => {
         const jwt = Cookies.get('token');
+        // setIsLoading(true);
         if (jwt) {
             Cookies.set('token', jwt);
             try {
@@ -84,25 +88,30 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                 setIsAuthenticated(true);
             } catch (error) {
                 console.error('Error decoding token:', error);
+            } finally {
+                setIsLoading(false);
             }
         }
+        // setIsLoading(false);
     }, []);
 
     const login = async (email: string, password: string) => {
+        // setIsLoading(true);
         try {
             const res = await axios.post(`http://localhost:8080/api/auth/login`, {
                 email,
                 password,
             });
-            const data = res.data.token;
+            const data = res.data.data.token;
             Cookies.set('token', data);
             const decodedUser = jwtDecode<UserProps>(data);
             setUser(decodedUser);
             setToken(data);
             setIsAuthenticated(true);
         } catch (error) {
-            console.error('Login Failed: ', error);
             throw new Error('Login Failed');
+        } finally {
+            // setIsLoading(false);
         }
     };
 
@@ -113,6 +122,8 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
         setToken('');
         setIsAuthenticated(false);
         setUser(DEFAULT_USER);
+        // setIsLoggingOut(false);
+        // setIsLoading(false);
     };
 
     const contextValue: AuthContextProps = {
