@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { JobInfoSection } from '@/modules/EditProfileModule/Section/jobInfo';
 import '@testing-library/jest-dom';
 import { UserProfile } from '@/components/ui/profile';
+import { mockUserProfile } from '@/mocks/mockProfile';
 
 interface ComboboxProps {
   label: string;
@@ -47,35 +48,7 @@ jest.mock('@/components/ui/comboboxCheckbox', () => ({
   },
 }));
 
-const completeMockUserProfile: UserProfile = {
-    id: "user123",
-    firstName: "Rudy",
-    lastName: "Handoko",
-    email: "dummy@example.com",
-    phoneNumber: "08123456789",
-    address: "Jakarta Kota, DKI Jakarta",
-    job: "Ahli Bangunan Gedung",
-    photo: "image-3.png",
-    aboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi...",
-    price: 7550000,
-    nik: "1234567890123456",
-    npwp: "123456789012345",
-    photoKtp: "image-3.png",
-    photoNpwp: "image-3.png",
-    photoIjazah: "image-3.png",
-    experienceYears: 2,
-    skkLevel: "profesional",
-    currentLocation: "surabaya",
-    preferredLocations: ["Jakarta", "Bandung", "Surabaya"],
-    skill: "arsitektur",
-};
-
-const completeMockInitialData: UserProfile = {
-  ...completeMockUserProfile,
-  aboutMe: 'Initial about me',
-  experienceYears: 2,
-  skkLevel: 'SKK Level 2',
-};
+const completeMockInitialData: UserProfile = mockUserProfile
 
 describe('JobInfoSection', () => {
   const mockOnChange = jest.fn();
@@ -83,7 +56,7 @@ describe('JobInfoSection', () => {
   beforeEach(() => {
     render(
       <JobInfoSection
-        data={completeMockUserProfile}
+        data={mockUserProfile}
         initialData={completeMockInitialData}
         onChange={mockOnChange}
       />

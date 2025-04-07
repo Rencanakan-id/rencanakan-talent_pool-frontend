@@ -2,6 +2,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { EditProfileModule } from '@/modules/EditProfileModule';
 import { UserProfile } from '@/components/ui/profile';
 import '@testing-library/jest-dom';
+import fetchMock from 'jest-fetch-mock';
+import axios from 'axios';
 
 const mockUserProfile: UserProfile = {
     id: "user123",
@@ -11,7 +13,7 @@ const mockUserProfile: UserProfile = {
     phoneNumber: "08123456789",
     address: "Jakarta Kota, DKI Jakarta",
     job: "Ahli Bangunan Gedung",
-    photo: "image-3.png",
+    photo: "",
     aboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi...",
     price: 7550000,
     nik: "1234567890123456",
@@ -26,45 +28,39 @@ const mockUserProfile: UserProfile = {
     skill: "arsitektur",
 };
 
-describe('EditProfileModule', () => {
-  beforeEach(() => {
-    global.URL.createObjectURL = jest.fn();
+
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
+beforeEach(() => {
+  fetchMock.resetMocks();
+  localStorage.setItem('authToken', 'dummy-token');
+});
+
+test('renders EditProfileModule and displays user data', async () => {
+  render(<EditProfileModule userProfile={mockUserProfile} />);
+  
+  expect(screen.getByText('Simpan Perubahan')).toBeInTheDocument();
+  expect(screen.getByText('Kembali')).toBeInTheDocument();
+});
+
+test('updates profile on save', async () => {
+  mockedAxios.put.mockResolvedValueOnce({
+    data: { data: { ...mockUserProfile, firstName: 'Jane' } },
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+  render(<EditProfileModule userProfile={mockUserProfile} />);
 
-  it('renders loading state initially', () => {
-    render(<EditProfileModule userProfile={mockUserProfile} />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-  });
+  const input = screen.getByTestId('first-name');
+  fireEvent.change(input, { target: { value: 'Jane' } });
 
-  it('renders form after loading', async () => {
-    render(<EditProfileModule userProfile={mockUserProfile} />);
-    await waitFor(() => {
-      expect(screen.getByText('Kembali')).toBeInTheDocument();
-      expect(screen.getByText('Simpan Perubahan')).toBeInTheDocument();
-    });
-  });
+  fireEvent.click(screen.getByText('Simpan Perubahan'));
 
-  it('handles save button click', async () => {
-    render(<EditProfileModule userProfile={mockUserProfile} />);
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Simpan Perubahan'));
-    });
-    // Add your assertions for save behavior here
-  });
-
-  it('handles photo change', async () => {
-    const file = new File(['photo'], 'photo.jpg', { type: 'image/jpeg' });
-    render(<EditProfileModule userProfile={mockUserProfile} />);
-    
-    await waitFor(() => {
-      const input = screen.getByLabelText('Foto Diri') as HTMLInputElement;
-      fireEvent.change(input, { target: { files: [file] } });
-    });
-    
-    // Add assertions for photo change
+  await waitFor(() => {
+    expect(mockedAxios.put).toHaveBeenCalledWith(
+      '/users/user123',
+      expect.objectContaining({ firstName: 'Jane' }),
+      expect.any(Object)
+    );
   });
 });
