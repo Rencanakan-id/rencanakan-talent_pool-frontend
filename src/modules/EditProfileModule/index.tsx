@@ -5,20 +5,29 @@ import { UserProfile } from '@/components/ui/profile';
 import { PersonalInfoSection } from './Section/personalInfo';
 import { JobInfoSection } from './Section/jobInfo';
 import axios from 'axios';
+import { useUserProfile } from '@/components/hooks/useUserProfile';
+import { useAuth } from "@/components/context/authContext";
+import { useNavigate } from 'react-router-dom';
 
-interface EditProfileModuleProps {
-  userProfile: UserProfile;
-}
-
-export const EditProfileModule: React.FC<EditProfileModuleProps> = ({ userProfile }) => {
-  const [formData, setFormData] = useState<UserProfile>(userProfile);
-  const [initialData, setInitialData] = useState<UserProfile>(userProfile);
+export const EditProfileModule: React.FC = () => {
+  const navigate = useNavigate();
+  const { userProfile, isLoading: isUserLoading } = useUserProfile();
+  const [formData, setFormData] = useState<UserProfile | null>(null);
+  const [initialData, setInitialData] = useState<UserProfile | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (userProfile) {
+      setFormData(userProfile);
+      setInitialData(userProfile);
+    }
+  }, [userProfile]);
 
   useEffect(() => {
     const loadImage = async () => {
       const imageUrl = '/dummy/profile.png';
-  
+
       try {
         const response = await fetch(imageUrl);
         const blob = await response.blob();
@@ -28,18 +37,21 @@ export const EditProfileModule: React.FC<EditProfileModuleProps> = ({ userProfil
         console.error('Failed to load hardcoded image:', error);
       }
     };
-  
+
     loadImage();
   }, []);
 
   const handleChange = (updated: Partial<UserProfile>) => {
-    setFormData((prev) => ({ ...prev, ...updated }));
+    setFormData((prev) => {
+      if (!prev) return prev;
+      return { ...prev, ...updated };
+    });
   };
 
   const handleSave = async () => {
-    console.log(formData)
+    if (!formData) return;
+
     try {
-      const token = localStorage.getItem('authToken');
 
       const updatedProfile = {
         firstName: formData.firstName,
@@ -54,38 +66,54 @@ export const EditProfileModule: React.FC<EditProfileModuleProps> = ({ userProfil
         currentLocation: formData.currentLocation,
         preferredLocations: formData.preferredLocations ?? [],
         skill: formData.skill,
-        price: formData.price
+        price: formData.price,
       };
-      
+
       const response = await axios.put(
-        `/users/${formData.id}`, 
+        `http://localhost:8080/api/users/${formData.id}`,
         updatedProfile,
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         }
       );
-      
-      if (response.data && response.data.data) {
+
+      if (response.data?.data) {
         setInitialData(response.data.data);
         setFormData(response.data.data);
+        navigate('/preview');
       }
     } catch (error) {
       console.error('Failed to update profile:', error);
     }
   };
 
+  const handleBack = () => {
+    navigate('/preview')
+  }
+
   const handlePhotoChange = (file: File | null) => {
     setPhotoFile(file);
   };
+
+  if (isUserLoading || !formData || !initialData) {
+    return (
+      <div className="absolute inset-0 flex h-full w-full items-center justify-center">
+        <div
+          data-testid="loading-spinner"
+          className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500"
+        ></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full justify-center">
       <div className="m-6 w-full max-w-6xl bg-white p-6 rounded-lg shadow">
         <div className="flex w-full justify-between pb-4">
-          <Button variant="primary-outline" className="flex py-2">
+          <Button variant="primary-outline" className="flex py-2" onClick={handleBack}>
             <ArrowLeft size={20} />
             <span>Kembali</span>
           </Button>

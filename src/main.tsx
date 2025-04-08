@@ -7,7 +7,6 @@ import { RegisterModule } from './modules/RegisterFormModule';
 import LoginModule from './modules/LoginFormModule';
 import { TalentProfilePage } from './modules/TalentProfileModule';
 import { EditProfileModule } from './modules/EditProfileModule';
-import { mockUserProfile } from './mocks/mockProfile';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -19,7 +18,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/register" element={<RegisterModule />} />
         <Route path="/login" element={<LoginModule />} />
         <Route path="/me" element={<TalentProfilePage />} />
-        <Route path="/edit" element={<EditProfileModule userProfile={mockUserProfile} />} />
+        <Route path="/edit" element={<EditProfileModule />} />
       </Route>
     </Routes>
   </BrowserRouter>
