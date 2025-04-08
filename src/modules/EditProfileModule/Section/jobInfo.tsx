@@ -56,8 +56,10 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
     return `Rp${formatted}`;
   };
 
-  const parseExperienceYears = (yearsExp: number): string | undefined => {
+  const parseExperienceYearsToString = (yearsExp: number): string | undefined => {
     switch (yearsExp) {
+      case 0:
+        return '< 1 Tahun'
       case 1:
         return '1 Tahun';
       case 2:
@@ -68,6 +70,22 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
         return '> 5 Tahun';
     }
   };
+
+  const parseExperienceYearsToInt = (yearsExp: string): number| undefined => {
+    switch (yearsExp) {
+      case '< 1 Tahun':
+        return 0;
+      case '1 Tahun':
+        return 1;
+      case '2-3 Tahun':
+        return 2;
+      case '5 Tahun':
+        return 3;
+      case '> 5 Tahun':
+        return 4;
+    }
+  };
+
 
   return (
     <div className="w-full border border-gray-300 rounded-[4px] px-6 py-6 mt-4">
@@ -85,8 +103,8 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
           <Combobox
             data={yearsOfExperience}
             label="Lama Pengalaman *"
-            value={parseExperienceYears(data.experienceYears)}
-            onChange={(value) => onChange({ experienceYears: parseInt(value) })}
+            value={parseExperienceYearsToString(data.experienceYears)}
+            onChange={(value) => onChange({ experienceYears: parseExperienceYearsToInt(value) })}
           />
           <Combobox
             data={skkLevels}

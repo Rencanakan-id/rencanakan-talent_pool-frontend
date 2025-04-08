@@ -37,10 +37,25 @@ export const EditProfileModule: React.FC<EditProfileModuleProps> = ({ userProfil
   };
 
   const handleSave = async () => {
+    console.log(formData)
     try {
       const token = localStorage.getItem('authToken');
-      
-      const updatedProfile = { ...formData };
+
+      const updatedProfile = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        nik: formData.nik,
+        npwp: formData.npwp,
+        aboutMe: formData.aboutMe,
+        experienceYears: formData.experienceYears,
+        skkLevel: formData.skkLevel,
+        currentLocation: formData.currentLocation,
+        preferredLocations: formData.preferredLocations ?? [],
+        skill: formData.skill,
+        price: formData.price
+      };
       
       const response = await axios.put(
         `/users/${formData.id}`, 
