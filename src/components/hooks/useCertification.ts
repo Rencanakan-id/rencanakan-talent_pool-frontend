@@ -8,7 +8,7 @@ export function useCertification(userId?: string) {
   const [isLoading, setIsLoading] = useState(true);
   const { token, user } = useAuth();
   
-  const effectiveUserId = userId || user?.id;
+  const effectiveUserId = userId ?? user?.id;
 
   useEffect(() => {
     const fetchCertification = async () => {

@@ -8,7 +8,7 @@ export function useRecommendation(userId?: string) {
   const [isLoading, setIsLoading] = useState(true);
   const { token, user } = useAuth();
   
-  const effectiveUserId = userId || user?.id;
+  const effectiveUserId = userId ?? user?.id;
   
   const loremIpsum = `
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
