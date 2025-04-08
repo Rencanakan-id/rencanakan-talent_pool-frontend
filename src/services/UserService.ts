@@ -19,4 +19,15 @@ export class UserService {
     if (!res.ok) throw new Error(`Failed to fetch experience: ${res.status}`);
     return res.json();
   }
+
+  static async getUserCertification(userId: string, token: string) {
+    console.log(token);
+    console.log(userId);
+    const res = await fetch(`${this.BASE_URL}/api/certificates/user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) throw new Error(`Failed to fetch certification: ${res.status}`);
+    return res.json();
+  }
 }

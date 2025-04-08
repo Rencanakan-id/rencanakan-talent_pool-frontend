@@ -8,16 +8,19 @@ import { useUserProfile } from '@/components/hooks/useUserProfile';
 import { useExperience } from '@/components/hooks/useExperience';
 import { useRecommendation } from '@/components/hooks/useRecommendation';
 import RecommendationCard from '@/components/ui/recommendation';
+import { useCertification } from '@/components/hooks/useCertification';
+import Certificate from '@/components/ui/certificate';
 
 export const PreviewTalentModule: React.FC = () => {
   // const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
   const { experience, isLoading: isExperienceLoading } = useExperience(
-    'e982b772-1610-4a05-8e55-c5da89ce2174'
+    userProfile?.id
   );
+  const { certification, isLoading: isCertificateLoading } = useCertification(userProfile?.id);
   const { recommendations, isLoading: isRecommendationLoading } = useRecommendation();
 
-  if (isUserLoading || isExperienceLoading || isRecommendationLoading) {
+  if (isUserLoading || isExperienceLoading || isCertificateLoading || isRecommendationLoading) {
     return (
       <div className="absolute inset-0 flex h-full w-full items-center justify-center">
         <div
@@ -44,6 +47,7 @@ export const PreviewTalentModule: React.FC = () => {
             {userProfile && <UserProfileCard user={userProfile} />}
             {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {experience && <Experience experiences={experience} />}
+            {certification && <Certificate certificates={certification} />}
             {recommendations && <RecommendationCard recommendations={recommendations} />}
           </div>
         </div>
