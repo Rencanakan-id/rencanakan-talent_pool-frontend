@@ -8,12 +8,10 @@ import { useUserProfile } from '@/components/hooks/useUserProfile';
 import { useExperience } from '@/components/hooks/useExperience';
 import { useRecommendation } from '@/components/hooks/useRecommendation';
 import RecommendationCard from '@/components/ui/recommendation';
-import { useNavigate } from 'react-router-dom';
 import { useCertification } from '@/components/hooks/useCertification';
 import Certificate from '@/components/ui/certificate';
 
 export const PreviewTalentModule: React.FC = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
   const { experience, isLoading: isExperienceLoading } = useExperience(
@@ -41,7 +39,7 @@ export const PreviewTalentModule: React.FC = () => {
   }
 
   const handleEdit = () => {
-    navigate('/edit');
+    window.location.href = '/edit';
   };
 
   return (

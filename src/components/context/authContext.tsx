@@ -43,7 +43,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                 const decodedUser = jwtDecode<UserProps>(token);
                 setUser(decodedUser);
                 setIsAuthenticated(true);
-                const res = await axios.get(`http://localhost:8080/api/users/me`, {
+                const res = await axios.get(`http://88.222.245.148:8080/api/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -97,7 +97,7 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
     const login = async (email: string, password: string) => {
         // setIsLoading(true);
         try {
-            const res = await axios.post(`http://localhost:8080/api/auth/login`, {
+            const res = await axios.post(`http://88.222.245.148:8080/api/auth/login`, {
                 email,
                 password,
             });
