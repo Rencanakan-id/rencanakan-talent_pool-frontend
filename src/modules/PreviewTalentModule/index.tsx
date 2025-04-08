@@ -19,9 +19,14 @@ export const PreviewTalentModule: React.FC = () => {
   const { experience, isLoading: isExperienceLoading } = useExperience(
     user?.id
   );
-  const { certification, isLoading: isCertificationLoading } = useCertification(
-    user?.id
-  );
+  const { 
+    certification, 
+    isLoading: isCertificationLoading,
+    handleAddCertificate,
+    handleEditCertificate,
+    handleDeleteCertificate 
+  } = useCertification(user?.id);
+  
   const { 
     recommendations, 
     isLoading: isRecommendationLoading,
@@ -64,12 +69,21 @@ export const PreviewTalentModule: React.FC = () => {
             {userProfile && <UserProfileCard user={userProfile} />}
             {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {experience && <Experience experiences={experience} />}
-            {certification && <Certificate certificates={certification} />}
-            {recommendations && <RecommendationCard 
-              recommendations={recommendations} 
-              onAccept={handleAcceptRecommendation}
-              onDecline={handleRejectRecommendation}
-            />}
+            {certification && (
+              <Certificate 
+                certificates={certification}
+                onSubmit={handleAddCertificate}
+                onEdit={handleEditCertificate}
+                onDelete={handleDeleteCertificate}
+              />
+            )}
+            {recommendations && (
+              <RecommendationCard 
+                recommendations={recommendations} 
+                onAccept={handleAcceptRecommendation}
+                onDecline={handleRejectRecommendation}
+              />
+            )}
           </div>
         </div>
       </div>

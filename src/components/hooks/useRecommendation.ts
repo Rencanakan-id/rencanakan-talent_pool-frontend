@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/context/authContext";
 import { RecommendationResponseDTO, StatusType } from '../ui/recommendation';
-import { RecommendationService } from "@/services/recommendationService";
+import { RecommendationService } from "@/services/RecommendationService";
 
 export function useRecommendation(userId?: string) {
   const [recommendations, setRecommendations] = useState<RecommendationResponseDTO[]>([]);

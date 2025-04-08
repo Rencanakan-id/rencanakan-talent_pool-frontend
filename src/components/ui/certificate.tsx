@@ -2,14 +2,15 @@ import { useState } from "react";
 import { Typography } from "../atoms/typography";
 import { Button } from "./button";
 import { Input } from "./input";
-import { Edit, Plus, Download, Pencil } from "lucide-react";
+import { Edit, Plus, Download, Pencil, Trash2 } from "lucide-react";
 import { FileInput } from "./fileInput";
 import { ModalFormWrapper } from "./modalFormWrapper";
 
 export interface CertificateDetail {
-    id: number;
+    id?: number;
     title: string;
-    file: File;
+    file: File | null;
+    fileUrl?: string;
 }
 
 interface FormErrors {
@@ -19,20 +20,27 @@ interface FormErrors {
 
 interface CertificateProps {
     certificates?: CertificateDetail[];
+    onSubmit?: (certificateData: CertificateDetail) => Promise<void>;
+    onEdit?: (id: number, certificateData: CertificateDetail) => Promise<void>;
+    onDelete?: (id: number) => Promise<void>;
 }
 
-const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
-    const [certificateList, setCertificateList] = useState<CertificateDetail[]>(certificates);
+const Certificate: React.FC<CertificateProps> = ({ 
+    certificates = [],
+    onSubmit,
+    onEdit,
+    onDelete
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCertificate, setEditingCertificate] = useState<CertificateDetail | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [wasValidated, setWasValidated] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [certificateFormData, setCertificateFormData] = useState<CertificateDetail>({
-        id: 0,
         title: '',
-        file: new File([], ''),
+        file: null,
     });
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,9 +68,8 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
     const handleAdd = () => {
         setEditingCertificate(null);
         setCertificateFormData({
-            id: certificateList.length + 1,
             title: '',
-            file: new File([], ''),
+            file: null,
         });
         setIsModalOpen(true);
         setFormErrors({});
@@ -71,20 +78,30 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
     
     const handleEdit = (cert: CertificateDetail) => {
         setEditingCertificate(cert);
-        setCertificateFormData(cert);
+        setCertificateFormData({
+            id: cert.id,
+            title: cert.title,
+            file: null, // Initialize with null as we don't modify existing file by default
+            fileUrl: cert.fileUrl
+        });
         setIsModalOpen(true);
         setFormErrors({});
         setWasValidated(false);
     };
 
-    const handleDelete = () => {
-        if (editingCertificate) {
-          setCertificateList((prev) =>
-            prev.filter((exp) => exp.id !== editingCertificate.id)
-          );
-          setIsModalOpen(false);
+    const handleConfirmDelete = async (id?: number) => {
+        if (!id || !onDelete) return;
+        
+        try {
+            setIsSubmitting(true);
+            await onDelete(id);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Error deleting certificate:", error);
+        } finally {
+            setIsSubmitting(false);
         }
-      };
+    };
 
     const validateForm = (): boolean => {
         const errors: FormErrors = {};
@@ -93,7 +110,8 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             errors.title = "Judul sertifikasi wajib diisi";
         }
         
-        if (!certificateFormData.file || certificateFormData.file.size === 0) {
+        // Only require file for new certificates
+        if (!editingCertificate && (!certificateFormData.file || certificateFormData.file.size === 0)) {
             errors.file = "File sertifikasi wajib diunggah";
         }
         
@@ -103,44 +121,29 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         return Object.keys(errors).length === 0;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!validateForm()) return;
         
-        if (editingCertificate) {
-            setCertificateList(prevList => 
-                prevList.map(cert => 
-                    cert.id === editingCertificate.id ? certificateFormData : cert
-                )
-            );
-        } else {
-            setCertificateList(prevList => [...prevList, certificateFormData]);
+        try {
+            setIsSubmitting(true);
+            
+            if (editingCertificate?.id && onEdit) {
+                await onEdit(editingCertificate.id, certificateFormData);
+            } else if (onSubmit) {
+                await onSubmit(certificateFormData);
+            }
+            
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Error submitting certificate:", error);
+        } finally {
+            setIsSubmitting(false);
         }
-        
-        setIsModalOpen(false);
     };
 
-    const formatFileSize = (bytes: number): string => {
-        if (bytes === 0) return '0Bytes';
-        
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + sizes[i];
-    };
-
-    const handleDownload = (file: File) => {
-        const url = URL.createObjectURL(file);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = file.name;
-        
-        document.body.appendChild(a);
-        a.click();
-
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+    const handleDownload = (fileUrl?: string) => {
+        if (!fileUrl) return;
+        window.open(fileUrl, '_blank');
     };
 
     const toggleEditMode = () => {
@@ -171,35 +174,49 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                 </div>
             </div>
 
-            {certificateList.length > 0 ? (
+            {certificates.length > 0 ? (
                 <div className="w-full space-y-4">
-                    {certificateList.map((cert) => (
+                    {certificates.map((cert) => (
                         <div key={cert.id} className="min-h-18 space-y-1 space-x-2 flex items-center justify-between bg-rencanakan-lightest-gray border-rencanakan-light-gray border-[1px] rounded-xl p-4">
                             <div className="flex space-x-2 items-center">
                                 <img src="/pdf.svg" alt="Logo" className="h-8 w-8" draggable={false} />
                                 <div>
-                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black">{cert.file.name}</Typography>
-                                    <Typography variant="p4" className="text-rencanakan-dark-gray">
-                                        {formatFileSize(cert.file.size)}
-                                    </Typography>
+                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black">{cert.title}</Typography>
+                                    {cert.fileUrl && (
+                                        <Typography variant="p4" className="text-rencanakan-dark-gray">
+                                            Certificate File
+                                        </Typography>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex space-x-2">
                                 {isEditMode ? (
-                                    <button 
-                                        onClick={() => handleEdit(cert)}
-                                        data-testid={`edit-button-${cert.id}`}
-                                        className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
-                                    >
-                                        <Pencil size={16} />
-                                    </button>
+                                    <>
+                                        <button 
+                                            onClick={() => handleEdit(cert)}
+                                            data-testid={`edit-button-${cert.id}`}
+                                            className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
+                                        >
+                                            <Pencil size={16} />
+                                        </button>
+                                        {onDelete && (
+                                            <button 
+                                                onClick={() => handleConfirmDelete(cert.id)}
+                                                data-testid={`delete-button-${cert.id}`}
+                                                className="p-2 rounded-full bg-red-100 text-red-500 hover:bg-red-200 cursor-pointer"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        )}
+                                    </>
                                 ) : (
                                     <Button 
                                         variant="primary" 
                                         icon={<Download size={16} />}
                                         iconPosition="end"
-                                        onClick={() => handleDownload(cert.file)}
+                                        onClick={() => handleDownload(cert.fileUrl)}
                                         data-testid={`download-btn-${cert.id}`}
+                                        disabled={!cert.fileUrl}
                                     >
                                         Download File
                                     </Button>
@@ -220,7 +237,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                     title={editingCertificate ? "Edit Sertifikasi" : "Tambah Sertifikasi"}
                     onClose={() => setIsModalOpen(false)}
                     onSubmit={handleSubmit}
-                    onDelete={editingCertificate ? handleDelete : undefined}
+                    onDelete={editingCertificate?.id ? () => handleConfirmDelete(editingCertificate.id) : undefined}
                     submitLabel={editingCertificate ? "Simpan" : "Tambah"}
                     isEditMode={!!editingCertificate}
                 >
@@ -232,6 +249,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                             name="title"
                             value={certificateFormData.title}
                             onChange={handleChange}
+                            disabled={isSubmitting}
                         />
                         {wasValidated && formErrors.title && (
                             <Typography variant="p5" className="text-red-500 mt-1">
@@ -243,10 +261,16 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                     <div>
                         <FileInput
                             onFileSelect={handleFileChange}
-                            textLabel="Media"
+                            textLabel={editingCertificate ? "File Baru (opsional)" : "File*"}
                             data-testid="file-input"
                             error={wasValidated && formErrors.file ? formErrors.file : undefined}
+                            disabled={isSubmitting}
                         />
+                        {editingCertificate?.fileUrl && (
+                            <Typography variant="p5" className="mt-1 text-gray-500">
+                                File saat ini: <a href={editingCertificate.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Lihat</a>
+                            </Typography>
+                        )}
                     </div>
                 </ModalFormWrapper>
             )}

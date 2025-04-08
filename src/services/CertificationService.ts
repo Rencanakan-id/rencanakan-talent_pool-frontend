@@ -7,17 +7,19 @@ export class CertificationService {
     try {
       const res = await fetch(`${this.BASE_URL}/certificates/user/${userId}`, {
         headers: { 
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.trim()}`,
           "Content-Type": "application/json" 
         },
       });
-
+  
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to fetch certificates: ${res.status}`);
       }
-      console.log("Certificates fetched successfully:", res);
-      return res.json();
+      
+      const data = await res.json();
+      console.log("Certificates fetched successfully:", data);
+      return data.data;
     } catch (error) {
       console.error("Error fetching certificates:", error);
       throw error;
@@ -26,20 +28,18 @@ export class CertificationService {
 
   static async addCertificate(token: string, certificateData: CertificateDetail) {
     try {
-      const formData = new FormData();
-      formData.append('title', certificateData.title);
-      formData.append('file', certificateData.file);
-
       const res = await fetch(`${this.BASE_URL}/certificates`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json" 
         },
-        body: formData
+        body: JSON.stringify({"title": certificateData.title, "file": certificateData.file?.name})
       });
-
+      
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
+        console.error("Delete error response:", errorData);
         throw new Error(errorData?.message || `Failed to add certificate: ${res.status}`);
       }
       
@@ -50,22 +50,28 @@ export class CertificationService {
     }
   }
 
-  static async editCertificate(token: string, certificateId: number, certificateData: CertificateDetail) {
+  static async updateCertificate(token: string, certificateId: number, certificateData: CertificateDetail) {
     try {
-      const formData = new FormData();
-      formData.append('title', certificateData.title);      
-      formData.append('file', certificateData.file);
-
+      const payload: { title: string; file?: string } = { 
+        "title": certificateData.title
+      };
+      
+      if (certificateData.file) {
+        payload.file = certificateData.file.name;
+      }
+      
       const res = await fetch(`${this.BASE_URL}/certificates/${certificateId}`, {
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json" 
         },
-        body: formData
+        body: JSON.stringify(payload)
       });
-
+      
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
+        console.error("Update error response:", errorData);
         throw new Error(errorData?.message || `Failed to update certificate: ${res.status}`);
       }
       
@@ -81,12 +87,14 @@ export class CertificationService {
       const res = await fetch(`${this.BASE_URL}/certificates/${certificateId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json" 
         }
       });
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
+        console.error("Delete error response:", errorData);
         throw new Error(errorData?.message || `Failed to delete certificate: ${res.status}`);
       }
       
