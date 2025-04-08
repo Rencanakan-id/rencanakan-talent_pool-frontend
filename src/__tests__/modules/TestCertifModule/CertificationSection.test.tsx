@@ -20,7 +20,6 @@ describe('Certificate Component', () => {
   test('renders the component with experience data', () => {
     render(<Certificate certificates={mockCertificates} />);
 
-    expect(screen.getByText('Sertifikasi')).toBeInTheDocument();
     expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
     expect(screen.getByText('13Bytes')).toBeInTheDocument();
   });

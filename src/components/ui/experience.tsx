@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Typography } from '../atoms/typography';
-import { Modal } from './modal';
 import { Pencil, Plus, Edit } from 'lucide-react';
 import { Input } from './input';
-import { Button } from './button';
 import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
+import { ModalFormWrapper } from './modalFormWrapper';
 
 export type EmploymentType =
   | 'FULL_TIME'
@@ -55,7 +54,7 @@ export interface ExperienceDetail {
 }
 
 interface ExperienceProps {
-  experiences?: ExperienceDetail[];
+  experiences?: ExperienceDetail[] | null;
 }
 
 // Define error state interface
@@ -70,7 +69,7 @@ interface FormErrors {
 }
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
-  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences);
+  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -279,11 +278,14 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       )}
 
       {isModalOpen && (
-        <Modal
-          size="large"
-          title={editingExperience ? 'Edit Pengalaman' : 'Tambah Pengalaman'}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+        <ModalFormWrapper
+            isOpen={isModalOpen}
+            title={editingExperience ? "Edit Pengalaman" : "Tambah Pengalaman"}
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={handleSubmit}
+            onDelete={editingExperience ? handleDelete : undefined}
+            submitLabel={editingExperience ? "Simpan" : "Tambah"}
+            isEditMode={!!editingExperience}
         >
           <div className="flex flex-col space-y-4 pt-1">
             <div>
@@ -419,39 +421,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 </div>
               )}
             </div>
-
-            {editingExperience ? (
-              <div className='grid grid-cols-2 gap-2'>
-                <Button 
-                  variant="primary" 
-                  data-testid="delete-button"
-                  className="rounded-md font-[500] bg-[rgba(196,61,75,0.95)] border-[rgba(196,61,75,0.95)] hover:bg-rencanakan-error-red-100 hover:border-rencanakan-error-red-100"
-                  onClick={handleDelete}
-                >
-                  <Typography variant="p2">Hapus</Typography>
-                </Button>
-
-                <Button 
-                  variant="primary" 
-                  data-testid="submit-button"
-                  className="rounded-md font-[500]" 
-                  onClick={handleSubmit}
-                >
-                  <Typography variant="p2">Simpan</Typography>
-                </Button>
-              </div>
-            ) : (
-              <Button 
-                variant="primary" 
-                data-testid="submit-button"
-                className="rounded-md font-[500]" 
-                onClick={handleSubmit}
-              >
-                <Typography variant="p2">Tambah</Typography>
-              </Button>
-            )}
           </div>
-        </Modal>
+        </ModalFormWrapper>
       )}
     </div>
   );

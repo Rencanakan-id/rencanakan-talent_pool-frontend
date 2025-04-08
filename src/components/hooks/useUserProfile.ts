@@ -13,7 +13,7 @@ export function useUserProfile() {
       if (!token ) return;
       try {
         const profile = await UserService.getUserProfile(token);
-        setUserProfile(profile);
+        setUserProfile(profile.data);
       } catch (err) {
         console.error(err);
         setUserProfile(null);
@@ -24,6 +24,7 @@ export function useUserProfile() {
 
     fetchProfile();
   }, [token]);
+
 
   return { userProfile, isLoading };
 }

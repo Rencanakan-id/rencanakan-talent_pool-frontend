@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { LoginForm } from './Section/login';
 import { LoginFormData } from '@/lib/login';
 import { useNavigate } from 'react-router-dom';
-// import AuthService from "@/services/AuthService";
+import { useAuth } from '@/components/context/authContext'; // Import useAuth dari AuthContext
 
 const LoginModule = () => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -13,6 +13,9 @@ const LoginModule = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const { login} = useAuth(); // Gunakan login dari AuthContext
+  const navigate = useNavigate();
+
   const updateFormData = (data: Partial<LoginFormData>) => {
     setFormData((prev) => ({
       ...prev,
@@ -21,8 +24,6 @@ const LoginModule = () => {
   };
 
   const isFormValid = !!formData.email && !!formData.password;
-
-  const navigate = useNavigate();
 
   const validateFormOnSubmit = () => {
     let isValid = true;
@@ -34,7 +35,7 @@ const LoginModule = () => {
       isValid = false;
     }
 
-    if ((formData.password ?? '').length < 6) {
+    if ((formData.password ?? '').length < 8) {
       commentErr = 'Kata sandi harus memiliki setidaknya 8 karakter';
       isValid = false;
     }
@@ -42,55 +43,26 @@ const LoginModule = () => {
     return { isValid, emailErr, commentErr };
   };
 
-  const processLoginResponse = async (response: Response) => {
-    const result = await response.json();
-    console.log(response.ok);
-    if (response.ok) {
-      console.log(result);
-      const token = result.token;
-      document.cookie = `access_token=${token}; path=/; Secure; SameSite=None`;
-      console.log('berhasil');
-      console.log(token);
-      navigate('/preview');
-      return true;
-    } else {
-      console.log('gagal');
-      console.log(result);
-      setEmailError('Email atau password salah');
-      setPasswordError('Email atau password salah');
-      return false;
-    }
-  };
-
   const handleLogin = async () => {
     if (!isFormValid) return;
-
+  
     const { isValid, emailErr, commentErr } = validateFormOnSubmit();
     setEmailError(emailErr);
     setPasswordError(commentErr);
-
+  
     if (!isValid) return;
-
+  
     try {
       console.log(formData);
-      // TODO: ganti api dengan variabel di env file
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(formData),
-        method: 'POST',
-      });
-      await processLoginResponse(response);
-      // // Tambahkan navigasi ke halaman utama
-      // navigate('/');
-    } catch (error) {
-      if (error instanceof Error && (error as any).response) {
-        console.error('Login Failed:', (error as any).response.data);
-      } else {
-        console.error('Login Failed:', error);
-      }
+      await login(formData.email, formData.password); // Tunggu hasil login
+  
+      // Jika login berhasil, navigasi ke halaman utama
+      console.log('Login berhasil');
+      navigate('/preview'); // Navigasi ke halaman lain
+    } catch (error: any) {
+      // console.error('Login Failed:', error.message);
+      setEmailError('Email atau password salah');
+      setPasswordError('Email atau password salah');
     }
   };
 
