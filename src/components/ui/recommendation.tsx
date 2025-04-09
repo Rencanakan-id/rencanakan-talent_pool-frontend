@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography } from '../atoms/typography';
 import { Button } from './button';
+import { ConfirmationBox } from '@/components/ui/confirmation-box';
 
 export enum StatusType {
   PENDING = 'PENDING',
@@ -64,23 +65,25 @@ const ExpandableRecommendation: React.FC<ExpandableRecommendationProps> = ({
   onDecline,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [isAcceptConfirmationOpen, setIsAcceptConfirmationOpen] = useState(false);
+  const [isDeclineConfirmationOpen, setIsDeclineConfirmationOpen] = useState(false);
 
-  // Define the character limit for collapsed view
   const CHARACTER_LIMIT = 250;
 
-  // Check if message exceeds character limit
   const isLongMessage = recommendation.message.length > CHARACTER_LIMIT;
 
-  const handleAccept = () => {
+  const handleAcceptConfirm = () => {
     if (onAccept) {
       onAccept(recommendation.id);
     }
+    setIsAcceptConfirmationOpen(false);
   };
 
-  const handleDecline = () => {
+  const handleDeclineConfirm = () => {
     if (onDecline) {
       onDecline(recommendation.id);
     }
+    setIsDeclineConfirmationOpen(false);
   };
 
   return (
@@ -89,8 +92,6 @@ const ExpandableRecommendation: React.FC<ExpandableRecommendationProps> = ({
         <Typography variant="h5" className="pb-1">
           {recommendation.contractorName}
         </Typography>
-
-        {/* Message section */}
 
         <Typography variant="p3">
           {expanded ? (
@@ -127,12 +128,32 @@ const ExpandableRecommendation: React.FC<ExpandableRecommendationProps> = ({
 
       {recommendation.status === StatusType.PENDING && (
         <div className="flex w-full flex-col space-y-2 md:w-1/4">
-          <Button variant="primary" onClick={handleAccept}>
+          <Button variant="primary" onClick={() => setIsAcceptConfirmationOpen(true)}>
             Terima
           </Button>
-          <Button variant="primary-outline" onClick={handleDecline}>
+          <Button variant="primary-outline" onClick={() => setIsDeclineConfirmationOpen(true)}>
             Tolak
           </Button>
+          
+          <ConfirmationBox
+            isOpen={isAcceptConfirmationOpen}
+            onClose={() => setIsAcceptConfirmationOpen(false)}
+            onConfirm={handleAcceptConfirm}
+            title="Konfirmasi Penerimaan"
+            description={`Apakah Anda yakin ingin menerima rekomendasi dari ${recommendation.contractorName}?`}
+            additionalMessage="Tindakan ini akan mempengaruhi profil Anda dan tidak dapat dibatalkan."
+          />
+          
+          <ConfirmationBox
+            isOpen={isDeclineConfirmationOpen}
+            onClose={() => setIsDeclineConfirmationOpen(false)}
+            onConfirm={handleDeclineConfirm}
+            title="Konfirmasi Penolakan"
+            description={`Apakah Anda yakin ingin menolak rekomendasi dari ${recommendation.contractorName}?`}
+            additionalMessage="Tindakan ini tidak dapat dibatalkan."
+            confirmButtonText="Tolak"
+            confirmButtonVariant="primary"
+          />
         </div>
       )}
     </div>

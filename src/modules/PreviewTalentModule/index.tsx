@@ -3,7 +3,7 @@ import Experience from '@/components/ui/experience';
 import UserProfileCard from '@/components/ui/profile';
 import { ArrowLeft } from 'lucide-react';
 import Location from '@/components/ui/location';
-// import { useAuth } from '@/components/context/authContext';
+import { useAuth } from '@/components/context/authContext';
 import { useUserProfile } from '@/components/hooks/useUserProfile';
 import { useExperience } from '@/components/hooks/useExperience';
 import { useRecommendation } from '@/components/hooks/useRecommendation';
@@ -12,15 +12,22 @@ import { useCertification } from '@/components/hooks/useCertification';
 import Certificate from '@/components/ui/certificate';
 
 export const PreviewTalentModule: React.FC = () => {
-  // const { user } = useAuth();
+  const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
   const { experience, isLoading: isExperienceLoading } = useExperience(
-    userProfile?.id
+    user?.id
   );
-  const { certification, isLoading: isCertificateLoading } = useCertification(userProfile?.id);
-  const { recommendations, isLoading: isRecommendationLoading } = useRecommendation();
+  const { certification, isLoading: isCertificationLoading } = useCertification(
+    user?.id
+  );
+  const { 
+    recommendations, 
+    isLoading: isRecommendationLoading,
+    handleAcceptRecommendation,
+    handleRejectRecommendation 
+  } = useRecommendation(user?.id);
 
-  if (isUserLoading || isExperienceLoading || isCertificateLoading || isRecommendationLoading) {
+  if (isUserLoading || isExperienceLoading || isRecommendationLoading || isCertificationLoading) {
     return (
       <div className="absolute inset-0 flex h-full w-full items-center justify-center">
         <div
@@ -31,6 +38,10 @@ export const PreviewTalentModule: React.FC = () => {
     );
   }
 
+  const handleEdit = () => {
+    window.location.href = '/edit';
+  };
+
   return (
     <div className={`flex items-center w-full justify-center`}>
       <div className="m-6 h-auto w-full max-w-6xl bg-white p-4">
@@ -38,6 +49,10 @@ export const PreviewTalentModule: React.FC = () => {
           <Button variant="primary-outline" className="flex py-2">
             <ArrowLeft size={20} />
             <span>Kembali</span>
+          </Button>
+
+          <Button variant="primary-outline" className="flex py-2" onClick={handleEdit}>
+            <span>Edit Profil</span>
           </Button>
         </div>
 
@@ -48,7 +63,11 @@ export const PreviewTalentModule: React.FC = () => {
             {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {experience && <Experience experiences={experience} />}
             {certification && <Certificate certificates={certification} />}
-            {recommendations && <RecommendationCard recommendations={recommendations} />}
+            {recommendations && <RecommendationCard 
+              recommendations={recommendations} 
+              onAccept={handleAcceptRecommendation}
+              onDecline={handleRejectRecommendation}
+            />}
           </div>
         </div>
       </div>
