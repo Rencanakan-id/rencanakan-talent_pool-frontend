@@ -83,7 +83,8 @@ export class CertificationService {
       const res = await fetch(`${this.BASE_URL}/certificates/${certificateId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json" 
         }
       });
 
