@@ -198,6 +198,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       setExperienceList((prev) =>
         prev.map((exp) => (exp.id === editingExperience.id ? { ...experienceFormData } : exp))
       );
+      console.log('Experience updated:', experienceFormData);
     } else {
       setExperienceList((prev) => [...prev, experienceFormData]);
     }
