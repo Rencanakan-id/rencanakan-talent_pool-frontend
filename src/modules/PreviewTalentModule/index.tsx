@@ -23,6 +23,7 @@ export const PreviewTalentModule: React.FC = () => {
     certification, 
     isLoading: isCertificationLoading,
     handleEditCertificate,
+    handleDeleteCertificate 
   } = useCertification(user?.id);
   
   const { 
@@ -71,6 +72,7 @@ export const PreviewTalentModule: React.FC = () => {
               <Certificate 
                 certificates={certification}
                 onEdit={handleEditCertificate}
+                onDelete={handleDeleteCertificate}
               />
             )}
             {recommendations && (
