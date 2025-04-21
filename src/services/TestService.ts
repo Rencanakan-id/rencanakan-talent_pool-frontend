@@ -25,16 +25,19 @@ export const getCertificates = async (userId: string, token: string) => {
 
   export const addCertificate = async (certificateData: CertificateDetail, token: string) => {
     try {
-      const formData = new FormData();
-      formData.append("title", certificateData.title);
-      formData.append("file", certificateData.file.name);
+      // The backend expects JSON with a title and file URL, not FormData
+      const requestData = {
+        title: certificateData.title,
+        file: certificateData.file.name // Or the complete file URL path if that's what the backend needs
+      };
   
       const res = await fetch(`${BASE_URL}/certificates`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
-        body: formData,
+        body: JSON.stringify(requestData),
       });
   
       if (!res.ok) {

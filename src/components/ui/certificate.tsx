@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Typography } from "../atoms/typography";
 import { Button } from "./button";
 import { Input } from "./input";
@@ -7,6 +7,7 @@ import { FileInput } from "./fileInput";
 import { ModalFormWrapper } from "./modalFormWrapper";
 import { addCertificate, deleteCertificate, editCertificate } from "@/services/TestService";
 import { useAuth } from "../context/authContext";
+import { createFileFromPath } from "@/lib/fileConverter";
 
 export interface CertificateDetail {
     id: number;
@@ -132,35 +133,46 @@ const Certificate: React.FC<CertificateProps> = ({
         if (!validateForm()) return;
         
         try {
-            setIsLoading(true);
+          setIsLoading(true);
+          
+          if (editingCertificate) {
+            const updatedResponse = await editCertificate(
+              editingCertificate.id, 
+              certificateFormData,
+              token
+            );
             
-            if (editingCertificate) {
-                const updatedCertificate = await editCertificate(
-                    editingCertificate.id, 
-                    certificateFormData,
-                    token
-                );
-                
-                const updatedList = certificateList.map(cert => 
-                    cert.id === editingCertificate.id ? updatedCertificate : cert
-                );
-                updateCertificateList(updatedList);
-            } else {
-                const newCertificate = await addCertificate(
-                    certificateFormData,
-                    token
-                );
-                
-                updateCertificateList([...certificateList, newCertificate]);
-            }
+            // Create a properly formatted certificate object from the response
+            const updatedCertificate = {
+              id: updatedResponse.data.id,
+              title: updatedResponse.data.title,
+              file: createFileFromPath(updatedResponse.data.file)
+            };
             
-            setIsModalOpen(false);
+            const updatedList = certificateList.map(cert => 
+              cert.id === editingCertificate.id ? updatedCertificate : cert
+            );
+            updateCertificateList(updatedList);
+          } else {
+            const response = await addCertificate(certificateFormData, token);
+            
+            // Create a properly formatted certificate object from the response
+            const newCertificate = {
+              id: response.data.id,
+              title: response.data.title,
+              file: createFileFromPath(response.data.file)
+            };
+            
+            updateCertificateList([...certificateList, newCertificate]);
+          }
+          
+          setIsModalOpen(false);
         } catch (error) {
-            console.error("Failed to save certificate:", error);
+          console.error("Failed to save certificate:", error);
         } finally {
-            setIsLoading(false);
+          setIsLoading(false);
         }
-    };
+      };
 
     const formatFileSize = (bytes: number): string => {
         if (bytes === 0) return '0Bytes';
@@ -181,6 +193,10 @@ const Certificate: React.FC<CertificateProps> = ({
         a.click();
         document.body.removeChild(a);
     };
+
+    useEffect(() => {
+        setCertificateList(certificates);
+      }, [certificates]);
 
     const toggleEditMode = () => {
         setIsEditMode(!isEditMode);
