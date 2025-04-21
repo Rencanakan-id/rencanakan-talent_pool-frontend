@@ -132,6 +132,8 @@ export const RegisterModule = () => {
 
   const parseExperienceYears = (yearsExp: string ): number | undefined => {
     switch (yearsExp) {
+      case '< 1 Tahun':
+        return 0;
       case '1 Tahun':
         return 1;
       case '2-3 Tahun':
