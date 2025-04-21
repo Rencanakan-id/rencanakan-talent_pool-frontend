@@ -65,14 +65,18 @@ export const useCertification = (userId?: string) => {
   };
 
   const handleDeleteCertificate = async (certificateId: number) => {
-    if (!token) return;
+    if (!token) {
+      setError('No authentication token available');
+      return;
+    }
     
     try {
       setIsLoading(true);
       await CertificationService.deleteCertificate(token, certificateId);
       await fetchCertificates();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete certificate');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete certificate';
+      setError(errorMessage);
       console.error('Error deleting certificate:', err);
       throw err;
     } finally {
