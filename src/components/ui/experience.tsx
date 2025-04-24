@@ -50,11 +50,15 @@ export interface ExperienceDetail {
   endDate: string | null;
   location: string;
   locationType: LocationType;
-  talentId: number;
+  talentId?: number;
 }
 
 interface ExperienceProps {
   experiences?: ExperienceDetail[] | null;
+  onEdit?: (experienceId: number, experienceData: ExperienceDetail) => Promise<void>;
+  onAdd?: (experienceData: ExperienceDetail) => Promise<void>;
+  onDelete?: (experienceId: number) => Promise<void>;
+  editable?: boolean;
 }
 
 // Define error state interface
@@ -68,14 +72,21 @@ interface FormErrors {
   endDate?: string;
 }
 
-const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
+const Experience: React.FC<ExperienceProps> = ({ 
+  experiences = [], 
+  onEdit, 
+  onAdd, 
+  onDelete,
+  editable = false
+}) => {
   const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(editable);
   const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [wasValidated, setWasValidated] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [experienceFormData, setExperienceFormData] = useState<ExperienceDetail>({
     id: 0,
@@ -86,8 +97,14 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     endDate: null,
     location: '',
     locationType: 'ON_SITE',
-    talentId: 0,
   });
+
+  // Update local state when props change
+  React.useEffect(() => {
+    if (experiences) {
+      setExperienceList(experiences);
+    }
+  }, [experiences]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -101,7 +118,12 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return 'Sekarang';
-    return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
+    try {
+      return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return dateStr;
+    }
   };
 
   const handleAdd = () => {
@@ -115,7 +137,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       endDate: null,
       location: '',
       locationType: 'ON_SITE',
-      talentId: 0,
     });
     setIsCurrentlyWorking(false);
     setIsModalOpen(true);
@@ -132,8 +153,19 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     setWasValidated(false);
   };
 
-  const handleDelete = () => {
-    if (editingExperience) {
+  const handleDelete = async () => {
+    if (editingExperience && onDelete) {
+      setIsSubmitting(true);
+      try {
+        await onDelete(editingExperience.id);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error('Failed to delete experience:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else if (editingExperience) {
+      // Local state only
       setExperienceList((prev) =>
         prev.filter((exp) => exp.id !== editingExperience.id)
       );
@@ -189,22 +221,36 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     return isValid;
   };
 
-  const handleSubmit = () => {
-    if (!validateForm()) {
+  const handleSubmit = async () => {
+    if (!validateForm() || isSubmitting) {
       return;
     }
 
-    if (editingExperience) {
-      setExperienceList((prev) =>
-        prev.map((exp) => (exp.id === editingExperience.id ? { ...experienceFormData } : exp))
-      );
-      console.log('Experience updated:', experienceFormData);
-    } else {
-      setExperienceList((prev) => [...prev, experienceFormData]);
+    setIsSubmitting(true);
+
+    try {
+      if (editingExperience && onEdit) {
+        await onEdit(editingExperience.id, experienceFormData);
+      } else if (!editingExperience && onAdd) {
+        await onAdd(experienceFormData);
+      } else {
+        // Update local state only if no external handlers provided
+        if (editingExperience) {
+          setExperienceList((prev) =>
+            prev.map((exp) => (exp.id === editingExperience.id ? { ...experienceFormData } : exp))
+          );
+        } else {
+          setExperienceList((prev) => [...prev, experienceFormData]);
+        }
+      }
+      setIsModalOpen(false);
+      setFormErrors({});
+      setWasValidated(false);
+    } catch (error) {
+      console.error('Failed to save experience:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsModalOpen(false);
-    setFormErrors({});
-    setWasValidated(false);
   };
 
   // Helper function to get the display label for employment type
@@ -221,22 +267,24 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     <div className="min-h-[200px] w-full rounded-lg border border-rencanakan-base-gray p-6">
       <div className="flex justify-between items-center">
         <Typography variant="p1">Pengalaman</Typography>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => setIsEditMode(!isEditMode)}
-            className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
-            data-testid="edit-experience-button"
-          >
-            <Edit size={20} />
-          </button>
-          <button
-            onClick={handleAdd}
-            className="p-2 rounded-full bg-rencanakan-sea-blue-300 text-white hover:bg-rencanakan-sea-blue-500 cursor-pointer"
-            data-testid="add-experience-button"
-          >
-            <Plus size={20} />
-          </button>
-        </div>
+        {editable && (
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setIsEditMode(!isEditMode)}
+              className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
+              data-testid="edit-experience-button"
+            >
+              <Edit size={20} />
+            </button>
+            <button
+              onClick={handleAdd}
+              className="p-2 rounded-full bg-rencanakan-sea-blue-300 text-white hover:bg-rencanakan-sea-blue-500 cursor-pointer"
+              data-testid="add-experience-button"
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+        )}
       </div>
 
       {experienceList.length > 0 ? (
