@@ -11,7 +11,7 @@ export interface ExperienceRequestDTO {
 }
 
 export class ExperienceService {
-  private static readonly BASE_URL = "http://88.222.245.148:8080/api";
+  private static readonly BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
 
   static async getExperiences(userId: string, token: string) {
     try {
