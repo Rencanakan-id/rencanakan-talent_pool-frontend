@@ -401,3 +401,36 @@ describe('Experience Delete Functionality', () => {
     expect(mockDeleteHandler).toHaveBeenCalledWith(1);
   });
 });
+
+describe('Experience Delete Edge Cases', () => {
+  test('should not attempt to delete when no onDelete handler is provided', () => {
+    // This test verifies that the component handles the absence of an onDelete handler
+    render(<Experience experiences={mockExperience} editable={true} />);
+    
+    // Activate edit mode
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    
+    // Click the edit button for experience with id=1
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    
+    // Click the delete button
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    // Verify the experience is removed from local state even without handler
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+  });
+
+  test('should handle delete button click immediately after switching to edit mode', () => {
+    render(<Experience experiences={mockExperience} editable={true} />);
+    
+    // Activate edit mode and immediately edit
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    
+    // Delete without making any changes
+    fireEvent.click(screen.getByTestId("delete-button"));
+    
+    // Verify the experience was deleted
+    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
+  });
+});
