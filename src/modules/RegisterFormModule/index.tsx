@@ -173,7 +173,7 @@ export const RegisterModule = () => {
           };
 
           console.log('Registration request data:', requestData);
-          const response = await fetch('http://88.222.245.148:8080/api/auth/register', {
+          const response = await fetch('http://localhost:8080/api/auth/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

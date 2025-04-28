@@ -18,6 +18,7 @@ export const useExperience = (userId?: string) => {
     try {
       setIsLoading(true);
       const data = await ExperienceService.getExperiences(userId, token);
+      console.log('lihat syaa, ini data', data);
       setExperience(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch experiences');
@@ -80,6 +81,21 @@ export const useExperience = (userId?: string) => {
     }
   };
 
+  const handleDeleteExperience = async (experienceId: number) => {
+    if (!token) return;
+    
+    try {
+      setIsLoading(true);
+      await ExperienceService.deleteExperience(token, experienceId);
+      await fetchExperiences();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete experience');
+      console.error('Error deleting experience:', err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return {
     experience,
@@ -87,6 +103,7 @@ export const useExperience = (userId?: string) => {
     error,
     handleAddExperience,
     handleEditExperience,
+    handleDeleteExperience,
     refreshExperiences: fetchExperiences
   };
 };

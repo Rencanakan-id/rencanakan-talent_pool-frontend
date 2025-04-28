@@ -11,7 +11,7 @@ export interface ExperienceRequestDTO {
 }
 
 export class ExperienceService {
-  private static readonly BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
+  private static readonly BASE_URL = "http://localhost:8080/api";
 
   static async getExperiences(userId: string, token: string) {
     try {
@@ -77,6 +77,27 @@ export class ExperienceService {
       return res.json();
     } catch (error) {
       console.error("Error updating experience:", error);
+      throw error;
+    }
+  }
+
+  static async deleteExperience(token: string, experienceId: number) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/experiences/${experienceId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.message || `Failed to delete experience: ${res.status}`);
+      }
+      return res.json();
+    } catch (error) {
+      console.error("Error deleting experience:", error);
       throw error;
     }
   }

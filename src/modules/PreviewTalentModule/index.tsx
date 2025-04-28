@@ -19,6 +19,7 @@ export const PreviewTalentModule: React.FC = () => {
     isLoading: isExperienceLoading,
     handleAddExperience,
     handleEditExperience,
+    handleDeleteExperience
   } = useExperience(user?.id);
 
   const { certification, isLoading: isCertificationLoading } = useCertification(
@@ -69,6 +70,7 @@ export const PreviewTalentModule: React.FC = () => {
               experiences={experience} 
               onAdd={handleAddExperience}
               onEdit={handleEditExperience}
+              onDelete={handleDeleteExperience}
               editable={true}
             />}
             {certification && <Certificate certificates={certification} />}
