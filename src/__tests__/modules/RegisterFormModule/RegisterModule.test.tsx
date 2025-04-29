@@ -233,6 +233,10 @@ describe("Registration Page Positive Case", () => {
     await waitFor(() => expect(screen.getByText("Lengkapi formulir dan mulai perjalanan karier kamu!")).toBeInTheDocument());
   });
 
+  it("successfully submits the form with < 1 year experience", async () => {
+    await completeRegistration("< 1 Tahun", 0);
+  });
+
   it("successfully submits the form with 1 year experience", async () => {
     await completeRegistration("1 Tahun", 1);
   });
@@ -303,6 +307,8 @@ describe("Registration Page Negative Case", () => {
 describe("parseExperienceYears function", () => {
   const parseExperienceYears = (yearsExp: string): number => {
     switch (yearsExp) {
+      case '< 1 Tahun':
+        return 0;
       case '1 Tahun':
         return 1;
       case '2-3 Tahun':
@@ -317,6 +323,7 @@ describe("parseExperienceYears function", () => {
   };
 
   it("maps experience years correctly for all possible values", () => {
+    expect(parseExperienceYears('< 1 Tahun')).toBe(0);
     expect(parseExperienceYears('1 Tahun')).toBe(1);
     expect(parseExperienceYears('2-3 Tahun')).toBe(2);
     expect(parseExperienceYears('5 Tahun')).toBe(3);
