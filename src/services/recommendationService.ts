@@ -7,7 +7,7 @@ interface WebResponse<T> {
 }
 
 export class RecommendationService {
-  private static readonly BASE_URL = 'http://localhost:8080/api';
+  private static readonly BASE_URL = import.meta.env.VITE_BASE_URL;
 
   static async getRecommendationsByTalentId(userId: string, token: string): Promise<RecommendationResponseDTO[]> {
     try {

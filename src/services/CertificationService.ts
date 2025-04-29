@@ -1,7 +1,7 @@
 import { CertificateDetail } from "@/components/ui/certificate";
 
 export class CertificationService {
-  private static readonly BASE_URL = "http://localhost:8080/api";
+  private static readonly BASE_URL = import.meta.env.VITE_BASE_URL;
 
   static async getCertificates(userId: string, token: string) {
     try {

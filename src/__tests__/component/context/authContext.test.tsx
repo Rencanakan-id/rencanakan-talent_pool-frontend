@@ -80,7 +80,7 @@ describe('AuthContext', () => {
             });
         }).rejects.toThrow('Login Failed');
 
-        expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/auth/login', {
+        expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
             email: 'wrong@example.com',
             password: 'wrongpassword',
         });
@@ -186,7 +186,7 @@ describe('AuthContext', () => {
             // Trigger useEffect
         });
 
-        expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/api/users/me', {
+        expect(axios.get).toHaveBeenCalledWith(`${import.meta.env.VITE_BASE_URL}/users/me`, {
             headers: { Authorization: `Bearer ${mockToken}` },
         });
         expect(result.current.user).toEqual(mockUser);
@@ -254,7 +254,7 @@ describe('AuthContext', () => {
         });
     
         // Verify axios.post was called with the correct arguments
-        expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/auth/login', {
+        expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
             email: 'test@example.com',
             password: 'password123',
         });

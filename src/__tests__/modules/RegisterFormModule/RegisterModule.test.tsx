@@ -66,7 +66,7 @@ describe("Registration Page Positive Case", () => {
     fireEvent.click(screen.getByText("Daftar Kerja"));
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('http://localhost:8080/api/auth/register', expect.objectContaining({
+      expect(fetch).toHaveBeenCalledWith(`${import.meta.env.VITE_BASE_URL}/auth/register`, expect.objectContaining({
         method: 'POST',
         headers: expect.objectContaining({
           'Content-Type': 'application/json',

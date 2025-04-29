@@ -11,7 +11,7 @@ export interface ExperienceRequestDTO {
 }
 
 export class ExperienceService {
-  private static readonly BASE_URL = "http://localhost:8080/api";
+  private static readonly BASE_URL = import.meta.env.VITE_BASE_URL;
 
   static async getExperiences(userId: string, token: string) {
     try {

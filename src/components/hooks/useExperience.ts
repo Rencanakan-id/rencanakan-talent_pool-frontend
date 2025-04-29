@@ -18,8 +18,8 @@ export const useExperience = (userId?: string) => {
     try {
       setIsLoading(true);
       const data = await ExperienceService.getExperiences(userId, token);
-      console.log('lihat syaa, ini data', data);
-      setExperience(data);
+      console.log('lihat syaa, ini data', data.data);
+      setExperience(data.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch experiences');
       setExperience([]);

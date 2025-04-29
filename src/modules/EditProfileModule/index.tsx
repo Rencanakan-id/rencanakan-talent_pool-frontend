@@ -70,7 +70,7 @@ export const EditProfileModule: React.FC = () => {
       };
 
       const response = await axios.put(
-        `http://localhost:8080/api/users/${formData.id}`,
+        `${import.meta.env.VITE_BASE_URL}/users/${formData.id}`,
         updatedProfile,
         {
           headers: {

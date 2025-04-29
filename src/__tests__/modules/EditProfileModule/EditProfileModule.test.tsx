@@ -72,7 +72,7 @@ test('updates profile on save', async () => {
 
   await waitFor(() => {
     expect(mockedAxios.put).toHaveBeenCalledWith(
-      'http://localhost:8080/api/users/user123',
+      `${import.meta.env.VITE_BASE_URL}/users/user123`,
       expect.objectContaining({ firstName: 'Jane' }),
       expect.objectContaining({
         headers: expect.objectContaining({

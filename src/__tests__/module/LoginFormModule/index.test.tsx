@@ -105,7 +105,7 @@ describe('LoginModule', () => {
     // Wait for axios to be called
     await waitFor(() => {
       // Check if axios was called with correct parameters
-      expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/auth/login', {
+      expect(axios.post).toHaveBeenCalledWith(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
         email: fakeEmail,
         password: fakePassword
       });
