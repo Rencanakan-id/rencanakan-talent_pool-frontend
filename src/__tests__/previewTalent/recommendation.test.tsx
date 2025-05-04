@@ -25,7 +25,7 @@ describe('RecommendationCard', () => {
       talentId: 'talent-2',
       contractorId: 102,
       contractorName: 'Contractor B',
-      message: 'This is a very long message that exceeds the character limit. '.repeat(10), // Makes it longer than 250 chars
+      message: 'This is a very long message that exceeds the character limit. '.repeat(10),
       status: StatusType.APPROVED,
     },
     {
@@ -60,44 +60,6 @@ describe('RecommendationCard', () => {
 
     const tolakButtons = screen.getAllByText('Tolak');
     expect(tolakButtons).toHaveLength(1);
-  });
-
-  it('calls onAccept function when Accept button is clicked', () => {
-    const mockOnAccept = jest.fn();
-    const mockOnDecline = jest.fn();
-
-    render(
-      <RecommendationCard
-        recommendations={mockRecommendations}
-        onAccept={mockOnAccept}
-        onDecline={mockOnDecline}
-      />
-    );
-
-    const acceptButton = screen.getByText('Terima');
-    fireEvent.click(acceptButton);
-
-    expect(mockOnAccept).toHaveBeenCalledWith('1');
-    expect(mockOnDecline).not.toHaveBeenCalled();
-  });
-
-  it('calls onDecline function when Decline button is clicked', () => {
-    const mockOnAccept = jest.fn();
-    const mockOnDecline = jest.fn();
-
-    render(
-      <RecommendationCard
-        recommendations={mockRecommendations}
-        onAccept={mockOnAccept}
-        onDecline={mockOnDecline}
-      />
-    );
-
-    const declineButton = screen.getByText('Tolak');
-    fireEvent.click(declineButton);
-
-    expect(mockOnDecline).toHaveBeenCalledWith('1');
-    expect(mockOnAccept).not.toHaveBeenCalled();
   });
 
   it('handles undefined onAccept and onDecline callbacks gracefully', () => {
@@ -155,5 +117,90 @@ describe('RecommendationCard', () => {
     );
 
     expect(screen.getByText('Tidak ada Rekomendasi.')).toBeInTheDocument();
+  });
+
+  it('shows confirmation dialog when Accept button is clicked', () => {
+    render(<RecommendationCard recommendations={mockRecommendations} />);
+    
+    const acceptButton = screen.getByText('Terima');
+    fireEvent.click(acceptButton);
+    
+    expect(screen.getByText('Konfirmasi Penerimaan')).toBeInTheDocument();
+    expect(screen.getByText(`Apakah Anda yakin ingin menerima rekomendasi dari Contractor A?`)).toBeInTheDocument();
+  });
+
+  it('shows confirmation dialog when Decline button is clicked', () => {
+    render(<RecommendationCard recommendations={mockRecommendations} />);
+    
+    const declineButton = screen.getByText('Tolak');
+    fireEvent.click(declineButton);
+    
+    expect(screen.getByText('Konfirmasi Penolakan')).toBeInTheDocument();
+    expect(screen.getByText(`Apakah Anda yakin ingin menolak rekomendasi dari Contractor A?`)).toBeInTheDocument();
+  });
+
+  it('calls onAccept only after confirmation is confirmed', () => {
+    const mockOnAccept = jest.fn();
+    
+    render(
+      <RecommendationCard
+        recommendations={mockRecommendations}
+        onAccept={mockOnAccept}
+      />
+    );
+    
+    const acceptButton = screen.getByText('Terima');
+    fireEvent.click(acceptButton);
+    
+    expect(screen.getByText('Konfirmasi Penerimaan')).toBeInTheDocument();
+    expect(mockOnAccept).not.toHaveBeenCalled();
+    
+    const confirmButton = screen.getByText('Iya');
+    fireEvent.click(confirmButton);
+    
+    expect(mockOnAccept).toHaveBeenCalledWith('1');
+  });
+
+  it('calls onDecline only after confirmation is confirmed', () => {
+    const mockOnDecline = jest.fn();
+    
+    render(
+      <RecommendationCard
+        recommendations={mockRecommendations}
+        onDecline={mockOnDecline}
+      />
+    );
+    
+    const declineButton = screen.getByText('Tolak');
+    fireEvent.click(declineButton);
+    
+    expect(screen.getByText('Konfirmasi Penolakan')).toBeInTheDocument();
+    expect(mockOnDecline).not.toHaveBeenCalled();
+    
+    const confirmButton = screen.getByRole('button', { name: 'Tolak' });
+    fireEvent.click(confirmButton);
+    
+    expect(mockOnDecline).toHaveBeenCalledWith('1');
+  });
+
+  it('does not call callbacks when confirmation is canceled', () => {
+    const mockOnAccept = jest.fn();
+    const mockOnDecline = jest.fn();
+    
+    render(
+      <RecommendationCard
+        recommendations={mockRecommendations}
+        onAccept={mockOnAccept}
+        onDecline={mockOnDecline}
+      />
+    );
+    
+    fireEvent.click(screen.getByText('Terima'));
+    fireEvent.click(screen.getByText('Tidak'));
+    fireEvent.click(screen.getByText('Tolak'));
+    fireEvent.click(screen.getByText('Tidak'));
+
+    expect(mockOnAccept).not.toHaveBeenCalled();
+    expect(mockOnDecline).not.toHaveBeenCalled();
   });
 });
