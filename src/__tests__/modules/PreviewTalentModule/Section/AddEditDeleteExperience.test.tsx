@@ -66,7 +66,7 @@ describe('Experience Section Positive Case', () => {
     fireEvent.click(screen.getByText('Simpan'));
     
     waitFor(() => expect(screen.getByText('Senior Software Engineer')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByText('Senior Software Engineer')).toBeInTheDocument();
+
   });
 
   test('should allow setting "Saya sedang bekerja di posisi ini"', () => {
