@@ -22,12 +22,10 @@ export const handleHargaChange = <T>({
   key,
 }: HandleHargaChangeParams<T>) => {
   const rawValue = e.target.value.replace(/[^\d]/g, '');
-  const price = Number(rawValue);
-
-  updateFn({ [key]: price } as Partial<T>);
+  updateFn({ [key]: rawValue } as Partial<T>);
 
   if (inputRef.current) {
-    inputRef.current.value = formatToRupiah(rawValue);
+    inputRef.current.value = `${formatToRupiah(rawValue)}`;
   }
 };
 
