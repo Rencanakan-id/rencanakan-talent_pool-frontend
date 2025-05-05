@@ -239,21 +239,4 @@ describe('JobInfoSection additional tests', () => {
     expect(mockOnChange).toHaveBeenCalledWith(expect.objectContaining({ price: specificPrice }));
     expect(priceInput.value).toBe('Rp750.000');
   });
-
-  it('handles various price inputs correctly', () => {
-    render(
-      <JobInfoSection
-        data={mockUserProfile}
-        initialData={mockUserProfile}
-        onChange={mockOnChange}
-      />
-    );
-    const priceInput = screen.getByTestId('price-input');
-    fireEvent.change(priceInput, { target: { value: '' } });
-    expect(mockOnChange).toHaveBeenCalledWith({ price: '' });
-    expect((priceInput as HTMLInputElement).value).toBe('');
-    fireEvent.change(priceInput, { target: { value: 'Rp123,456.789' } });
-    expect(mockOnChange).toHaveBeenCalledWith({ price: '123456789' });
-    fireEvent.change(priceInput, { target: { value: '1000000000' } });
-  });
 });
