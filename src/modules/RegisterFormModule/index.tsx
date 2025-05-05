@@ -151,7 +151,7 @@ export const RegisterModule = () => {
             nik: formData.nik,
             npwp: formData.npwp,
             aboutMe: formData.aboutMe,
-            experienceYears: parseExperienceYearsToInt(formData.yearsOfExperience || ''),
+            experienceYears: parseExperienceYearsToInt(formData.yearsOfExperience ?? ''),
             skkLevel: formData.skkLevel,
             currentLocation: formData.currentLocation,
             preferredLocations: formData.preferredLocations || [],
