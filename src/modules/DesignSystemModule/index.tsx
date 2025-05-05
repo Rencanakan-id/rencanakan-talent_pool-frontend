@@ -12,7 +12,7 @@ import RecommendationCard, {
 } from '@/components/ui/recommendation';
 
 import Experience from '@/components/ui/experience';
-import { EmploymentType, LocationType } from '@/services/ExperienceService';
+import { EmploymentType, LocationType } from '@/lib/experience';
 import { ConfirmationBox } from '@/components/ui/confirmation-box';
 
 const dummyExperience = [

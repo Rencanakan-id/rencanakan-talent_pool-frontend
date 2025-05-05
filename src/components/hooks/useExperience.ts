@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/context/authContext";
 import { UserService } from "@/services/UserService";
-import { ExperienceResponseDTO } from "@/services/ExperienceService"
+import { ExperienceResponseDTO } from "@/lib/experience"
 
 export function useExperience(userId?: string) {
   const [experience, setExperience] = useState<ExperienceResponseDTO[] | null>(null);

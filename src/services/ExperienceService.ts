@@ -1,45 +1,12 @@
-export interface ExperienceRequestDTO {
-    title: string;
-    company: string;
-    companyImage: string;
-    employmentType: EmploymentType;
-    startDate: string;
-    endDate: string | null;
-    location: string;
-    locationType: LocationType;
-  }
-
-export interface ExperienceResponseDTO {
-    id: number;
-    title: string;
-    company: string;
-    companyImage: string;
-    employmentType: EmploymentType;
-    startDate: string;
-    endDate: string | null;
-    location: string;
-    locationType: LocationType;
-  }
-
-export type EmploymentType =
-  | 'FULL_TIME'
-  | 'PART_TIME'
-  | 'SELF_EMPLOYED'
-  | 'FREELANCE'
-  | 'CONTRACT'
-  | 'INTERNSHIP'
-  | 'APPRENTICESHIP'
-  | 'SEASONAL'
-  | '';
-
-export type LocationType = 'ON_SITE' | 'HYBRID' | 'REMOTE' | '';
+import { ExperienceRequestDTO, ExperienceResponseDTO } from "@/lib/experience";
+import { env } from "@/config/env";
 
 export class ExperienceService {
-  private static readonly BASE_URL = import.meta.env.VITE_BASE_URL ?? "http://localhost:8080/api";
+  // private static readonly BASE_URL = import.meta.env.VITE_BASE_URL ?? "http://localhost:8080/api";
 
   static async getExperiences(userId: string, token: string) {
     try {
-      const res = await fetch(`${this.BASE_URL}/experiences/user/${userId}`, {
+      const res = await fetch(`${env.API_BASE_URL}/experiences/user/${userId}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json" 
@@ -76,7 +43,7 @@ export class ExperienceService {
       };
       console.log("Adding experience with data:", requestData);
 
-      const res = await fetch(`${this.BASE_URL}/experiences`, {
+      const res = await fetch(`${env.API_BASE_URL}/experiences`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -102,7 +69,7 @@ export class ExperienceService {
 
   static async editExperience(token: string, experienceId: number, experienceData: Partial<ExperienceRequestDTO>) {
     try {
-      const res = await fetch(`${this.BASE_URL}/experiences/${experienceId}`, {
+      const res = await fetch(`${env.API_BASE_URL}/experiences/${experienceId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,7 +94,7 @@ export class ExperienceService {
 
   static async deleteExperience(token: string, experienceId: number) {
     try {
-      const res = await fetch(`${this.BASE_URL}/experiences/${experienceId}`, {
+      const res = await fetch(`${env.API_BASE_URL}/experiences/${experienceId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`

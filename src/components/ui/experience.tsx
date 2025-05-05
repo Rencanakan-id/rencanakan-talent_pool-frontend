@@ -6,7 +6,8 @@ import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 import { ModalFormWrapper } from './modalFormWrapper';
-import { ExperienceService, ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/services/ExperienceService';
+import { ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/lib/experience';
+import { ExperienceService } from '@/services/ExperienceService';
 import { useAuth } from '../context/authContext';
 
 // Define employment type labels
