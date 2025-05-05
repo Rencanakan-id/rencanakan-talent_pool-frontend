@@ -6,7 +6,9 @@ import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 import { ModalFormWrapper } from './modalFormWrapper';
-import { ExperienceService, ExperienceDetail, EmploymentType, LocationType } from '@/services/ExperienceService';
+import { ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/lib/experience';
+import { ExperienceService } from '@/services/ExperienceService';
+import { useAuth } from '../context/authContext';
 
 // Define employment type labels
 const employmentTypeLabels: Record<string, string> = {
@@ -30,9 +32,7 @@ const locationTypeLabels: Record<string, string> = {
 };
 
 interface ExperienceProps {
-  userId: string;
-  token: string;
-  initialExperiences?: ExperienceDetail[] | null;
+  experiences?: ExperienceResponseDTO[] | null;
 }
 
 // Define error state interface
@@ -46,10 +46,13 @@ interface FormErrors {
   endDate?: string;
 }
 
-const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperiences = [] }) => {
-  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(initialExperiences || []);
+const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
+  const { user, token } = useAuth();
+  const id = user.id?? '';
+
+  const [experienceList, setExperienceList] = useState<ExperienceResponseDTO[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
+  const [editingExperience, setEditingExperience] = useState<ExperienceResponseDTO | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -57,33 +60,32 @@ const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperienc
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [experienceFormData, setExperienceFormData] = useState<ExperienceDetail>({
-    id: 0,
+  const [experienceFormData, setExperienceFormData] = useState<ExperienceRequestDTO>({
     title: '',
     company: '',
+    companyImage: '', // Assuming this is not used in the form, but required in the DTO
     employmentType: 'FULL_TIME',
     startDate: '',
     endDate: null,
     location: '',
     locationType: 'ON_SITE',
-    talentId: parseInt(userId) || 0,
   });
 
   useEffect(() => {
-    // If initialExperiences is not provided, fetch from API
-    if (!initialExperiences || initialExperiences.length === 0) {
+    // If experiences is not provided, fetch from API
+    if (!experiences || experiences.length === 0) {
       fetchExperiences();
     }
-  }, [userId, token]);
+  }, [user.id, token]);
 
   const fetchExperiences = async () => {
-    if (!userId || !token) return;
+    if (!user.id || !token) return;
     
     setIsLoading(true);
     setError(null);
     
     try {
-      const experiences = await ExperienceService.getExperiences(userId, token);
+      const experiences = await ExperienceService.getExperiences(user.id, token);
       setExperienceList(experiences || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch experiences');
@@ -115,15 +117,14 @@ const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperienc
   const handleAdd = () => {
     setEditingExperience(null);
     setExperienceFormData({
-      id: 0,
       title: '',
       company: '',
+      companyImage: '', // Assuming this is not used in the form, but required in the DTO
       employmentType: 'FULL_TIME',
       startDate: '',
       endDate: null,
       location: '',
       locationType: 'ON_SITE',
-      talentId: parseInt(userId) || 0,
     });
     setIsCurrentlyWorking(false);
     setIsModalOpen(true);
@@ -131,7 +132,7 @@ const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperienc
     setWasValidated(false);
   };
 
-  const handleEdit = (exp: ExperienceDetail) => {
+  const handleEdit = (exp: ExperienceResponseDTO) => {
     setEditingExperience(exp);
     setExperienceFormData(exp);
     setIsCurrentlyWorking(exp.endDate === null);
@@ -228,10 +229,14 @@ const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperienc
         );
       } else {
         // Add new experience
-        const { id, ...experienceData } = experienceFormData;
-        const newExperience = await ExperienceService.addExperience(token, experienceData);
+        const {  ...experienceData } = experienceFormData;
+        console.log(user.id, token, experienceData);
+        const newExperience = await ExperienceService.addExperience(id, token, experienceData);
         
-        setExperienceList((prev) => [...prev, newExperience]);
+        if (newExperience) {
+          setExperienceList((prev) => [...prev, newExperience]);
+        }
+
       }
       
       setIsModalOpen(false);
