@@ -49,13 +49,26 @@ export interface ExperienceDetail {
   
     static async addExperience(token: string, experienceData: Omit<ExperienceDetail, 'id'>) {
       try {
+
         console.log("Adding experience with data:", experienceData);
+        const requestData = {
+          title: experienceData.title,
+          company: experienceData.company,
+          companyImage: "", // Add this field even if empty
+          employmentType: experienceData.employmentType,
+          startDate: experienceData.startDate, // Make sure this is in format YYYY-MM-DD
+          endDate: experienceData.endDate, // Make sure this is in format YYYY-MM-DD or null
+          location: experienceData.location,
+          locationType: experienceData.locationType,
+          userId: String(experienceData.talentId) // Convert talentId to userId as string
+        };
         const res = await fetch(`${this.BASE_URL}/experiences`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify(experienceData)
+          body: JSON.stringify(requestData)
         });
   
         if (!res.ok) {
