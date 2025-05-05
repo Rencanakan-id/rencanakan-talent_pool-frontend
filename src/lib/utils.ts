@@ -14,3 +14,17 @@ export function capitalizeString(str: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 }
+
+export function formatIndonesianPhoneNumber(phoneNumber: string): string {
+  const cleanedNumber = phoneNumber.replace(/\D/g, '');
+
+  if (cleanedNumber.startsWith('0')) {
+    return '+62 ' + cleanedNumber.substring(1);
+  }
+
+  if (cleanedNumber.startsWith('62')) {
+    return '+' + cleanedNumber;
+  }
+
+  return '+62 ' + cleanedNumber;
+}

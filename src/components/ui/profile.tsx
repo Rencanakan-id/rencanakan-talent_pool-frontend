@@ -1,7 +1,6 @@
-import { FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
-import { capitalizeString } from '@/lib/utils';
+import { capitalizeString, formatIndonesianPhoneNumber } from '@/lib/utils';
 
 export interface UserProfile {
   id: string;
@@ -33,6 +32,7 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
   const currLoc = capitalizeString(user?.currentLocation ?? '');
   const job = capitalizeString(user?.job ?? '');
   const skkLevel = capitalizeString(user?.skkLevel ?? '');
+  const phoneNum = formatIndonesianPhoneNumber(user?.phoneNumber ?? '');
 
   return (
     <div className="w-full space-y-4">
@@ -41,15 +41,19 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
           {user?.firstName} {user?.lastName}
         </Typography>
         <div className="flex items-center space-x-2">
-          <img src={'/point-location.svg'} alt="Logo" draggable="false" />
-          <Typography variant="p1" className="text-gray-600">
-            {currLoc}
-          </Typography>
+          <div className='flex space-x-2'>
+            <img src={'/point-location.svg'} alt="Logo" draggable="false" />
+            <Typography variant="p1" className="text-rencanakan-dark-gray font-[400] font-sans">
+              {currLoc}
+            </Typography>
+          </div>
           <div className="h-5 border-l border-gray-400"></div>
-          <img src={'/whatsapp.svg'} alt="Logo" draggable="false" />
-          <Typography variant="p1" className="text-rencanakan-dark-gray font-lighter">
-            {user?.phoneNumber}
-          </Typography>
+          <div className='flex space-x-1'>
+            <img src={'/whatsapp.svg'} alt="Logo" draggable="false" />
+            <Typography variant="p1" className="text-rencanakan-dark-gray font-[400] font-sans">
+              {phoneNum}
+            </Typography>
+          </div>
         </div>
         <div className="flex items-center space-y-2 space-x-2">
           <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400 font-semibold'>{skkLevel}</Badge>
