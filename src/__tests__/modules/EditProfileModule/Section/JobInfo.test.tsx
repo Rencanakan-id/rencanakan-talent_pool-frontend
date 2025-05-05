@@ -1,13 +1,10 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import { mockCombobox } from '@/__mocks__/components/ui/combobox';
-import { mockComboboxCheckBox } from '@/__mocks__/components/ui/comboboxCheckbox';
+import { setupComponentMocks } from '@/__mocks__/components/setUpComponents';
+setupComponentMocks(['combobox', 'comboboxCheckbox']);
 import { JobInfoSection } from '@/modules/EditProfileModule/Section/jobInfo';
 import '@testing-library/jest-dom';
 import { UserProfile } from '@/components/ui/profile';
 import { mockUserProfile } from '@/mocks/mockProfile';
-
-jest.mock('@/components/ui/combobox', () => ({ Combobox: mockCombobox }));
-jest.mock('@/components/ui/comboboxCheckbox', () => ({ ComboboxCheckBox: mockComboboxCheckBox }));
 
 const completeMockInitialData: UserProfile = mockUserProfile
 

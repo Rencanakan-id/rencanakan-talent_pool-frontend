@@ -6,12 +6,24 @@ import { mockInput } from './ui/input';
 import { mockFileInput } from './ui/fileInput';
 import { mockTextarea } from './ui/textarea';
 
-export function setupComponentMocks() {
-  jest.mock('@/components/ui/combobox', () => ({ Combobox: mockCombobox }));
-  jest.mock('@/components/ui/comboboxCheckbox', () => ({ ComboboxCheckBox: mockComboboxCheckBox }));
-  jest.mock('@/components/atoms/typography', () => ({ Typography: mockTypography }));
-  jest.mock('@/components/ui/stepper', () => ({ Stepper: mockStepper }));
-  jest.mock('@/components/ui/input', () => ({ Input: mockInput }));
-  jest.mock('@/components/ui/textarea', () => ({ Textarea: mockTextarea }));
-  jest.mock('@/components/ui/fileInput', () => ({ FileInput: mockFileInput }));
-}
+export function setupComponentMocks(components?: string[]) {
+  const allComponents = {
+    'combobox': () => jest.mock('@/components/ui/combobox', () => ({ Combobox: mockCombobox })),
+    'comboboxCheckbox': () => jest.mock('@/components/ui/comboboxCheckbox', () => ({ ComboboxCheckBox: mockComboboxCheckBox })),
+    'typography': () => jest.mock('@/components/atoms/typography', () => ({ Typography: mockTypography })),
+    'stepper': () => jest.mock('@/components/ui/stepper', () => ({ Stepper: mockStepper })),
+    'input': () => jest.mock('@/components/ui/input', () => ({ Input: mockInput })),
+    'textarea': () => jest.mock('@/components/ui/textarea', () => ({ Textarea: mockTextarea })),
+    'fileInput': () => jest.mock('@/components/ui/fileInput', () => ({ FileInput: mockFileInput })),
+  };
+  
+  if (!components || components.length === 0) {
+    Object.values(allComponents).forEach(mockFn => mockFn());
+  } else {
+    components.forEach(component => {
+      if (component in allComponents) {
+        allComponents[component as keyof typeof allComponents]();
+      }
+    });
+  }
+  }
