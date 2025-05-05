@@ -1,3 +1,4 @@
+import { capitalizeString } from '@/lib/utils';
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
 
@@ -5,16 +6,6 @@ type LocationProps = Readonly<{
   data?: ReadonlyArray<string>;
 }>;
 
-
-function capitalizeString(str: string): string {
-  // Handle empty string
-  if (!str) return str;
-  
-  return str
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-}
 
 function Location({ data = [] }: LocationProps) {
   // Map through the data and capitalize each city name

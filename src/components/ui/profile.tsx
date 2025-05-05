@@ -1,6 +1,7 @@
 import { FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
+import { capitalizeString } from '@/lib/utils';
 
 export interface UserProfile {
   id: string;
@@ -29,6 +30,10 @@ interface UserProfileProps {
 }
 
 const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
+  const currLoc = capitalizeString(user?.currentLocation ?? '');
+  const job = capitalizeString(user?.job ?? '');
+  const skkLevel = capitalizeString(user?.skkLevel ?? '');
+
   return (
     <div className="w-full space-y-4">
       <div className="flex flex-col items-center space-y-2 md:items-start">
@@ -38,7 +43,7 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
         <div className="flex items-center space-x-2">
           <FaMapMarkerAlt />
           <Typography variant="p1" className="text-gray-600">
-            {user?.currentLocation}
+            {currLoc}
           </Typography>
           <div className="h-5 border-l border-gray-400"></div>
           <FaWhatsapp className="text-green-500" />
@@ -47,9 +52,9 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
           </Typography>
         </div>
         <div className="flex items-center space-y-2 space-x-2">
-          <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400'> {user?.skkLevel}</Badge>
-          <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400'> {user?.experienceYears} Tahun Pengalaman</Badge>
-          <Badge variant={'profileGray'}> {user?.job}</Badge>
+          <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400 font-semibold'>{skkLevel}</Badge>
+          <Badge variant={'profileOrange'} className='text-rencanakan-premium-gold-400 font-semibold'> {user?.experienceYears} Tahun Pengalaman</Badge>
+          <Badge variant={'profileGray'}> {job} </Badge>
         </div>
       </div>
       <div className="bg-rencanakan-lightest-gray relative flex w-full flex-col justify-center space-y-2 p-6 md:flex-row md:items-center md:justify-start">
@@ -57,7 +62,7 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
           <Typography variant="p2" className="text-rencanakan-dark-gray">
             Perkiraan Harga
           </Typography>
-          <Typography variant="h2" className="pt-4">
+          <Typography variant="h2" style={{ fontFamily: "'Google Sans Text', 'Inter', sans-serif" }} className="pt-4 text-rencanakan-type-black">
             Rp {new Intl.NumberFormat('id-ID').format(user?.price ?? 0)}
           </Typography>
         </div>
