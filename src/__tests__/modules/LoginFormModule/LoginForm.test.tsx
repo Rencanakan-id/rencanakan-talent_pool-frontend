@@ -27,7 +27,7 @@ describe('LoginForm', () => {
 
   test('renders input fields correctly', () => {
     expect(screen.getByPlaceholderText('Masukkan email Anda')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Masukkan kata sandi')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Masukkan kata sandi Anda')).toBeInTheDocument();
   });
 
   test('calls updateFormData when typing in input fields', () => {
