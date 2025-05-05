@@ -37,16 +37,16 @@ const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
   return (
     <div className="w-full space-y-4">
       <div className="flex flex-col items-center space-y-2 md:items-start">
-        <Typography variant="h1">
+        <Typography variant="h1" className='text-shadow-rencanakan-type-black'>
           {user?.firstName} {user?.lastName}
         </Typography>
         <div className="flex items-center space-x-2">
-          <FaMapMarkerAlt />
+          <img src={'/point-location.svg'} alt="Logo" draggable="false" />
           <Typography variant="p1" className="text-gray-600">
             {currLoc}
           </Typography>
           <div className="h-5 border-l border-gray-400"></div>
-          <FaWhatsapp className="text-green-500" />
+          <img src={'/whatsapp.svg'} alt="Logo" draggable="false" />
           <Typography variant="p1" className="text-rencanakan-dark-gray font-lighter">
             {user?.phoneNumber}
           </Typography>
