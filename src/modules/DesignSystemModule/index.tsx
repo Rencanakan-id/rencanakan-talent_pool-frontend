@@ -11,7 +11,8 @@ import RecommendationCard, {
   StatusType,
 } from '@/components/ui/recommendation';
 
-import Experience, { EmploymentType, LocationType } from '@/components/ui/experience';
+import Experience from '@/components/ui/experience';
+import { EmploymentType, LocationType } from '@/services/ExperienceService';
 import { ConfirmationBox } from '@/components/ui/confirmation-box';
 
 const dummyExperience = [
@@ -19,6 +20,7 @@ const dummyExperience = [
     id: 1,
     title: 'Software Engineer',
     company: 'Tech Corp',
+    companyImage: 'https://via.placeholder.com/150',
     employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2020-06-01',
     endDate: '2023-08-31',
@@ -30,6 +32,7 @@ const dummyExperience = [
     id: 2,
     title: 'Frontend Developer',
     company: 'Startup XYZ',
+    companyImage: 'https://via.placeholder.com/150',
     employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2019-02-15',
     endDate: '2020-05-30',
@@ -41,6 +44,7 @@ const dummyExperience = [
     id: 3,
     title: 'Backend Developer',
     company: 'Enterprise Solutions',
+    companyImage: 'https://via.placeholder.com/150',
     employmentType: 'FULL_TIME' as EmploymentType,
     startDate: '2018-09-01',
     endDate: '2019-12-15',
