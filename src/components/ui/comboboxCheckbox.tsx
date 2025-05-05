@@ -106,7 +106,9 @@ export function ComboboxCheckBox({
                 variant="p4"
                 className={`${value ? 'text-rencanakan-type-black' : 'text-rencanakan-dark-gray'}`}
               >
-                {value || `Pilih ${label}`}
+                {value || (label.endsWith(" *") 
+                  ? `Pilih ${label.substring(0, label.length - 2)}` 
+                  : `Pilih ${label}`)}
               </Typography>
             </Button>
             <Typography
