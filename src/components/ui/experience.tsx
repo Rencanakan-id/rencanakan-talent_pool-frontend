@@ -6,7 +6,7 @@ import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 import { ModalFormWrapper } from './modalFormWrapper';
-import { ExperienceService, ExperienceDetail, EmploymentType, LocationType } from '@/services/ExperienceService';
+import { ExperienceService, ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/services/ExperienceService';
 
 // Define employment type labels
 const employmentTypeLabels: Record<string, string> = {
@@ -32,7 +32,7 @@ const locationTypeLabels: Record<string, string> = {
 interface ExperienceProps {
   userId: string;
   token: string;
-  initialExperiences?: ExperienceDetail[] | null;
+  initialExperiences?: ExperienceResponseDTO[] | null;
 }
 
 // Define error state interface
@@ -47,9 +47,9 @@ interface FormErrors {
 }
 
 const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperiences = [] }) => {
-  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(initialExperiences || []);
+  const [experienceList, setExperienceList] = useState<ExperienceResponseDTO[]>(initialExperiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
+  const [editingExperience, setEditingExperience] = useState<ExperienceResponseDTO | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -57,16 +57,15 @@ const Experience: React.FC<ExperienceProps> = ({ userId, token, initialExperienc
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [experienceFormData, setExperienceFormData] = useState<ExperienceDetail>({
-    id: 0,
+  const [experienceFormData, setExperienceFormData] = useState<ExperienceRequestDTO>({
     title: '',
     company: '',
+    companyImage: '', // Assuming this is not used in the form, but required in the DTO
     employmentType: 'FULL_TIME',
     startDate: '',
     endDate: null,
     location: '',
     locationType: 'ON_SITE',
-    talentId: parseInt(userId) || 0,
   });
 
   useEffect(() => {
