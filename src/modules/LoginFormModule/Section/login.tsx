@@ -103,8 +103,9 @@ export const LoginForm = ({
             </Typography>
             <Typography variant="p3" className="mt-4">
               <a
-                className="cursor-pointer text-white hover:text-blue-900 underline"
+                className="cursor-pointer text-white hover:text-blue-900"
                 href="https://rencanakan.id/about-us/"
+                style={{ textDecoration: 'underline' }}
               >
                 Pelajari lebih lanjut
               </a>
