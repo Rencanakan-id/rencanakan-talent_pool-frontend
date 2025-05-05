@@ -60,9 +60,9 @@ export const PreviewTalentModule: React.FC = () => {
           <img src="./dummy/profile.svg" alt="Logo" className="h-[250px] w-[250px]" />
           <div className="w-full flex-col items-center space-y-4 p-4">
             {userProfile && <UserProfileCard user={userProfile} />}
-            {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {experience && <Experience experiences={experience} />}
             {certification && <Certificate certificates={certification} />}
+            {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {recommendations && <RecommendationCard 
               recommendations={recommendations} 
               onAccept={handleAcceptRecommendation}

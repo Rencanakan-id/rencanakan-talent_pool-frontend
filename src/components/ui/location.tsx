@@ -5,7 +5,21 @@ type LocationProps = Readonly<{
   data?: ReadonlyArray<string>;
 }>;
 
+
+function capitalizeString(str: string): string {
+  // Handle empty string
+  if (!str) return str;
+  
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 function Location({ data = [] }: LocationProps) {
+  // Map through the data and capitalize each city name
+  const capitalizedLocations = data.map(location => capitalizeString(location));
+
   return (
     <div className="min-h-[119px] w-full rounded-[4px] border border-gray-300 px-6 py-6">
       <Typography variant="p1" className="pb-4">
@@ -14,7 +28,7 @@ function Location({ data = [] }: LocationProps) {
 
       {data.length > 0 ? (
         <div className="min-h-[23]px w-full flex-wrap space-y-3 space-x-1">
-          {data.map((loc) => (
+          {capitalizedLocations.map((loc) => (
             <Badge asChild key={loc} variant={'profileLocation'}>
               <Typography variant="p4" className="font-semibold text-black">
                 {loc}
