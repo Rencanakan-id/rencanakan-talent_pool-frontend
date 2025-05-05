@@ -40,15 +40,15 @@ describe("Registration Page Positive Case", () => {
 
   const fillSecondStep = async (experienceText: string) => {
     await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Saya seorang developer berpengalaman.");
-    await userEvent.click(screen.getByText("Pilih Lama Pengalaman *"));
+    await userEvent.click(screen.getByText("Pilih Lama Pengalaman"));
     await userEvent.click(screen.getByText(experienceText));
-    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
+    await userEvent.click(screen.getByText("Pilih Level Sertifikasi SKK"));
     await userEvent.click(screen.getByText("Operator"));
-    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
+    await userEvent.click(screen.getByText("Pilih Lokasi Saat Ini"));
     await userEvent.click(screen.getByText("Jakarta"));
-    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
+    await userEvent.click(screen.getByText("Pilih Bersedia Ditempatkan Di Mana"));
     await userEvent.click(screen.getByText("Bandung"));
-    await userEvent.click(screen.getByText("Keahlian *"));
+    await userEvent.click(screen.getByText("Pilih Keahlian"));
     await userEvent.click(screen.getByText("Arsitektur"));
   };
 
@@ -272,15 +272,15 @@ describe("Registration Page Negative Case", () => {
     // Step 2
     await waitFor(() => expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument());
     await userEvent.type(screen.getByPlaceholderText("Ceritakan tentang dirimu secara singkat di sini..."), "Test bio 10 karakter");
-    await userEvent.click(screen.getByText("Lama Pengalaman *"));
+    await userEvent.click(screen.getByText("Pilih Lama Pengalaman"));
     await userEvent.click(screen.getByText("> 5 Tahun"));
-    await userEvent.click(screen.getByText("Level Sertifikasi SKK *"));
+    await userEvent.click(screen.getByText("Pilih Level Sertifikasi SKK"));
     await userEvent.click(screen.getByText("Operator"));
-    await userEvent.click(screen.getByText("Lokasi Saat Ini *"));
+    await userEvent.click(screen.getByText("Pilih Lokasi Saat Ini"));
     await userEvent.click(screen.getByText("Jakarta"));
-    await userEvent.click(screen.getByText("Bersedia Ditempatkan Di Mana *"));
+    await userEvent.click(screen.getByText("Pilih Bersedia Ditempatkan Di Mana"));
     await userEvent.click(screen.getByText("Bandung"));
-    await userEvent.click(screen.getByText("Keahlian *"));
+    await userEvent.click(screen.getByText("Pilih Keahlian"));
     await userEvent.click(screen.getByText("Arsitektur"));
     fireEvent.click(screen.getByText("Selanjutnya"));
     
