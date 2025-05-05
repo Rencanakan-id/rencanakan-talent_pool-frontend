@@ -1,51 +1,13 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { mockCombobox } from '@/__mocks__/components/ui/combobox';
+import { mockComboboxCheckBox } from '@/__mocks__/components/ui/comboboxCheckbox';
 import { JobInfoSection } from '@/modules/EditProfileModule/Section/jobInfo';
 import '@testing-library/jest-dom';
 import { UserProfile } from '@/components/ui/profile';
 import { mockUserProfile } from '@/mocks/mockProfile';
 
-interface ComboboxProps {
-  label: string;
-  onChange: (value: string) => void;
-  value?: string;
-  error?: string;
-}
-
-jest.mock('@/components/ui/combobox', () => ({
-  Combobox: ({ label, onChange, value, error }: ComboboxProps) => (
-    <div>
-      <label>{label}</label>
-      <input value={value ?? ''} onChange={(e) => onChange(e.target.value)} aria-label={label} />
-      {error && <div className="error-message">{error}</div>}
-    </div>
-  ),
-}));
-
-interface ComboboxCheckBoxProps {
-  label: string;
-  onChange: (values: string[]) => void;
-  values?: string[];
-  placeholder?: string;
-  error?: string;
-}
-
-jest.mock('@/components/ui/comboboxCheckbox', () => ({
-  ComboboxCheckBox: ({ label, onChange, values, placeholder, error }: ComboboxCheckBoxProps) => {
-    const displayValues = (values || []).map((v) => v.charAt(0).toUpperCase() + v.slice(1));
-    return (
-      <div>
-        <label>{label}</label>
-        <input
-          value={displayValues.join(', ')}
-          onChange={(e) => onChange(e.target.value.split(', '))}
-          placeholder={placeholder ?? ''}
-          aria-label={label}
-        />
-        {error && <div className="error-message">{error}</div>}
-      </div>
-    );
-  },
-}));
+jest.mock('@/components/ui/combobox', () => ({ Combobox: mockCombobox }));
+jest.mock('@/components/ui/comboboxCheckbox', () => ({ ComboboxCheckBox: mockComboboxCheckBox }));
 
 const completeMockInitialData: UserProfile = mockUserProfile
 

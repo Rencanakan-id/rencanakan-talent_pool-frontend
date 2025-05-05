@@ -4,7 +4,6 @@ import { UserProfile } from '@/components/ui/profile';
 import '@testing-library/jest-dom';
 import axios from 'axios';
 
-// Mock hooks and router
 jest.mock('@/components/hooks/useUserProfile');
 jest.mock('@/components/context/authContext', () => ({
   useAuth: () => ({
@@ -20,7 +19,6 @@ jest.mock('react-router-dom', () => ({
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-// Default mock profile
 const mockUserProfile: UserProfile = {
   id: "user123",
   firstName: "Rudy",
@@ -44,7 +42,6 @@ const mockUserProfile: UserProfile = {
   skill: "arsitektur",
 };
 
-// Mock implementation for useUserProfile
 const { useUserProfile } = jest.requireMock('@/components/hooks/useUserProfile');
 
 beforeEach(() => {
@@ -177,13 +174,8 @@ test('loads initial profile image from /dummy/profile.png', async () => {
 test('handles manual photo change via ImageUpload', async () => {
   render(<EditProfileModule />);
 
-  // Create dummy file
   const newPhoto = new File(['hello'], 'newphoto.png', { type: 'image/png' });
-
-  // Find the input by label or test ID if needed
   const fileInput = screen.getByLabelText(/foto diri/i) as HTMLInputElement;
-
-  // Simulate file change
   fireEvent.change(fileInput, { target: { files: [newPhoto] } });
 
   await waitFor(() => {
