@@ -20,8 +20,6 @@ export interface ExperienceResponseDTO {
     location: string;
     locationType: LocationType;
   }
-  
-
 
 export type EmploymentType =
   | 'FULL_TIME'
@@ -52,40 +50,17 @@ export class ExperienceService {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to fetch experiences: ${res.status}`);
       }
+
+      const json = await res.json()
       console.log("Experiences fetched successfully:", res);
-      return res.json();
+      return json.data as ExperienceResponseDTO[];
     } catch (error) {
       console.error("Error fetching experiences:", error);
       throw error;
     }
   }
 
-  // static async addExperience(token: string, experienceData: ExperienceRequestDTO) {
-  //   try {
-  //     const res = await fetch(`${this.BASE_URL}/experiences`, {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify(experienceData)
-  //     });
-
-  //     console.log("Hitting add experience endpoint:", this.BASE_URL);
-
-  //     if (!res.ok) {
-  //       const errorData = await res.json().catch(() => null);
-  //       throw new Error(errorData?.message || `Failed to add experience: ${res.status}`);
-  //     }
-      
-  //     return res.json();
-  //   } catch (error) {
-  //     console.error("Error adding experience:", error);
-  //     throw error;
-  //   }
-  // }
-
-  static async addExperience(token: string, experienceData: Omit<ExperienceDetail, 'id'>) {
+  static async addExperience(userId: string, token: string, experienceData: Omit<ExperienceRequestDTO, 'id'>) {
     try {
 
       const requestData = {
@@ -97,7 +72,7 @@ export class ExperienceService {
         endDate: experienceData.endDate, // Make sure this is in format YYYY-MM-DD or null
         location: experienceData.location,
         locationType: experienceData.locationType,
-        userId: String(experienceData.talentId) // Convert talentId to userId as string
+        userId: userId
       };
       console.log("Adding experience with data:", requestData);
 
@@ -114,15 +89,18 @@ export class ExperienceService {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to add experience: ${res.status}`);
       }
+
+      const json = await res.json()
       
-      return res.json();
+      console.log("Experience added successfully:", res);
+      return json.data as ExperienceResponseDTO;
     } catch (error) {
       console.error("Error adding experience:", error);
       throw error;
     }
   }
 
-  static async editExperience(token: string, experienceId: number, experienceData: Partial<ExperienceDetail>) {
+  static async editExperience(token: string, experienceId: number, experienceData: Partial<ExperienceRequestDTO>) {
     try {
       const res = await fetch(`${this.BASE_URL}/experiences/${experienceId}`, {
         method: 'PUT',
@@ -137,8 +115,10 @@ export class ExperienceService {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to update experience: ${res.status}`);
       }
+
+      const json = await res.json()
       
-      return res.json();
+      return json.data as ExperienceResponseDTO;
     } catch (error) {
       console.error("Error updating experience:", error);
       throw error;
@@ -165,78 +145,5 @@ export class ExperienceService {
       throw error;
     }
   }
-
-  // Keep the certificate methods for backwards compatibility
-  static async addCertificate(token: string, certificateData: any) {
-    try {
-      const formData = new FormData();
-      formData.append('title', certificateData.title);
-      formData.append('file', certificateData.file);
-
-      const res = await fetch(`${this.BASE_URL}/experiences`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => null);
-        throw new Error(errorData?.message || `Failed to add certificate: ${res.status}`);
-      }
-      
-      return res.json();
-    } catch (error) {
-      console.error("Error adding certificate:", error);
-      throw error;
-    }
-  }
-
-  static async editCertificate(token: string, certificateId: number, certificateData: any) {
-    try {
-      const formData = new FormData();
-      formData.append('title', certificateData.title);      
-      formData.append('file', certificateData.file);
-
-      const res = await fetch(`${this.BASE_URL}/experiences/${certificateId}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => null);
-        throw new Error(errorData?.message || `Failed to update certificate: ${res.status}`);
-      }
-      
-      return res.json();
-    } catch (error) {
-      console.error("Error updating certificate:", error);
-      throw error;
-    }
-  }
-
-  static async deleteCertificate(token: string, certificateId: number) {
-    try {
-      const res = await fetch(`${this.BASE_URL}/experiences/${certificateId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => null);
-        throw new Error(errorData?.message || `Failed to delete certificate: ${res.status}`);
-      }
-      
-      return true;
-    } catch (error) {
-      console.error("Error deleting certificate:", error);
-      throw error;
-    }
-  }
+  
 }
