@@ -3,6 +3,7 @@
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "types": ["jest", "@testing-library/jest-dom"],
+    "module": "esnext",
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
