@@ -54,9 +54,6 @@ describe('Experience Section Positive Case', () => {
     waitFor(() => expect(screen.getByText('Frontend Developer')).toBeInTheDocument(), { timeout: 5000 });
     waitFor(() => expect(screen.getByText('Startup XYZ • Penuh Waktu')).toBeInTheDocument(), { timeout: 5000 });
     waitFor(() => expect(screen.getByText('01 Februari 2024 - 01 Maret 2024')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByText('Frontend Developer')).toBeInTheDocument();
-    // expect(screen.getByText('Startup XYZ • Penuh Waktu')).toBeInTheDocument();
-    // expect(screen.getByText('01 Februari 2024 - 01 Maret 2024')).toBeInTheDocument();
   });
 
   test('should open edit experience modal and update data', () => {
@@ -85,8 +82,6 @@ describe('Experience Section Positive Case', () => {
     
     waitFor(() => expect(screen.getByText('Software Engineer')).toBeInTheDocument(), { timeout: 5000 });
     waitFor(() => expect(screen.getByText('01 Januari 2023 - Sekarang')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-    // expect(screen.getByText('01 Januari 2023 - Sekarang')).toBeInTheDocument();
   });
 
 });
@@ -154,9 +149,6 @@ describe('Experience Section Edge Case', () => {
         waitFor(() => expect(screen.getByText('Tech Corp • Penuh Waktu')).toBeInTheDocument(), { timeout: 5000 });
         waitFor(() => expect(screen.getByText('Software Engineer')).toBeInTheDocument(), { timeout: 5000 });
         waitFor(() => expect(screen.getByText('01 Januari 2023 - 01 Januari 2024')).toBeInTheDocument(), { timeout: 5000 });
-        // expect(screen.getByText('Tech Corp • Penuh Waktu')).toBeInTheDocument();
-        // expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-        // expect(screen.getByText('01 Januari 2023 - 01 Januari 2024')).toBeInTheDocument();
         
     });
 });
@@ -175,7 +167,6 @@ describe('Experience Delete Functionality', () => {
     
     expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
     waitFor(() => expect(screen.getByText('Tidak ada pengalaman')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
   });
   
   test('should delete only the selected experience when multiple exist', () => {
@@ -206,7 +197,6 @@ describe('Experience Delete Functionality', () => {
     
     expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
     waitFor(() => expect(screen.getByText('Product Manager')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByText('Product Manager')).toBeInTheDocument();
   });
   
   test('should not show delete button in add experience mode', () => {
@@ -231,7 +221,6 @@ describe('Experience Delete Functionality', () => {
     waitFor(() => {
       expect(screen.queryByText('Edit Pengalaman')).not.toBeInTheDocument();
     });
-    // expect(screen.getByText('Edit Pengalaman')).not.toBeInTheDocument();
   });
 
   test('should show "no experience" message after deleting the last experience', () => {
@@ -242,7 +231,7 @@ describe('Experience Delete Functionality', () => {
     fireEvent.click(screen.getByTestId("delete-button"));
     
     waitFor(() => expect(screen.getByText('Tidak ada pengalaman')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByText('Tidak ada pengalaman.')).toBeInTheDocument();
+
   }); 
   
   test('should keep edit mode active after deleting an experience', () => {
@@ -268,6 +257,6 @@ describe('Experience Delete Functionality', () => {
     fireEvent.click(screen.getByTestId("delete-button"));
     
     waitFor(() => expect(screen.getByTestId('edit-button-2')).toBeInTheDocument(), { timeout: 5000 });
-    // expect(screen.getByTestId("edit-button-2")).toBeInTheDocument();
+ 
   });
 });
