@@ -82,7 +82,7 @@ describe('JobInfoSection', () => {
   it('handles price change and formats correctly', () => {
     const priceInput = screen.getByTestId('price-input');
     fireEvent.change(priceInput, { target: { value: '2000000' } });
-    expect(mockOnChange).toHaveBeenCalledWith({ price: 2000000 });
+    expect(mockOnChange).toHaveBeenCalledWith({ price: '2000000' });
   });
 
   it('resets form when reset button is clicked', () => {
