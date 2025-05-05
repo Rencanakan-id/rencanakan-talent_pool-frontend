@@ -47,7 +47,7 @@ interface FormErrors {
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
   const { user, token } = useAuth();
-  const id = user.id || '';
+  const id = user.id?? '';
 
   const [experienceList, setExperienceList] = useState<ExperienceResponseDTO[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
