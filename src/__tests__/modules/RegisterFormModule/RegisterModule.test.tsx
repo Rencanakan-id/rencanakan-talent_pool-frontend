@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { RegisterModule } from "@/modules/RegisterFormModule";
 import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
+import { parseExperienceYearsToInt } from "@/lib/utils";
 
 // Fix TypeScript errors with proper typing for mocks
 // Properly type the global fetch mock
@@ -305,22 +306,7 @@ describe("Registration Page Negative Case", () => {
 });
 
 describe("parseExperienceYears function", () => {
-  const parseExperienceYears = (yearsExp: string): number => {
-    switch (yearsExp) {
-      case '< 1 Tahun':
-        return 0;
-      case '1 Tahun':
-        return 1;
-      case '2-3 Tahun':
-        return 2;
-      case '4-5 Tahun':
-        return 3;
-      case '> 5 Tahun':
-        return 4;
-      default:
-        return 0;
-    }
-  };
+  const parseExperienceYears = parseExperienceYearsToInt;
 
   it("maps experience years correctly for all possible values", () => {
     expect(parseExperienceYears('< 1 Tahun')).toBe(0);
