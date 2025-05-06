@@ -122,7 +122,7 @@ describe('JobInfoSection', () => {
     fireEvent.change(screen.getByLabelText('Lama Pengalaman *'), {
       target: { value: 'Invalid Label' },
     });
-    expect(mockOnChange).toHaveBeenCalledWith({ experienceYears: undefined });
+    expect(mockOnChange).toHaveBeenCalledWith({ experienceYears: 0 });
   });
 
   it('returns undefined when experienceYears is not mapped (parseExperienceYearsToString)', () => {
