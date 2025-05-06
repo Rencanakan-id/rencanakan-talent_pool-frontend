@@ -6,6 +6,30 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function capitalizeString(str: string): string {
+  // Handle empty string
+  if (!str) return str;
+  
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+export function formatIndonesianPhoneNumber(phoneNumber: string): string {
+  const cleanedNumber = phoneNumber.replace(/\D/g, '');
+
+  if (cleanedNumber.startsWith('0')) {
+    return '+62 ' + cleanedNumber.substring(1);
+  }
+
+  if (cleanedNumber.startsWith('62')) {
+    return '+' + cleanedNumber;
+  }
+
+  return '+62 ' + cleanedNumber;
+}
+
 type UpdateFn<T> = (data: Partial<T>) => void;
 
 interface HandleHargaChangeParams<T> {
@@ -54,7 +78,7 @@ export const parseExperienceYearsToString = (yearsExp: number): string | undefin
       case 2:
         return '2-3 Tahun';
       case 3:
-        return '5 Tahun';
+        return '4-5 Tahun';
       case 4:
         return '> 5 Tahun';
     }
@@ -68,7 +92,7 @@ export const parseExperienceYearsToInt = (yearsExp: string): number| undefined =
         return 1;
       case '2-3 Tahun':
         return 2;
-      case '5 Tahun':
+      case '4-5 Tahun':
         return 3;
       case '> 5 Tahun':
         return 4;
