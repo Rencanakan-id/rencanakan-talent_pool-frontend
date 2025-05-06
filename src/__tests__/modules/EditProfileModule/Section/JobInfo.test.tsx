@@ -217,7 +217,7 @@ describe('JobInfoSection additional tests', () => {
         onChange={mockOnChange}
       />
     );
-    expect(screen.getByLabelText('Lama Pengalaman *')).toHaveValue('5 Tahun');
+    expect(screen.getByLabelText('Lama Pengalaman *')).toHaveValue('4-5 Tahun');
     cleanup();
   });
 

@@ -246,7 +246,7 @@ describe("Registration Page Positive Case", () => {
   });
 
   it("successfully submits the form with 5 years experience", async () => {
-    await completeRegistration("5 Tahun", 3);
+    await completeRegistration("4-5 Tahun", 3);
   });
 });
 
@@ -313,7 +313,7 @@ describe("parseExperienceYears function", () => {
         return 1;
       case '2-3 Tahun':
         return 2;
-      case '5 Tahun':
+      case '4-5 Tahun':
         return 3;
       case '> 5 Tahun':
         return 4;
@@ -326,7 +326,7 @@ describe("parseExperienceYears function", () => {
     expect(parseExperienceYears('< 1 Tahun')).toBe(0);
     expect(parseExperienceYears('1 Tahun')).toBe(1);
     expect(parseExperienceYears('2-3 Tahun')).toBe(2);
-    expect(parseExperienceYears('5 Tahun')).toBe(3);
+    expect(parseExperienceYears('4-5 Tahun')).toBe(3);
     expect(parseExperienceYears('> 5 Tahun')).toBe(4);
     expect(parseExperienceYears('Invalid Value')).toBe(0);
   });
