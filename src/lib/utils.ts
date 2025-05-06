@@ -96,5 +96,7 @@ export const parseExperienceYearsToInt = (yearsExp: string): number| undefined =
         return 3;
       case '> 5 Tahun':
         return 4;
+      default:
+        return 0
     }
   };
