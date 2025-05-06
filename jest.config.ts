@@ -8,11 +8,15 @@ const config: Config = {
   // Module resolution
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^@/config/env$': '<rootDir>/src/config/env.test.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   moduleDirectories: ['node_modules', 'src'],
 
-  // Setup files
+  // 👇 Tambahkan ini
+  setupFiles: ['<rootDir>/jest.env.ts'],
+
+  // Sudah ada, biarkan
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   // TypeScript configuration
