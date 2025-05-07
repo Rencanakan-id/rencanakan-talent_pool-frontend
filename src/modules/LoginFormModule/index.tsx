@@ -51,21 +51,21 @@ const LoginModule = () => {
     setEmailError(emailErr);
     setPasswordError(commentErr);
   
-    if (!isValid) throw new Error('Form tidak valid');
+    if (!isValid) return;
   
     try {
       console.log(formData);
       await login(formData.email, formData.password);
   
-      // Jika login berhasil, navigasi ke halaman utama
+      // Jika login berhasil, kasih tau ke sentry dan navigasi ke halaman utama
       console.log('Login berhasil');
       Sentry.captureMessage('User login success', 'info');
-      navigate('/preview'); // Navigasi ke halaman lain
+      navigate('/preview'); 
     } catch (error: any) {
       // Tangkap error dan kirim ke Sentry
       Sentry.captureException(error, {
         extra: {
-          email: formData.email,
+          emailProvided: !!formData.email,
           context: 'LoginModule.handleLogin',
         },
       });
