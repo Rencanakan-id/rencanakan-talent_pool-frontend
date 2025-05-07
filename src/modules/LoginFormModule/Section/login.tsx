@@ -79,7 +79,7 @@ export const LoginForm = ({
             <Typography variant="p4">
               Belum punya akun?{' '}
               <a
-                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-500"
+                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-700"
                 href="/register"
                 style={{ textDecoration: 'underline' }}
               >
@@ -103,7 +103,7 @@ export const LoginForm = ({
             </Typography>
             <Typography variant="p3" className="mt-4">
               <a
-                className="cursor-pointer text-white hover:text-blue-900"
+                className="cursor-pointer text-white hover:text-rencanakan-sea-blue-900"
                 href="https://rencanakan.id/about-us/"
                 style={{ textDecoration: 'underline' }}
               >
