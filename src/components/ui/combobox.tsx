@@ -80,12 +80,17 @@ export function Combobox({
                 variant="p4"
                 className={`${value ? 'text-rencanakan-type-black' : 'text-rencanakan-dark-gray'}`}
               >
-                {value 
-                  ? data.find((option) => option.value === value)?.label 
-                  : label.endsWith(" *")
-                    ? `Pilih ${label.substring(0, label.length - 2)}`
-                    : `Pilih ${label}`
-                }
+                {(() => {
+                  if (value) {
+                    return data.find((option) => option.value === value)?.label;
+                  }
+                  
+                  if (label.endsWith(" *")) {
+                    return `Pilih ${label.substring(0, label.length - 2)}`;
+                  }
+                  
+                  return `Pilih ${label}`;
+                })()}
               </Typography>
             </Button>
             <Typography
