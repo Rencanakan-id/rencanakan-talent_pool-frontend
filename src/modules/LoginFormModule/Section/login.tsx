@@ -79,7 +79,7 @@ export const LoginForm = ({
             <Typography variant="p4">
               Belum punya akun?{' '}
               <a
-                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-blue-700"
+                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-500"
                 href="/register"
                 style={{ textDecoration: 'underline' }}
               >
