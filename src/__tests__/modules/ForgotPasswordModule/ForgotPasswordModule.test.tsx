@@ -6,7 +6,7 @@ import { ForgotPasswordModule } from '@/modules';
 import { sendPasswordResetEmail } from '@/services/api';
 
 // Mock API service
-jest.mock('../services/api', () => ({
+jest.mock('@/services/api', () => ({
   sendPasswordResetEmail: jest.fn()
 }));
 
