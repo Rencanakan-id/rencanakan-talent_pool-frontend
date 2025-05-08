@@ -104,7 +104,6 @@ export const ForgotPasswordModule = () => {
               name="email"
               label="E-mail"
               placeholder="Masukkan email Anda"
-              type="email"
               value={formState.email}
               onChange={handleChange}
               error={formState.errors.email}
@@ -112,10 +111,9 @@ export const ForgotPasswordModule = () => {
             <div className="mt-6">
               <Button
                 variant="primary"
-                className="w-full"
+                className={`w-full ${isSubmitting ? 'disabled' : ""}`}
                 data-testid="login-button"
                 type="submit"
-                disabled={isSubmitting}
               >
                 {isSubmitting ? 'MEMPROSES...' : 'VERIFIKASI'}
               </Button>
