@@ -64,7 +64,13 @@ export const LoginForm = ({
             />
           </div>
 
-          <div className="mt-6">
+          <Typography variant="p4" className="mt-2 text-rencanakan-sea-blue-500">
+            <a href="/forgot-password" className="hover:text-blue-700 text-blue-500">
+              Lupa kata sandi?
+            </a>
+          </Typography>
+
+          <div className="mt-4">
             <Button
               variant="primary"
               className="w-full"
