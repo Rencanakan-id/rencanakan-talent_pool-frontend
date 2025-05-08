@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ForgotPasswordModule } from '@/modules';
-import { sendPasswordResetEmail } from '../services/api';
+import { sendPasswordResetEmail } from '@/services/api';
 
 // Mock API service
 jest.mock('../services/api', () => ({
