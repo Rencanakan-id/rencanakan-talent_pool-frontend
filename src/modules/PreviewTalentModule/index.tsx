@@ -14,15 +14,8 @@ import Certificate from '@/components/ui/certificate';
 export const PreviewTalentModule: React.FC = () => {
   const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
-  const { experience, isLoading: isExperienceLoading } = useExperience(
-    user?.id
-  );
-  const { 
-    certification, 
-    isLoading: isCertificationLoading,
-    handleEditCertificate,
-    handleDeleteCertificate 
-  } = useCertification(user?.id);
+  const { experience, isLoading: isExperienceLoading } = useExperience(user?.id);
+  const { certification, isLoading: isCertificationLoading } = useCertification(user?.id);
   
   const { 
     recommendations, 
@@ -65,13 +58,7 @@ export const PreviewTalentModule: React.FC = () => {
           <div className="w-full flex-col items-center space-y-4 p-4">
             {userProfile && <UserProfileCard user={userProfile} />}
             {experience && <Experience experiences={experience} />}
-            {certification && (
-              <Certificate 
-                certificates={certification}
-                onEdit={handleEditCertificate}
-                onDelete={handleDeleteCertificate}
-              />
-            )}
+            {certification && <Certificate />}
             {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {recommendations && (
               <RecommendationCard 

@@ -1,11 +1,12 @@
-import { CertificateDetail } from "@/components/ui/certificate";
+import { CertificationRequestDTO, CertificationResponseDTO } from "@/lib/certificate";
+import { env } from "@/config/env";
 
 export class CertificationService {
-  private static readonly BASE_URL = "http://88.222.245.148:8080/api";
+  // private static readonly BASE_URL = import.meta.env.VITE_BASE_URL ?? "http://localhost:8080/api";
 
-  static async getCertificates(userId: string, token: string) {
+  static async getCertifications(userId: string, token: string) {
     try {
-      const res = await fetch(`${this.BASE_URL}/certificates/user/${userId}`, {
+      const res = await fetch(`${env.API_BASE_URL}/certificates/user/${userId}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json" 
@@ -16,75 +17,81 @@ export class CertificationService {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to fetch certificates: ${res.status}`);
       }
-      console.log("Certificates fetched successfully:", res);
-      return res.json();
+
+      const json = await res.json()
+      console.log("Certifications fetched successfully:", res);
+      return json.data as CertificationResponseDTO[];
     } catch (error) {
       console.error("Error fetching certificates:", error);
       throw error;
     }
   }
 
-  static async addCertificate(token: string, certificateData: CertificateDetail) {
+  static async addCertification(userId: string, token: string, certificateData: Omit<CertificationRequestDTO, 'id'>) {
     try {
-      const res = await fetch(`${this.BASE_URL}/certificates`, {
+
+      const requestData = {
+        title: certificateData.title,
+        file: certificateData.file,
+        userId: userId
+      };
+      console.log("Adding certificate with data:", requestData);
+
+      const res = await fetch(`${env.API_BASE_URL}/certificates`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json" 
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({"title": certificateData.title, "file": certificateData.file?.name})
+        body: JSON.stringify(requestData)
       });
-      
+
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to add certificate: ${res.status}`);
       }
+
+      const json = await res.json()
       
-      return res.json();
+      console.log("Certification added successfully:", res);
+      return json.data as CertificationResponseDTO;
     } catch (error) {
       console.error("Error adding certificate:", error);
       throw error;
     }
   }
 
-  static async updateCertificate(token: string, certificateId: number, certificateData: CertificateDetail) {
+  static async editCertification(token: string, certificateId: number, certificateData: Partial<CertificationRequestDTO>) {
     try {
-      const payload: { title: string; file?: string } = { 
-        "title": certificateData.title
-      };
-      
-      if (certificateData.file) {
-        payload.file = certificateData.file.name;
-      }
-      
-      const res = await fetch(`${this.BASE_URL}/certificates/${certificateId}`, {
+      const res = await fetch(`${env.API_BASE_URL}/certificates/${certificateId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json" 
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(certificateData)
       });
-      
+
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Failed to update certificate: ${res.status}`);
       }
+
+      const json = await res.json()
       
-      return res.json();
+      return json.data as CertificationResponseDTO;
     } catch (error) {
       console.error("Error updating certificate:", error);
       throw error;
     }
   }
 
-  static async deleteCertificate(token: string, certificateId: number) {
+  static async deleteCertification(token: string, certificateId: number) {
     try {
-      const res = await fetch(`${this.BASE_URL}/certificates/${certificateId}`, {
+      const res = await fetch(`${env.API_BASE_URL}/certificates/${certificateId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json" 
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -99,4 +106,5 @@ export class CertificationService {
       throw error;
     }
   }
+
 }

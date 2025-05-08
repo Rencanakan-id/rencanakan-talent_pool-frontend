@@ -1,15 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/authContext';
 import { CertificationService } from '@/services/CertificationService';
-import { CertificateDetail } from '../ui/certificate';
+import { CertificationResponseDTO } from '@/lib/certificate';
 
 export const useCertification = (userId?: string) => {
-  const [certification, setCertification] = useState<CertificateDetail[]>([]);
+  const [certification, setCertification] = useState<CertificationResponseDTO[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const { token } = useAuth();
 
-  const fetchCertificates = useCallback(async () => {
+  const fetchCertifications = useCallback(async () => {
     if (!userId || !token) {
       setIsLoading(false);
       return;
@@ -17,10 +16,9 @@ export const useCertification = (userId?: string) => {
 
     try {
       setIsLoading(true);
-      const data = await CertificationService.getCertificates(userId, token);
+      const data = await CertificationService.getCertifications(userId, token);
       setCertification(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch certificates');
       setCertification([]);
       console.error('Error fetching certificates:', err);
     } finally {
@@ -29,68 +27,8 @@ export const useCertification = (userId?: string) => {
   }, [userId, token]);
 
   useEffect(() => {
-    fetchCertificates();
-  }, [userId, token, fetchCertificates]);
+    fetchCertifications();
+  }, [userId, token, fetchCertifications]);
 
-  const handleAddCertificate = async (certificateData: CertificateDetail) => {
-    if (!token) return;
-    
-    try {
-      setIsLoading(true);
-      await CertificationService.addCertificate(token, certificateData);
-      await fetchCertificates();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add certificate');
-      console.error('Error adding certificate:', err);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleEditCertificate = async (certificateId: number, certificateData: CertificateDetail) => {
-    if (!token) return;
-    
-    try {
-      setIsLoading(true);
-      await CertificationService.updateCertificate(token, certificateId, certificateData);
-      await fetchCertificates();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update certificate');
-      console.error('Error updating certificate:', err);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeleteCertificate = async (certificateId: number) => {
-    if (!token) {
-      setError('No authentication token available');
-      return;
-    }
-    
-    try {
-      setIsLoading(true);
-      await CertificationService.deleteCertificate(token, certificateId);
-      await fetchCertificates();
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete certificate';
-      setError(errorMessage);
-      console.error('Error deleting certificate:', err);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return {
-    certification,
-    isLoading,
-    error,
-    handleAddCertificate,
-    handleEditCertificate,
-    handleDeleteCertificate,
-    refreshCertificates: fetchCertificates
-  };
+  return {certification, isLoading};
 };
