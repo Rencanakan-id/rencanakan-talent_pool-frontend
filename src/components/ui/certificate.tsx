@@ -24,14 +24,14 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
 
     const [certificateList, setCertificationList] = useState<CertificationResponseDTO[]>(certificates || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCertification, setEditingCertification] = useState<CertificationResponseDTO | null>(null);
+    const [editingCertification, setEditingCertificate] = useState<CertificationResponseDTO | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [wasValidated, setWasValidated] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const [certificateFormData, setCertificationFormData] = useState<CertificationRequestDTO>({
+    const [certificateFormData, setCertificateFormData] = useState<CertificationRequestDTO>({
         title: '',
         file: '', // String type as per CertificationRequestDTO
     });
@@ -61,7 +61,7 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setCertificationFormData((prev) => ({ ...prev, [name]: value }));
+        setCertificateFormData((prev) => ({ ...prev, [name]: value }));
         
         if (wasValidated && formErrors[name as keyof FormErrors]) {
             setFormErrors(prev => ({ ...prev, [name]: undefined }));
@@ -72,7 +72,7 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
         if (file) {
             // Store file info as string (could be a file path, URL, or other string representation)
             // You might need to adjust this based on how your API expects the file
-            setCertificationFormData((prev) => ({ 
+            setCertificateFormData((prev) => ({ 
                 ...prev, 
                 file: file.name // Or another string representation that works with your API
             }));
@@ -84,8 +84,8 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     };
 
     const handleAdd = () => {
-        setEditingCertification(null);
-        setCertificationFormData({
+        setEditingCertificate(null);
+        setCertificateFormData({
             title: '',
             file: '',
         });
@@ -95,8 +95,8 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     };
     
     const handleEdit = (cert: CertificationResponseDTO) => {
-        setEditingCertification(cert);
-        setCertificationFormData({
+        setEditingCertificate(cert);
+        setCertificateFormData({
             title: cert.title || '',
             file: cert.file || '',
         });
@@ -106,7 +106,7 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     };
 
     const handleDelete = async () => {
-        if (editingCertification && editingCertification.id) {
+        if (editingCertification?.id) {
             setIsLoading(true);
             setError(null);
             
@@ -148,7 +148,7 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
         setError(null);
         
         try {
-            if (editingCertification && editingCertification.id) {
+            if (editingCertification?.id) {
                 // Update existing certificate
                 const updatedCertification = await CertificationService.editCertification(
                     token, 
@@ -233,15 +233,13 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
                             </div>
                             <div className="flex space-x-2">
                                 {isEditMode ? (
-                                    <>
-                                        <button 
-                                            onClick={() => handleEdit(cert)}
-                                            data-testid={`edit-button-${cert.id}`}
-                                            className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
-                                        >
-                                            <Pencil size={16} />
-                                        </button>
-                                    </>
+                                    <button 
+                                        onClick={() => handleEdit(cert)}
+                                        data-testid={`edit-button-${cert.id}`}
+                                        className="p-2 rounded-full bg-rencanakan-base-gray hover:bg-rencanakan-dark-gray hover:text-rencanakan-base-gray cursor-pointer"
+                                    >
+                                        <Pencil size={16} />
+                                    </button>
                                 ) : (
                                     <Button 
                                         variant="primary" 
