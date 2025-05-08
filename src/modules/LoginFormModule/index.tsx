@@ -4,6 +4,7 @@ import { LoginForm } from './Section/login';
 import { LoginFormData } from '@/lib/login';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/context/authContext'; // Import useAuth dari AuthContext
+import * as Sentry from '@sentry/react';
 
 const LoginModule = () => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -54,13 +55,20 @@ const LoginModule = () => {
   
     try {
       console.log(formData);
-      await login(formData.email, formData.password); // Tunggu hasil login
+      await login(formData.email, formData.password);
   
-      // Jika login berhasil, navigasi ke halaman utama
+      // Jika login berhasil, kasih tau ke sentry dan navigasi ke halaman utama
       console.log('Login berhasil');
-      navigate('/preview'); // Navigasi ke halaman lain
+      Sentry.captureMessage('User login success', 'info');
+      navigate('/preview'); 
     } catch (error: any) {
-      // console.error('Login Failed:', error.message);
+      // Tangkap error dan kirim ke Sentry
+      Sentry.captureException(error, {
+        extra: {
+          emailProvided: !!formData.email,
+          context: 'LoginModule.handleLogin',
+        },
+      });
       setEmailError('Email atau password salah');
       setPasswordError('Email atau password salah');
     }
