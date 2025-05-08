@@ -8,12 +8,10 @@ import { useUserProfile } from '@/components/hooks/useUserProfile';
 import { useExperience } from '@/components/hooks/useExperience';
 import { useRecommendation } from '@/components/hooks/useRecommendation';
 import RecommendationCard from '@/components/ui/recommendation';
-import { useNavigate } from 'react-router-dom';
 import { useCertification } from '@/components/hooks/useCertification';
 import Certificate from '@/components/ui/certificate';
 
 export const PreviewTalentModule: React.FC = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { userProfile, isLoading: isUserLoading } = useUserProfile();
   const { experience, isLoading: isExperienceLoading } = useExperience(
@@ -45,7 +43,7 @@ export const PreviewTalentModule: React.FC = () => {
   }
 
   const handleEdit = () => {
-    navigate('/edit');
+    window.location.href = '/edit';
   };
 
   return (
@@ -66,7 +64,6 @@ export const PreviewTalentModule: React.FC = () => {
           <img src="./dummy/profile.svg" alt="Logo" className="h-[250px] w-[250px]" />
           <div className="w-full flex-col items-center space-y-4 p-4">
             {userProfile && <UserProfileCard user={userProfile} />}
-            {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {experience && <Experience experiences={experience} />}
             {certification && (
               <Certificate 
@@ -75,6 +72,7 @@ export const PreviewTalentModule: React.FC = () => {
                 onDelete={handleDeleteCertificate}
               />
             )}
+            {userProfile?.preferredLocations && <Location data={userProfile.preferredLocations} />}
             {recommendations && (
               <RecommendationCard 
                 recommendations={recommendations} 
