@@ -22,9 +22,9 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     const { user, token } = useAuth();
     const id = user.id ?? '';
 
-    const [certificateList, setCertificationList] = useState<CertificationResponseDTO[]>(certificates || []);
+    const [certificationList, setCertificationList] = useState<CertificationResponseDTO[]>(certificates || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCertification, setEditingCertificate] = useState<CertificationResponseDTO | null>(null);
+    const [editingCertification, setEditingCertification] = useState<CertificationResponseDTO | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [wasValidated, setWasValidated] = useState(false);
@@ -84,7 +84,7 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     };
 
     const handleAdd = () => {
-        setEditingCertificate(null);
+        setEditingCertification(null);
         setCertificateFormData({
             title: '',
             file: '',
@@ -95,7 +95,7 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     };
     
     const handleEdit = (cert: CertificationResponseDTO) => {
-        setEditingCertificate(cert);
+        setEditingCertification(cert);
         setCertificateFormData({
             title: cert.title || '',
             file: cert.file || '',
@@ -216,9 +216,9 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
             {isLoading && <Typography variant="p3" className="text-rencanakan-dark-gray mt-2">Memuat...</Typography>}
             {error && <Typography variant="p3" className="text-red-500 mt-2">{error}</Typography>}
 
-            {!isLoading && certificateList.length > 0 ? (
+            {!isLoading && certificationList.length > 0 ? (
                 <div className="w-full space-y-4">
-                    {certificateList.map((cert) => (
+                    {certificationList.map((cert) => (
                         <div key={cert.id} className="min-h-18 space-y-1 space-x-2 flex items-center justify-between bg-rencanakan-lightest-gray border-rencanakan-light-gray border-[1px] rounded-xl p-4">
                             <div className="flex space-x-2 items-center">
                                 <img src="/pdf.svg" alt="Logo" className="h-8 w-8" draggable={false} />
