@@ -1,7 +1,7 @@
 import { CertificateDetail } from "@/components/ui/certificate";
 
 export class CertificationService {
-  private static readonly BASE_URL = "http://localhost:8080/api";
+  private static readonly BASE_URL = "http://88.222.245.148:8080/api";
 
   static async getCertificates(userId: string, token: string) {
     try {
