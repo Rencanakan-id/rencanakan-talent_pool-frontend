@@ -4,6 +4,7 @@ import { hargaJasa } from '@/data/hargaJasa';
 import { RegisterFormData } from '@/lib/register';
 import { skkLevels } from '@/data/skkLevels';
 import { yearsOfExperience } from '@/data/yearsOfExperience';
+import { formatToRupiah, handleHargaChange } from '@/lib/utils';
 
 interface StepThreeFormProps {
   formData: RegisterFormData;
@@ -23,31 +24,6 @@ export const StepThreeForm: React.FC<StepThreeFormProps> = ({ formData, updateFo
       ?.label.replace(' Tahun', '') ?? 'Unknown';
   const minHargaSewa = hargaJasa[skkLevel]?.[yearsOfExp]?.min ?? 0;
   const maxHargaSewa = hargaJasa[skkLevel]?.[yearsOfExp]?.max ?? 0;
-
-  const formatToRupiah = (number: string | number) => {
-    if (!number) return '';
-    const numStr = Number(number).toString();
-    let formatted = '';
-    let counter = 0;
-
-    for (let i = numStr.length - 1; i >= 0; i--) {
-      formatted = numStr[i] + formatted;
-      counter++;
-      if (counter % 3 === 0 && i !== 0) {
-        formatted = '.' + formatted;
-      }
-    }
-    return `Rp${formatted}`;
-  };
-
-  const handleHargaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/[^\d]/g, '');
-    updateFormData({ price: rawValue });
-
-    if (inputRef.current) {
-      inputRef.current.value = `${formatToRupiah(rawValue)}`;
-    }
-  };
 
   return (
     <>
@@ -74,7 +50,7 @@ export const StepThreeForm: React.FC<StepThreeFormProps> = ({ formData, updateFo
         label="Tentukan Harga Kamu *"
         style={{ marginTop: '30px' }}
         placeholder="Rp. -"
-        onChange={handleHargaChange}
+        onChange={(e) => handleHargaChange({ e, updateFn: updateFormData, inputRef, key: 'price' })}
         defaultValue={formatToRupiah(formData.price ?? '')}
       />
     </>

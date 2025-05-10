@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/context/authContext";
 import { UserService } from "@/services/UserService";
-import { ExperienceDetail } from "../ui/experience";
+import { ExperienceResponseDTO } from "@/lib/experience"
 
 export function useExperience(userId?: string) {
-  const [experience, setExperience] = useState<ExperienceDetail[] | null>(null);
+  const [experience, setExperience] = useState<ExperienceResponseDTO[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { token } = useAuth();
 

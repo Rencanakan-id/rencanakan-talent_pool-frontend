@@ -7,7 +7,7 @@ const mockUser: UserProfile = {
   firstName: 'Gabriella',
   lastName: 'Naomi',
   email: 'gabriella@example.com',
-  phoneNumber: '+62 8123456789',
+  phoneNumber: '08123456789',
   address: 'Jl. Merdeka No.1, Jakarta',
   job: 'Software Engineer',
   photo: '',

@@ -9,6 +9,7 @@ import { validateStepFourForm } from '@/lib/validation/stepFourFormValidation';
 import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
 import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
+import { parseExperienceYearsToInt } from '@/lib/utils';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -130,19 +131,6 @@ export const RegisterModule = () => {
     setFormState((prev) => Math.max(prev - 1, 1));
   };
 
-  const parseExperienceYears = (yearsExp: string ): number | undefined => {
-    switch (yearsExp) {
-      case '1 Tahun':
-        return 1;
-      case '2-3 Tahun':
-        return 2;
-      case '5 Tahun':
-        return 3;
-      case '> 5 Tahun':
-        return 4;
-    }
-  };
-
   const handleSubmit = async () => {
     if (formState === 4) {
       const { password, passwordConfirmation, termsAndConditions } = formData;
@@ -163,7 +151,7 @@ export const RegisterModule = () => {
             nik: formData.nik,
             npwp: formData.npwp,
             aboutMe: formData.aboutMe,
-            experienceYears: parseExperienceYears(formData.yearsOfExperience || ''),
+            experienceYears: parseExperienceYearsToInt(formData.yearsOfExperience ?? ''),
             skkLevel: formData.skkLevel,
             currentLocation: formData.currentLocation,
             preferredLocations: formData.preferredLocations || [],

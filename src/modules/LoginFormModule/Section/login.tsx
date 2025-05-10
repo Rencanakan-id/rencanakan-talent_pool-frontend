@@ -42,25 +42,25 @@ export const LoginForm = ({
             <Input
               data-testid="email-input"
               name="email"
-              label="E-mail"
+              label="E-mail *"
               placeholder="Masukkan email Anda"
               type="email"
               value={formData.email ?? ''}
               onChange={handleInputChange}
               error={emailError}
-              data-error={emailError} // Add this line
+              data-error={emailError}
             />
 
             <Input
               data-testid="password-input"
               name="password"
-              label="Kata Sandi"
-              placeholder="Masukkan kata sandi"
+              label="Kata Sandi *"
+              placeholder="Masukkan kata sandi Anda"
               type="password"
               value={formData.password ?? ''}
               onChange={handleInputChange}
               error={commentError}
-              data-error={commentError} // Add this line
+              data-error={commentError}
             />
           </div>
 
@@ -79,7 +79,7 @@ export const LoginForm = ({
             <Typography variant="p4">
               Belum punya akun?{' '}
               <a
-                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-blue-700"
+                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-700"
                 href="/register"
                 style={{ textDecoration: 'underline' }}
               >
@@ -101,10 +101,11 @@ export const LoginForm = ({
               kontraktor dalam mencari dan merekrut talenta sesuai kebutuhan proyek mereka secara
               cepat dan efisien.
             </Typography>
-            <Typography variant="p5" className="mt-4">
+            <Typography variant="p3" className="mt-4">
               <a
-                className="cursor-pointer text-white hover:text-blue-700"
+                className="cursor-pointer text-white hover:text-rencanakan-sea-blue-900"
                 href="https://rencanakan.id/about-us/"
+                style={{ textDecoration: 'underline' }}
               >
                 Pelajari lebih lanjut
               </a>
