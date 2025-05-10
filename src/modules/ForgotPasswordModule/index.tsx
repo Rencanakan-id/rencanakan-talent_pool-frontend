@@ -45,20 +45,8 @@ export const ForgotPasswordModule = () => {
     
     const trimmedEmail = email.trim();
     
-    // Limit overall length before applying regex
-    if (trimmedEmail.length > 254) {
-      setFormState(prev => ({
-        ...prev,
-        errors: {
-          ...prev.errors,
-          email: 'Email terlalu panjang',
-        }
-      }));
-      return false;
-    }
-
     // More permissive regex that still avoids backtracking issues
-const emailRegex = /^[^\s@]{1,100}@[^\s@]+(?:\.[^\s@]+)+$/;
+    const emailRegex = /^[^\s@]{1,64}@[^\s@]{1,255}(?:\.[^\s@]{1,63})+$/;
     
     if (!emailRegex.test(trimmedEmail)) {
       setFormState(prev => ({
