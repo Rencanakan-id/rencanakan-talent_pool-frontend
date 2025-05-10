@@ -57,7 +57,8 @@ export const ForgotPasswordModule = () => {
       return false;
     }
 
-    const emailRegex = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]{1,64}@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){1,}$/;
+    // More permissive regex that still avoids backtracking issues
+const emailRegex = /^[^\s@]{1,100}@[^\s@]+(?:\.[^\s@]+)+$/;
     
     if (!emailRegex.test(trimmedEmail)) {
       setFormState(prev => ({

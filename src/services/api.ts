@@ -11,7 +11,7 @@ export const sendPasswordResetEmail = async (email: string): Promise<{ success: 
       if (!response.ok) {
         // Parse error response
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to send password reset email');
+        throw new Error(errorData.message?? 'Failed to send password reset email');
       }
   
       return await response.json();
