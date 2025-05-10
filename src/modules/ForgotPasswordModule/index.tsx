@@ -31,7 +31,7 @@ export const ForgotPasswordModule = () => {
 
   // 2. Validate email function
   const validateEmail = (email: string): boolean => {
-    // Basic email validation
+    // Check if empty
     if (!email.trim()) {
       setFormState(prev => ({
         ...prev,
@@ -42,9 +42,24 @@ export const ForgotPasswordModule = () => {
       }));
       return false;
     }
+    
+    const trimmedEmail = email.trim();
+    
+    // Limit overall length before applying regex
+    if (trimmedEmail.length > 254) {
+      setFormState(prev => ({
+        ...prev,
+        errors: {
+          ...prev.errors,
+          email: 'Email terlalu panjang',
+        }
+      }));
+      return false;
+    }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
+    const emailRegex = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]{1,64}@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){1,}$/;
+    
+    if (!emailRegex.test(trimmedEmail)) {
       setFormState(prev => ({
         ...prev,
         errors: {
@@ -54,7 +69,7 @@ export const ForgotPasswordModule = () => {
       }));
       return false;
     }
-
+    
     return true;
   };
 
