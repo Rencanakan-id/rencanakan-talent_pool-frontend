@@ -20,7 +20,7 @@ interface FormErrors {
 
 const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     const { user, token } = useAuth();
-    const id = user.id ?? '';
+    const id = user?.id ?? '';
 
     const [certificationList, setCertificationList] = useState<CertificationResponseDTO[]>(certificates || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,10 +40,10 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
         if (!certificates || certificates.length === 0) {
             fetchCertifications();
         }
-    }, [user.id, token]);
+    }, [user?.id, token]);
 
     const fetchCertifications = async () => {
-        if (!user.id || !token) return;
+        if (!user?.id || !token) return;
         
         setIsLoading(true);
         setError(null);
