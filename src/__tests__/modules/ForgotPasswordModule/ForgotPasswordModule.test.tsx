@@ -16,8 +16,12 @@ const mockSendPasswordResetEmail = sendPasswordResetEmail as jest.Mock;
 describe('ForgotPasswordModule Page', () => {
   let delayPromise: () => Promise<any>;
 
+  const resolveSuccess = (resolve: (value: any) => void) => {
+    setTimeout(() => resolve({ success: true }), 100);
+  };
+
   beforeEach(() => {
-    delayPromise = () => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100));
+    delayPromise = () => new Promise(resolveSuccess);
     jest.clearAllMocks();
   });
 
