@@ -5,6 +5,7 @@ import { skkLevels } from '@/data/skkLevels';
 import { locations } from '@/data/location';
 import { skills } from '@/data/skills';
 import { UserProfile } from '@/components/ui/profile';
+import { handleHargaChange, formatToRupiah, parseExperienceYearsToInt, parseExperienceYearsToString } from '@/lib/utils';
 
 interface Props {
   data: UserProfile;
@@ -30,62 +31,6 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
       inputRef.current.value = formatToRupiah(initialData.price ?? 0);
     }
   };
-
-  const handleHargaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/[^\d]/g, '');
-    onChange({ price: Number(rawValue) });
-
-    if (inputRef.current) {
-      inputRef.current.value = formatToRupiah(rawValue);
-    }
-  };
-
-  const formatToRupiah = (number: string | number) => {
-    if (!number) return '';
-    const numStr = Number(number).toString();
-    let formatted = '';
-    let counter = 0;
-
-    for (let i = numStr.length - 1; i >= 0; i--) {
-      formatted = numStr[i] + formatted;
-      counter++;
-      if (counter % 3 === 0 && i !== 0) {
-        formatted = '.' + formatted;
-      }
-    }
-    return `Rp${formatted}`;
-  };
-
-  const parseExperienceYearsToString = (yearsExp: number): string | undefined => {
-    switch (yearsExp) {
-      case 0:
-        return '< 1 Tahun'
-      case 1:
-        return '1 Tahun';
-      case 2:
-        return '2-3 Tahun';
-      case 3:
-        return '5 Tahun';
-      case 4:
-        return '> 5 Tahun';
-    }
-  };
-
-  const parseExperienceYearsToInt = (yearsExp: string): number| undefined => {
-    switch (yearsExp) {
-      case '< 1 Tahun':
-        return 0;
-      case '1 Tahun':
-        return 1;
-      case '2-3 Tahun':
-        return 2;
-      case '5 Tahun':
-        return 3;
-      case '> 5 Tahun':
-        return 4;
-    }
-  };
-
 
   return (
     <div className="w-full border border-gray-300 rounded-[4px] px-6 py-6 mt-4">
@@ -142,7 +87,7 @@ export const JobInfoSection: React.FC<Props> = ({ data, initialData, onChange })
           <Input
             label="Harga"
             placeholder="Rp. -"
-            onChange={handleHargaChange}
+            onChange={(e) => handleHargaChange({ e, updateFn: onChange, inputRef, key: 'price'})}
             className="h-9 px-[14px] py-[9px] sm:h-10 sm:px-5 sm:py-[11px]"
             defaultValue={formatToRupiah(data.price)}
             data-testid = "price-input"

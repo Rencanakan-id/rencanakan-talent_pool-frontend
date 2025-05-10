@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { RegisterModule } from "@/modules/RegisterFormModule";
 import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
+import { parseExperienceYearsToInt } from "@/lib/utils";
 
 // Fix TypeScript errors with proper typing for mocks
 // Properly type the global fetch mock
@@ -246,7 +247,7 @@ describe("Registration Page Positive Case", () => {
   });
 
   it("successfully submits the form with 5 years experience", async () => {
-    await completeRegistration("5 Tahun", 3);
+    await completeRegistration("4-5 Tahun", 3);
   });
 });
 
@@ -305,28 +306,13 @@ describe("Registration Page Negative Case", () => {
 });
 
 describe("parseExperienceYears function", () => {
-  const parseExperienceYears = (yearsExp: string): number => {
-    switch (yearsExp) {
-      case '< 1 Tahun':
-        return 0;
-      case '1 Tahun':
-        return 1;
-      case '2-3 Tahun':
-        return 2;
-      case '5 Tahun':
-        return 3;
-      case '> 5 Tahun':
-        return 4;
-      default:
-        return 0;
-    }
-  };
+  const parseExperienceYears = parseExperienceYearsToInt;
 
   it("maps experience years correctly for all possible values", () => {
     expect(parseExperienceYears('< 1 Tahun')).toBe(0);
     expect(parseExperienceYears('1 Tahun')).toBe(1);
     expect(parseExperienceYears('2-3 Tahun')).toBe(2);
-    expect(parseExperienceYears('5 Tahun')).toBe(3);
+    expect(parseExperienceYears('4-5 Tahun')).toBe(3);
     expect(parseExperienceYears('> 5 Tahun')).toBe(4);
     expect(parseExperienceYears('Invalid Value')).toBe(0);
   });
