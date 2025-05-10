@@ -14,7 +14,10 @@ jest.mock('@/services/api', () => ({
 const mockSendPasswordResetEmail = sendPasswordResetEmail as jest.Mock;
 
 describe('ForgotPasswordModule Page', () => {
+  let delayPromise: () => Promise<any>;
+
   beforeEach(() => {
+    delayPromise = () => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100));
     jest.clearAllMocks();
   });
 
@@ -206,8 +209,6 @@ describe('ForgotPasswordModule Page', () => {
     });
 
     test('prevents multiple form submissions while processing', async () => {
-      // Mock delayed API response - reduce nesting with async/await
-      const delayPromise = () => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100));
       mockSendPasswordResetEmail.mockImplementation(() => delayPromise());
       
       renderWithRouter();
@@ -231,8 +232,6 @@ describe('ForgotPasswordModule Page', () => {
     });
 
     test('shows disabled button during submission', async () => {
-      // Mock delayed API response
-      const delayPromise = () => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100));
       mockSendPasswordResetEmail.mockImplementation(() => delayPromise());
       
       renderWithRouter();
