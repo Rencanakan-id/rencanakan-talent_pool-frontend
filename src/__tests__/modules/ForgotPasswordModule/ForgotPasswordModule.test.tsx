@@ -207,12 +207,8 @@ describe('ForgotPasswordModule Page', () => {
 
     test('prevents multiple form submissions while processing', async () => {
       // Mock delayed API response - reduce nesting with async/await
-      mockSendPasswordResetEmail.mockImplementation(
-        async () => {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          return { success: true };
-        }
-      );
+      const delayPromise = () => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100));
+      mockSendPasswordResetEmail.mockImplementation(() => delayPromise());
       
       renderWithRouter();
       
@@ -236,12 +232,8 @@ describe('ForgotPasswordModule Page', () => {
 
     test('shows disabled button during submission', async () => {
       // Mock delayed API response
-      mockSendPasswordResetEmail.mockImplementation(
-        async () => {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          return { success: true };
-        }
-      );
+      const delayPromise = () => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100));
+      mockSendPasswordResetEmail.mockImplementation(() => delayPromise());
       
       renderWithRouter();
       
