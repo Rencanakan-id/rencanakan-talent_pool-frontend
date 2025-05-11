@@ -9,6 +9,7 @@ import { ModalFormWrapper } from './modalFormWrapper';
 import { ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/lib/experience';
 import { ExperienceService } from '@/services/ExperienceService';
 import { useAuth } from '../context/authContext';
+import DOMPurify from 'dompurify';
 
 // Define employment type labels
 const employmentTypeLabels: Record<string, string> = {
@@ -97,7 +98,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setExperienceFormData((prev) => ({ ...prev, [name]: value }));
+    const sanitizedValue = DOMPurify.sanitize(value);
+    setExperienceFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
     
     // Clear error for this field if it was previously set
     if (wasValidated && formErrors[name as keyof FormErrors]) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Typography } from "../atoms/typography";
 import { Button } from "./button";
 import { Input } from "./input";
+import DOMPurify from 'dompurify';
 import { Edit, Plus, Download, Pencil } from "lucide-react";
 import { FileInput } from "./fileInput";
 import { ModalFormWrapper } from "./modalFormWrapper";
@@ -61,7 +62,8 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setCertificateFormData((prev) => ({ ...prev, [name]: value }));
+        const sanitizedValue = DOMPurify.sanitize(value);
+        setCertificateFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
         
         if (wasValidated && formErrors[name as keyof FormErrors]) {
             setFormErrors(prev => ({ ...prev, [name]: undefined }));
@@ -70,11 +72,9 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
 
     const handleFileChange = (file: File | null) => {
         if (file) {
-            // Store file info as string (could be a file path, URL, or other string representation)
-            // You might need to adjust this based on how your API expects the file
             setCertificateFormData((prev) => ({ 
                 ...prev, 
-                file: file.name // Or another string representation that works with your API
+                file: file.name
             }));
             
             if (wasValidated && formErrors.file) {
