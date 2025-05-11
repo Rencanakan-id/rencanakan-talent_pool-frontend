@@ -194,28 +194,10 @@ export const RegisterModule = () => {
   };
 
   const stepsContent: Record<number, ReactNode> = {
-    1: (
-      <StepOneForm
-        formData={formData}
-        updateFormData={updateFormData}
-        validationErrors={validationErrors}
-      />
-    ),
-    2: (
-      <StepTwoForm
-        formData={formData}
-        updateFormData={updateFormData}
-        validationErrors={validationErrors}
-      />
-    ),
+    1: <StepOneForm formData={formData} updateFormData={updateFormData} validationErrors={validationErrors} />,
+    2: <StepTwoForm formData={formData} updateFormData={updateFormData} validationErrors={validationErrors} />,
     3: <StepThreeForm formData={formData} updateFormData={updateFormData} />,
-    4: (
-      <StepFourForm
-        formData={formData}
-        updateFormData={updateFormData}
-        validationErrors={validationErrors}
-      />
-    ),
+    4: <StepFourForm formData={formData} updateFormData={updateFormData} validationErrors={validationErrors} />,
   };
 
   return (
