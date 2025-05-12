@@ -58,7 +58,7 @@ export const validateStepFourForm = (
       isValid = false;
     }
   }
-  // TermsAccepted is a separate check for overall validity, not a field error in the same way
+  
   if (!termsAccepted) {
     isValid = false;
   }

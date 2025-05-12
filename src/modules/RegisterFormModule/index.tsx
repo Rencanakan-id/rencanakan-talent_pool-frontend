@@ -104,8 +104,7 @@ export const RegisterModule = () => {
       ],
     },
     3: {
-      // Step 3's completeness is checked by isStepValid for button enablement.
-      // No specific field errors are set from here, but validation could be added if needed.
+      // Step 3's completeness has been checked by isStepValid
     },
   };
 
@@ -116,7 +115,6 @@ export const RegisterModule = () => {
       const stepDataToValidate: Partial<RegisterFormData> = {};
       currentStepConfig.keys.forEach((key) => {
         const value = formData[key];
-        // Ensure files are undefined if null, for consistent validation
         if (
           key === 'ktpFile' ||
           key === 'npwpFile' ||
@@ -137,13 +135,10 @@ export const RegisterModule = () => {
         setFormState((prev) => Math.min(prev + 1, 4));
       }
     } else if (formState === 3) {
-      // For Step 3, rely on isStepValid (checkStepCompleteness) for price field
       if (isStepValid) {
         setFormState((prev) => Math.min(prev + 1, 4));
       }
-      // If not valid, button is disabled, no specific errors set here for step 3.
     } else {
-      // Should not happen if all steps are configured or handled
       setFormState((prev) => Math.min(prev + 1, 4));
     }
   };
