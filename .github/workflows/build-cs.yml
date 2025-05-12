@@ -18,8 +18,8 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - uses: SonarSource/sonarqube-scan-action@v4
         env:
-          SONAR_TOKEN: sqp_02452c5508cfb5b65feedf8e177e08a9ec389477
-          SONAR_HOST_URL: https://sonarqube.cs.ui.ac.id
+          SONAR_TOKEN: ${{ secrets.CS_SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.CS_SONAR_HOST_URL }}
       # If you wish to fail your job when the Quality Gate is red, uncomment the
       # following lines. This would typically be used to fail a deployment.
       # We do not recommend to use this in a pull request. Prefer using pull request
