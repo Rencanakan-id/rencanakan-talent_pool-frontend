@@ -185,6 +185,49 @@ describe("Registration Page Positive Case", () => {
     });
   });
 
+  it("handles null and undefined file values correctly", async () => {
+    render(<RegisterModule />);
+
+    // Test with null values
+    const nullFormData = {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "081234567890",
+      nik: "1234567890123456",
+      npwp: "123456789012345",
+    };
+
+    // Update form with null values
+    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), nullFormData.firstName);
+    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), nullFormData.lastName);
+    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), nullFormData.email);
+    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), nullFormData.phoneNumber);
+    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), nullFormData.nik);
+    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), nullFormData.npwp);
+
+    const ktpFile = new File(['ktp content'], 'ktp.txt', { type: 'text/plain' });
+    const npwpFile = new File(['npwp content'], 'npwp.txt', { type: 'text/plain' });
+    const diplomaFile = new File(['diploma content'], 'diploma.txt', { type: 'text/plain' });
+
+    // Upload files
+    const ktpInput = screen.getByTestId('ktp-file-input');
+    const npwpInput = screen.getByTestId('npwp-file-input');
+    const diplomaInput = screen.getByTestId('diploma-file-input');
+
+    await userEvent.upload(ktpInput, ktpFile);
+    await userEvent.upload(npwpInput, npwpFile);
+    await userEvent.upload(diplomaInput, diplomaFile);
+
+    // Try to proceed again
+    fireEvent.click(screen.getByText("Selanjutnya"));
+
+    // Verify we can proceed to next step with valid files
+    await waitFor(() => {
+      expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument();
+    });
+  });
+
   it("converts null files to undefined in validation", async () => {
     render(<RegisterModule />);
     
@@ -217,6 +260,8 @@ describe("Registration Page Positive Case", () => {
     mockValidateStepOneForm.mockRestore();
   });
 
+  
+
   it("proceeds to another step and return with kembali button", async () => {
     render(<RegisterModule />);
     
@@ -233,6 +278,8 @@ describe("Registration Page Positive Case", () => {
 
     await waitFor(() => expect(screen.getByText("Lengkapi formulir dan mulai perjalanan karier kamu!")).toBeInTheDocument());
   });
+
+  
 
   it("successfully submits the form with < 1 year experience", async () => {
     await completeRegistration("< 1 Tahun", 0);
