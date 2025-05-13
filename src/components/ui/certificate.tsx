@@ -150,22 +150,18 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
         try {
             if (editingCertification?.id) {
                 // Update existing certificate
-                const updatedCertification = await CertificationService.editCertification(
+                await CertificationService.editCertification(
                     token, 
                     editingCertification.id, 
                     certificateFormData
                 );
                 
-                setCertificationList((prev) =>
-                    prev.map((cert) => (cert.id === editingCertification.id ? updatedCertification : cert))
-                );
+                fetchCertifications();
             } else {
                 // Add new certificate
-                const newCertification = await CertificationService.addCertification(id, token, certificateFormData);
-                
-                if (newCertification) {
-                    setCertificationList((prev) => [...prev, newCertification]);
-                }
+                await CertificationService.addCertification(id, token, certificateFormData);
+                fetchCertifications();
+
             }
             
             setIsModalOpen(false);
