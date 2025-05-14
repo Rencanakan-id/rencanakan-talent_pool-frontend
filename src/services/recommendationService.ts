@@ -1,4 +1,5 @@
 import { StatusType, RecommendationResponseDTO } from '@/components/ui/recommendation';
+import { env } from "@/config/env";
 
 interface WebResponse<T> {
   data: T;
@@ -7,11 +8,11 @@ interface WebResponse<T> {
 }
 
 export class RecommendationService {
-  private static readonly BASE_URL = 'http://88.222.245.148:8080/api';
+  // private static readonly BASE_URL = 'http://localhost:8081/api';
 
   static async getRecommendationsByTalentId(userId: string, token: string): Promise<RecommendationResponseDTO[]> {
     try {
-      const response = await fetch(`${this.BASE_URL}/recommendations/user/${userId}`, {
+      const response = await fetch(`${env.API_BASE_URL}/recommendations/user/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ export class RecommendationService {
     token: string
   ): Promise<RecommendationResponseDTO | null> {
     try {
-      const response = await fetch(`${this.BASE_URL}/recommendations/${recommendationId}`, {
+      const response = await fetch(`${env.API_BASE_URL}/recommendations/${recommendationId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +64,7 @@ export class RecommendationService {
     token: string
   ): Promise<Record<StatusType, RecommendationResponseDTO[]>> {
     try {
-      const response = await fetch(`${this.BASE_URL}/recommendations/user/${userId}/grouped-by-status`, {
+      const response = await fetch(`${env.API_BASE_URL}/recommendations/user/${userId}/grouped-by-status`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

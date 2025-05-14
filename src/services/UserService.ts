@@ -1,9 +1,11 @@
 // services/UserService.ts
+import { env } from "@/config/env";
+
 export class UserService {
-  private static readonly BASE_URL = 'http://88.222.245.148:8080';
+  // private static readonly BASE_URL = 'http://localhost:8081';
 
   static async getUserProfile(token: string) {
-    const res = await fetch(`${this.BASE_URL}/api/users/me`, {
+    const res = await fetch(`${env.API_BASE_URL}/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -12,7 +14,7 @@ export class UserService {
   }
 
   static async getUserExperience(userId: string, token: string) {
-    const res = await fetch(`${this.BASE_URL}/api/experiences/user/${userId}`, {
+    const res = await fetch(`${env.API_BASE_URL}/experiences/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

@@ -38,7 +38,7 @@ export function useRecommendation(userId?: string) {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      console.log(token, effectiveUserId);
+      // console.log(token, effectiveUserId);
       if (!token || !effectiveUserId) {
         setRecommendations(dummyRecommendations);
         setIsLoading(false);

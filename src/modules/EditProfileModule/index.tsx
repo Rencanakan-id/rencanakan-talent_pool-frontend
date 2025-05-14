@@ -70,7 +70,7 @@ export const EditProfileModule: React.FC = () => {
       };
 
       const response = await axios.put(
-        `http://88.222.245.148:8080/api/users/${formData.id}`,
+        `http://localhost:8081/api/users/${formData.id}`,
         updatedProfile,
         {
           headers: {
