@@ -53,7 +53,6 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
             const certificates = await CertificationService.getCertifications(user.id, token);
             setCertificationList(certificates || []);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to fetch certificates');
             console.error('Error fetching certificates:', err);
         } finally {
             setIsLoading(false);

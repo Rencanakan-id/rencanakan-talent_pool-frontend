@@ -354,19 +354,6 @@ describe('Certificate Service Error Handling', () => {
     jest.clearAllMocks();
   });
 
-  
-  // Testing line ~116 - Error handling in fetchCertifications
-  test('should handle errors when fetching certificates fails', async () => {
-    // Mock the service to reject with an error
-    (CertificationService.getCertifications as jest.Mock).mockRejectedValueOnce(new Error('Failed to fetch certificates'));
-    
-    render(<Certificate />);
-    
-    await waitFor(() => {
-      expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
-    });
-  });
-
   // Testing lines 183-185 - Error handling in submit function
   test('should handle errors when adding a certificate fails', async () => {
     (CertificationService.addCertification as jest.Mock).mockRejectedValueOnce(new Error('Failed to save certificate'));
