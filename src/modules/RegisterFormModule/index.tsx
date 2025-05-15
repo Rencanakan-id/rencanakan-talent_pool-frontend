@@ -10,6 +10,7 @@ import { validateStepOneForm } from '@/lib/validation/stepOneFormValidation';
 import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
 import { parseExperienceYearsToInt } from '@/lib/utils';
+import * as Sentry from '@sentry/react';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -187,10 +188,17 @@ export const RegisterModule = () => {
           }
 
           const responseData = await response.json().catch(() => ({}));
+          Sentry.captureMessage('Registration successful', responseData);
           console.log('Registration successful:', responseData);
           
           window.location.href = '/login';
         } catch (error) {
+          Sentry.captureException(error, {
+            extra: {
+              formData,
+              context: 'RegisterModule.handleSubmit',
+            },
+          });
           console.error('Registration error:', error);
           setSubmitError(
             error instanceof Error
