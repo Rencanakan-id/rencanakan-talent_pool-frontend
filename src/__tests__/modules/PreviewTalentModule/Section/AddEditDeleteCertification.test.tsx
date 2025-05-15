@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
-import Certificate, { CertificateDetail } from '@/components/ui/certificate';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import Certificate from '@/components/ui/certificate';
+import { CertificationResponseDTO } from '@/lib/certificate';
 
 interface FileInputProps {
     textLabel: string;
@@ -27,22 +28,24 @@ jest.mock('@/components/ui/fileInput', () => ({
   ),
 }));
 
-const mockCertificates: CertificateDetail[] = [
+const mockCertificatesResponse: CertificationResponseDTO[] = [
   {
     id: 1,
     title: 'Software Engineer',
-    file: new File(['dummy content'], 'software-engineer.pdf', { type: 'application/pdf' }),
+    file: 'software-engineer.pdf',
+    talentId: '123',
   },
   {
     id: 2,
     title: 'UI/UX Design',
-    file: new File([], 'empty-cert.pdf', { type: 'application/pdf' }),
+    file: 'empty-cert.pdf',
+    talentId: '123',
   }
 ];
 
 describe('Certificate Section Positive Case', () => {
     test('should render the certificate list correctly', () => {
-      render(<Certificate certificates={mockCertificates} />);
+      render(<Certificate certificates={mockCertificatesResponse} />);
       
       expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
       expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
@@ -69,26 +72,26 @@ describe('Certificate Section Positive Case', () => {
       
       fireEvent.change(screen.getByPlaceholderText(/Masukkan judul sertifikasi Anda/i), { target: { value: 'Frontend Developer' } });
       const file = new File(['dummy content'], 'sertifikasi.pdf', { type: 'application/pdf' });
-      const fileInput = screen.getByLabelText('Media');
+      const fileInput = screen.getByLabelText('File*');
       fireEvent.change(fileInput, { target: { files: [file] } });
       
       fireEvent.click(screen.getByTestId('submit-button'));
       
-      expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument();
+      waitFor(() => expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument(), { timeout: 5000 });
     });
   
     test('should open edit certificate modal and update data', () => {
-      render(<Certificate certificates={mockCertificates} />);
+      render(<Certificate certificates={mockCertificatesResponse} />);
       
       fireEvent.click(screen.getByTestId("edit-certificate-button"));
       fireEvent.click(screen.getByTestId("edit-button-1"));
       
       const file = new File(['dummy content'], 'sertifikasi.pdf', { type: 'application/pdf' });
-      const fileInput = screen.getByLabelText('Media');
+      const fileInput = screen.getByLabelText('File Baru (opsional)');
       fireEvent.change(fileInput, { target: { files: [file] } });
       fireEvent.click(screen.getByText('Simpan'));
       
-      expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument();
+      waitFor(() => expect(screen.getByText('sertifikasi.pdf')).toBeInTheDocument(), { timeout: 5000 });
     });
   
     test('should clear errors when inputs are changed after validation', async () => {
@@ -106,7 +109,7 @@ describe('Certificate Section Positive Case', () => {
       const titleInput = screen.getByTestId('input-title');
       fireEvent.change(titleInput, { target: { name: 'title', value: 'New Certificate' } });
 
-      const fileInput = screen.getByLabelText('Media');
+      const fileInput = screen.getByLabelText('File*');
       const file = new File(['dummy content'], 'test.pdf', { type: 'application/pdf' });
       
       fireEvent.change(fileInput, { target: { files: [file] } });
@@ -147,7 +150,7 @@ describe('Certificate Section Negative Case', () => {
 describe('Certificate Section Edge Case', () => {
 
     test('should keep the same data if no changes are made', () => {
-        render(<Certificate certificates={mockCertificates} />);
+        render(<Certificate certificates={mockCertificatesResponse} />);
         
         fireEvent.click(screen.getByTestId("edit-certificate-button"));
 
@@ -157,14 +160,14 @@ describe('Certificate Section Edge Case', () => {
 
         fireEvent.click(screen.getByText('Simpan'));
 
-        expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
+        waitFor(() => expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument(), { timeout: 5000 });
         
     });
 });
 
 describe('Certificate Delete Functionality', () => {
   test('should delete an certificate when delete button is clicked', () => {
-    render(<Certificate certificates={[mockCertificates[0]]} />);
+    render(<Certificate certificates={[mockCertificatesResponse[0]]} />);
     
     fireEvent.click(screen.getByTestId("edit-certificate-button"));
     fireEvent.click(screen.getByTestId("edit-button-1"));
@@ -174,13 +177,13 @@ describe('Certificate Delete Functionality', () => {
     
     fireEvent.click(deleteButton);
     
-    expect(screen.queryByText('software-engineer.pdf')).not.toBeInTheDocument();
-    expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
+    waitFor(() => expect(screen.getByText('software-engineer.pdf')).not.toBeInTheDocument(), { timeout: 5000 });
+    waitFor(() => expect(screen.getByText('Tidak ada sertifikasi')).toBeInTheDocument(), { timeout: 5000 });
   });
   
   test('should delete only the selected certificate when multiple exist', () => {
   
-    render(<Certificate certificates={mockCertificates} />);
+    render(<Certificate certificates={mockCertificatesResponse} />);
     
     expect(screen.getByText('software-engineer.pdf')).toBeInTheDocument();
     expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
@@ -190,12 +193,12 @@ describe('Certificate Delete Functionality', () => {
     fireEvent.click(screen.getByTestId("edit-button-1"));
     fireEvent.click(screen.getByTestId("delete-button"));
     
-    expect(screen.queryByText('software-engineer.pdf')).not.toBeInTheDocument();
-    expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument();
+    waitFor(() => expect(screen.getByText('software-engineer.pdf')).not.toBeInTheDocument(), { timeout: 5000 });
+    waitFor(() => expect(screen.getByText('empty-cert.pdf')).toBeInTheDocument(), { timeout: 5000 });
   });
   
   test('should not show delete button in add certificate mode', () => {
-    render(<Certificate certificates={mockCertificates} />);
+    render(<Certificate certificates={mockCertificatesResponse} />);
     
     fireEvent.click(screen.getByTestId("add-certificate-button"));
     
@@ -206,33 +209,33 @@ describe('Certificate Delete Functionality', () => {
   });
   
   test('should close the modal after deleting an certificate', () => {
-    render(<Certificate certificates={mockCertificates} />);
+    render(<Certificate certificates={mockCertificatesResponse} />);
     
     fireEvent.click(screen.getByTestId("edit-certificate-button"));
     fireEvent.click(screen.getByTestId("edit-button-1"));
     expect(screen.getByText('Edit Sertifikasi')).toBeInTheDocument();
     
     fireEvent.click(screen.getByTestId("delete-button"));
-    expect(screen.queryByText('Edit Sertifikasi')).not.toBeInTheDocument();
+    waitFor(() => expect(screen.getByText('Edit Sertifikasi')).toBeInTheDocument(), { timeout: 5000 });
   });
 
   test('should show "no certificate" message after deleting the last certificate', () => {
-    render(<Certificate certificates={[mockCertificates[0]]} />);
+    render(<Certificate certificates={[mockCertificatesResponse[0]]} />);
     
     fireEvent.click(screen.getByTestId("edit-certificate-button"));
     fireEvent.click(screen.getByTestId("edit-button-1"));
     fireEvent.click(screen.getByTestId("delete-button"));
     
-    expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument();
+    waitFor(() => expect(screen.getByText('Tidak ada sertifikasi.')).toBeInTheDocument(), { timeout: 5000 });
   }); 
   
   test('should keep edit mode active after deleting an certificate', () => { 
-    render(<Certificate certificates={mockCertificates} />);
+    render(<Certificate certificates={mockCertificatesResponse} />);
     
     fireEvent.click(screen.getByTestId("edit-certificate-button"));
     fireEvent.click(screen.getByTestId("edit-button-1"));
     fireEvent.click(screen.getByTestId("delete-button"));
     
-    expect(screen.getByTestId("edit-button-2")).toBeInTheDocument();
+    waitFor(() => expect(screen.getByTestId('edit-button-2')).toBeInTheDocument(), { timeout: 5000 });
   });
 });

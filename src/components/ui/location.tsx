@@ -1,3 +1,4 @@
+import { capitalizeString } from '@/lib/utils';
 import { Typography } from '../atoms/typography';
 import { Badge } from './badge';
 
@@ -5,7 +6,11 @@ type LocationProps = Readonly<{
   data?: ReadonlyArray<string>;
 }>;
 
+
 function Location({ data = [] }: LocationProps) {
+  // Map through the data and capitalize each city name
+  const capitalizedLocations = data.map(location => capitalizeString(location));
+
   return (
     <div className="min-h-[119px] w-full rounded-[4px] border border-gray-300 px-6 py-6">
       <Typography variant="p1" className="pb-4">
@@ -14,7 +19,7 @@ function Location({ data = [] }: LocationProps) {
 
       {data.length > 0 ? (
         <div className="min-h-[23]px w-full flex-wrap space-y-3 space-x-1">
-          {data.map((loc) => (
+          {capitalizedLocations.map((loc) => (
             <Badge asChild key={loc} variant={'profileLocation'}>
               <Typography variant="p4" className="font-semibold text-black">
                 {loc}

@@ -70,7 +70,6 @@ export const validateSkill = (skill: string | undefined): string => {
  * @returns Empty string if valid, otherwise an error message
  */
 export const validateOtherSkill = (skill: string | undefined, otherSkill?: string): string => {
-  console.log(skill + '  asd   ' + otherSkill);
   if (skill === 'lainnya' && (!otherSkill || otherSkill.trim() === ''))
     return 'Harap isi keahlian kamu';
   return '';
@@ -103,37 +102,27 @@ export const validateStepTwoForm = (formData: {
     skkFile?: string;
   };
 } => {
-  const aboutMeError = validateAboutMe(formData.aboutMe);
-  const yearsOfExperienceError = validateYearsOfExperience(formData.yearsOfExperience);
-  const skkLevelError = validateSKKLevel(formData.skkLevel);
-  const currentLocationError = validateCurrentLocation(formData.currentLocation);
-  const preferredLocationsError = validatePreferredLocations(formData.preferredLocations);
-  const skillError = validateSkill(formData.skill);
-  const otherSkillError = validateOtherSkill(formData.skill, formData.otherSkill);
-  const skkFileError = validateFile(formData.skkFile);
-
-  const errors = {
-    aboutMe: formData.aboutMe !== undefined ? aboutMeError : undefined,
-    yearsOfExperience:
-      formData.yearsOfExperience !== undefined ? yearsOfExperienceError : undefined,
-    skkLevel: formData.skkLevel !== undefined ? skkLevelError : undefined,
-    currentLocation: formData.currentLocation !== undefined ? currentLocationError : undefined,
-    preferredLocations:
-      formData.preferredLocations !== undefined ? preferredLocationsError : undefined,
-    skill: formData.skill !== undefined ? skillError : undefined,
-    otherSkill: formData.otherSkill !== undefined ? otherSkillError : undefined,
-    skkFile: formData.skkFile !== null ? skkFileError : undefined,
+  const errorsResult = {
+    aboutMe: validateAboutMe(formData.aboutMe),
+    yearsOfExperience: validateYearsOfExperience(formData.yearsOfExperience),
+    skkLevel: validateSKKLevel(formData.skkLevel),
+    currentLocation: validateCurrentLocation(formData.currentLocation),
+    preferredLocations: validatePreferredLocations(formData.preferredLocations),
+    skill: validateSkill(formData.skill),
+    otherSkill: validateOtherSkill(formData.skill, formData.otherSkill),
+    skkFile: validateFile(formData.skkFile),
   };
 
-  const isValid =
-    aboutMeError === '' &&
-    yearsOfExperienceError === '' &&
-    skkLevelError === '' &&
-    currentLocationError === '' &&
-    preferredLocationsError === '' &&
-    skillError === '' &&
-    otherSkillError === '' &&
-    skkFileError === '';
+  const activeErrors: Partial<typeof errorsResult> = {};
+  let isValid = true;
 
-  return { isValid, errors };
+  for (const key in errorsResult) {
+    const errorValue = errorsResult[key as keyof typeof errorsResult];
+    if (errorValue) {
+      activeErrors[key as keyof typeof errorsResult] = errorValue;
+      isValid = false;
+    }
+  }
+
+  return { isValid, errors: activeErrors };
 };

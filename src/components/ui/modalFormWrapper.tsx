@@ -29,7 +29,7 @@ export const ModalFormWrapper: React.FC<ModalFormWrapperProps> = ({
       <div className="flex flex-col space-y-4 pt-1">
         {children}
 
-        <div className={isEditMode ? "grid grid-cols-2 gap-2" : ""}>
+        <div className={isEditMode ? "grid grid-cols-2 gap-2" : "flex justify-center items-center"}>
           {isEditMode && onDelete && (
             <Button
               variant="primary"
@@ -44,7 +44,7 @@ export const ModalFormWrapper: React.FC<ModalFormWrapperProps> = ({
           <Button
             variant="primary"
             data-testid="submit-button"
-            className="rounded-md font-[500]"
+            className="rounded-md font-[500] w-full"
             onClick={onSubmit}
           >
             <Typography variant="p2">{submitLabel}</Typography>

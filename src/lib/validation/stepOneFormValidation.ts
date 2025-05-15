@@ -105,35 +105,28 @@ export const validateStepOneForm = (formData: {
     diplomaFile?: string;
   };
 } => {
-  const firstNameError = validateFirstName(formData.firstName);
-  const emailError = validateEmail(formData.email);
-  const phoneNumberError = validatePhoneNumber(formData.phoneNumber);
-  const nikError = validateNIK(formData.nik);
-  const npwpError = validateNPWP(formData.npwp);
-  const ktpFileError = validateFile(formData.ktpFile);
-  const npwpFileError = validateFile(formData.npwpFile);
-  const diplomaFileError = validateFile(formData.diplomaFile);
-
-  const errors = {
-    firstName: formData.firstName !== undefined ? firstNameError : undefined,
-    email: formData.email !== undefined ? emailError : undefined,
-    phoneNumber: formData.phoneNumber !== undefined ? phoneNumberError : undefined,
-    nik: formData.nik !== undefined ? nikError : undefined,
-    npwp: formData.npwp !== undefined ? npwpError : undefined,
-    ktpFile: formData.ktpFile !== null ? ktpFileError : undefined,
-    npwpFile: formData.npwpFile !== null ? npwpFileError : undefined,
-    diplomaFile: formData.diplomaFile !== null ? diplomaFileError : undefined,
+  const errorsResult = {
+    firstName: validateFirstName(formData.firstName),
+    lastName: validateLastName(formData.lastName),
+    email: validateEmail(formData.email),
+    phoneNumber: validatePhoneNumber(formData.phoneNumber),
+    nik: validateNIK(formData.nik),
+    npwp: validateNPWP(formData.npwp),
+    ktpFile: validateFile(formData.ktpFile),
+    npwpFile: validateFile(formData.npwpFile),
+    diplomaFile: validateFile(formData.diplomaFile),
   };
 
-  const isValid =
-    firstNameError === '' &&
-    emailError === '' &&
-    phoneNumberError === '' &&
-    nikError === '' &&
-    npwpError === '' &&
-    ktpFileError === '' &&
-    npwpFileError === '' &&
-    diplomaFileError === '';
+  const activeErrors: Partial<typeof errorsResult> = {};
+  let isValid = true;
 
-  return { isValid, errors };
+  for (const key in errorsResult) {
+    const errorValue = errorsResult[key as keyof typeof errorsResult];
+    if (errorValue) {
+      activeErrors[key as keyof typeof errorsResult] = errorValue;
+      isValid = false;
+    }
+  }
+
+  return { isValid, errors: activeErrors };
 };
