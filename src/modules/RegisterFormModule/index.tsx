@@ -61,70 +61,86 @@ export const RegisterModule = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const updateFormData = (data: Partial<RegisterFormData>) => {
-    setFormData((prev) => {
-      const newData = { ...prev, ...data };
-      return newData;
-    });
+    setFormData((prev) => ({ ...prev, ...data }));
   };
 
   const isStepValid = checkStepCompleteness(formState, formData);
 
+  type StepValidationFunction = (
+    stepData: Partial<RegisterFormData>
+  ) => { isValid: boolean; errors: Record<string, string> };
+
+  interface StepConfig {
+    validate?: StepValidationFunction;
+    keys?: (keyof RegisterFormData)[];
+  }
+
+  const stepConfig: Record<number, StepConfig> = {
+    1: {
+      validate: validateStepOneForm as StepValidationFunction,
+      keys: [
+        'firstName',
+        'lastName',
+        'email',
+        'phoneNumber',
+        'nik',
+        'npwp',
+        'ktpFile',
+        'npwpFile',
+        'diplomaFile',
+      ],
+    },
+    2: {
+      validate: validateStepTwoForm as StepValidationFunction,
+      keys: [
+        'aboutMe',
+        'yearsOfExperience',
+        'skkLevel',
+        'currentLocation',
+        'preferredLocations',
+        'skill',
+        'otherSkill',
+        'skkFile',
+      ],
+    },
+    3: {
+      // Step 3's completeness has been checked by isStepValid
+    },
+  };
+
   const handleNext = () => {
-    if (formState === 1) {
-      const { firstName, lastName, email, phoneNumber, nik, npwp, ktpFile, npwpFile, diplomaFile } =
-        formData;
-      const stepOneValidation = validateStepOneForm({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        nik,
-        npwp,
-        ktpFile: ktpFile === null ? undefined : ktpFile,
-        npwpFile: npwpFile === null ? undefined : npwpFile,
-        diplomaFile: diplomaFile === null ? undefined : diplomaFile,
+    const currentStepConfig = stepConfig[formState];
+
+    if (currentStepConfig?.validate && currentStepConfig.keys) {
+      const stepDataToValidate: Partial<RegisterFormData> = {};
+      currentStepConfig.keys.forEach((key) => {
+        const value = formData[key];
+        if (
+          key === 'ktpFile' ||
+          key === 'npwpFile' ||
+          key === 'diplomaFile' ||
+          key === 'skkFile' ||
+          key === 'profilePhoto'
+        ) {
+          stepDataToValidate[key] = value === null ? undefined : (value as any);
+        } else {
+          stepDataToValidate[key] = value as any;
+        }
       });
 
-      setValidationErrors(stepOneValidation.errors);
+      const validationResult = currentStepConfig.validate(stepDataToValidate);
+      setValidationErrors((prevErrors) => ({ ...prevErrors, ...validationResult.errors }));
 
-      if (stepOneValidation.isValid) {
+      if (validationResult.isValid) {
         setFormState((prev) => Math.min(prev + 1, 4));
       }
-      return;
-    }
-
-    if (formState === 2) {
-      const {
-        aboutMe,
-        yearsOfExperience,
-        skkLevel,
-        currentLocation,
-        preferredLocations,
-        skill,
-        otherSkill,
-        skkFile,
-      } = formData;
-
-      const stepTwoValidation = validateStepTwoForm({
-        aboutMe,
-        yearsOfExperience,
-        skkLevel,
-        currentLocation,
-        preferredLocations,
-        skill,
-        otherSkill,
-        skkFile: skkFile === null ? undefined : skkFile,
-      });
-
-      setValidationErrors(stepTwoValidation.errors);
-
-      if (stepTwoValidation.isValid) {
+    } else if (formState === 3) {
+      if (isStepValid) {
         setFormState((prev) => Math.min(prev + 1, 4));
       }
-      return;
+    } else {
+      setFormState((prev) => Math.min(prev + 1, 4));
     }
-
-    setFormState((prev) => Math.min(prev + 1, 4));
   };
 
   const handlePrev = () => {
