@@ -137,7 +137,7 @@ export const ForgotPasswordModule = () => {
               Sudah punya akun?{' '}
               <a
                 className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-blue-700 underline"
-                href="/register"
+                href="/login"
               >
                 Masuk
               </a>
