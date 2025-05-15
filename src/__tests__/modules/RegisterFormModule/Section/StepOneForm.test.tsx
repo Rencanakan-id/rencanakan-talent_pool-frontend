@@ -9,6 +9,7 @@ interface InputFileProps {
   accept?: string;
   state?: string;
   value?: string | null;
+  error?: string;
   onFileSelect: (file: File) => void;
 }
 
@@ -69,8 +70,8 @@ jest.mock('@/components', () => ({
       {error && <div className="error-message">{error}</div>}
     </div>
   ),
-  FileInput: ({ textLabel, accept, state, value, onFileSelect }: InputFileProps) => (
-    <div>
+  FileInput: ({ textLabel, accept, state, value, onFileSelect, error, compTestId }: InputFileProps & { error?: string, compTestId?: string }) => (
+    <div data-testid={compTestId}>
       <label>{textLabel}</label>
       <input
         type="file"
@@ -79,6 +80,7 @@ jest.mock('@/components', () => ({
         aria-label={textLabel}
       />
       {state === 'filled' && <span>{value}</span>}
+      {error && <div className="error-message">{error}</div>}
     </div>
   ),
 }));
@@ -220,12 +222,13 @@ describe('StepOneForm Component', () => {
         phoneNumber: undefined,
         nik: undefined,
         npwp: undefined,
-        ktpFile: null,
-        npwpFile: null,
-        diplomaFile: null,
+        ktpFile: new File(['dummy content'], 'ktp.txt', { type: 'text/plain' }),
+        npwpFile: new File(['dummy content'], 'npwp.txt', { type: 'text/plain' }),
+        diplomaFile: new File(['dummy content'], 'diploma.txt', { type: 'text/plain' }),
       } as Partial<RegisterFormData>);
 
       expect(container).toBeInTheDocument();
     });
   });
+
 });

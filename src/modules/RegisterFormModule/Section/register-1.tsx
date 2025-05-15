@@ -125,7 +125,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               state={formData.ktpFile ? 'filled' : 'empty'}
               value={formData.ktpFile?.name || ''}
               onFileSelect={(file) => updateFormData({ ktpFile: file })}
-              error={validationErrors?.ktpFile}
+              error={validationErrors.ktpFile}
             />
             <FileInput
               data-slot="input"
@@ -135,7 +135,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               state={formData.npwpFile ? 'filled' : 'empty'}
               value={formData.npwpFile?.name || ''}
               onFileSelect={(file) => updateFormData({ npwpFile: file })}
-              error={validationErrors?.npwpFile}
+              error={validationErrors.npwpFile}
             />
             <FileInput
               data-slot="input"
@@ -145,7 +145,7 @@ export const StepOneForm: React.FC<StepOneFormProps> = ({
               state={formData.diplomaFile ? 'filled' : 'empty'}
               value={formData.diplomaFile?.name || ''}
               onFileSelect={(file) => updateFormData({ diplomaFile: file })}
-              error={validationErrors?.diplomaFile}
+              error={validationErrors.diplomaFile}
             />
           </div>
         </section>

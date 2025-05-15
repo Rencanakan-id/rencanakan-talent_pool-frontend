@@ -10,6 +10,7 @@ import { ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationTy
 import { ExperienceService } from '@/services/ExperienceService';
 import { useAuth } from '../context/authContext';
 import * as Sentry from '@sentry/react';
+import DOMPurify from 'dompurify';
 
 // Define employment type labels
 const employmentTypeLabels: Record<string, string> = {
@@ -103,7 +104,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setExperienceFormData((prev) => ({ ...prev, [name]: value }));
+    const sanitizedValue = DOMPurify.sanitize(value);
+    setExperienceFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
     
     // Clear error for this field if it was previously set
     if (wasValidated && formErrors[name as keyof FormErrors]) {
@@ -113,11 +115,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return 'Sekarang';
-    try {
-      return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
-    } catch (e) {
-      return dateStr;
-    }
+      
+    return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
   };
 
   const handleAdd = () => {
@@ -180,18 +179,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       isValid = false;
     }
 
-    if (!experienceFormData.employmentType) {
-      errors.employmentType = 'Jenis pekerjaan harus dipilih';
-      isValid = false;
-    }
-
     if (!experienceFormData.location.trim()) {
       errors.location = 'Lokasi harus diisi';
-      isValid = false;
-    }
-
-    if (!experienceFormData.locationType) {
-      errors.locationType = 'Tipe lokasi harus dipilih';
       isValid = false;
     }
 
@@ -238,16 +227,14 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         const {  ...experienceData } = experienceFormData;
         console.log(user.id, token, experienceData);
         const newExperience = await ExperienceService.addExperience(id, token, experienceData);
+        console.log(newExperience);
 
         Sentry.captureMessage('New experience added', {
                             tags: { feature: 'user-data', environment: 'production' },
                             extra: { userId: user?.id }
                         });
         
-        if (newExperience) {
-          setExperienceList((prev) => [...prev, newExperience]);
-        }
-
+        fetchExperiences();
       }
       
       setIsModalOpen(false);
@@ -384,9 +371,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 value={experienceFormData.employmentType}
                 onChange={(value) => {
                   setExperienceFormData((prev) => ({ ...prev, employmentType: value as EmploymentType }));
-                  if (wasValidated && formErrors.employmentType) {
-                    setFormErrors(prev => ({ ...prev, employmentType: undefined }));
-                  }
                 }}
                 label="Jenis Pekerjaan*"
                 placeholder="Cari jenis pekerjaan..."
@@ -417,9 +401,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 value={experienceFormData.locationType}
                 onChange={(value) => {
                   setExperienceFormData((prev) => ({ ...prev, locationType: value as LocationType }));
-                  if (wasValidated && formErrors.locationType) {
-                    setFormErrors(prev => ({ ...prev, locationType: undefined }));
-                  }
                 }}
                 label="Tipe Lokasi*"
                 placeholder="Cari tipe lokasi..."
