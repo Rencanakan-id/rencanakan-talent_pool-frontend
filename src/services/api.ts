@@ -1,6 +1,8 @@
+import { env } from "@/config/env";
+
 export const sendPasswordResetEmail = async (email: string): Promise<{ success: boolean }> => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/forgot-password`, {
+      const response = await fetch(`${env.API_BASE_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

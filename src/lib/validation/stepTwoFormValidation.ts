@@ -70,7 +70,6 @@ export const validateSkill = (skill: string | undefined): string => {
  * @returns Empty string if valid, otherwise an error message
  */
 export const validateOtherSkill = (skill: string | undefined, otherSkill?: string): string => {
-  console.log(skill + '  asd   ' + otherSkill);
   if (skill === 'lainnya' && (!otherSkill || otherSkill.trim() === ''))
     return 'Harap isi keahlian kamu';
   return '';

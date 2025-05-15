@@ -93,7 +93,7 @@ describe('ForgotPasswordModule Page', () => {
       const loginLink = screen.getByText('Masuk');
       
       // Check that the link has the correct href
-      expect(loginLink.closest('a')).toHaveAttribute('href', '/register'); // As per the HTML in the original code
+      expect(loginLink.closest('a')).toHaveAttribute('href', '/login'); // As per the HTML in the original code
     });
   });
 
