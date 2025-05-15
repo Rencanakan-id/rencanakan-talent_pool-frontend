@@ -9,6 +9,7 @@ import { ModalFormWrapper } from "./modalFormWrapper";
 import { useAuth } from '../context/authContext';
 import { CertificationService } from '@/services/CertificationService';
 import { CertificationRequestDTO, CertificationResponseDTO } from "@/lib/certificate";
+import * as Sentry from '@sentry/react';
 
 interface CertificationProps {
     certificates?: CertificationResponseDTO[] | null;
@@ -161,12 +162,20 @@ const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
                 await CertificationService.addCertification(id, token, certificateFormData);
                 fetchCertifications();
 
+                Sentry.captureMessage('New certificate added', {
+                    tags: { feature: 'user-data', environment: 'production' },
+                    extra: { userId: user?.id }
+                });
             }
             
             setIsModalOpen(false);
             setFormErrors({});
             setWasValidated(false);
         } catch (err) {
+            Sentry.captureException(err, {
+                    tags: { feature: 'user-data', environment: 'production' },
+                    extra: { userId: user?.id }
+                  });
             setError(err instanceof Error ? err.message : 'Failed to save certificate');
             console.error('Error saving certificate:', err);
         } finally {

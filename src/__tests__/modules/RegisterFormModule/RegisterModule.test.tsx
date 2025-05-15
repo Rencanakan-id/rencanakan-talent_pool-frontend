@@ -4,21 +4,16 @@ import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
 import { parseExperienceYearsToInt } from "@/lib/utils";
 
-// Fix TypeScript errors with proper typing for mocks
-// Properly type the global fetch mock
 global.fetch = jest.fn() as jest.Mock;
 
-// Properly define ResizeObserver mock
 global.ResizeObserver = class ResizeObserver {
   observe(): void { console.log('ResizeObserver: observe called'); }
   unobserve(): void { console.log('ResizeObserver: unobserve called'); }
   disconnect(): void { console.log('ResizeObserver: disconnect called'); }
 } as unknown as typeof ResizeObserver;
 
-// Fix scrollIntoView mock
 HTMLElement.prototype.scrollIntoView = jest.fn() as jest.Mock;
 
-// Properly handle window.location mock
 const originalLocation = window.location;
 const locationMock = {
   ...originalLocation,

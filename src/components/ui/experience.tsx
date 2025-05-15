@@ -9,6 +9,7 @@ import { ModalFormWrapper } from './modalFormWrapper';
 import { ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/lib/experience';
 import { ExperienceService } from '@/services/ExperienceService';
 import { useAuth } from '../context/authContext';
+import * as Sentry from '@sentry/react';
 import DOMPurify from 'dompurify';
 
 // Define employment type labels
@@ -88,7 +89,12 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     try {
       const experiences = await ExperienceService.getExperiences(user.id, token);
       setExperienceList(experiences || []);
+      
     } catch (err) {
+      Sentry.captureException(err, {
+        tags: { feature: 'user-data', environment: 'production' },
+        extra: { userId: user?.id }
+      });
       setError(err instanceof Error ? err.message : 'Failed to fetch experiences');
       console.error('Error fetching experiences:', err);
     } finally {
@@ -222,6 +228,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         console.log(user.id, token, experienceData);
         const newExperience = await ExperienceService.addExperience(id, token, experienceData);
         console.log(newExperience);
+
+        Sentry.captureMessage('New experience added', {
+                            tags: { feature: 'user-data', environment: 'production' },
+                            extra: { userId: user?.id }
+                        });
         
         if (newExperience) {
           setExperienceList((prev) => [...prev, newExperience]);
@@ -233,6 +244,10 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       setFormErrors({});
       setWasValidated(false);
     } catch (err) {
+      Sentry.captureException(err, {
+        tags: { feature: 'user-data', environment: 'production' },
+        extra: { userId: user?.id }
+      });
       setError(err instanceof Error ? err.message : 'Failed to save experience');
       console.error('Error saving experience:', err);
     } finally {

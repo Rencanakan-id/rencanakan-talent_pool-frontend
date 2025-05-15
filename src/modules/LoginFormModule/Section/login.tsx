@@ -1,5 +1,5 @@
 // login.tsx - UI/Presentation component only
-import { Typography, Input, Button } from '@/components';
+import { Typography, Input, Button, AuthBanner } from '@/components';
 import { ChangeEvent } from 'react';
 import { LoginFormData } from '@/lib/login';
 
@@ -64,7 +64,13 @@ export const LoginForm = ({
             />
           </div>
 
-          <div className="mt-6">
+          <Typography variant="p4" className="mt-2 text-rencanakan-sea-blue-500">
+            <a href="/forgot-password" className="hover:text-blue-700 text-blue-500">
+              Lupa kata sandi?
+            </a>
+          </Typography>
+
+          <div className="mt-4">
             <Button
               variant="primary"
               className="w-full"
@@ -90,28 +96,7 @@ export const LoginForm = ({
         </div>
 
         {/* Right side - Banner */}
-        <div className="bg-rencanakan-premium-gold-300 hidden p-8 md:block md:w-1/2">
-          <div className="flex h-full flex-col justify-center">
-            <Typography variant="h4" className="mb-4 text-white">
-              Selamat datang!
-            </Typography>
-            <Typography variant="p2" className="text-white">
-              Talent Pool adalah fitur dari Rencanakan.id yang memungkinkan tenaga ahli di bidang
-              konstruksi untuk mendaftar dan menunjukkan keterampilan mereka. Fitur ini memudahkan
-              kontraktor dalam mencari dan merekrut talenta sesuai kebutuhan proyek mereka secara
-              cepat dan efisien.
-            </Typography>
-            <Typography variant="p3" className="mt-4">
-              <a
-                className="cursor-pointer text-white hover:text-rencanakan-sea-blue-900"
-                href="https://rencanakan.id/about-us/"
-                style={{ textDecoration: 'underline' }}
-              >
-                Pelajari lebih lanjut
-              </a>
-            </Typography>
-          </div>
-        </div>
+        <AuthBanner />
       </div>
     </div>
   );

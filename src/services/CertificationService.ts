@@ -2,7 +2,6 @@ import { CertificationRequestDTO, CertificationResponseDTO } from "@/lib/certifi
 import { env } from "@/config/env";
 
 export class CertificationService {
-  // private static readonly BASE_URL = import.meta.env.VITE_BASE_URL ?? "http://localhost:8080/api";
 
   static async getCertifications(userId: string, token: string) {
     try {
