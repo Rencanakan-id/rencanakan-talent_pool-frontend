@@ -42,8 +42,8 @@ jobs:
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.CS_SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.CS_SONAR_HOST_URL }}
         with:
           args: >
             -Dsonar.projectKey=rencanakan-talent_pool-frontend

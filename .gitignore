@@ -40,3 +40,5 @@ reports/
 *.sln
 *.sw?
 coverage/
+.lighthouseci/
+

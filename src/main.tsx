@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/react';
 import { browserTracingIntegration } from '@sentry/browser';
 import './index.css';
 import App from './App';
-import { DesignSystemModule, LandingPageModule, PreviewTalentModule } from './modules';
+import { DesignSystemModule, LandingPageModule, PreviewTalentModule, ForgotPasswordModule } from './modules';
 import { RegisterModule } from './modules/RegisterFormModule';
 import LoginModule from './modules/LoginFormModule';
 import { EditProfileModule } from './modules/EditProfileModule';
@@ -33,7 +33,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/register" element={<RegisterModule />} />
           <Route path="/login" element={<LoginModule />} />
           <Route path="/edit" element={<EditProfileModule />} />
-        </Route>
+          <Route path="/forgot-password" element={<ForgotPasswordModule />} />
+      </Route>
       </Routes>
     </BrowserRouter>
   </Sentry.ErrorBoundary>
