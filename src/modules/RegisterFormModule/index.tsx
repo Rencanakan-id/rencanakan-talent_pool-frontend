@@ -103,9 +103,6 @@ export const RegisterModule = () => {
         'skkFile',
       ],
     },
-    3: {
-      // Step 3's completeness has been checked by isStepValid
-    },
   };
 
   const handleNext = () => {
@@ -138,9 +135,7 @@ export const RegisterModule = () => {
       if (isStepValid) {
         setFormState((prev) => Math.min(prev + 1, 4));
       }
-    } else {
-      setFormState((prev) => Math.min(prev + 1, 4));
-    }
+    } 
   };
 
   const handlePrev = () => {
