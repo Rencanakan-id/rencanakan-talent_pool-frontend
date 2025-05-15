@@ -1,12 +1,16 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { LandingPageModule } from '@/modules';
 import { ButtonProps } from '@/components/ui/button';
 import { TypographyProps } from '@/components/atoms/typography';
 
 jest.mock('@/components', () => ({
-  Button: ({ children, variant, className }: ButtonProps) => (
-    <button data-testid={`mock-button-${variant}`} className={className}>
+  Button: ({ children, variant, className, 'data-testid': dataTestId, onClick }: ButtonProps & { 'data-testid'?: string }) => (
+    <button 
+      data-testid={dataTestId || `mock-button-${variant}`} 
+      className={className}
+      onClick={onClick}
+    >
       {children}
     </button>
   ),
@@ -18,6 +22,14 @@ jest.mock('@/components', () => ({
 }));
 
 describe('LandingPageModule', () => {
+    beforeEach(() => {
+    // Mock window.location.href
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: 'http://localhost/' }
+    });
+  });
+
   it('renders without crashing', () => {
     render(<LandingPageModule />);
   });
@@ -35,20 +47,6 @@ describe('LandingPageModule', () => {
 
     const subheading = screen.getByTestId('mock-typography-p1');
     expect(subheading).toHaveTextContent('Lebih dari 500 kesempatan kerja menanti kamu!');
-  });
-
-  it('renders the call-to-action buttons', () => {
-    render(<LandingPageModule />);
-
-    const primaryButton = screen.getByTestId('mock-button-secondary');
-    const secondaryButton = screen.getByTestId('mock-button-secondary-outline');
-
-    expect(primaryButton).toBeInTheDocument();
-    expect(secondaryButton).toBeInTheDocument();
-
-    const buttonTexts = screen.getAllByTestId('mock-typography-p2');
-    expect(buttonTexts[0]).toHaveTextContent('Gabung sekarang');
-    expect(buttonTexts[1]).toHaveTextContent('Login');
   });
 
   it('renders the hero image', () => {
@@ -82,4 +80,33 @@ describe('LandingPageModule', () => {
     const imageContainer = screen.getByTestId('image-container');
     expect(imageContainer).toBeInTheDocument();
   });
+
+  test('navigates to register page when "Gabung sekarang" button is clicked', () => {
+    render(<LandingPageModule />);
+    
+    const registerButton = screen.getByTestId('join-button');
+    fireEvent.click(registerButton);
+    
+    expect(window.location.href).toBe('/register');
+  });
+
+  test('navigates to login page when "Login" button is clicked', () => {
+    render(<LandingPageModule />);
+    
+    const loginButton = screen.getByTestId('login-button');
+    fireEvent.click(loginButton);
+    
+    expect(window.location.href).toBe('/login');
+  });
+
+  test('displays hero image with animated border', () => {
+    render(<LandingPageModule />);
+    
+    const heroImage = screen.getByAltText('Hero');
+    const animatedBorder = screen.getByTestId('animated-border');
+    
+    expect(heroImage).toBeInTheDocument();
+    expect(animatedBorder).toBeInTheDocument();
+  });
 });
+

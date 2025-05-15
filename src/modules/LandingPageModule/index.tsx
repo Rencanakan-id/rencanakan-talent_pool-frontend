@@ -32,6 +32,7 @@ export const LandingPageModule: React.FC = () => {
 
         <div className="relative mt-6 flex gap-3 font-semibold max-md:justify-center lg:mt-12">
           <Button
+            data-testid="join-button"
             variant="secondary"
             className="lg:!h-11"
             onClick={() => {
@@ -43,6 +44,7 @@ export const LandingPageModule: React.FC = () => {
             </Typography>
           </Button>
           <Button
+            data-testid="login-button"
             variant="secondary-outline"
             className="lg:!h-11"
             onClick={() => {
