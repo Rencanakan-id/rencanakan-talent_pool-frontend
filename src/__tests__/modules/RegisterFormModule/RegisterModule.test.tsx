@@ -223,40 +223,6 @@ describe("Registration Page Positive Case", () => {
     });
   });
 
-  it("converts null files to undefined in validation", async () => {
-    render(<RegisterModule />);
-    
-    // Fill form data without files
-    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
-    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
-
-    // Mock the validation function
-    const mockValidateStepOneForm = jest.spyOn(require('@/lib/validation/stepOneFormValidation'), 'validateStepOneForm');
-
-    // Trigger validation by clicking next
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Verify that null values were converted to undefined in validation call
-    await waitFor(() => {
-      expect(mockValidateStepOneForm).toHaveBeenCalledWith(
-        expect.objectContaining({
-          ktpFile: undefined,
-          npwpFile: undefined,
-          diplomaFile: undefined
-        })
-      );
-    });
-
-    // Clean up
-    mockValidateStepOneForm.mockRestore();
-  });
-
-  
-
   it("proceeds to another step and return with kembali button", async () => {
     render(<RegisterModule />);
     

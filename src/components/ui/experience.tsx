@@ -234,10 +234,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                             extra: { userId: user?.id }
                         });
         
-        if (newExperience) {
-          setExperienceList((prev) => [...prev, newExperience]);
-        }
-
+        fetchExperiences();
       }
       
       setIsModalOpen(false);
