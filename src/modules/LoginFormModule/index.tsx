@@ -14,7 +14,7 @@ const LoginModule = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const { login} = useAuth(); // Gunakan login dari AuthContext
+  const { login } = useAuth(); // Gunakan login dari AuthContext
   const navigate = useNavigate();
 
   const updateFormData = (data: Partial<LoginFormData>) => {

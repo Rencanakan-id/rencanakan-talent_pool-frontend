@@ -27,7 +27,7 @@ describe('LoginForm', () => {
 
   test('renders input fields correctly', () => {
     expect(screen.getByPlaceholderText('Masukkan email Anda')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Masukkan kata sandi')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Masukkan kata sandi Anda')).toBeInTheDocument();
   });
 
   test('calls updateFormData when typing in input fields', () => {
@@ -38,7 +38,7 @@ describe('LoginForm', () => {
       expect.objectContaining({ email: 'test@example.com' })
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Masukkan kata sandi'), {
+    fireEvent.change(screen.getByPlaceholderText('Masukkan kata sandi Anda'), {
       target: { value: randomPassword },
     });
     expect(mockUpdateFormData).toHaveBeenCalledWith(
@@ -106,7 +106,7 @@ describe('LoginForm - Null Values', () => {
     expect(screen.getByPlaceholderText('Masukkan email Anda')).toHaveValue('');
 
     // Cek bahwa input password memiliki value kosong (bukan null)
-    expect(screen.getByPlaceholderText('Masukkan kata sandi')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Masukkan kata sandi Anda')).toHaveValue('');
   });
 
   test('updates null values correctly', () => {
