@@ -3,7 +3,6 @@ import { FileInput } from '../components/ui/fileInput';
 import { action } from '@storybook/addon-actions';
 import React from 'react';
 
-// Meta object for FileInput component
 const meta: Meta<typeof FileInput> = {
   title: 'Components/FileInput',
   component: FileInput,
@@ -49,7 +48,6 @@ const meta: Meta<typeof FileInput> = {
 export default meta;
 type Story = StoryObj<typeof FileInput>;
 
-// Basic example
 export const Default: Story = {
   args: {
     textLabel: 'Upload a file',
@@ -58,7 +56,6 @@ export const Default: Story = {
   },
 };
 
-// With initial value
 export const WithValue: Story = {
   args: {
     textLabel: 'Upload a file',
@@ -69,7 +66,6 @@ export const WithValue: Story = {
   },
 };
 
-// With error state
 export const WithError: Story = {
   args: {
     textLabel: 'Upload a file',
@@ -81,10 +77,8 @@ export const WithError: Story = {
   },
 };
 
-// Interactive example with state management
 export const Interactive: Story = {
   render: (args) => {
-    // Using function component to manage state
     const InteractiveComponent = () => {
       const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
       const [fileState, setFileState] = React.useState<'empty' | 'filled' | 'error'>('empty');
@@ -100,8 +94,7 @@ export const Interactive: Story = {
           return;
         }
 
-        // Check file size (example: max 5MB)
-        const maxSize = 5 * 1024 * 1024; // 5MB
+        const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
           setFileState('error');
           setErrorMessage(`File size exceeds ${maxSize / (1024 * 1024)}MB limit`);
@@ -141,7 +134,6 @@ export const Interactive: Story = {
   },
 };
 
-// Showing different file type restrictions
 export const PDFOnly: Story = {
   args: {
     textLabel: 'Upload a PDF file',
