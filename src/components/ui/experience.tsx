@@ -109,11 +109,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return 'Sekarang';
-    try {
-      return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
-    } catch (e) {
-      return dateStr;
-    }
+      
+    return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
   };
 
   const handleAdd = () => {
@@ -176,18 +173,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       isValid = false;
     }
 
-    if (!experienceFormData.employmentType) {
-      errors.employmentType = 'Jenis pekerjaan harus dipilih';
-      isValid = false;
-    }
-
     if (!experienceFormData.location.trim()) {
       errors.location = 'Lokasi harus diisi';
-      isValid = false;
-    }
-
-    if (!experienceFormData.locationType) {
-      errors.locationType = 'Tipe lokasi harus dipilih';
       isValid = false;
     }
 
@@ -234,6 +221,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         const {  ...experienceData } = experienceFormData;
         console.log(user.id, token, experienceData);
         const newExperience = await ExperienceService.addExperience(id, token, experienceData);
+        console.log(newExperience);
         
         if (newExperience) {
           setExperienceList((prev) => [...prev, newExperience]);
@@ -371,9 +359,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 value={experienceFormData.employmentType}
                 onChange={(value) => {
                   setExperienceFormData((prev) => ({ ...prev, employmentType: value as EmploymentType }));
-                  if (wasValidated && formErrors.employmentType) {
-                    setFormErrors(prev => ({ ...prev, employmentType: undefined }));
-                  }
                 }}
                 label="Jenis Pekerjaan*"
                 placeholder="Cari jenis pekerjaan..."
@@ -404,9 +389,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 value={experienceFormData.locationType}
                 onChange={(value) => {
                   setExperienceFormData((prev) => ({ ...prev, locationType: value as LocationType }));
-                  if (wasValidated && formErrors.locationType) {
-                    setFormErrors(prev => ({ ...prev, locationType: undefined }));
-                  }
                 }}
                 label="Tipe Lokasi*"
                 placeholder="Cari tipe lokasi..."
