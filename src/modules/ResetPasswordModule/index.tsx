@@ -9,8 +9,8 @@ interface FormState {
   password: string;
   confirmPassword: string;
   errors: {
-    password?: string;
-    confirmPassword?: string;
+    pw?: string;
+    confirmPw?: string;
   };
 }
 
@@ -43,12 +43,12 @@ export const ResetPasswordModule = () => {
     const errors: FormState["errors"] = {};
 
     if (password.length < MIN_PASSWORD_LENGTH) {
-        errors.password = `Password minimal ${MIN_PASSWORD_LENGTH} karakter`;
+        errors.pw= `Password minimal ${MIN_PASSWORD_LENGTH} karakter`;
     }
     if (!confirmPassword) {
-        errors.confirmPassword = "Konfirmasi password harus diisi";
+        errors.confirmPw= "Konfirmasi password harus diisi";
     } else if (password !== confirmPassword) {
-        errors.confirmPassword = "Password tidak cocok";
+        errors.confirmPw = "Password tidak cocok";
     }
 
     if (Object.keys(errors).length > 0) {
@@ -97,7 +97,7 @@ export const ResetPasswordModule = () => {
               placeholder="Masukkan password baru"
               value={formState.password}
               onChange={handleChange}
-              error={formState.errors.password}
+              error={formState.errors.pw}
             />
             <Input
               name="confirmPassword"
@@ -107,7 +107,7 @@ export const ResetPasswordModule = () => {
               placeholder="Konfirmasi password baru"
               value={formState.confirmPassword}
               onChange={handleChange}
-              error={formState.errors.confirmPassword}
+              error={formState.errors.confirmPw}
               className="mt-4"
             />
             <div className="mt-6">
