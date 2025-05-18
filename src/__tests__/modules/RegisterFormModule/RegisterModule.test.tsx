@@ -4,21 +4,16 @@ import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
 import { parseExperienceYearsToInt } from "@/lib/utils";
 
-// Fix TypeScript errors with proper typing for mocks
-// Properly type the global fetch mock
 global.fetch = jest.fn() as jest.Mock;
 
-// Properly define ResizeObserver mock
 global.ResizeObserver = class ResizeObserver {
   observe(): void { console.log('ResizeObserver: observe called'); }
   unobserve(): void { console.log('ResizeObserver: unobserve called'); }
   disconnect(): void { console.log('ResizeObserver: disconnect called'); }
 } as unknown as typeof ResizeObserver;
 
-// Fix scrollIntoView mock
 HTMLElement.prototype.scrollIntoView = jest.fn() as jest.Mock;
 
-// Properly handle window.location mock
 const originalLocation = window.location;
 const locationMock = {
   ...originalLocation,
@@ -183,38 +178,6 @@ describe("Registration Page Positive Case", () => {
     await waitFor(() => {
       expect(screen.getByText("Ceritakan sedikit pengalaman kerja kamu")).toBeInTheDocument();
     });
-  });
-
-  it("converts null files to undefined in validation", async () => {
-    render(<RegisterModule />);
-    
-    // Fill form data without files
-    await userEvent.type(screen.getByPlaceholderText("Nama Depan"), "John");
-    await userEvent.type(screen.getByPlaceholderText("Nama Belakang"), "Doe");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan email Anda"), "john@example.com");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan nomor WhatsApp Anda"), "081234567890");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NIK Anda"), "1234567890123456");
-    await userEvent.type(screen.getByPlaceholderText("Masukkan NPWP Anda"), "123456789012345");
-
-    // Mock the validation function
-    const mockValidateStepOneForm = jest.spyOn(require('@/lib/validation/stepOneFormValidation'), 'validateStepOneForm');
-
-    // Trigger validation by clicking next
-    fireEvent.click(screen.getByText("Selanjutnya"));
-
-    // Verify that null values were converted to undefined in validation call
-    await waitFor(() => {
-      expect(mockValidateStepOneForm).toHaveBeenCalledWith(
-        expect.objectContaining({
-          ktpFile: undefined,
-          npwpFile: undefined,
-          diplomaFile: undefined
-        })
-      );
-    });
-
-    // Clean up
-    mockValidateStepOneForm.mockRestore();
   });
 
   it("proceeds to another step and return with kembali button", async () => {

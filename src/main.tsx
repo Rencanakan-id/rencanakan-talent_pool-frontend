@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import * as Sentry from '@sentry/react';
+import { browserTracingIntegration } from '@sentry/browser';
 import './index.css';
 import App from './App';
 import { DesignSystemModule, LandingPageModule, PreviewTalentModule, ForgotPasswordModule } from './modules';
@@ -14,7 +15,9 @@ import { ResetPasswordModule } from './modules/ResetPasswordModule';
 Sentry.init({
   dsn: "https://7394d93c3045e34bd05d76f4690b310c@o4509283489546240.ingest.de.sentry.io/4509283502653520",
   tracesSampleRate: 1.0,
-  environment: 'development',
+  integrations: [
+    browserTracingIntegration(),
+  ],
   release: 'rencanakan-id-fe@1.0.0',
   sendDefaultPii: true,
 });
