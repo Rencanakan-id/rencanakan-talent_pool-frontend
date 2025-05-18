@@ -3,6 +3,8 @@ import { resetPassword } from "@/services/ForgotPwService";
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
+const MIN_PASSWORD_LENGTH = 6;
+
 interface FormState {
   password: string;
   confirmPassword: string;
@@ -40,11 +42,13 @@ export const ResetPasswordModule = () => {
     const { password, confirmPassword } = formState;
     const errors: FormState["errors"] = {};
 
-    if (!password) errors.password = "Password baru harus diisi";
-    if (password.length < 6) errors.password = "Password minimal 6 karakter";
-    if (!confirmPassword) errors.confirmPassword = "Konfirmasi password harus diisi";
-    if (password && confirmPassword && password !== confirmPassword) {
-      errors.confirmPassword = "Password tidak cocok";
+    if (password.length < MIN_PASSWORD_LENGTH) {
+        errors.password = `Password minimal ${MIN_PASSWORD_LENGTH} karakter`;
+    }
+    if (!confirmPassword) {
+        errors.confirmPassword = "Konfirmasi password harus diisi";
+    } else if (password !== confirmPassword) {
+        errors.confirmPassword = "Password tidak cocok";
     }
 
     if (Object.keys(errors).length > 0) {
