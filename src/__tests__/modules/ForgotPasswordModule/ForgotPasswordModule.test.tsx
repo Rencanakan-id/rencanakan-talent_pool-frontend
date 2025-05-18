@@ -3,10 +3,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ForgotPasswordModule } from '@/modules';
-import { sendPasswordResetEmail } from '@/services/api';
+import { sendPasswordResetEmail } from '@/services/ForgotPwService';
 
 // Mock API service
-jest.mock('@/services/api', () => ({
+jest.mock('@/services/ForgotPwService', () => ({
   sendPasswordResetEmail: jest.fn()
 }));
 
