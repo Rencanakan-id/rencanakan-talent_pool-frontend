@@ -15,6 +15,8 @@ export const ForgotPasswordModule = () => {
     errors: {},
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
 
   // 1. Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,18 +78,11 @@ export const ForgotPasswordModule = () => {
     setIsSubmitting(true);
     
     try {
-      // Call API to send password reset email
       await sendPasswordResetEmail(formState.email.trim());
-      
-      
-      // Optionally redirect to login page after success
-      // navigate('/login');
+      setMessage("Tautan reset kata sandi berhasil dikirim. Silakan periksa email Anda.");
     } catch (error) {
-      // Show error message
-      console.error('Gagal mengirim email verifikasi. Silakan coba lagi.');
-      console.error('Error sending reset email:', error);
-    } finally {
-      setIsSubmitting(false);
+      console.error("Error sending reset email:", error);
+      setMessage("Gagal mengirim email verifikasi. Silakan coba lagi.");
     }
   };
 
@@ -124,6 +119,11 @@ export const ForgotPasswordModule = () => {
               >
                 {isSubmitting ? 'MEMPROSES...' : 'KIRIM EMAIL'}
               </Button>
+              {message && (
+                <Typography variant="p4" className="mt-3 text-center text-red-500">
+                  {message}
+                </Typography>
+              )}
             </div>
           </form>
           <div className="mt-4 text-center flex flex-row-reverse justify-between">
