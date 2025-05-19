@@ -6,6 +6,7 @@ import { locations } from '@/data/location';
 import { skills } from '@/data/skills';
 import { RegisterFormData } from '@/lib/register';
 import { ComboboxCheckBox } from '@/components/ui/comboboxCheckbox';
+import DOMPurify from 'dompurify';
 
 interface StepTwoFormProps {
   formData: RegisterFormData;
@@ -21,6 +22,10 @@ interface StepTwoFormProps {
     skkFile?: string;
   };
 }
+
+const sanitizeInput = (input: string): string => {
+  return DOMPurify.sanitize(input);
+};
 
 export const StepTwoForm: React.FC<StepTwoFormProps> = ({
   formData,
@@ -44,7 +49,7 @@ export const StepTwoForm: React.FC<StepTwoFormProps> = ({
           textLabel="Tentang Saya *"
           placeholder="Ceritakan tentang dirimu secara singkat di sini..."
           value={formData.aboutMe || ''}
-          onChange={(e) => updateFormData({ aboutMe: e.target.value })}
+          onChange={(e) => updateFormData({ aboutMe: sanitizeInput(e.target.value) })}
           error={validationErrors?.aboutMe}
         />
 
