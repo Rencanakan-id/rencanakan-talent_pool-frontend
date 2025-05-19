@@ -43,7 +43,7 @@ describe('ForgotPasswordModule Page', () => {
       expect(screen.getByAltText('Rencanakan Logo')).toBeInTheDocument();
       
       // Check if title is present
-      expect(screen.getByText('Lupa Kata Sandi')).toBeInTheDocument();
+      expect(screen.getByText('Lupa Kata Sandi?')).toBeInTheDocument();
       
       // Check if input field is present
       expect(screen.getByTestId('email-input')).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('ForgotPasswordModule Page', () => {
       
       // Check if button is present
       expect(screen.getByTestId('login-button')).toBeInTheDocument();
-      expect(screen.getByText('VERIFIKASI')).toBeInTheDocument();
+      expect(screen.getByText('KIRIM EMAIL')).toBeInTheDocument();
       
       // Check if links are present
       expect(screen.getByText('Belum punya akun?')).toBeInTheDocument();
