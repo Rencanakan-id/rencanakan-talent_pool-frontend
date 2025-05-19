@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StepTwoForm } from '@/modules/RegisterFormModule/Section/register-2';
 import { RegisterFormData } from '@/lib/register';
+import DOMPurify from 'dompurify';
 
 interface ComboboxProps {
   label: string;
@@ -20,6 +21,10 @@ jest.mock('@/components/ui/combobox', () => ({
     </div>
   ),
 }));
+
+const sanitizeInput = (input: string): string => {
+  return DOMPurify.sanitize(input);
+};
 
 interface ComboboxCheckBoxProps {
   label: string;
@@ -287,6 +292,68 @@ describe('StepTwoForm Component', () => {
       const textarea = screen.getByLabelText('Tentang Saya *');
       fireEvent.change(textarea, { target: { value: longText } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: longText });
+    });
+
+      describe('XSS Prevention for About Me', () => {
+
+    test('Positive Case: sanitizes input with script tags', () => {
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya *');
+      const maliciousInput = "<script>alert('XSS')</script>";
+      const sanitizedOutput = sanitizeInput(maliciousInput);
+
+      fireEvent.change(textarea, { target: { value: maliciousInput } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+    });
+
+    test('Positive Case: sanitizes input with img tags and onerror attribute', () => {
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya *');
+      const maliciousInput = '<img src="x" onerror="alert(\'XSS\')">';
+      const sanitizedOutput = sanitizeInput(maliciousInput);
+
+      fireEvent.change(textarea, { target: { value: maliciousInput } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+    });
+
+    test('Positive Case: sanitizes input with iframe tag', () => {
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya *');
+      const maliciousInput = '<iframe src="javascript:alert(\'XSS\');"></iframe>';
+      const sanitizedOutput = sanitizeInput(maliciousInput);
+
+      fireEvent.change(textarea, { target: { value: maliciousInput } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+    });
+
+    test('Positive Case: sanitizes malformed HTML with script inside', () => {
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya *');
+      const maliciousInput = '<div><script>alert("XSS")</script>';
+      const sanitizedOutput = sanitizeInput(maliciousInput);
+
+      fireEvent.change(textarea, { target: { value: maliciousInput } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+    });
+
+    test('Positive Case: sanitizes javascript: URI in href', () => {
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya *');
+      const maliciousInput = '<a href="javascript:alert(\'XSS\')">Click me</a>';
+      const sanitizedOutput = sanitizeInput(maliciousInput);
+
+      fireEvent.change(textarea, { target: { value: maliciousInput } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+    });
+
+    test('Negative Case: does not alter safe input', () => {
+      setup();
+      const textarea = screen.getByLabelText('Tentang Saya *');
+      const safeInput = 'This is a safe about me section.';
+
+      fireEvent.change(textarea, { target: { value: safeInput } });
+      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: safeInput });
+      });
     });
   });
 
