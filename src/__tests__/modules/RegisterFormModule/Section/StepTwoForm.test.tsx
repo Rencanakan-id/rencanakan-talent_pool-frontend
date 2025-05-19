@@ -5,37 +5,40 @@ import { StepTwoForm } from '@/modules/RegisterFormModule/Section/register-2';
 import { RegisterFormData } from '@/lib/register';
 import DOMPurify from 'dompurify';
 
-interface ComboboxProps {
-  label: string;
-  onChange: (value: string) => void;
-  value?: string;
-  error?: string;
-}
-
-jest.mock('@/components/ui/combobox', () => ({
-  Combobox: ({ label, onChange, value, error }: ComboboxProps) => (
-    <div>
-      <label>{label}</label>
-      <input value={value ?? ''} onChange={(e) => onChange(e.target.value)} aria-label={label} />
-      {error && <div className="error-message">{error}</div>}
-    </div>
-  ),
-}));
-
+// Helper function for sanitizing input
 const sanitizeInput = (input: string): string => {
   return DOMPurify.sanitize(input);
 };
 
-interface ComboboxCheckBoxProps {
-  label: string;
-  onChange: (values: string[]) => void;
-  values?: string[];
-  placeholder?: string;
-  error?: string;
-}
+// Common error display component for mocks
+const ErrorMessage = ({ error }: { error?: string }) => (
+  error ? <div className="error-message">{error}</div> : null
+);
+
+// Mock UI components
+jest.mock('@/components/ui/combobox', () => ({
+  Combobox: ({ label, onChange, value, error }: {
+    label: string;
+    onChange: (value: string) => void;
+    value?: string;
+    error?: string;
+  }) => (
+    <div>
+      <label>{label}</label>
+      <input value={value ?? ''} onChange={(e) => onChange(e.target.value)} aria-label={label} />
+      <ErrorMessage error={error} />
+    </div>
+  ),
+}));
 
 jest.mock('@/components/ui/comboboxCheckbox', () => ({
-  ComboboxCheckBox: ({ label, onChange, values, placeholder, error }: ComboboxCheckBoxProps) => {
+  ComboboxCheckBox: ({ label, onChange, values, placeholder, error }: {
+    label: string;
+    onChange: (values: string[]) => void;
+    values?: string[];
+    placeholder?: string;
+    error?: string;
+  }) => {
     const displayValues = (values || []).map((v) => v.charAt(0).toUpperCase() + v.slice(1));
 
     return (
@@ -47,48 +50,32 @@ jest.mock('@/components/ui/comboboxCheckbox', () => ({
           placeholder={placeholder ?? ''}
           aria-label={label}
         />
-        {error && <div className="error-message">{error}</div>}
+        <ErrorMessage error={error} />
       </div>
     );
   },
 }));
 
-interface InputProps {
-  name?: string;
-  label?: string;
-  placeholder?: string;
-  type?: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  className?: string;
-}
-
-interface TextareaProps {
-  textLabel: string;
-  placeholder?: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  error?: string;
-}
-
-interface FileInputProps {
-  textLabel: string;
-  accept?: string;
-  state?: string;
-  value?: string | null;
-  onFileSelect: (file: File) => void;
-  error?: string;
-}
-
-jest.mock('@/components', () => ({
-  Typography: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+jest.mock('@/components', () => {
+  // Common components
+  const Typography = ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div className={className}>{children}</div>
-  ),
-  Stepper: ({ currentStep }: { currentStep: number }) => (
+  );
+  
+  const Stepper = ({ currentStep }: { currentStep: number }) => (
     <div>{`Current step: ${currentStep}`}</div>
-  ),
-  Input: ({ name, label, placeholder, type, value, onChange, error, className }: InputProps) => (
+  );
+  
+  const Input = ({ name, label, placeholder, type, value, onChange, error, className }: {
+    name?: string;
+    label?: string;
+    placeholder?: string;
+    type?: string;
+    value?: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    error?: string;
+    className?: string;
+  }) => (
     <div className={className}>
       {label && <label htmlFor={name}>{label}</label>}
       <input
@@ -100,10 +87,17 @@ jest.mock('@/components', () => ({
         onChange={onChange}
         aria-label={label}
       />
-      {error && <div className="error-message">{error}</div>}
+      <ErrorMessage error={error} />
     </div>
-  ),
-  Textarea: ({ textLabel, placeholder, value, onChange, error }: TextareaProps) => (
+  );
+  
+  const Textarea = ({ textLabel, placeholder, value, onChange, error }: {
+    textLabel: string;
+    placeholder?: string;
+    value?: string;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    error?: string;
+  }) => (
     <div>
       <label>{textLabel}</label>
       <textarea
@@ -112,10 +106,18 @@ jest.mock('@/components', () => ({
         onChange={onChange}
         aria-label={textLabel}
       />
-      {error && <div className="error-message">{error}</div>}
+      <ErrorMessage error={error} />
     </div>
-  ),
-  FileInput: ({ textLabel, accept, state, value, onFileSelect, error }: FileInputProps) => (
+  );
+  
+  const FileInput = ({ textLabel, accept, state, value, onFileSelect, error }: {
+    textLabel: string;
+    accept?: string;
+    state?: string;
+    value?: string | null;
+    onFileSelect: (file: File) => void;
+    error?: string;
+  }) => (
     <div>
       <label>{textLabel}</label>
       <input
@@ -125,10 +127,18 @@ jest.mock('@/components', () => ({
         aria-label={textLabel}
       />
       {state === 'filled' && <span>{value}</span>}
-      {error && <div className="error-message">{error}</div>}
+      <ErrorMessage error={error} />
     </div>
-  ),
-}));
+  );
+  
+  return {
+    Typography,
+    Stepper,
+    Input,
+    Textarea,
+    FileInput
+  };
+});
 
 describe('StepTwoForm Component', () => {
   const defaultFormData: RegisterFormData = {
@@ -294,65 +304,41 @@ describe('StepTwoForm Component', () => {
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: longText });
     });
 
-      describe('XSS Prevention for About Me', () => {
-
-    test('sanitizes input with script tags', () => {
+  describe('XSS Prevention for About Me', () => {
+    const testSanitization = (maliciousInput: string) => {
       setup();
       const textarea = screen.getByLabelText('Tentang Saya *');
-      const maliciousInput = "<script>alert('XSS')</script>";
       const sanitizedOutput = sanitizeInput(maliciousInput);
 
       fireEvent.change(textarea, { target: { value: maliciousInput } });
       expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+    };
+
+    test('sanitizes input with script tags', () => {
+      testSanitization("<script>alert('XSS')</script>");
     });
 
     test('sanitizes input with img tags and onerror attribute', () => {
-      setup();
-      const textarea = screen.getByLabelText('Tentang Saya *');
-      const maliciousInput = '<img src="x" onerror="alert(\'XSS\')">';
-      const sanitizedOutput = sanitizeInput(maliciousInput);
-
-      fireEvent.change(textarea, { target: { value: maliciousInput } });
-      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+      testSanitization('<img src="x" onerror="alert(\'XSS\')">')
     });
 
     test('sanitizes input with iframe tag', () => {
-      setup();
-      const textarea = screen.getByLabelText('Tentang Saya *');
-      const maliciousInput = '<iframe src="javascript:alert(\'XSS\');"></iframe>';
-      const sanitizedOutput = sanitizeInput(maliciousInput);
-
-      fireEvent.change(textarea, { target: { value: maliciousInput } });
-      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+      testSanitization('<iframe src="javascript:alert(\'XSS\');"></iframe>');
     });
 
     test('sanitizes malformed HTML with script inside', () => {
-      setup();
-      const textarea = screen.getByLabelText('Tentang Saya *');
-      const maliciousInput = '<div><script>alert("XSS")</script>';
-      const sanitizedOutput = sanitizeInput(maliciousInput);
-
-      fireEvent.change(textarea, { target: { value: maliciousInput } });
-      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+      testSanitization('<div><script>alert("XSS")</script>');
     });
 
     test('sanitizes javascript: URI in href', () => {
-      setup();
-      const textarea = screen.getByLabelText('Tentang Saya *');
-      const maliciousInput = '<a href="javascript:alert(\'XSS\')">Click me</a>';
-      const sanitizedOutput = sanitizeInput(maliciousInput);
-
-      fireEvent.change(textarea, { target: { value: maliciousInput } });
-      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: sanitizedOutput });
+      testSanitization('<a href="javascript:alert(\'XSS\')">Click me</a>');
     });
 
     test('does not alter safe input', () => {
-      setup();
-      const textarea = screen.getByLabelText('Tentang Saya *');
       const safeInput = 'This is a safe about me section.';
-
-      fireEvent.change(textarea, { target: { value: safeInput } });
-      expect(mockUpdateFormData).toHaveBeenCalledWith({ aboutMe: safeInput });
+      testSanitization(safeInput);
+      // Safe input shouldn't be modified
+      expect(sanitizeInput(safeInput)).toBe(safeInput);
     });
   });
 });
