@@ -117,7 +117,7 @@ export const ResetPasswordModule = () => {
                 className={`w-full ${isSubmitting ? 'disabled' : ""}`}
                 type="submit"
               >
-                {isSubmitting ? 'MEMPROSES...' : 'RESET PASSWORD'}
+                {isSubmitting ? 'MEMPROSES...' : 'RESET KATA SANDI'}
               </Button>
             </div>
           </form>

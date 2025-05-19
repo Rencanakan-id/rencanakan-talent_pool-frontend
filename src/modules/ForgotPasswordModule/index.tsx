@@ -99,8 +99,11 @@ export const ForgotPasswordModule = () => {
           <div className="mb-8">
             <img src="/rencanakanLogo.svg" alt="Rencanakan Logo" className="h-10" />
           </div>
-          <Typography variant="h5" className="mb-6">
-            Lupa Kata Sandi
+          <Typography variant="h5" className="mb-1">
+            Lupa Kata Sandi?
+          </Typography>
+          <Typography variant="p4" className="mb-6 text-rencanakan-sea-blue-500">
+            Masukkan alamat email Anda untuk menerima tautan reset kata sandi.
           </Typography>
           <form onSubmit={handleSubmit}>
             <Input
@@ -119,7 +122,7 @@ export const ForgotPasswordModule = () => {
                 data-testid="login-button"
                 type="submit"
               >
-                {isSubmitting ? 'MEMPROSES...' : 'VERIFIKASI'}
+                {isSubmitting ? 'MEMPROSES...' : 'KIRIM EMAIL'}
               </Button>
             </div>
           </form>
