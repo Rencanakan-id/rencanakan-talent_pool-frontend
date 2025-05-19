@@ -1,5 +1,5 @@
 import { AuthBanner, Button, Input, Typography } from "@/components";
-import { sendPasswordResetEmail } from "@/services/api";
+import { sendPasswordResetEmail } from "@/services/ForgotPwService";
 import { useState } from "react";
 
 interface FormState {

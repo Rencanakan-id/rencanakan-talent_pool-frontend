@@ -43,15 +43,25 @@ export const validateStepFourForm = (
   isValid: boolean;
   errors: { password?: string; passwordConfirmation?: string };
 } => {
-  const passwordError = validatePassword(password);
-  const confirmationError = validatePasswordMatch(password, confirmation);
-
-  const errors = {
-    password: password !== undefined ? passwordError : undefined,
-    passwordConfirmation: confirmation !== undefined ? confirmationError : undefined,
+  const errorsResult = {
+    password: validatePassword(password),
+    passwordConfirmation: validatePasswordMatch(password, confirmation),
   };
 
-  const isValid = passwordError === '' && confirmationError === '' && !!termsAccepted;
+  const activeErrors: Partial<typeof errorsResult> = {};
+  let isValid = true;
 
-  return { isValid, errors };
+  for (const key in errorsResult) {
+    const errorValue = errorsResult[key as keyof typeof errorsResult];
+    if (errorValue) {
+      activeErrors[key as keyof typeof errorsResult] = errorValue;
+      isValid = false;
+    }
+  }
+  
+  if (!termsAccepted) {
+    isValid = false;
+  }
+
+  return { isValid, errors: activeErrors };
 };
