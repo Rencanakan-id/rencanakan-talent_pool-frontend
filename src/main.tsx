@@ -9,6 +9,7 @@ import { DesignSystemModule, LandingPageModule, PreviewTalentModule, ForgotPassw
 import { RegisterModule } from './modules/RegisterFormModule';
 import LoginModule from './modules/LoginFormModule';
 import { EditProfileModule } from './modules/EditProfileModule';
+import { ResetPasswordModule } from './modules/ResetPasswordModule';
 
 // Inisialisasi Sentry
 Sentry.init({
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/login" element={<LoginModule />} />
           <Route path="/edit" element={<EditProfileModule />} />
           <Route path="/forgot-password" element={<ForgotPasswordModule />} />
+          <Route path="/reset-password" element={<ResetPasswordModule />} />
       </Route>
       </Routes>
     </BrowserRouter>
