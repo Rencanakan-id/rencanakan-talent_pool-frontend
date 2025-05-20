@@ -65,24 +65,25 @@ export const ForgotPasswordModule = () => {
   };
 
   // 3. Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate input
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setMessage(null);
+
     const isValid = validateEmail(formState.email);
     if (!isValid) return;
-    
-    // Prevent multiple submissions
+
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       await sendPasswordResetEmail(formState.email.trim());
       setMessage("Tautan reset kata sandi berhasil dikirim. Silakan periksa email Anda.");
     } catch (error) {
       console.error("Error sending reset email:", error);
       setMessage("Gagal mengirim email verifikasi. Silakan coba lagi.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
