@@ -41,30 +41,6 @@ describe('AuthContext', () => {
         expect(result.current.isLoading).toBe(false);
     });
 
-    // it('should authenticate user after successful login', async () => {
-    //     (axios.post as jest.Mock).mockResolvedValue({
-    //         data: { data: { token: mockToken } },
-    //     });
-
-    //     const wrapper = ({ children }: { children: React.ReactNode }) => (
-    //         <AuthContextProvider initialToken="">{children}</AuthContextProvider>
-    //     );
-
-    //     const { result } = renderHook(() => useAuth(), { wrapper });
-
-    //     await act(async () => {
-    //         await result.current.login('test@example.com', 'password123');
-    //     });
-
-    //     expect(axios.post).toHaveBeenCalledWith('http://88.222.245.148:8080/api/auth/login', {
-    //         email: 'test@example.com',
-    //         password: 'password123',
-    //     });
-    //     expect(Cookies.set).toHaveBeenCalledWith('token', mockToken);
-    //     expect(result.current.isAuthenticated).toBe(true);
-    //     expect(result.current.token).toBe(mockToken);
-    // });
-
     it('should handle login failure', async () => {
         (axios.post as jest.Mock).mockRejectedValue(new Error('Invalid credentials'));
 
@@ -80,7 +56,7 @@ describe('AuthContext', () => {
             });
         }).rejects.toThrow('Login Failed');
 
-        expect(axios.post).toHaveBeenCalledWith('http://88.222.245.148:8080/api/auth/login', {
+        expect(axios.post).toHaveBeenCalledWith('http://localhost:8081/api/auth/login', {
             email: 'wrong@example.com',
             password: 'wrongpassword',
         });
@@ -186,7 +162,7 @@ describe('AuthContext', () => {
             // Trigger useEffect
         });
 
-        expect(axios.get).toHaveBeenCalledWith('http://88.222.245.148:8080/api/users/me', {
+        expect(axios.get).toHaveBeenCalledWith('http://localhost:8081/api/users/me', {
             headers: { Authorization: `Bearer ${mockToken}` },
         });
         expect(result.current.user).toEqual(mockUser);
@@ -254,7 +230,7 @@ describe('AuthContext', () => {
         });
     
         // Verify axios.post was called with the correct arguments
-        expect(axios.post).toHaveBeenCalledWith('http://88.222.245.148:8080/api/auth/login', {
+        expect(axios.post).toHaveBeenCalledWith('http://localhost:8081/api/auth/login', {
             email: 'test@example.com',
             password: 'password123',
         });

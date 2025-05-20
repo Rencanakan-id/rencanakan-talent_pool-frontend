@@ -11,6 +11,7 @@ import { validateStepTwoForm } from '@/lib/validation/stepTwoFormValidation';
 import { checkStepCompleteness } from '@/lib/validation/formCompletenessValidation';
 import { parseExperienceYearsToInt } from '@/lib/utils';
 import * as Sentry from '@sentry/react';
+import { env } from '@/config/env';
 
 export const RegisterModule = () => {
   const [formState, setFormState] = useState(1);
@@ -173,7 +174,8 @@ export const RegisterModule = () => {
           };
 
           console.log('Registration request data:', requestData);
-          const response = await fetch('http://88.222.245.148:8080/api/auth/register', {
+
+          const response = await fetch(`${env.API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

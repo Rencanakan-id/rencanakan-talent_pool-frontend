@@ -6,51 +6,31 @@ import { RecommendationService } from "@/services/recommendationService";
 export function useRecommendation(userId?: string) {
   const [recommendations, setRecommendations] = useState<RecommendationResponseDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(false);
   const { token, user } = useAuth();
   
   const effectiveUserId = userId ?? user?.id;
   
-  const loremIpsum = `
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-  in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-  sunt in culpa qui officia deserunt mollit anim id est laborum.
-  `;
-  
-  const dummyRecommendations: RecommendationResponseDTO[] = [
-    {
-      id: '1',
-      talentId: user?.id || userId || '',
-      contractorId: 202,
-      contractorName: 'John Doe',
-      message: loremIpsum,
-      status: StatusType.PENDING,
-    },
-    {
-      id: '2',
-      talentId: user?.id || userId || '',
-      contractorId: 203,
-      contractorName: 'Jane Smith',
-      message: 'Pekerjaan luar biasa, sangat detail dan komunikatif.',
-      status: StatusType.PENDING,
-    },
-  ];
-
   useEffect(() => {
     const fetchRecommendations = async () => {
-      console.log(token, effectiveUserId);
       if (!token || !effectiveUserId) {
-        setRecommendations(dummyRecommendations);
+        setRecommendations([]);
+        setIsEmpty(true);
         setIsLoading(false);
         return;
       }
       
       try {
         const data = await RecommendationService.getRecommendationsByTalentId(effectiveUserId, token);
-        setRecommendations([...data, ...dummyRecommendations]);
+        const filteredData = data.filter(
+          (recommendation) => recommendation.status !== StatusType.DECLINED
+        );
+        setRecommendations(filteredData);
+        setIsEmpty(data.length === 0);
       } catch (err) {
         console.error("Error fetching recommendations:", err);
-        setRecommendations(dummyRecommendations);
+        setRecommendations([]);
+        setIsEmpty(true);
       } finally {
         setIsLoading(false);
       }
@@ -63,9 +43,8 @@ export function useRecommendation(userId?: string) {
     if (!token) return;
     
     try {
-      await RecommendationService.updateRecommendationStatus(
+      await RecommendationService.acceptRecommendation(
         recommendationId,
-        StatusType.APPROVED,
         token
       );
       
@@ -79,13 +58,6 @@ export function useRecommendation(userId?: string) {
       );
     } catch (error) {
       console.error('Error accepting recommendation:', error);
-      setRecommendations(prevRecommendations => 
-        prevRecommendations.map(rec => 
-          rec.id === recommendationId
-            ? { ...rec, status: StatusType.APPROVED }
-            : rec
-        )
-      );
     }
   };
 
@@ -93,31 +65,29 @@ export function useRecommendation(userId?: string) {
     if (!token) return;
     
     try {
-      await RecommendationService.updateRecommendationStatus(
+      await RecommendationService.rejectRecommendation(
         recommendationId, 
-        StatusType.DECLINED,
         token
       );
       
       // Update the local state
-      setRecommendations(prevRecommendations => 
-        prevRecommendations.map(rec => 
-          rec.id === recommendationId
-            ? { ...rec, status: StatusType.DECLINED }
-            : rec
-        )
-      );
+      setRecommendations(prevRecommendations => {
+        const updatedRecommendations = prevRecommendations.filter(rec => 
+          rec.id !== recommendationId
+        );
+        
+        setIsEmpty(updatedRecommendations.length === 0);
+        return updatedRecommendations;
+      });
     } catch (error) {
       console.error('Error rejecting recommendation:', error);
-      setRecommendations(prevRecommendations => 
-        prevRecommendations.filter(rec => rec.id !== recommendationId)
-      );
     }
   };
 
   return { 
     recommendations, 
     isLoading,
+    isEmpty,
     handleAcceptRecommendation,
     handleRejectRecommendation
   };

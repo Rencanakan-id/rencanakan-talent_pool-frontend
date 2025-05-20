@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useUserProfile } from '@/components/hooks/useUserProfile';
 import { useAuth } from "@/components/context/authContext";
 import { useNavigate } from 'react-router-dom';
+import { env } from '@/config/env';
 
 export const EditProfileModule: React.FC = () => {
   const navigate = useNavigate();
@@ -70,7 +71,8 @@ export const EditProfileModule: React.FC = () => {
       };
 
       const response = await axios.put(
-        `http://88.222.245.148:8080/api/users/${formData.id}`,
+        // Use the environment variable for the base URL
+        `${env.API_BASE_URL}/users/${formData.id}`,
         updatedProfile,
         {
           headers: {
