@@ -1,15 +1,18 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "../atoms/typography";
 import { Button } from "./button";
 import { Input } from "./input";
+import DOMPurify from 'dompurify';
 import { Edit, Plus, Download, Pencil } from "lucide-react";
 import { FileInput } from "./fileInput";
 import { ModalFormWrapper } from "./modalFormWrapper";
+import { useAuth } from '../context/authContext';
+import { CertificationService } from '@/services/CertificationService';
+import { CertificationRequestDTO, CertificationResponseDTO } from "@/lib/certificate";
+import * as Sentry from '@sentry/react';
 
-export interface CertificateDetail {
-    id: number;
-    title: string;
-    file: File;
+interface CertificationProps {
+    certificates?: CertificationResponseDTO[] | null;
 }
 
 interface FormErrors {
@@ -17,27 +20,50 @@ interface FormErrors {
     file?: string;
 }
 
-interface CertificateProps {
-    certificates?: CertificateDetail[];
-}
+const Certification: React.FC<CertificationProps> = ({ certificates = [] }) => {
+    const { user, token } = useAuth();
+    const id = user?.id ?? '';
 
-const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
-    const [certificateList, setCertificateList] = useState<CertificateDetail[]>(certificates);
+    const [certificationList, setCertificationList] = useState<CertificationResponseDTO[]>(certificates || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCertificate, setEditingCertificate] = useState<CertificateDetail | null>(null);
+    const [editingCertification, setEditingCertification] = useState<CertificationResponseDTO | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [wasValidated, setWasValidated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const [certificateFormData, setCertificateFormData] = useState<CertificateDetail>({
-        id: 0,
+    const [certificateFormData, setCertificateFormData] = useState<CertificationRequestDTO>({
         title: '',
-        file: new File([], ''),
+        file: '', // String type as per CertificationRequestDTO
     });
+    
+    useEffect(() => {
+        if (!certificates || certificates.length === 0) {
+            fetchCertifications();
+        }
+    }, [user?.id, token]);
+
+    const fetchCertifications = async () => {
+        if (!user?.id || !token) return;
+        
+        setIsLoading(true);
+        setError(null);
+        
+        try {
+            const certificates = await CertificationService.getCertifications(user.id, token);
+            setCertificationList(certificates || []);
+        } catch (err) {
+            console.error('Error fetching certificates:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setCertificateFormData((prev) => ({ ...prev, [name]: value }));
+        const sanitizedValue = DOMPurify.sanitize(value);
+        setCertificateFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
         
         if (wasValidated && formErrors[name as keyof FormErrors]) {
             setFormErrors(prev => ({ ...prev, [name]: undefined }));
@@ -48,7 +74,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         if (file) {
             setCertificateFormData((prev) => ({ 
                 ...prev, 
-                file: file 
+                file: file.name
             }));
             
             if (wasValidated && formErrors.file) {
@@ -58,33 +84,44 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
     };
 
     const handleAdd = () => {
-        setEditingCertificate(null);
+        setEditingCertification(null);
         setCertificateFormData({
-            id: certificateList.length + 1,
             title: '',
-            file: new File([], ''),
+            file: '',
         });
         setIsModalOpen(true);
         setFormErrors({});
         setWasValidated(false);
     };
     
-    const handleEdit = (cert: CertificateDetail) => {
-        setEditingCertificate(cert);
-        setCertificateFormData(cert);
+    const handleEdit = (cert: CertificationResponseDTO) => {
+        setEditingCertification(cert);
+        setCertificateFormData({
+            title: cert.title || '',
+            file: cert.file || '',
+        });
         setIsModalOpen(true);
         setFormErrors({});
         setWasValidated(false);
     };
 
-    const handleDelete = () => {
-        if (editingCertificate) {
-          setCertificateList((prev) =>
-            prev.filter((exp) => exp.id !== editingCertificate.id)
-          );
-          setIsModalOpen(false);
+    const handleDelete = async () => {
+        if (editingCertification?.id) {
+            setIsLoading(true);
+            setError(null);
+            
+            try {
+                await CertificationService.deleteCertification(token, editingCertification.id);
+                setCertificationList((prev) => prev.filter((cert) => cert.id !== editingCertification.id));
+                setIsModalOpen(false);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to delete certificate');
+                console.error('Error deleting certificate:', err);
+            } finally {
+                setIsLoading(false);
+            }
         }
-      };
+    };
 
     const validateForm = (): boolean => {
         const errors: FormErrors = {};
@@ -93,7 +130,8 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             errors.title = "Judul sertifikasi wajib diisi";
         }
         
-        if (!certificateFormData.file || certificateFormData.file.size === 0) {
+        // Only require file for new certificates
+        if (!editingCertification && (!certificateFormData.file)) {
             errors.file = "File sertifikasi wajib diunggah";
         }
         
@@ -103,44 +141,52 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
         return Object.keys(errors).length === 0;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!validateForm()) return;
         
-        if (editingCertificate) {
-            setCertificateList(prevList => 
-                prevList.map(cert => 
-                    cert.id === editingCertificate.id ? certificateFormData : cert
-                )
-            );
-        } else {
-            setCertificateList(prevList => [...prevList, certificateFormData]);
+        setIsLoading(true);
+        setError(null);
+        
+        try {
+            if (editingCertification?.id) {
+                // Update existing certificate
+                await CertificationService.editCertification(
+                    token, 
+                    editingCertification.id, 
+                    certificateFormData
+                );
+                
+                fetchCertifications();
+            } else {
+                // Add new certificate
+                await CertificationService.addCertification(id, token, certificateFormData);
+                fetchCertifications();
+
+                Sentry.captureMessage('New certificate added', {
+                    tags: { feature: 'user-data', environment: 'production' },
+                    extra: { userId: user?.id }
+                });
+            }
+            
+            setIsModalOpen(false);
+            setFormErrors({});
+            setWasValidated(false);
+        } catch (err) {
+            Sentry.captureException(err, {
+                    tags: { feature: 'user-data', environment: 'production' },
+                    extra: { userId: user?.id }
+                  });
+            setError(err instanceof Error ? err.message : 'Failed to save certificate');
+            console.error('Error saving certificate:', err);
+        } finally {
+            setIsLoading(false);
         }
-        
-        setIsModalOpen(false);
     };
 
-    const formatFileSize = (bytes: number): string => {
-        if (bytes === 0) return '0Bytes';
-        
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + sizes[i];
-    };
-
-    const handleDownload = (file: File) => {
-        const url = URL.createObjectURL(file);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = file.name;
-        
-        document.body.appendChild(a);
-        a.click();
-
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+    const handleDownload = (file?: string) => {
+        if (!file) return;
+        const fileUrl = 'public/Catetan Kripto.pdf'
+        window.open(fileUrl, '_blank');
     };
 
     const toggleEditMode = () => {
@@ -148,7 +194,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
     };
 
     return (
-        <div className="min-h-[200px] w-full rounded-[8px] border border-gray-300 p-6">
+        <div className="min-h-[200px] w-full rounded-[8px] border border-rencanakan-base-gray p-6">
             <div className="flex justify-between items-center pb-4">
                 <Typography variant="p1" className="text-rencanakan-type-black font-medium">
                     Sertifikasi
@@ -171,17 +217,22 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                 </div>
             </div>
 
-            {certificateList.length > 0 ? (
+            {isLoading && <Typography variant="p3" className="text-rencanakan-dark-gray mt-2">Memuat...</Typography>}
+            {error && <Typography variant="p3" className="text-red-500 mt-2">{error}</Typography>}
+
+            {!isLoading && certificationList.length > 0 ? (
                 <div className="w-full space-y-4">
-                    {certificateList.map((cert) => (
+                    {certificationList.map((cert) => (
                         <div key={cert.id} className="min-h-18 space-y-1 space-x-2 flex items-center justify-between bg-rencanakan-lightest-gray border-rencanakan-light-gray border-[1px] rounded-xl p-4">
                             <div className="flex space-x-2 items-center">
                                 <img src="/pdf.svg" alt="Logo" className="h-8 w-8" draggable={false} />
                                 <div>
-                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black">{cert.file.name}</Typography>
-                                    <Typography variant="p4" className="text-rencanakan-dark-gray">
-                                        {formatFileSize(cert.file.size)}
-                                    </Typography>
+                                    <Typography variant="p4" className="font-medium text-rencanakan-type-black">{cert.title}</Typography>
+                                    {cert.file && (
+                                        <Typography variant="p4" className="text-rencanakan-dark-gray">
+                                            {cert.file}
+                                        </Typography>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex space-x-2">
@@ -200,6 +251,7 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                                         iconPosition="end"
                                         onClick={() => handleDownload(cert.file)}
                                         data-testid={`download-btn-${cert.id}`}
+                                        disabled={!cert.file}
                                     >
                                         Download File
                                     </Button>
@@ -208,8 +260,8 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
                         </div>
                     ))}
                 </div>
-            ) : (
-                <Typography variant="p3" className="text-gray-500">
+            ) : !isLoading && (
+                <Typography variant="p3" className="text-rencanakan-dark-gray">
                     Tidak ada sertifikasi.
                 </Typography>
             )}
@@ -217,41 +269,45 @@ const Certificate: React.FC<CertificateProps> = ({ certificates = [] }) => {
             {isModalOpen && (
                 <ModalFormWrapper
                     isOpen={isModalOpen}
-                    title={editingCertificate ? "Edit Sertifikasi" : "Tambah Sertifikasi"}
+                    title={editingCertification ? "Edit Sertifikasi" : "Tambah Sertifikasi"}
                     onClose={() => setIsModalOpen(false)}
                     onSubmit={handleSubmit}
-                    onDelete={editingCertificate ? handleDelete : undefined}
-                    submitLabel={editingCertificate ? "Simpan" : "Tambah"}
-                    isEditMode={!!editingCertificate}
+                    onDelete={editingCertification ? handleDelete : undefined}
+                    submitLabel={editingCertification ? "Simpan" : "Tambah"}
+                    isEditMode={!!editingCertification}
                 >
-                    <div>
-                        <Input
-                            label="Judul*"
-                            data-testid="input-title"
-                            placeholder="Masukkan judul sertifikasi Anda"
-                            name="title"
-                            value={certificateFormData.title}
-                            onChange={handleChange}
-                        />
-                        {wasValidated && formErrors.title && (
-                            <Typography variant="p5" className="text-red-500 mt-1">
-                            {formErrors.title}
-                            </Typography>
-                        )}
-                    </div>
+                    <div className="flex flex-col space-y-4 pt-1">
+                        <div>
+                            <Input
+                                label="Judul*"
+                                data-testid="input-title"
+                                placeholder="Masukkan judul sertifikasi Anda"
+                                name="title"
+                                value={certificateFormData.title}
+                                onChange={handleChange}
+                                disabled={isLoading}
+                            />
+                            {wasValidated && formErrors.title && (
+                                <Typography variant="p5" className="text-red-500 mt-1">
+                                {formErrors.title}
+                                </Typography>
+                            )}
+                        </div>
 
-                    <div>
-                        <FileInput
-                            onFileSelect={handleFileChange}
-                            textLabel="Media"
-                            data-testid="file-input"
-                            error={wasValidated && formErrors.file ? formErrors.file : undefined}
-                        />
+                        <div>
+                            <FileInput
+                                onFileSelect={handleFileChange}
+                                textLabel={editingCertification ? "File Baru (opsional)" : "File*"}
+                                data-testid="file-input"
+                                error={wasValidated && formErrors.file ? formErrors.file : undefined}
+                                disabled={isLoading}
+                            />
+                        </div>
                     </div>
                 </ModalFormWrapper>
             )}
         </div>
     );
-}
+};
 
-export default Certificate;
+export default Certification;

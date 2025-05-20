@@ -1,19 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Experience, { ExperienceDetail } from '../../components/ui/experience';
+import Experience from '../../components/ui/experience';
+import { ExperienceResponseDTO } from '@/lib/experience';
 
 describe('Experience Component', () => {
-  const mockExperiences: ExperienceDetail[] = [
+  const mockExperiences: ExperienceResponseDTO[] = [
     {
       id: 1,
       title: 'Software Engineer',
       company: 'Tech Corp',
+      companyImage: 'https://example.com/image.jpg',
       employmentType: 'FULL_TIME',
       startDate: '2020-06-01',
       endDate: '2023-08-31',
       location: 'Jakarta, Indonesia',
       locationType: 'ON_SITE',
-      talentId: 101,
     },
   ];
 

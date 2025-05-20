@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography } from '../atoms/typography';
 import { Pencil, Plus, Edit } from 'lucide-react';
 import { Input } from './input';
@@ -6,19 +6,11 @@ import { Combobox } from './combobox';
 import { format, parseISO } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 import { ModalFormWrapper } from './modalFormWrapper';
-
-export type EmploymentType =
-  | 'FULL_TIME'
-  | 'PART_TIME'
-  | 'SELF_EMPLOYED'
-  | 'FREELANCE'
-  | 'CONTRACT'
-  | 'INTERNSHIP'
-  | 'APPRENTICESHIP'
-  | 'SEASONAL'
-  | '';
-
-export type LocationType = 'ON_SITE' | 'HYBRID' | 'REMOTE' | '';
+import { ExperienceRequestDTO, ExperienceResponseDTO, EmploymentType, LocationType } from '@/lib/experience';
+import { ExperienceService } from '@/services/ExperienceService';
+import { useAuth } from '../context/authContext';
+import * as Sentry from '@sentry/react';
+import DOMPurify from 'dompurify';
 
 // Define employment type labels
 const employmentTypeLabels: Record<string, string> = {
@@ -41,20 +33,8 @@ const locationTypeLabels: Record<string, string> = {
   '': 'Pilih Tipe Lokasi'
 };
 
-export interface ExperienceDetail {
-  id: number;
-  title: string;
-  company: string;
-  employmentType: EmploymentType;
-  startDate: string;
-  endDate: string | null;
-  location: string;
-  locationType: LocationType;
-  talentId: number;
-}
-
 interface ExperienceProps {
-  experiences?: ExperienceDetail[] | null;
+  experiences?: ExperienceResponseDTO[] | null;
 }
 
 // Define error state interface
@@ -69,29 +49,63 @@ interface FormErrors {
 }
 
 const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
-  const [experienceList, setExperienceList] = useState<ExperienceDetail[]>(experiences || []);
+  const { user, token } = useAuth();
+  const id = user.id?? '';
+
+  const [experienceList, setExperienceList] = useState<ExperienceResponseDTO[]>(experiences || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingExperience, setEditingExperience] = useState<ExperienceDetail | null>(null);
+  const [editingExperience, setEditingExperience] = useState<ExperienceResponseDTO | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [wasValidated, setWasValidated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const [experienceFormData, setExperienceFormData] = useState<ExperienceDetail>({
-    id: 0,
+  const [experienceFormData, setExperienceFormData] = useState<ExperienceRequestDTO>({
     title: '',
     company: '',
+    companyImage: '', // Assuming this is not used in the form, but required in the DTO
     employmentType: 'FULL_TIME',
     startDate: '',
     endDate: null,
     location: '',
     locationType: 'ON_SITE',
-    talentId: 0,
   });
+
+  useEffect(() => {
+    // If experiences is not provided, fetch from API
+    if (!experiences || experiences.length === 0) {
+      fetchExperiences();
+    }
+  }, [user.id, token]);
+
+  const fetchExperiences = async () => {
+    if (!user.id || !token) return;
+    
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const experiences = await ExperienceService.getExperiences(user.id, token);
+      setExperienceList(experiences || []);
+      
+    } catch (err) {
+      Sentry.captureException(err, {
+        tags: { feature: 'user-data', environment: 'production' },
+        extra: { userId: user?.id }
+      });
+      setError(err instanceof Error ? err.message : 'Failed to fetch experiences');
+      console.error('Error fetching experiences:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setExperienceFormData((prev) => ({ ...prev, [name]: value }));
+    const sanitizedValue = DOMPurify.sanitize(value);
+    setExperienceFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
     
     // Clear error for this field if it was previously set
     if (wasValidated && formErrors[name as keyof FormErrors]) {
@@ -101,21 +115,21 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return 'Sekarang';
+      
     return format(parseISO(dateStr), 'dd MMMM yyyy', { locale: idLocale });
   };
 
   const handleAdd = () => {
     setEditingExperience(null);
     setExperienceFormData({
-      id: experienceList.length + 1,
       title: '',
       company: '',
+      companyImage: '', // Assuming this is not used in the form, but required in the DTO
       employmentType: 'FULL_TIME',
       startDate: '',
       endDate: null,
       location: '',
       locationType: 'ON_SITE',
-      talentId: 0,
     });
     setIsCurrentlyWorking(false);
     setIsModalOpen(true);
@@ -123,7 +137,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     setWasValidated(false);
   };
 
-  const handleEdit = (exp: ExperienceDetail) => {
+  const handleEdit = (exp: ExperienceResponseDTO) => {
     setEditingExperience(exp);
     setExperienceFormData(exp);
     setIsCurrentlyWorking(exp.endDate === null);
@@ -132,12 +146,21 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     setWasValidated(false);
   };
 
-  const handleDelete = () => {
-    if (editingExperience) {
-      setExperienceList((prev) =>
-        prev.filter((exp) => exp.id !== editingExperience.id)
-      );
-      setIsModalOpen(false);
+  const handleDelete = async () => {
+    if (editingExperience && editingExperience.id) {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        await ExperienceService.deleteExperience(token, editingExperience.id);
+        setExperienceList((prev) => prev.filter((exp) => exp.id !== editingExperience.id));
+        setIsModalOpen(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete experience');
+        console.error('Error deleting experience:', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -156,18 +179,8 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
       isValid = false;
     }
 
-    if (!experienceFormData.employmentType) {
-      errors.employmentType = 'Jenis pekerjaan harus dipilih';
-      isValid = false;
-    }
-
     if (!experienceFormData.location.trim()) {
       errors.location = 'Lokasi harus diisi';
-      isValid = false;
-    }
-
-    if (!experienceFormData.locationType) {
-      errors.locationType = 'Tipe lokasi harus dipilih';
       isValid = false;
     }
 
@@ -189,21 +202,54 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
     return isValid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
 
-    if (editingExperience) {
-      setExperienceList((prev) =>
-        prev.map((exp) => (exp.id === editingExperience.id ? { ...experienceFormData } : exp))
-      );
-    } else {
-      setExperienceList((prev) => [...prev, experienceFormData]);
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      if (editingExperience && editingExperience.id) {
+        // Update existing experience
+        const updatedExperience = await ExperienceService.editExperience(
+          token, 
+          editingExperience.id, 
+          experienceFormData
+        );
+        
+        setExperienceList((prev) =>
+          prev.map((exp) => (exp.id === editingExperience.id ? updatedExperience : exp))
+        );
+      } else {
+        // Add new experience
+        const {  ...experienceData } = experienceFormData;
+        console.log(user.id, token, experienceData);
+        const newExperience = await ExperienceService.addExperience(id, token, experienceData);
+        console.log(newExperience);
+
+        Sentry.captureMessage('New experience added', {
+                            tags: { feature: 'user-data', environment: 'production' },
+                            extra: { userId: user?.id }
+                        });
+        
+        fetchExperiences();
+      }
+      
+      setIsModalOpen(false);
+      setFormErrors({});
+      setWasValidated(false);
+    } catch (err) {
+      Sentry.captureException(err, {
+        tags: { feature: 'user-data', environment: 'production' },
+        extra: { userId: user?.id }
+      });
+      setError(err instanceof Error ? err.message : 'Failed to save experience');
+      console.error('Error saving experience:', err);
+    } finally {
+      setIsLoading(false);
     }
-    setIsModalOpen(false);
-    setFormErrors({});
-    setWasValidated(false);
   };
 
   // Helper function to get the display label for employment type
@@ -238,7 +284,10 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         </div>
       </div>
 
-      {experienceList.length > 0 ? (
+      {isLoading && <Typography variant="p3" className="text-rencanakan-dark-gray mt-2">Memuat...</Typography>}
+      {error && <Typography variant="p3" className="text-red-500 mt-2">{error}</Typography>}
+
+      {!isLoading && experienceList.length > 0 ? (
         <div className="w-full space-y-2 divide-y divide-gray-300">
           {experienceList.map((exp) => (
             <div key={exp.id} className="min-h-[112px] space-y-1 flex justify-between items-center">
@@ -273,7 +322,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
             </div>
           ))}
         </div>
-      ) : (
+      ) : !isLoading && (
         <Typography variant="p3" className="text-rencanakan-dark-gray">Tidak ada pengalaman.</Typography>
       )}
 
@@ -322,9 +371,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 value={experienceFormData.employmentType}
                 onChange={(value) => {
                   setExperienceFormData((prev) => ({ ...prev, employmentType: value as EmploymentType }));
-                  if (wasValidated && formErrors.employmentType) {
-                    setFormErrors(prev => ({ ...prev, employmentType: undefined }));
-                  }
                 }}
                 label="Jenis Pekerjaan*"
                 placeholder="Cari jenis pekerjaan..."
@@ -355,9 +401,6 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                 value={experienceFormData.locationType}
                 onChange={(value) => {
                   setExperienceFormData((prev) => ({ ...prev, locationType: value as LocationType }));
-                  if (wasValidated && formErrors.locationType) {
-                    setFormErrors(prev => ({ ...prev, locationType: undefined }));
-                  }
                 }}
                 label="Tipe Lokasi*"
                 placeholder="Cari tipe lokasi..."
@@ -409,7 +452,7 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
                       label="Tanggal Selesai" 
                       data-testid="input-end-date"
                       name="endDate" 
-                      value={experienceFormData.endDate?? ''} 
+                      value={experienceFormData.endDate ?? ''} 
                       onChange={handleChange} 
                       type="date"
                       className="w-full"

@@ -5,22 +5,24 @@ const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
 
+  // Transform configuration
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.jest.json',
+    }]
+  },
+
   // Module resolution
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^@/config/env$': '<rootDir>/src/config/env.test.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   moduleDirectories: ['node_modules', 'src'],
 
   // Setup files
+  setupFiles: ['<rootDir>/jest.env.ts'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-
-  // TypeScript configuration
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.jest.json',
-    },
-  },
 
   // Coverage settings
   collectCoverage: true,
