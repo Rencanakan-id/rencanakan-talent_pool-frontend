@@ -1,6 +1,6 @@
 // services/UserService.ts
 export class UserService {
-  private static readonly BASE_URL = 'http://88.222.245.148:8080';
+  private static readonly BASE_URL = 'https://api-talentpool.rencanakan.my.id';
 
   static async getUserProfile(token: string) {
     const res = await fetch(`${this.BASE_URL}/api/users/me`, {
