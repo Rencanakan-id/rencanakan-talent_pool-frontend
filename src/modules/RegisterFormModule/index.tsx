@@ -188,11 +188,27 @@ export const RegisterModule = () => {
           }
 
           const responseData = await response.json().catch(() => ({}));
+          Sentry.addBreadcrumb({
+            category: 'registration',
+            message: 'Registration successful',
+            data: {
+              requestData,
+              responseData,
+            },
+          });
           Sentry.captureMessage('Registration successful', responseData);
           console.log('Registration successful:', responseData);
           
           window.location.href = '/login';
         } catch (error) {
+          Sentry.addBreadcrumb({
+            category: 'error',
+            message: 'Registration error',
+            data: {
+              formData,
+              error,
+            },
+          });
           Sentry.captureException(error, {
             extra: {
               formData,
