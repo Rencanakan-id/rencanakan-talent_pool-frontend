@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/components/context/authContext";
 import { RecommendationResponseDTO, StatusType } from '../ui/recommendation';
 import { RecommendationService } from "@/services/recommendationService";
+import * as Sentry from '@sentry/react';
 
 export function useRecommendation(userId?: string) {
   const [recommendations, setRecommendations] = useState<RecommendationResponseDTO[]>([]);
@@ -100,6 +101,7 @@ export function useRecommendation(userId?: string) {
       );
       
       // Update the local state
+      Sentry.captureMessage('Recommendation rejected');
       setRecommendations(prevRecommendations => 
         prevRecommendations.map(rec => 
           rec.id === recommendationId
@@ -108,6 +110,7 @@ export function useRecommendation(userId?: string) {
         )
       );
     } catch (error) {
+      Sentry.captureException(error);
       console.error('Error rejecting recommendation:', error);
       setRecommendations(prevRecommendations => 
         prevRecommendations.filter(rec => rec.id !== recommendationId)
