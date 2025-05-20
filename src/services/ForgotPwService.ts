@@ -31,7 +31,7 @@ export const resetPassword = async (
 ): Promise<{ message: string }> => {
   try {
     const response = await fetch(`${env.API_BASE_URL}/auth/password`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
