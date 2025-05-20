@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useCallback, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 

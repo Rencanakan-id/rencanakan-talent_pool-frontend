@@ -7,7 +7,7 @@ interface WebResponse<T> {
 }
 
 export class RecommendationService {
-  private static readonly BASE_URL = 'http://88.222.245.148:8080/api';
+  private static readonly BASE_URL = 'http://localhost:8081/api';
 
   static async getRecommendationsByTalentId(userId: string, token: string): Promise<RecommendationResponseDTO[]> {
     try {
