@@ -15,6 +15,8 @@ export const ForgotPasswordModule = () => {
     errors: {},
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
 
   // 1. Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,29 +65,23 @@ export const ForgotPasswordModule = () => {
   };
 
   // 3. Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate input
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setMessage(null);
+
     const isValid = validateEmail(formState.email);
     if (!isValid) return;
-    
-    // Prevent multiple submissions
+
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
-      // Call API to send password reset email
       await sendPasswordResetEmail(formState.email.trim());
-      
-      
-      // Optionally redirect to login page after success
-      // navigate('/login');
+      setMessage("Tautan reset kata sandi berhasil dikirim. Silakan periksa email Anda.");
     } catch (error) {
-      // Show error message
-      console.error('Gagal mengirim email verifikasi. Silakan coba lagi.');
-      console.error('Error sending reset email:', error);
+      console.error("Error sending reset email:", error);
+      setMessage("Gagal mengirim email verifikasi. Silakan coba lagi.");
     } finally {
       setIsSubmitting(false);
     }
@@ -99,8 +95,11 @@ export const ForgotPasswordModule = () => {
           <div className="mb-8">
             <img src="/rencanakanLogo.svg" alt="Rencanakan Logo" className="h-10" />
           </div>
-          <Typography variant="h5" className="mb-6">
-            Lupa Kata Sandi
+          <Typography variant="h5" className="mb-1">
+            Lupa Kata Sandi?
+          </Typography>
+          <Typography variant="p4" className="mb-6 text-rencanakan-sea-blue-500">
+            Masukkan alamat email Anda untuk menerima tautan reset kata sandi.
           </Typography>
           <form onSubmit={handleSubmit}>
             <Input
@@ -119,8 +118,13 @@ export const ForgotPasswordModule = () => {
                 data-testid="login-button"
                 type="submit"
               >
-                {isSubmitting ? 'MEMPROSES...' : 'VERIFIKASI'}
+                {isSubmitting ? 'MEMPROSES...' : 'KIRIM EMAIL'}
               </Button>
+              {message && (
+                <Typography variant="p4" className="mt-3 text-center text-red-500">
+                  {message}
+                </Typography>
+              )}
             </div>
           </form>
           <div className="mt-4 text-center flex flex-row-reverse justify-between">
