@@ -2,7 +2,6 @@ import { ExperienceRequestDTO, ExperienceResponseDTO } from "@/lib/experience";
 import { env } from "@/config/env";
 
 export class ExperienceService {
-  // private static readonly BASE_URL = import.meta.env.VITE_BASE_URL ?? "http://localhost:8080/api";
 
   static async getExperiences(userId: string, token: string) {
     try {
