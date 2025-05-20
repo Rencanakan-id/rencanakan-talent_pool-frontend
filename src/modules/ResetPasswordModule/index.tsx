@@ -60,6 +60,7 @@ export const ResetPasswordModule = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormState(prev => ({ ...prev, errors: {} }));
 
     if (!validatePasswords() || isSubmitting || !token) return;
 
