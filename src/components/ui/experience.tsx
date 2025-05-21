@@ -291,11 +291,11 @@ const Experience: React.FC<ExperienceProps> = ({ experiences = [] }) => {
         <div className="w-full space-y-2 divide-y divide-gray-300">
           {experienceList.map((exp) => (
             <div key={exp.id} className="min-h-[112px] space-y-1 flex justify-between items-center">
-              <div className="flex gap-4 items-start">
+              <div className="flex gap-4 items-center">
                 <img
-                  src="https://i.pinimg.com/736x/11/48/4f/11484f06170418c48b0b183b8868b64f.jpg"
-                  width={32}
-                  height={32}
+                  src="public/rencanakanLogo.svg"
+                  width={55}
+                  height={55}
                   alt="Exp logo"
                   draggable="false"
                 />
