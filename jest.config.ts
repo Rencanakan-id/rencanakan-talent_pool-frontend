@@ -5,6 +5,13 @@ const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
 
+  // Transform configuration
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.jest.json',
+    }]
+  },
+
   // Module resolution
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -13,18 +20,9 @@ const config: Config = {
   },
   moduleDirectories: ['node_modules', 'src'],
 
-  // 👇 Tambahkan ini
+  // Setup files
   setupFiles: ['<rootDir>/jest.env.ts'],
-
-  // Sudah ada, biarkan
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-
-  // TypeScript configuration
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.jest.json',
-    },
-  },
 
   // Coverage settings
   collectCoverage: true,

@@ -60,6 +60,7 @@ export const ResetPasswordModule = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormState(prev => ({ ...prev, errors: {} }));
 
     if (!validatePasswords() || isSubmitting || !token) return;
 
@@ -117,7 +118,7 @@ export const ResetPasswordModule = () => {
                 className={`w-full ${isSubmitting ? 'disabled' : ""}`}
                 type="submit"
               >
-                {isSubmitting ? 'MEMPROSES...' : 'RESET PASSWORD'}
+                {isSubmitting ? 'MEMPROSES...' : 'RESET KATA SANDI'}
               </Button>
             </div>
           </form>

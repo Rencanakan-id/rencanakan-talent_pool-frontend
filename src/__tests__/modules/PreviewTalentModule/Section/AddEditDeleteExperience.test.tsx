@@ -2,15 +2,19 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Experience from '@/components/ui/experience';
 import { ExperienceResponseDTO } from '@/lib/experience';
 import '@testing-library/jest-dom';
+import { ExperienceService } from '@/services/ExperienceService';
+import DOMPurify from 'dompurify';
+import { setupComponentMocks } from '@/__mocks__/components/setUpComponents';
+setupComponentMocks();
 
-jest.mock('@/components', () => ({
-  Typography: ({
-    children,
-    className,
-  }: {
-    children: React.ReactNode;
-    className?: string;
-  }) => <div className={className}>{children}</div>
+// Setup component mocks
+jest.mock('@/services/ExperienceService', () => ({
+  ExperienceService: {
+    getExperiences: jest.fn(),
+    addExperience: jest.fn(),
+    editExperience: jest.fn(),
+    deleteExperience: jest.fn(),
+  }
 }));
 
 const mockExperience: ExperienceResponseDTO[] = [
@@ -27,7 +31,12 @@ const mockExperience: ExperienceResponseDTO[] = [
   }
 ];
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('Experience Section Positive Case', () => {
+
   test('should render the experience list correctly', () => {
     render(<Experience experiences={mockExperience} />);
     
@@ -133,6 +142,27 @@ describe('Experience Section Edge Case', () => {
         expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
     });
 
+    test('should delete error when field error is fixed', () => {
+        render(<Experience experiences={[]} />);
+        
+        fireEvent.click(screen.getByTestId("add-experience-button"));
+      
+        fireEvent.change(screen.getByPlaceholderText(/Masukkan judul pekerjaan Anda/i), { target: { value: 'Frontend Developer' } });
+        fireEvent.change(screen.getByPlaceholderText(/Masukkan nama perusahaan tempat bekerja/i), { target: { value: 'Startup XYZ' } });
+        fireEvent.change(screen.getByTestId("input-location"), { target: { value: 'Jakarta' } });
+        fireEvent.change(screen.getByTestId("input-start-date"), { target: { value: '2024-02-01' } });
+        fireEvent.change(screen.getByTestId("input-end-date"), { target: { value: '2024-01-01' } });
+        
+        fireEvent.click(screen.getByTestId('submit-button'));
+
+        const checkbox = screen.getByTestId('checkbox-currently-working');
+        fireEvent.click(checkbox);
+
+        fireEvent.click(screen.getByTestId('submit-button'));
+
+        waitFor(() => expect(screen.getByText('Frontend Developer')).toBeInTheDocument(), { timeout: 5000 });
+    });
+
     test('should keep the same data if no changes are made', () => {
         render(<Experience experiences={mockExperience} />);
         
@@ -223,6 +253,18 @@ describe('Experience Delete Functionality', () => {
     });
   });
 
+  test('should open any modal and close it with X button', () => {
+    render(<Experience experiences={[]} />);
+    
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+
+    expect(screen.getByText('Tambah Pengalaman')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("close-modal-button"));
+
+    expect(screen.queryByText('Tambah Pengalaman')).not.toBeInTheDocument();
+  });
+
   test('should show "no experience" message after deleting the last experience', () => {
     render(<Experience experiences={mockExperience} />);
     
@@ -258,5 +300,174 @@ describe('Experience Delete Functionality', () => {
     
     waitFor(() => expect(screen.getByTestId('edit-button-2')).toBeInTheDocument(), { timeout: 5000 });
  
+  });
+});
+
+describe('Experience State Management Coverage', () => {
+  test('should validate form errors when submitting with missing fields', async () => {
+    render(<Experience experiences={[]} />);
+    
+    // Open add modal
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+    
+    // Submit empty form to trigger validation
+    fireEvent.click(screen.getByTestId('submit-button'));
+    
+    // Check if validation errors are displayed
+    await waitFor(() => {
+      expect(screen.getByText('Judul pekerjaan harus diisi')).toBeInTheDocument();
+      expect(screen.getByText('Nama perusahaan harus diisi')).toBeInTheDocument();
+      expect(screen.getByText('Lokasi harus diisi')).toBeInTheDocument();
+      expect(screen.getByText('Tanggal mulai harus diisi')).toBeInTheDocument();
+    });
+  });
+
+  test('should clear form errors when input values change after validation', async () => {
+    render(<Experience experiences={[]} />);
+    
+    // Open add modal
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+    
+    // Submit empty form to trigger validation
+    fireEvent.click(screen.getByTestId('submit-button'));
+    
+    // Check if title error is displayed
+    await waitFor(() => {
+      expect(screen.getByText('Judul pekerjaan harus diisi')).toBeInTheDocument();
+    });
+    
+    // Fill the title input to clear error
+    fireEvent.change(screen.getByTestId('input-title'), { 
+      target: { name: 'title', value: 'New Title' } 
+    });
+    
+    // Error should be cleared
+    await waitFor(() => {
+      expect(screen.queryByText('Judul pekerjaan harus diisi')).not.toBeInTheDocument();
+    });
+  });
+
+  test('should toggle currently working checkbox correctly', async () => {
+    render(<Experience experiences={[]} />);
+    
+    // Open add modal
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+    
+    // Initially the end date field should be visible
+    expect(screen.getByTestId('input-end-date')).toBeInTheDocument();
+    
+    // Check the currently working checkbox
+    const checkbox = screen.getByTestId('checkbox-currently-working');
+    fireEvent.click(checkbox);
+    
+    // End date field should now be hidden
+    await waitFor(() => {
+      expect(screen.queryByTestId('input-end-date')).not.toBeInTheDocument();
+    });
+    
+    // Uncheck the currently working checkbox
+    fireEvent.click(checkbox);
+    
+    // End date field should be visible again
+    await waitFor(() => {
+      expect(screen.getByTestId('input-end-date')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle errors when adding a experience fails', async () => {
+    (ExperienceService.addExperience as jest.Mock).mockRejectedValueOnce(new Error('Failed to save experience'));
+    
+    render(<Experience experiences={[]} />);
+    
+    // Open add modal
+    fireEvent.click(screen.getByTestId('add-experience-button'));
+    
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+    
+    // Fill required fields
+    fireEvent.change(screen.getByTestId('input-title'), { 
+      target: { name: 'title', value: 'New Job' } 
+    });
+    fireEvent.change(screen.getByTestId('input-company'), { 
+      target: { name: 'company', value: 'New Company' } 
+    });
+    fireEvent.change(screen.getByTestId('input-location'), { 
+      target: { name: 'location', value: 'New Location' } 
+    });
+    fireEvent.change(screen.getByTestId('input-start-date'), { 
+      target: { name: 'startDate', value: '2023-01-01' } 
+    });
+    
+    // Submit form
+    fireEvent.click(screen.getByTestId('submit-button'));
+    
+    // Check if error message is displayed
+    await waitFor(() => {
+      expect(screen.getByText('Failed to save experience')).toBeInTheDocument();
+    });
+
+  });
+
+  test('should handle errors when editing a experience fails', async () => {
+    (ExperienceService.editExperience as jest.Mock).mockRejectedValueOnce(new Error('Failed to update experience'));
+    
+    render(<Experience experiences={mockExperience} />);
+    
+    // Enable edit mode
+    fireEvent.click(screen.getByTestId("edit-experience-button"));
+    fireEvent.click(screen.getByTestId("edit-button-1"));
+    
+    // Make a change
+    fireEvent.change(screen.getByTestId('input-title'), { 
+      target: { name: 'title', value: 'Updated Job' } 
+    });
+    
+    // Submit form
+    fireEvent.click(screen.getByTestId('submit-button'));
+    
+    // Check if error message is displayed
+    await waitFor(() => {
+      expect(screen.getByText('Failed to update experience')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle errors when deleting a experience fails', async () => {
+    (ExperienceService.deleteExperience as jest.Mock).mockRejectedValueOnce(new Error('Failed to delete experience'));
+    
+    render(<Experience experiences={mockExperience} />);
+    
+    // Enable edit mode
+    fireEvent.click(screen.getByTestId('edit-experience-button'));
+    
+    // Open edit modal
+    fireEvent.click(screen.getByTestId('edit-button-1'));
+    
+    // Click delete
+    fireEvent.click(screen.getByTestId('delete-button'));
+    
+    // Check error message
+    await waitFor(() => {
+      expect(screen.getByText('Failed to delete experience')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle DOMPurify sanitization when input changes', async () => {
+    const sanitizeSpy = jest.spyOn(DOMPurify, 'sanitize');
+    
+    render(<Experience experiences={[]} />);
+    
+    // Open add modal
+    fireEvent.click(screen.getByTestId("add-experience-button"));
+    
+    // Input with HTML tags
+    const maliciousText = '<script>alert("XSS")</script>Test Title';
+    fireEvent.change(screen.getByTestId('input-title'), { 
+      target: { name: 'title', value: maliciousText } 
+    });
+    
+    // Verify sanitize was called
+    expect(sanitizeSpy).toHaveBeenCalledWith(maliciousText);
+    
+    sanitizeSpy.mockRestore();
   });
 });

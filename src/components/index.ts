@@ -9,4 +9,5 @@ export { Stepper } from './ui/stepper';
 export { CheckIcon } from './ui/check-icon';
 export { Combobox } from './ui/combobox';
 export { ComboboxCheckBox } from './ui/comboboxCheckbox';
+export { ModalFormWrapper } from './ui/modalFormWrapper';
 export { AuthBanner } from './ui/auth-banner';
