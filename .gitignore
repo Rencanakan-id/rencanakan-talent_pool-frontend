@@ -42,3 +42,4 @@ reports/
 coverage/
 .lighthouseci/
 
+*storybook.log
