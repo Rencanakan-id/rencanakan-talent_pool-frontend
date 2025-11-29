@@ -173,7 +173,8 @@ export const RegisterModule = () => {
           };
 
           console.log('Registration request data:', requestData);
-          const response = await fetch('https://api-talentpool.rencanakan.my.id/api/auth/register', {
+          const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+          const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

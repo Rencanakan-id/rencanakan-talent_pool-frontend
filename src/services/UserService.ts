@@ -1,9 +1,9 @@
 // services/UserService.ts
 export class UserService {
-  private static readonly BASE_URL = 'https://api-talentpool.rencanakan.my.id';
+  private static readonly BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
   static async getUserProfile(token: string) {
-    const res = await fetch(`${this.BASE_URL}/api/users/me`, {
+    const res = await fetch(`${this.BASE_URL}/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -12,7 +12,7 @@ export class UserService {
   }
 
   static async getUserExperience(userId: string, token: string) {
-    const res = await fetch(`${this.BASE_URL}/api/experiences/user/${userId}`, {
+    const res = await fetch(`${this.BASE_URL}/experiences/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

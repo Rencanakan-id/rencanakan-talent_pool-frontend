@@ -69,8 +69,9 @@ export const EditProfileModule: React.FC = () => {
         price: formData.price,
       };
 
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
       const response = await axios.put(
-        `https://api-talentpool.rencanakan.my.id/api/users/${formData.id}`,
+        `${API_BASE_URL}/users/${formData.id}`,
         updatedProfile,
         {
           headers: {

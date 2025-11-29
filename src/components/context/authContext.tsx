@@ -43,7 +43,8 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
                 const decodedUser = jwtDecode<UserProps>(token);
                 setUser(decodedUser);
                 setIsAuthenticated(true);
-                const res = await axios.get(`https://api-talentpool.rencanakan.my.id/api/users/me`, {
+                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+                const res = await axios.get(`${API_BASE_URL}/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -97,7 +98,8 @@ export const AuthContextProvider = ({ children, initialToken }: { children: Reac
     const login = async (email: string, password: string) => {
         // setIsLoading(true);
         try {
-            const res = await axios.post(`https://api-talentpool.rencanakan.my.id/api/auth/login`, {
+            const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+            const res = await axios.post(`${API_BASE_URL}/auth/login`, {
                 email,
                 password,
             });
