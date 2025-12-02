@@ -65,7 +65,11 @@ export const LoginForm = ({
           </div>
 
           <Typography variant="p4" className="mt-2 text-rencanakan-sea-blue-500">
-            <a href="/forgot-password" className="hover:text-blue-700 text-blue-500">
+            <a 
+            className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-700"
+            href="/forgot-password" 
+            style={{ textDecoration: 'underline' }}
+            >
               Lupa kata sandi?
             </a>
           </Typography>

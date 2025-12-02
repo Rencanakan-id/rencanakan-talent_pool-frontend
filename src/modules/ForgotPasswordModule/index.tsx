@@ -131,7 +131,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <Typography variant="p4">
               Belum punya akun?{' '}
               <a
-                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-blue-700 underline"
+                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-700 underline"
                 href="/register"
               >
                 Daftar
@@ -140,7 +140,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <Typography variant="p4">
               Sudah punya akun?{' '}
               <a
-                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-blue-700 underline"
+                className="text-rencanakan-sea-blue-500 cursor-pointer hover:text-rencanakan-sea-blue-700 underline"
                 href="/login"
               >
                 Masuk

@@ -15,8 +15,9 @@ export const AuthBanner = () => {
             </Typography>
             <Typography variant="p5" className="mt-4">
                 <a
-                className="cursor-pointer text-white hover:text-blue-700"
+                className="cursor-pointer text-white hover:text-gray-100"
                 href="https://rencanakan.id/about-us/"
+                style={{ textDecoration: 'underline' }}
                 >
                 Pelajari lebih lanjut
                 </a>

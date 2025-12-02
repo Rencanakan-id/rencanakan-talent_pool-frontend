@@ -43,10 +43,14 @@ export const PreviewTalentModule: React.FC = () => {
     <div className={`flex items-center w-full justify-center`}>
       <div className="m-6 h-auto w-full max-w-6xl bg-white p-4">
         <div className="flex w-full justify-between p-4">
-          <Button variant="primary-outline" className="flex py-2">
+            <Button 
+            variant="primary-outline" 
+            className="flex py-2" 
+            onClick={() => window.history.back()}
+            >
             <ArrowLeft size={20} />
             <span>Kembali</span>
-          </Button>
+            </Button>
 
           <Button variant="primary-outline" className="flex py-2" onClick={handleEdit}>
             <span>Edit Profil</span>
